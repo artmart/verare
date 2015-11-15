@@ -31,7 +31,6 @@
  */
  ?>
  
- 
 <div class="row">
         <div class="span2">
 		<?php echo $form->labelEx($model,'trade_date'); ?>

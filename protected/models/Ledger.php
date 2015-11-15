@@ -80,8 +80,8 @@ class Ledger extends CActiveRecord
 			'instrument' => array(self::BELONGS_TO, 'Instruments', 'instrument_id'),
 			'portfolio' => array(self::BELONGS_TO, 'Portfolios', 'portfolio_id'),
 			'tradeStatus' => array(self::BELONGS_TO, 'TradeStatus', 'trade_status_id'),
-			'createdBy' => array(self::BELONGS_TO, 'Users1', 'created_by'),
-			'confirmedBy' => array(self::BELONGS_TO, 'Users1', 'confirmed_by'),
+			'createdBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
+			'confirmedBy' => array(self::BELONGS_TO, 'Users', 'confirmed_by'),
 		);
 	}
 

@@ -16,6 +16,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Update InstrumentTypes <?php echo $model->id; ?></h1>
+<h1>Update Instrument Type: <?php echo $model->instrument_type; ?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

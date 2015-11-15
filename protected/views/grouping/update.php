@@ -16,6 +16,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Update Grouping <?php echo $model->id; ?></h1>
+<h1>Update Group: <?php echo $model->group_name; ?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

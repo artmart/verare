@@ -13,6 +13,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Create Portfolios</h1>
+<h1>Create Portfolio</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

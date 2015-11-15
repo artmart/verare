@@ -13,6 +13,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Create InstrumentTypes</h1>
+<h1>Create Instrument Type</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

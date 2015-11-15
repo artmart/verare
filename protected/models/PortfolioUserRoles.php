@@ -46,7 +46,7 @@ class PortfolioUserRoles extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('portfolio_id, user_id, role_id, created_by, created_at', 'required'),
+			array('portfolio_id, user_id, role_id, created_by', 'required'),
 			array('portfolio_id, user_id, role_id, created_by, is_current', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -63,8 +63,8 @@ class PortfolioUserRoles extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'portfolio' => array(self::BELONGS_TO, 'Portfolios', 'portfolio_id'),
-			'user' => array(self::BELONGS_TO, 'Users1', 'user_id'),
-			'createdBy' => array(self::BELONGS_TO, 'Users1', 'created_by'),
+			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
+			'createdBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
 			'role' => array(self::BELONGS_TO, 'UserRole', 'role_id'),
 		);
 	}

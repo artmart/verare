@@ -33,7 +33,6 @@
 	<?php echo CHtml::encode($data->created_by); ?>
 	<br />
 
-	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('created_at')); ?>:</b>
 	<?php echo CHtml::encode($data->created_at); ?>
 	<br />
@@ -73,7 +72,5 @@
 	<b><?php echo CHtml::encode($data->getAttributeLabel('is_current')); ?>:</b>
 	<?php echo CHtml::encode($data->is_current); ?>
 	<br />
-
-	*/ ?>
 
 </div>

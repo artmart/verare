@@ -51,9 +51,8 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'trade_confirmation',
 		'trade_cancellation',
 		'price_administration',
-		/*
 		'instrument_administration',
-		*/
+		
 		array(
 			'class'=>'CButtonColumn',
 		),

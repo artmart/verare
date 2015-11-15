@@ -51,7 +51,6 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'portfolio_id',
 		'nominal',
 		'price',
-		/*
 		'created_by',
 		'created_at',
 		'trade_status_id',
@@ -63,7 +62,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'custody_comment',
 		'account_number',
 		'is_current',
-		*/
+		
 		array(
 			'class'=>'CButtonColumn',
 		),

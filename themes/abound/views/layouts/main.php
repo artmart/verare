@@ -37,6 +37,7 @@
         <link rel="alternate stylesheet" type="text/css" media="screen" title="style5" href="<?php echo $baseUrl;?>/css/style-orange.css" />
         <link rel="alternate stylesheet" type="text/css" media="screen" title="style6" href="<?php echo $baseUrl;?>/css/style-purple.css" />
         <link rel="alternate stylesheet" type="text/css" media="screen" title="style7" href="<?php echo $baseUrl;?>/css/style-red.css" />
+        
 	  <?php
 	  $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js');
 	  $cs->registerScriptFile($baseUrl.'/js/plugins/jquery.sparkline.js');

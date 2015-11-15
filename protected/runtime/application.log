@@ -49,3 +49,305 @@ Stack trace:
 REQUEST_URI=/verare/portfolios/admin
 HTTP_REFERER=http://localhost/verare/site/admin
 ---
+2015/11/15 15:39:44 [error] [exception.CException] exception 'CException' with message 'Alias "application.extensions.eckeditor.ECKEditor" is invalid. Make sure it points to an existing PHP file and the file is readable.' in C:\xampp\htdocs\verare\framework\YiiBase.php:316
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWidgetFactory.php(146): YiiBase::import('application.ext...', true)
+#1 C:\xampp\htdocs\verare\framework\web\CBaseController.php(146): CWidgetFactory->createWidget(Object(PortfoliosController), 'application.ext...', Array)
+#2 C:\xampp\htdocs\verare\framework\web\CBaseController.php(172): CBaseController->createWidget('application.ext...', Array)
+#3 C:\xampp\htdocs\verare\protected\views\portfolios\_form.php(51): CBaseController->widget('application.ext...', Array)
+#4 C:\xampp\htdocs\verare\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\verare\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\verare\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#7 C:\xampp\htdocs\verare\protected\views\portfolios\create.php(18): CController->renderPartial('_form', Array)
+#8 C:\xampp\htdocs\verare\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#9 C:\xampp\htdocs\verare\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#10 C:\xampp\htdocs\verare\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#11 C:\xampp\htdocs\verare\framework\web\CController.php(782): CController->renderPartial('create', Array, true)
+#12 C:\xampp\htdocs\verare\protected\controllers\PortfoliosController.php(79): CController->render('create', Array)
+#13 C:\xampp\htdocs\verare\framework\web\actions\CInlineAction.php(49): PortfoliosController->actionCreate()
+#14 C:\xampp\htdocs\verare\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#15 C:\xampp\htdocs\verare\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#16 C:\xampp\htdocs\verare\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#17 C:\xampp\htdocs\verare\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#18 C:\xampp\htdocs\verare\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#19 C:\xampp\htdocs\verare\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#20 C:\xampp\htdocs\verare\framework\web\CController.php(291): CFilterChain->run()
+#21 C:\xampp\htdocs\verare\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#22 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(282): CController->run('create')
+#23 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('portfolios/crea...')
+#24 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#25 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#26 {main}
+REQUEST_URI=/verare/portfolios/create
+HTTP_REFERER=http://localhost/verare/portfolios/admin
+---
+2015/11/15 15:40:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:41:57 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:42:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:43:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:43:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:43:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:43:56 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:44:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:45:16 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:45:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:46:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:46:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:47:00 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:47:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:47:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:47:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:48:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:49:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:49:17 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:50:00 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:50:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:50:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:50:40 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:51:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:51:17 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:51:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:51:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:51:49 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:51:58 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---
+2015/11/15 15:53:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "assets/4fe4bb74/contents.css".' in C:\xampp\htdocs\verare\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\verare\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/4fe4bb74...')
+#1 C:\xampp\htdocs\verare\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\verare\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/verare/assets/4fe4bb74/contents.css
+HTTP_REFERER=http://localhost/verare/portfolios/create
+---

@@ -29,7 +29,7 @@
 </br>
 <?php  echo CHtml::link('Trade Statuses',array('/tradeStatus/admin')); ?>
 </br>
-<?php  echo CHtml::link('Prices',array('/prices')); ?>
+<?php  echo CHtml::link('Prices',array('/prices/admin')); ?>
 </br>
 <?php  echo CHtml::link('Portfolio UserS with Roles',array('/portfolioUserRoles/admin')); ?>
 </br>
@@ -60,7 +60,10 @@
 <?php  echo CHtml::link('Audit Trails',array('/auditTrails/admin')); ?>
 </br>
 <?php  echo CHtml::link('Audit Tables',array('/auditTables/admin')); ?>
-        
+</br>
+<?php  echo CHtml::link('Upload pricies',array('/uploads/create')); ?>        
+    
+    
         
         
         

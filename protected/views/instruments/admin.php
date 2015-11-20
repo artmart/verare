@@ -48,7 +48,11 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'id',
 		'instrument',
 		'instrument_type_id',
-		'fpml',
+		//'fpml',
+        ['name' => 'fpml', 
+         //'header' =>'Incoming orders total', 
+         'type'=>'raw',
+         ],
 		'is_current',
 		'created_at',
 		array(

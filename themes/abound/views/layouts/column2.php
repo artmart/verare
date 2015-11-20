@@ -62,7 +62,8 @@
 <?php  echo CHtml::link('Audit Tables',array('/auditTables/admin')); ?>
 </br>
 <?php  echo CHtml::link('Upload pricies',array('/uploads/create')); ?>        
-    
+</br>
+<?php  echo CHtml::link('Return',array('/prices/return')); ?>    
     
         
         

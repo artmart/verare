@@ -1,63 +1,149 @@
-<div class="span1"></div><div class="span11"><h2>Time-weighted return</h2></div>
-<?php $baseurl = Yii::app()->baseUrl; $baseUrl1 = Yii::app()->theme->baseUrl;?>
-<!--<img src="<?php //echo $baseUrl1;?>/img/MLS_logo.jpg" style= 'height: 48px; '/>-->
+<style>
+.grid-view table.items th{
+    	background-size: 100% 100%;
+    }
+</style>
+<div class="span1"></div>
+<div class="span11">
+    <h2>Time-weighted return</h2>
+</div>
+
 <div class="row-fluid"></div>
 <div class="span9">
 <?php //$this->beginWidget('zii.widgets.CPortlet', array('title'=>"Selection",));
-     // echo CHtml::beginForm('prices/return','post'); 
-      $baseurl = Yii::app()->baseUrl;
-?>
-
-<style>
-.hoptions{
-    background-color: grey; 
-    font-weight: bold;
-    }
-</style>
-
-<?php //$this->endWidget();?>	
+      // echo CHtml::beginForm('prices/return','post'); 
+      // $baseurl = Yii::app()->baseUrl;
+      //$this->endWidget();
+ ?>	
 </div>
 
 <?php 
 ini_set('max_execution_time', 50000);
-$columns= array(array('name' => 'trade_date', 'header' =>'trade_date', 'type'=>'raw'));
-$instruments = Yii::app()->db->createCommand("select * from instruments where is_current = 1")->queryAll(true);
 
-foreach($instruments as $instrument1){
-    $columns[] =  array('name' => $instrument1['instrument'], 'header' =>$instrument1['instrument'], 'type'=>'raw');
-    $ret_hiades[] = array('name' => 'chart_'.$instrument1['instrument'], 'header' =>'chart_'.$instrument1['instrument'], 'type'=>'raw');
-}
-foreach($ret_hiades as $rh){
-array_push($columns, $rh);
-}
+//Trades
+$inst_sql = "select * from ledger l
+             inner join instruments i on l.instrument_id = i.id
+             where l.is_current = 1 and i.is_current = 1 order by trade_date, l.instrument_id asc";
+             
+$trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
 
-$trade_dates = Yii::app()->db->createCommand("select distinct trade_date from prices where is_current = 1 order by trade_date asc")->queryAll(true);
-$prices = Yii::app()->db->createCommand("select * from prices where is_current = 1")->queryAll(true);
+$columnsArray = array('Trade Date', 'Instrument', 'Nominal', 'Price');
+    $cnt=count($trades);
+    foreach($trades as $instrument){
+        $rowsArray[] = [$instrument['trade_date'], $instrument['instrument'], number_format(floatval($instrument['nominal']), 1), number_format(floatval($instrument['price']), 1)];
+        $all_instruments[$instrument['instrument_id']] = $instrument['instrument'];   
+    }
+    $this->widget('ext.htmlTableUi.htmlTableUi',array(
+        'ajaxUrl'=>'site/handleHtmlTable',
+        'arProvider'=>'',    
+        'collapsed'=>true,
+        'columns'=>$columnsArray,
+        'cssFile'=>'',
+        'editable'=>false,
+        'enableSort'=>false,
+        'exportUrl'=>'',//'site/exportTable',
+        'extra'=>'', //'Additional Information',
+        //'footer'=> 'Total rows: '.$cnt.'',
+        'formTitle'=>'Form Title',
+        'rows'=>$rowsArray,
+        'sortColumn'=>1,
+        'sortOrder'=>'desc',
+        //'subtitle'=>'SubTitle of Table',
+        'title'=>'Trades', 
+    ));
+
+//Prices and returns calculations
+$columns = array(array('name' => 'trade_date', 'header' =>'trade_date', 'type'=>'raw'));
+$distinct_instruments  = array_unique($all_instruments);
+
+//exit;
+foreach($distinct_instruments as $key => $di){
+    $columns[] =  array('name' => $di, 'header' =>$di, 'type'=>'raw');
+    $columns[] = array('name' => 'ret_'.$key, 'header' =>'ret_'.$di, 'type'=>'raw');
+    $columns[] = array('name' => 'chart_'.$di, 'header' =>'chart_'.$di, 'type'=>'raw');
+    $inst_id[] = $key;
+}
+//array_merge($columns, $columns1);
+$inst_ids = implode(" ', '", $inst_id);
+
+$prices = Yii::app()->db->createCommand("select * from prices where is_current = 1 and instrument_id in ('$inst_ids') order by trade_date, instrument_id asc")->queryAll(true);
+
+foreach($prices as $pr){$all_dates[] = $pr['trade_date'];}
+$trade_dates = array_unique($all_dates); 
+
 
 $i = 0;
 foreach($trade_dates as $td){
     $rawData[$i]['id'] = $i;
-    $rawData[$i]['trade_date'] = date_format(date_create($td['trade_date']), 'Y-m-d');
-    foreach($instruments as $instrument){
-        $column = $instrument['instrument'];
-        $instrument_id = $instrument['id']; 
-        foreach($prices as $price){
-            if($price['instrument_id'] == $instrument_id && $price['trade_date'] == $td['trade_date']){        
-                        $rawData[$i][$column] = $price['price']; 
-                        $retun_field = 'chart_'.$column; 
-                        $rawData[$i][$retun_field] = '';
-                        $data[$retun_field][] = 0;
-                        if($i>0 && !($rawData[0][$column] == 0)){
-                                $rawData[$i][$retun_field] = $rawData[$i][$column]/$rawData[0][$column];
-                                $data[$retun_field][] = floatval($rawData[$i][$retun_field]);
-                    }
+    $rawData[$i]['trade_date'] = date_format(date_create($td), 'Y-m-d');
+       
+    foreach($trades as $trade){
+        $rawData[$i]['nominal'.$trade['instrument_id']] = 0;
+        if($i==0){
+                $rawData[$i]['ret_'.$trade['instrument_id']] = 1;
+                if(strtotime($trade['trade_date']) > strtotime($rawData[0]['trade_date'])){
+                    $rawData[$i]['amount'.$trade['instrument_id']] = $trade['nominal'] * $trade['price'];
+                    $rawData[$i]['nominal_flag'.$trade['instrument_id']] = 1;                    
+                }else{$rawData[$i]['amount'.$trade['instrument_id']] = 0;}
+                
+               // if(strtotime($trade['trade_date']) <= strtotime($rawData[$i]['trade_date'])){
+                //$rawData[$i]['nominal'.$trade['instrument_id']] = $trade['nominal'];
                 }
+        $instrument_id = $trade['instrument_id'];
+        $nom_pl_sql = "select sum(if(trade_date<='$td', nominal, 0)) nominal, sum(if(trade_date='$td', nominal*price, 0)) pnl from ledger 
+                        where instrument_id = '$instrument_id'";
+             
+        $nom_pl = Yii::app()->db->createCommand($nom_pl_sql)->queryAll(true);
+        $rawData[$i]['nominal'.$trade['instrument_id']] = $nom_pl[0]['nominal'];
+        $rawData[$i]['pnl'.$trade['instrument_id']] = $nom_pl[0]['pnl'];
+               
+        $column = $trade['instrument'];
+        $instrument_id = $trade['id']; 
+        
+                foreach($prices as $price){
+                    if($price['instrument_id'] == $instrument_id && $price['trade_date'] == $td){        
+                                $rawData[$i][$column] = $price['price'];
+                               // $trade_field = 'trade_'.$column; 
+                                $retun_field = 'chart_'.$column; 
+                                $rawData[$i][$retun_field] = '';
+                                $data[$retun_field][] = 0;
+                                if($i>0 && !($rawData[0][$column] == 0)){
+                                        $rawData[$i][$retun_field] = $rawData[$i][$column]/$rawData[0][$column];
+                                        $data[$retun_field][] = floatval($rawData[$i][$retun_field]);         
+                            }
+                        }
+                    }
+                    
+        if($i>0){ 
+            $div = $rawData[$i-1]['nominal'.$trade['instrument_id']] * $rawData[$i-1][$retun_field]+ $rawData[$i]['pnl'.$trade['instrument_id']];
+            
+            if($div>0){
+                $rawData[$i]['ret_'.$trade['instrument_id']] = ($rawData[$i]['nominal'.$trade['instrument_id']] * $rawData[$i][$retun_field])/($rawData[$i-1]['nominal'.$trade['instrument_id']] * $rawData[$i-1][$retun_field]+ $rawData[$i]['pnl'.$trade['instrument_id']]);
+            }else{
+                $rawData[$i]['ret_'.$trade['instrument_id']] = 1;
             }
+        }
         }
     $i++;
 }
 
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div class="row-fluid"></div>
 <?php
@@ -77,11 +163,8 @@ foreach($trade_dates as $td){
 	$dp->setTotalItemCount(count($rawData));	
 	?>
 	
-<style>
-.grid-view table.items th{
-    	background-size: 100% 100%;
-    }
-</style>	
+
+<h3>Prices and Returns</h3>	
 	<?php 
 	//$this->widget('bootstrap.widgets.TbGridView', array(
 	$this->widget('ext.groupgridview.GroupGridView', array(

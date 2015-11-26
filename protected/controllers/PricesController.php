@@ -81,6 +81,7 @@ class PricesController extends Controller
     
    	public function actionReturn()
 	{
+	    $this->layout='column1';
 		$this->render('return');
 	}
     

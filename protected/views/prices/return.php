@@ -63,6 +63,7 @@ foreach($distinct_instruments as $key => $di){
     $columns[] = array('name' => 'chart_'.$di, 'header' =>'chart_'.$di, 'type'=>'raw');
     $inst_id[] = $key;
 }
+$columns[] = array('name' => 'portfolio', 'header' =>'Portfolio', 'type'=>'raw');
 //array_merge($columns, $columns1);
 $inst_ids = implode(" ', '", $inst_id);
 
@@ -71,12 +72,14 @@ $prices = Yii::app()->db->createCommand("select * from prices where is_current =
 foreach($prices as $pr){$all_dates[] = $pr['trade_date'];}
 $trade_dates = array_unique($all_dates); 
 
-
 $i = 0;
 foreach($trade_dates as $td){
-    $rawData[$i]['id'] = $i;
+    $rawData[$i]['id'] = $i;    
     $rawData[$i]['trade_date'] = date_format(date_create($td), 'Y-m-d');
-       
+    
+    $amount_portfolio[$i] = 0; 
+    $amount_traded[$i] = 0; 
+    
     foreach($trades as $trade){
         $rawData[$i]['nominal'.$trade['instrument_id']] = 0;
         if($i==0){
@@ -85,15 +88,12 @@ foreach($trade_dates as $td){
                     $rawData[$i]['amount'.$trade['instrument_id']] = $trade['nominal'] * $trade['price'];
                     $rawData[$i]['nominal_flag'.$trade['instrument_id']] = 1;                    
                 }else{$rawData[$i]['amount'.$trade['instrument_id']] = 0;}
-                
-               // if(strtotime($trade['trade_date']) <= strtotime($rawData[$i]['trade_date'])){
-                //$rawData[$i]['nominal'.$trade['instrument_id']] = $trade['nominal'];
                 }
         $instrument_id = $trade['instrument_id'];
-        $nom_pl_sql = "select sum(if(trade_date<='$td', nominal, 0)) nominal, sum(if(trade_date='$td', nominal*price, 0)) pnl from ledger 
-                        where instrument_id = '$instrument_id'";
-             
+        
+        $nom_pl_sql = "select sum(if(trade_date<='$td', nominal, 0)) nominal, sum(if(trade_date='$td', nominal*price, 0)) pnl from ledger where instrument_id = '$instrument_id'";    
         $nom_pl = Yii::app()->db->createCommand($nom_pl_sql)->queryAll(true);
+        
         $rawData[$i]['nominal'.$trade['instrument_id']] = $nom_pl[0]['nominal'];
         $rawData[$i]['pnl'.$trade['instrument_id']] = $nom_pl[0]['pnl'];
                
@@ -123,23 +123,25 @@ foreach($trade_dates as $td){
                 $rawData[$i]['ret_'.$trade['instrument_id']] = 1;
             }
         }
+        $amount_portfolio[$i] = $amount_portfolio[$i] +  $rawData[$i]['ret_'.$trade['instrument_id']];
+        $amount_traded[$i] = $amount_traded[$i] + $rawData[$i]['pnl'.$trade['instrument_id']];
         }
+        
+        //////////////////Portfolio calculation////////////////////
+            if($i == 0){
+                $rawData[$i]['portfolio'] = 1;
+            }else{
+                if(($amount_portfolio[$i-1]+$amount_traded[$i])>0){
+                $rawData[$i]['portfolio'] = $amount_portfolio[$i]/($amount_portfolio[$i-1]+$amount_traded[$i]);
+                }else{
+                    $rawData[$i]['portfolio'] = 1;
+                }
+            }
+        //////////////////////////////////////////////////////////
     $i++;
 }
 
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -105,7 +105,7 @@ foreach($trade_dates as $td){
                                 $rawData[$i][$column] = $price['price'];
                                // $trade_field = 'trade_'.$column; 
                                 $retun_field = 'chart_'.$column; 
-                                $rawData[$i][$retun_field] = '';
+                                $rawData[$i][$retun_field] = 1;
                                 $data[$retun_field][] = 0;
                                 if($i>0 && !($rawData[0][$column] == 0)){
                                         $rawData[$i][$retun_field] = $rawData[$i][$column]/$rawData[0][$column];

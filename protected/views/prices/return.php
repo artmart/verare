@@ -67,7 +67,7 @@ $columns[] = array('name' => 'portfolio', 'header' =>'Portfolio', 'type'=>'raw')
 //array_merge($columns, $columns1);
 $inst_ids = implode(" ', '", $inst_id);
 
-$prices = Yii::app()->db->createCommand("select * from prices where is_current = 1 and instrument_id in ('$inst_ids') order by trade_date, instrument_id asc")->queryAll(true);
+$prices = Yii::app()->db->createCommand("select DATE(trade_date) trade_date, price, instrument_id from prices where is_current = 1 and instrument_id in ('$inst_ids') order by trade_date, instrument_id asc")->queryAll(true);
 
 foreach($prices as $pr){$all_dates[] = $pr['trade_date'];}
 $trade_dates = array_unique($all_dates); 
@@ -75,56 +75,68 @@ $trade_dates = array_unique($all_dates);
 $i = 0;
 foreach($trade_dates as $td){
     $rawData[$i]['id'] = $i;    
-    $rawData[$i]['trade_date'] = date_format(date_create($td), 'Y-m-d');
+    $rawData[$i]['trade_date'] = $td;
     
     $amount_portfolio[$i] = 0; 
     $amount_traded[$i] = 0; 
     
     foreach($trades as $trade){
         $rawData[$i]['nominal'.$trade['instrument_id']] = 0;
+        $rawData[$i]['pnl'.$trade['instrument_id']] = 0;
         if($i==0){
                 $rawData[$i]['ret_'.$trade['instrument_id']] = 1;
                 if(strtotime($trade['trade_date']) > strtotime($rawData[0]['trade_date'])){
-                    $rawData[$i]['amount'.$trade['instrument_id']] = $trade['nominal'] * $trade['price'];
-                    $rawData[$i]['nominal_flag'.$trade['instrument_id']] = 1;                    
+                    $rawData[$i]['amount'.$trade['instrument_id']] = $trade['nominal'] * $trade['price'];                    
                 }else{$rawData[$i]['amount'.$trade['instrument_id']] = 0;}
                 }
         $instrument_id = $trade['instrument_id'];
         
-        $nom_pl_sql = "select sum(if(trade_date<='$td', nominal, 0)) nominal, sum(if(trade_date='$td', nominal*price, 0)) pnl from ledger where instrument_id = '$instrument_id'";    
+        $nom_pl_sql = "select sum(if(DATE(trade_date)<='$td', nominal, 0)) nominal, sum(if(DATE(trade_date)='$td', nominal*price, 0)) pnl from ledger where instrument_id = '$instrument_id'";    
         $nom_pl = Yii::app()->db->createCommand($nom_pl_sql)->queryAll(true);
         
         $rawData[$i]['nominal'.$trade['instrument_id']] = $nom_pl[0]['nominal'];
         $rawData[$i]['pnl'.$trade['instrument_id']] = $nom_pl[0]['pnl'];
-               
+        if($trade['instrument_id']==4){
+         var_dump($rawData[$i]['nominal'.$trade['instrument_id']]); 
+         }     
         $column = $trade['instrument'];
-        $instrument_id = $trade['id']; 
+       // $instrument_id = $trade['id']; 
         
                 foreach($prices as $price){
-                    if($price['instrument_id'] == $instrument_id && $price['trade_date'] == $td){        
+                    if($price['instrument_id'] == $instrument_id && strtotime($price['trade_date']) == strtotime($td)){        
                                 $rawData[$i][$column] = $price['price'];
+                                $rawData[$i]['price_'.$trade['instrument_id']] = $price['price'];
                                // $trade_field = 'trade_'.$column; 
                                 $retun_field = 'chart_'.$column; 
                                 $rawData[$i][$retun_field] = 1;
-                                $data[$retun_field][] = 0;
+                                //$data[$retun_field][] = 0;
                                 if($i>0 && !($rawData[0][$column] == 0)){
                                         $rawData[$i][$retun_field] = $rawData[$i][$column]/$rawData[0][$column];
-                                        $data[$retun_field][] = floatval($rawData[$i][$retun_field]);         
+                                       // $data[$retun_field][] = floatval($rawData[$i][$retun_field]);         
                             }
                         }
                     }
                     
         if($i>0){ 
-            $div = $rawData[$i-1]['nominal'.$trade['instrument_id']] * $rawData[$i-1][$retun_field]+ $rawData[$i]['pnl'.$trade['instrument_id']];
+            $div = $rawData[$i-1]['nominal'.$trade['instrument_id']] * $rawData[$i-1]['price_'.$trade['instrument_id']]+ $rawData[$i]['pnl'.$trade['instrument_id']];
             
             if($div>0){
-                $rawData[$i]['ret_'.$trade['instrument_id']] = ($rawData[$i]['nominal'.$trade['instrument_id']] * $rawData[$i][$retun_field])/($rawData[$i-1]['nominal'.$trade['instrument_id']] * $rawData[$i-1][$retun_field]+ $rawData[$i]['pnl'.$trade['instrument_id']]);
+                $rawData[$i]['ret_'.$trade['instrument_id']] = ($rawData[$i]['nominal'.$trade['instrument_id']] * $rawData[$i]['price_'.$trade['instrument_id']])/($rawData[$i-1]['nominal'.$trade['instrument_id']] * $rawData[$i-1]['price_'.$trade['instrument_id']]+ $rawData[$i]['pnl'.$trade['instrument_id']]);
+                if($rawData[$i]['ret_'.$trade['instrument_id']] <0.9 || $rawData[$i]['ret_'.$trade['instrument_id']] >1.1){
+                    $rawData[$i]['ret_'.$trade['instrument_id']] = 1;
+                }
             }else{
                 $rawData[$i]['ret_'.$trade['instrument_id']] = 1;
             }
         }
-        $amount_portfolio[$i] = $amount_portfolio[$i] +  $rawData[$i]['ret_'.$trade['instrument_id']];
-        $amount_traded[$i] = $amount_traded[$i] + $rawData[$i]['pnl'.$trade['instrument_id']];
+       if($rawData[$i]['ret_'.$trade['instrument_id']] ==1){
+                $amount_portfolio[$i] = $amount_portfolio[$i];
+                $amount_traded[$i] = $amount_traded[$i];
+            }else{
+                $amount_portfolio[$i] = $amount_portfolio[$i] +  $rawData[$i]['ret_'.$trade['instrument_id']];
+                $amount_traded[$i] = $amount_traded[$i] + $rawData[$i]['pnl'.$trade['instrument_id']];
+           }
+        
         }
         
         //////////////////Portfolio calculation////////////////////
@@ -133,6 +145,11 @@ foreach($trade_dates as $td){
             }else{
                 if(($amount_portfolio[$i-1]+$amount_traded[$i])>0){
                 $rawData[$i]['portfolio'] = $amount_portfolio[$i]/($amount_portfolio[$i-1]+$amount_traded[$i]);
+                
+                if( $rawData[$i]['portfolio']  <0.9 || $rawData[$i]['portfolio'] >1.1){
+                     $rawData[$i]['portfolio']  = 1;
+                }
+                
                 }else{
                     $rawData[$i]['portfolio'] = 1;
                 }

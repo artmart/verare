@@ -96,9 +96,9 @@ foreach($trade_dates as $td){
         
         $rawData[$i]['nominal'.$trade['instrument_id']] = $nom_pl[0]['nominal'];
         $rawData[$i]['pnl'.$trade['instrument_id']] = $nom_pl[0]['pnl'];
-        if($trade['instrument_id']==4){
-         var_dump($rawData[$i]['nominal'.$trade['instrument_id']]); 
-         }     
+       // if($trade['instrument_id']==4){
+      //   var_dump($rawData[$i]['nominal'.$trade['instrument_id']]); 
+        // }     
         $column = $trade['instrument'];
        // $instrument_id = $trade['id']; 
         

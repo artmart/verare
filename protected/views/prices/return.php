@@ -130,9 +130,9 @@ foreach($trade_dates as $td){
        //     }else{
                 $porfolio_amount[$i] = $porfolio_amount[$i] + $rawData[$i]['nominal'.$trade['instrument_id']] * $rawData[$i]['price_'.$trade['instrument_id']];
                 
-                $amount_portfolio[$i] = $amount_portfolio[$i] +  $rawData[$i]['ret_'.$trade['instrument_id']];
+                //$amount_portfolio[$i] = $amount_portfolio[$i] +  $rawData[$i]['ret_'.$trade['instrument_id']];
                 $amount_traded[$i] = $amount_traded[$i] + $rawData[$i]['pnl'.$trade['instrument_id']];
-                $amount_nominal[$i] = $amount_nominal[$i] + $rawData[$i]['nominal'.$trade['instrument_id']];
+                //$amount_nominal[$i] = $amount_nominal[$i] + $rawData[$i]['nominal'.$trade['instrument_id']];
        //    }
         }
         
@@ -201,8 +201,6 @@ foreach($trade_dates as $td){
     //'rowCssClassExpression'=>if(!($data["tclass"] == '')){'$data["tclass"]'},
 //    'rowCssClassExpression'=>'($data["tclass"] == 1)?(($data["id"]%2==1)?"even":"odd"):$data["tclass"]',
 ));
-
-//var_dump($data);
 
 //foreach($ret_hiades as $rh){
 

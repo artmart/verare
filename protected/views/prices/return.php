@@ -96,46 +96,39 @@ foreach($trade_dates as $td){
         
         $rawData[$i]['nominal'.$trade['instrument_id']] = $nom_pl[0]['nominal'];
         $rawData[$i]['pnl'.$trade['instrument_id']] = $nom_pl[0]['pnl'];
-       // if($trade['instrument_id']==4){
-      //   var_dump($rawData[$i]['nominal'.$trade['instrument_id']]); 
-        // }     
+   
         $column = $trade['instrument'];
-       // $instrument_id = $trade['id']; 
         
-                foreach($prices as $price){
-                    if($price['instrument_id'] == $instrument_id && strtotime($price['trade_date']) == strtotime($td)){        
+                foreach($prices as $price)
+                {
+                    if($price['instrument_id'] == $instrument_id && strtotime($price['trade_date']) == strtotime($td))
+                       {        
                                 $rawData[$i][$column] = $price['price'];
                                 $rawData[$i]['price_'.$trade['instrument_id']] = $price['price'];
-                               // $trade_field = 'trade_'.$column; 
                                 $retun_field = 'chart_'.$column; 
                                 $rawData[$i][$retun_field] = 1;
-                                //$data[$retun_field][] = 0;
                                 if($i>0 && !($rawData[0][$column] == 0)){
-                                        $rawData[$i][$retun_field] = $rawData[$i][$column]/$rawData[0][$column];
-                                       // $data[$retun_field][] = floatval($rawData[$i][$retun_field]);         
-                            }
+                                        $rawData[$i][$retun_field] = $rawData[$i][$column]/$rawData[0][$column];      
+                                    }
                         }
-                    }
+                }
                     
         if($i>0){ 
             $div = $rawData[$i-1]['nominal'.$trade['instrument_id']] * $rawData[$i-1]['price_'.$trade['instrument_id']]+ $rawData[$i]['pnl'.$trade['instrument_id']];
             
             if($div>0){
-                $rawData[$i]['ret_'.$trade['instrument_id']] = ($rawData[$i]['nominal'.$trade['instrument_id']] * $rawData[$i]['price_'.$trade['instrument_id']])/($rawData[$i-1]['nominal'.$trade['instrument_id']] * $rawData[$i-1]['price_'.$trade['instrument_id']]+ $rawData[$i]['pnl'.$trade['instrument_id']]);
-                if($rawData[$i]['ret_'.$trade['instrument_id']] <0.9 || $rawData[$i]['ret_'.$trade['instrument_id']] >1.1){
-                    $rawData[$i]['ret_'.$trade['instrument_id']] = 1;
-                }
+                $rawData[$i]['ret_'.$trade['instrument_id']] = ($rawData[$i]['nominal'.$trade['instrument_id']] * $rawData[$i]['price_'.$trade['instrument_id']])/$div;
             }else{
                 $rawData[$i]['ret_'.$trade['instrument_id']] = 1;
             }
         }
-       if($rawData[$i]['ret_'.$trade['instrument_id']] ==1){
-                $amount_portfolio[$i] = $amount_portfolio[$i];
-                $amount_traded[$i] = $amount_traded[$i];
-            }else{
+      // if($rawData[$i]['ret_'.$trade['instrument_id']] ==1){
+      //          $amount_portfolio[$i] = $amount_portfolio[$i];
+      //          $amount_traded[$i] = $amount_traded[$i];
+       //     }else{
                 $amount_portfolio[$i] = $amount_portfolio[$i] +  $rawData[$i]['ret_'.$trade['instrument_id']];
                 $amount_traded[$i] = $amount_traded[$i] + $rawData[$i]['pnl'.$trade['instrument_id']];
-           }
+       //    }
         
         }
         
@@ -144,12 +137,7 @@ foreach($trade_dates as $td){
                 $rawData[$i]['portfolio'] = 1;
             }else{
                 if(($amount_portfolio[$i-1]+$amount_traded[$i])>0){
-                $rawData[$i]['portfolio'] = $amount_portfolio[$i]/($amount_portfolio[$i-1]+$amount_traded[$i]);
-                
-                if( $rawData[$i]['portfolio']  <0.9 || $rawData[$i]['portfolio'] >1.1){
-                     $rawData[$i]['portfolio']  = 1;
-                }
-                
+                $rawData[$i]['portfolio'] = $amount_portfolio[$i]/($amount_portfolio[$i-1]+$amount_traded[$i]);                
                 }else{
                     $rawData[$i]['portfolio'] = 1;
                 }

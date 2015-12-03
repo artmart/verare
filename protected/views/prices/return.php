@@ -80,6 +80,7 @@ foreach($trade_dates as $td){
     $amount_portfolio[$i] = 0; 
     $amount_traded[$i] = 0; 
     $amount_nominal[$i] = 0;
+    $porfolio_amount[$i] = 0;
     
     foreach($trades as $trade){
         $rawData[$i]['nominal'.$trade['instrument_id']] = 0;
@@ -127,21 +128,22 @@ foreach($trade_dates as $td){
       //          $amount_portfolio[$i] = $amount_portfolio[$i];
       //          $amount_traded[$i] = $amount_traded[$i];
        //     }else{
+                $porfolio_amount[$i] = $porfolio_amount[$i] + $rawData[$i]['nominal'.$trade['instrument_id']] * $rawData[$i]['price_'.$trade['instrument_id']];
+                
                 $amount_portfolio[$i] = $amount_portfolio[$i] +  $rawData[$i]['ret_'.$trade['instrument_id']];
                 $amount_traded[$i] = $amount_traded[$i] + $rawData[$i]['pnl'.$trade['instrument_id']];
                 $amount_nominal[$i] = $amount_nominal[$i] + $rawData[$i]['nominal'.$trade['instrument_id']];
        //    }
-        
         }
         
         //////////////////Portfolio calculation////////////////////
             if($i == 0){
                 $rawData[$i]['portfolio'] = 1;
-            }else{
-                
-                $dev1 = $amount_nominal[$i-1] * $rawData[$i-1][$column] + $amount_traded[$i];
+            }else{   
+                //$dev1 = $amount_nominal[$i-1] * $rawData[$i-1][$column] + $amount_traded[$i];
+                $dev1 = $porfolio_amount[$i-1] + $amount_traded[$i];
                 if($dev1 >0){
-                $rawData[$i]['portfolio'] = ($amount_nominal[$i] * $rawData[$i][$column])/$dev1;
+                    $rawData[$i]['portfolio'] = ($porfolio_amount[$i])/$dev1;
                // if(($amount_portfolio[$i-1]+$amount_traded[$i])>0){
                 //$rawData[$i]['portfolio'] = $amount_portfolio[$i]/($amount_portfolio[$i-1]+$amount_traded[$i]);                
                 }else{

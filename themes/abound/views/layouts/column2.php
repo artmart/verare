@@ -63,7 +63,10 @@
 </br>
 <?php  echo CHtml::link('Upload pricies',array('/uploads/create')); ?>        
 </br>
-<?php  echo CHtml::link('Return',array('/prices/return')); ?>    
+<?php  echo CHtml::link('Return',array('/prices/return')); ?>  
+</br>
+<?php  echo CHtml::link('Returns',array('/returns/admin')); ?> 
+ 
     
         
         

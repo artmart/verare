@@ -58,7 +58,7 @@ $distinct_instruments  = array_unique($all_instruments);
 
 //exit;
 foreach($distinct_instruments as $key => $di){
-    $columns[] =  array('name' => $di, 'header' =>$di, 'type'=>'raw');
+    $columns[] = array('name' => $di, 'header' =>$di, 'type'=>'raw');
     $columns[] = array('name' => 'ret_'.$key, 'header' =>'ret_'.$di, 'type'=>'raw');
     $columns[] = array('name' => 'chart_'.$di, 'header' =>'chart_'.$di, 'type'=>'raw');
     $inst_id[] = $key;
@@ -124,17 +124,19 @@ foreach($trade_dates as $td){
                 $rawData[$i]['ret_'.$trade['instrument_id']] = 1;
             }
         }
-      // if($rawData[$i]['ret_'.$trade['instrument_id']] ==1){
-      //          $amount_portfolio[$i] = $amount_portfolio[$i];
-      //          $amount_traded[$i] = $amount_traded[$i];
-       //     }else{
                 $porfolio_amount[$i] = $porfolio_amount[$i] + $rawData[$i]['nominal'.$trade['instrument_id']] * $rawData[$i]['price_'.$trade['instrument_id']];
-                
-                //$amount_portfolio[$i] = $amount_portfolio[$i] +  $rawData[$i]['ret_'.$trade['instrument_id']];
                 $amount_traded[$i] = $amount_traded[$i] + $rawData[$i]['pnl'.$trade['instrument_id']];
-                //$amount_nominal[$i] = $amount_nominal[$i] + $rawData[$i]['nominal'.$trade['instrument_id']];
-       //    }
-        }
+
+      //checking if the return for current instrument is not exist and inserting the calculated return.//
+       $existing_return  = Returns::model()->findByAttributes(['instrument_id'=>$trade['instrument_id'], 'trade_date' =>$rawData[$i]['trade_date']]);
+           if(count($existing_return)==0){
+               $return = new Returns;
+               $return->instrument_id = $trade['instrument_id'];
+               $return->trade_date = $rawData[$i]['trade_date'];
+               $return->return = $rawData[$i]['ret_'.$trade['instrument_id']];
+               $return->save(); 
+           }
+       }
         
         //////////////////Portfolio calculation////////////////////
             if($i == 0){
@@ -155,10 +157,6 @@ foreach($trade_dates as $td){
 }
 
 ?>
-
-
-
-
 
 <div class="row-fluid"></div>
 <?php

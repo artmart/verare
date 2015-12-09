@@ -52,5 +52,6 @@ $this->pageTitle=Yii::app()->name;
 <?php  echo CHtml::link('Return',array('/prices/return')); ?>
 </br>
 <?php  echo CHtml::link('Returns',array('/returns/admin')); ?> 
-
+</br>
+<?php  echo CHtml::link('Return Calculation',array('/prices/ReturnCalculation')); ?> 
 

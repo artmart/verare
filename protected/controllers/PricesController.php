@@ -32,7 +32,7 @@ class PricesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'return'),
+				'actions'=>array('create','update', 'return', 'returnCalculation' ),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -83,6 +83,19 @@ class PricesController extends Controller
 	{
 	    $this->layout='column1';
 		$this->render('return');
+	}
+        
+    public function actionReturnCalculation()
+	{
+	    $this->layout='column1';
+        
+        $instrument = '';
+
+        if(isset($_REQUEST['instrument']) && !($_REQUEST['instrument'] == '')){
+            $instrument = $_REQUEST['instrument'];
+            }
+        
+		$this->render('return_calculation', ['instrument' => $instrument]);
 	}
     
 

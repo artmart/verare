@@ -26,6 +26,7 @@ $inst_sql = "select * from ledger l
              where l.is_current = 1 and i.is_current = 1 order by trade_date, l.instrument_id asc";
              
 $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
+if(count($trades)>0){
 
 $columnsArray = array('Trade Date', 'Instrument', 'Nominal', 'Price');
     $cnt=count($trades);
@@ -68,7 +69,7 @@ $columns[] = array('name' => 'portfolio', 'header' =>'Portfolio', 'type'=>'raw')
 $inst_ids = implode(" ', '", $inst_id);
 
 $prices = Yii::app()->db->createCommand("select DATE(trade_date) trade_date, price, instrument_id from prices where is_current = 1 and instrument_id in ('$inst_ids') order by trade_date, instrument_id asc")->queryAll(true);
-
+if(count($prices)>0){
 foreach($prices as $pr){$all_dates[] = $pr['trade_date'];}
 $trade_dates = array_unique($all_dates); 
 
@@ -199,33 +200,21 @@ foreach($trade_dates as $td){
     //'rowCssClassExpression'=>if(!($data["tclass"] == '')){'$data["tclass"]'},
 //    'rowCssClassExpression'=>'($data["tclass"] == 1)?(($data["id"]%2==1)?"even":"odd"):$data["tclass"]',
 ));
-
-//foreach($ret_hiades as $rh){
-
-//$series[] = array('name' => $rh, 'data' => $data[$rh]);
-//}
-
-//$series[] = array('name' => 'Ending Inventory', 'data' => $data1);
-//$series[] = array('name' => 'Total stock', 'data' => $data2); 	
-
-?>
-
-<div class = "span12">
-	<?php 
- /*   
-    $this->Widget('ext.highcharts.HighchartsWidget', array(
-		   'options'=>array('title' => array('text' => ''), 'xAxis' => array('categories' => $weeks, 'type' => 'datetime', 'title' => array('text'=> null), 
-							'labels' => array('enabled' => true),),
-			  'yAxis' => array('title' => array('text' => ''), 'min' => 0),
-			  'chart' => array('plotBackgroundColor' => '#ffffff', 'plotBorderWidth' => null, 'plotShadow' => false, 'height' => 300, ),
-			  'colors'=>array('#6AC36A', '#FFD148', '#0563FE', '#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'),
-			  'credits' => array('enabled' => false),
-			  'series' => $series,
-		   )
-		));
-} else{echo "<div class='row-fluid'></div><div class='span2'></div>No Results found";}  
-*/
-?>
+    }else{ ?>
+ <div class="row-fluid"></div>
+ <div class="span1"></div>        
+<div class="alert alert-info span5">
+  <button type="button" class="close" data-dismiss="alert">x</button>
+  <strong>Error!</strong> Prices not fount for selected instrument.
 </div>
+    <?php }}else{ ?>
+    <div class="row-fluid"></div>
+    <div class="span1"></div> 
+                <div class="alert alert-info span5">
+                  <button type="button" class="close" data-dismiss="alert">x</button>
+                  <strong>Error!</strong> Ledgar information not fount for selected instrument.
+                </div>
+    <?php }
+?>
 
 

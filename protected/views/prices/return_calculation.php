@@ -58,7 +58,7 @@ $columnsArray = array('Trade Date', 'Instrument', 'Nominal', 'Price');
     $this->widget('ext.htmlTableUi.htmlTableUi',array(
         'ajaxUrl'=>'site/handleHtmlTable',
         'arProvider'=>'',    
-        'collapsed'=>true,
+        'collapsed'=>false,
         'columns'=>$columnsArray,
         'cssFile'=>'',
         'editable'=>false,
@@ -76,12 +76,9 @@ $columnsArray = array('Trade Date', 'Instrument', 'Nominal', 'Price');
 
 
 //Prices and returns calculations
-
-
 $columns = array(array('name' => 'trade_date', 'header' =>'trade_date', 'type'=>'raw'));
 $distinct_instruments  = array_unique($all_instruments);
 
-//exit;
 foreach($distinct_instruments as $key => $di){
     $columns[] = array('name' => $di, 'header' =>$di, 'type'=>'raw');
     $columns[] = array('name' => 'ret_'.$key, 'header' =>'ret_'.$di, 'type'=>'raw');
@@ -181,20 +178,11 @@ foreach($trade_dates as $td){
         //////////////////////////////////////////////////////////
     $i++;
 }
-
-
 ?>
 
 <div class="row-fluid"></div>
-<?php
-
-	$dp=new CArrayDataProvider($rawData, array(
-												'pagination'=>array('pageSize'=>75,),
-												//'sort'=>array('attributes'=> array('Group', 'Subgroup', 'Category', 'Total'),),
-			//'sort'=>array('attributes'=>array('product_group', 'subgroup', 'category'),),
-			
-	));
-	//$dp= new CSqlDataProvider($sql);
+    <?php
+	$dp=new CArrayDataProvider($rawData, ['pagination'=>['pageSize'=>75], /*'sort'=>array('attributes'=> array('Group', 'Subgroup', 'Category', 'Total'),),*/]);
 	$dp->setTotalItemCount(count($rawData));	
 	?>
 	

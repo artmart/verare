@@ -129,6 +129,7 @@ foreach($trade_dates as $td){
                 $amount_traded[$i] = $amount_traded[$i] + $rawData[$i]['pnl'.$trade['instrument_id']];
 
       //checking if the return for current instrument is not exist and inserting the calculated return.//
+      /*
        $existing_return  = Returns::model()->findByAttributes(['instrument_id'=>$trade['instrument_id'], 'trade_date' =>$rawData[$i]['trade_date']]);
            if(count($existing_return)==0){
                $return = new Returns;
@@ -137,6 +138,7 @@ foreach($trade_dates as $td){
                $return->return = $rawData[$i]['ret_'.$trade['instrument_id']];
                $return->save(); 
            }
+           */
        }
         
         //////////////////Portfolio calculation////////////////////

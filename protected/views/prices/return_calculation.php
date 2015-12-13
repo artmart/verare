@@ -151,6 +151,7 @@ foreach($trade_dates as $td){
                 $amount_traded[$i] = $amount_traded[$i] + $rawData[$i]['pnl'.$trade['instrument_id']];
 
       //checking if the return for current instrument is not exist and inserting the calculated return.//
+      /*
        $existing_return  = Returns::model()->findByAttributes(['instrument_id'=>$trade['instrument_id'], 'trade_date' =>$rawData[$i]['trade_date']]);
            if(count($existing_return)==0){
                $return = new Returns;
@@ -159,6 +160,7 @@ foreach($trade_dates as $td){
                $return->return = $rawData[$i]['ret_'.$trade['instrument_id']];
                $return->save(); 
            }
+       */
        }
         
         //////////////////Portfolio calculation////////////////////
@@ -201,27 +203,21 @@ foreach($trade_dates as $td){
     //'cssClassExpression' => '"yes"',
     //'rowCssClass'=>array('odd','even'),
 	'columns'=>$columns,
-   // 'htmlOptions'=>$data['tclass'],
-    //'htmlOptions'=>["id" => "hoptions"],
-    //'rowHtmlOptionsExpression' => $hoptions, // '[ "data-animalclass" => $hoptions, ]',
-    //'rowHtmlOptionsExpression' => ["id" => "hoptions"],
-    //'rowCssClassExpression'=>if(!($data["tclass"] == '')){'$data["tclass"]'},
-//    'rowCssClassExpression'=>'($data["tclass"] == 1)?(($data["id"]%2==1)?"even":"odd"):$data["tclass"]',
 ));
     }else{ ?>
- <div class="row-fluid"></div>
- <div class="span1"></div>        
-<div class="alert alert-info span5">
-  <button type="button" class="close" data-dismiss="alert">x</button>
-  <strong>Error!</strong> Prices not fount for selected instrument.
-</div>
+    <div class="row-fluid"></div>
+    <div class="span1"></div>        
+    <div class="alert alert-info span5">
+      <button type="button" class="close" data-dismiss="alert">x</button>
+      <strong>Error!</strong> Prices not fount for selected instrument.
+    </div>
     <?php }}else{ ?>
     <div class="row-fluid"></div>
     <div class="span1"></div> 
-                <div class="alert alert-info span5">
-                  <button type="button" class="close" data-dismiss="alert">x</button>
-                  <strong>Error!</strong> Ledgar information not fount for selected instrument.
-                </div>
+    <div class="alert alert-info span5">
+      <button type="button" class="close" data-dismiss="alert">x</button>
+      <strong>Error!</strong> Ledgar information not fount for selected instrument.
+    </div>
     <?php }
 } 
 ?>

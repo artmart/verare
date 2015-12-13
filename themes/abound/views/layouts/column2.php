@@ -67,7 +67,9 @@
 </br>
 <?php  echo CHtml::link('Returns',array('/returns/admin')); ?> 
 </br>
-<?php  echo CHtml::link('Return Calculation',array('/prices/ReturnCalculation')); ?> 
+<?php  echo CHtml::link('Return Calculation',array('/prices/allReturns')); 
+
+//echo CHtml::link('Return Calculation',array('/prices/ReturnCalculation')); ?> 
 
 
  

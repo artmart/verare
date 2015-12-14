@@ -5,7 +5,7 @@
 </style>
 <div class="span1"></div>
 <div class="span11">
-    <h2>Time-weighted return calculation for selected instrument</h2>
+    <h2>Time-weighted return calculation for selected portfolio</h2>
 </div>
 
 <div class="row-fluid"></div>
@@ -14,21 +14,21 @@
 
 <?php 
     $baseurl = Yii::app()->baseUrl;
-    $instrument_id = '';
+    $portfolio_id = '';
     $dt = '';
     $where = ' 1 = 1 ';
     
-    if(isset($_REQUEST['instrument']) && !($_REQUEST['instrument'] == '')){$instrument_id = $_REQUEST['instrument'];}
+    if(isset($_REQUEST['portfolio']) && !($_REQUEST['portfolio'] == '')){$portfolio_id = $_REQUEST['portfolio'];}
 
         
-    if(isset($_REQUEST['dt']) && !($_REQUEST['dt'] == '')){$dt = $_REQUEST['dt']; $where .= " and l.trade_date >='$dt' "; }
+    if(isset($_REQUEST['dt']) && !($_REQUEST['dt'] == '')){$dt = $_REQUEST['dt']; $where .= " and p.trade_date >='$dt' "; }
 
     $this->beginWidget('zii.widgets.CPortlet', array('title'=>"Selection",));
-    echo CHtml::beginForm('returnCalculation','post'); 
+    echo CHtml::beginForm('portfolioReturns','post'); 
 ?>
 <div class="span3">
     <?php
-        echo CHtml::dropDownList('instrument', $instrument_id,  CHtml::listData(Instruments::model()->findAll(array('select'=>'id, instrument', 'order'=>'instrument')),'id','instrument'), array('empty' => '-- Select Instrument --',  /*'onchange'=>'loaddata()', 'multiple' => true, 'size'=>'10'*/ ));
+        echo CHtml::dropDownList('portfolio', $portfolio_id,  CHtml::listData(Portfolios::model()->findAll(array('select'=>'id, portfolio', 'order'=>'portfolio')),'id','portfolio'), array('empty' => '-- Select Instrument --',  /*'onchange'=>'loaddata()', 'multiple' => true, 'size'=>'10'*/ ));
     ?>
 </div>
 <div class="span3">
@@ -51,7 +51,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',array(
 ?>
 </div>
 <div class="span1">
-<?php echo CHtml::submitButton('Calculate Return', array('submit' => $baseurl.'/prices/allReturns', 'class'=>"btn btn-primary"));?>
+<?php echo CHtml::submitButton('Calculate Return', array('submit' => $baseurl.'/prices/PortfolioReturns', 'class'=>"btn btn-primary"));?>
 </div>
 <br />
 <?php echo CHtml::endForm(); ?>
@@ -78,7 +78,7 @@ Yii::app()->db->createCommand($update_nominals_sql)->execute();
 
 
 
-if($instrument_id >0){
+if($portfolio_id >0){
 //Trades
 /*
 $trades_sql = "select l.instrument_id, i.instrument, l.trade_date, 
@@ -97,10 +97,19 @@ $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
 */
 $inst_sql = "select * from ledger l
              inner join instruments i on l.instrument_id = i.id
-             where l.is_current = 1 and i.is_current = 1 and i.id = $instrument_id  order by trade_date asc";
+             where l.is_current = 1 and i.is_current = 1 and l.portfolio_id = $portfolio_id  order by trade_date asc";
 $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
 
+
 if(count($trades)>0){
+
+foreach($trades as $trd){
+    $ins_ids[] = $trd['instrument_id'];
+} 
+
+$insids = implode("','", $ins_ids);
+// var_dump($insids);
+ //exit;  
 /*
 $columnsArray = array('Trade Date', 'Instrument', 'Nominal', 'Price', 'Total Nominal');
     $cnt=count($trades);
@@ -130,49 +139,58 @@ $columnsArray = array('Trade Date', 'Instrument', 'Nominal', 'Price', 'Total Nom
 
     //Prices and returns calculations
     $columns = array(array('name' => 'trade_date', 'header' =>'trade_date', 'type'=>'raw'));
-    $columns[] = array('name' => 'price', 'header' =>'Price', 'type'=>'raw');
+    //$columns[] = array('name' => 'price', 'header' =>'Price', 'type'=>'raw');
     $columns[] = array('name' => 'return', 'header' =>'Return', 'type'=>'raw');
-    $columns[] = array('name' => 'chart', 'header' =>'Chart Return', 'type'=>'raw');
+   // $columns[] = array('name' => 'chart', 'header' =>'Chart Return', 'type'=>'raw');
     
-    
+/*    
 $prices_sql = "select distinct p.trade_date, p.price,
                 (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id) nominal,
                 (select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id) pnl
                  from prices p
                 where p.is_current = 1 and p.instrument_id = $instrument_id and p.trade_date >='$dt'  
                 order by p.trade_date asc";
-$prices = Yii::app()->db->createCommand($prices_sql)->queryAll(true);
+*/               
+                
+$portfolio_return_sql = "select p.trade_date,
+                        sum((select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id)) pnl,
+                        sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id)) top
+                        from prices p
+                        where p.is_current = 1 and instrument_id in ('$insids') and " . $where .  
+                        " group by  p.trade_date
+                        order by p.trade_date asc";
+$portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
 
-if(count($prices)>0){
+if(count($portfolio_returns)>0){
 $i = 0;
-foreach($prices as $price){
+foreach($portfolio_returns as $price){
     $rawData[$i]['id'] = $i;    
     $rawData[$i]['trade_date'] = $price['trade_date'];
-    $rawData[$i]['price'] = $price['price'];
-    $rawData[$i]['nominal'] = $price['nominal'];
+    //$rawData[$i]['price'] = $price['price'];
+    $rawData[$i]['top'] = $price['top'];
     $rawData[$i]['pnl'] = $price['pnl'];
     $rawData[$i]['return'] = 1;                          
-    $rawData[$i]['chart'] = 1;
+    //$rawData[$i]['chart'] = 1;
     // $rawData[$i]['amount'] = 0;
     // $amount_portfolio[$i] = 0; 
     // $amount_traded[$i] = 0; 
     // $amount_nominal[$i] = 0;
     // $porfolio_amount[$i] = 0;
      
-    if($i>0 && $rawData[0]['price'] !== 0){
-            $rawData[$i]['chart'] = $rawData[$i]['price']/$rawData[0]['price'];      
+    if($i>0){
+          //  $rawData[$i]['chart'] = $rawData[$i]['price']/$rawData[0]['price'];      
         
-            $div = $rawData[$i-1]['nominal'] * $rawData[$i-1]['price']+ $rawData[$i]['pnl'];
+            $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'];
             
             if($div>0){
-                $rawData[$i]['return'] = ($rawData[$i]['nominal'] * $rawData[$i]['price'])/$div;
+                $rawData[$i]['return'] = $rawData[$i]['top'] /$div;
             }else{
                 $rawData[$i]['return'] = 1;
             }
         
             // $porfolio_amount[$i] = $porfolio_amount[$i] + $rawData[$i]['nominal'] * $rawData[$i]['price'];
             // $amount_traded[$i] = $amount_traded[$i] + $rawData[$i]['pnl'];
-        }
+       }
  
 
       //checking if the return for current instrument is not exist and inserting the calculated return.//
@@ -210,7 +228,7 @@ foreach($prices as $price){
 ?>
 <div class="row-fluid"></div>
     <?php
-	$dp=new CArrayDataProvider($rawData, ['pagination'=>['pageSize'=>70, 'params' => ['instrument' => $instrument_id, 'dt' => $dt]], 
+	$dp=new CArrayDataProvider($rawData, ['pagination'=>['pageSize'=>70, 'params' => ['portfolio' => $portfolio_id, 'dt' => $dt]], 
     /*'sort'=>array('attributes'=> array('Group', 'Subgroup', 'Category', 'Total'),),*/
     ]);
 	$dp->setTotalItemCount(count($rawData));	

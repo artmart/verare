@@ -32,7 +32,7 @@ class PricesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'return', 'returnCalculation', 'allReturns', 'instrumentReturnUpdate' ),
+				'actions'=>array('create','update', 'return', 'returnCalculation', 'allReturns', 'instrumentReturnUpdate', 'portfolioReturns' ),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -105,6 +105,33 @@ class PricesController extends Controller
 		$this->render('all_returns', ['instrument' => $instrument, 'dt' => $dt]);
        
     }
+    
+    
+    public function actionPortfolioReturns()
+	{
+	   $this->layout='column1';
+        
+        
+       // var_dump($_POST);
+       // exit;
+        $portfolio = '';
+        $dt = '';
+
+        if(isset($_REQUEST['portfolio']) && !($_REQUEST['portfolio'] == '')){
+            $portfolio = $_REQUEST['portfolio'];
+            }
+        if(isset($_REQUEST['dt']) && !($_REQUEST['dt'] == '')){
+            $dt = $_REQUEST['dt'];
+            }
+            
+		$this->render('portfolio_returns', ['portfolio' => $portfolio, 'dt' => $dt]);
+       
+    }
+    
+    
+    
+    
+    
     
     public function actionInstrumentReturnUpdate($id)
 	{

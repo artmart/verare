@@ -66,13 +66,8 @@ class PortfolioReturnsController extends Controller
         $where = ' 1 = 1 ';
     
         if(isset($_REQUEST['portfolio']) && !($_REQUEST['portfolio'] == '')){$portfolio_id = $_REQUEST['portfolio'];}
-
-        
         if(isset($_REQUEST['dt']) && !($_REQUEST['dt'] == '')){$dt = $_REQUEST['dt']; $where .= " and p.trade_date >='$dt' "; }
-
-        //if(isset($_REQUEST['portfolio']) && !($_REQUEST['portfolio'] == '')){$portfolio_id = $_REQUEST['portfolio'];}
-        //if(isset($_REQUEST['dt']) && !($_REQUEST['dt'] == '')){$dt = $_REQUEST['dt'];}
-       ///////////////////////////////////////////////////////////////////////////////////     
+  
         if($portfolio_id >0){
             ini_set('max_execution_time', 50000);
         //Trades
@@ -138,13 +133,7 @@ class PortfolioReturnsController extends Controller
         }
         }    
         
-        $this->redirect('admin');
-
-             
-            
-        ///////////////////////////////////////////////////////////////////////////////////    
-	//	$this->render('portfolio_returns', ['portfolio' => $portfolio, 'dt' => $dt]);
-       
+        $this->redirect('admin');       
     }
     
     

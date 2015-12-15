@@ -110,21 +110,90 @@ class PricesController extends Controller
     public function actionPortfolioReturns()
 	{
 	   $this->layout='column1';
-        
-        
-       // var_dump($_POST);
-       // exit;
-        $portfolio = '';
-        $dt = '';
 
-        if(isset($_REQUEST['portfolio']) && !($_REQUEST['portfolio'] == '')){
-            $portfolio = $_REQUEST['portfolio'];
-            }
-        if(isset($_REQUEST['dt']) && !($_REQUEST['dt'] == '')){
-            $dt = $_REQUEST['dt'];
-            }
+        $portfolio_id = '';
+        $dt = '';
+        $where = ' 1 = 1 ';
+    
+        if(isset($_REQUEST['portfolio']) && !($_REQUEST['portfolio'] == '')){$portfolio_id = $_REQUEST['portfolio'];}
+
+        
+        if(isset($_REQUEST['dt']) && !($_REQUEST['dt'] == '')){$dt = $_REQUEST['dt']; $where .= " and p.trade_date >='$dt' "; }
+
+        //if(isset($_REQUEST['portfolio']) && !($_REQUEST['portfolio'] == '')){$portfolio_id = $_REQUEST['portfolio'];}
+        //if(isset($_REQUEST['dt']) && !($_REQUEST['dt'] == '')){$dt = $_REQUEST['dt'];}
+       ///////////////////////////////////////////////////////////////////////////////////     
+        if($portfolio_id >0){
+            ini_set('max_execution_time', 50000);
+        //Trades
+        $inst_sql = "select * from ledger l
+                     inner join instruments i on l.instrument_id = i.id
+                     where l.is_current = 1 and i.is_current = 1 and l.portfolio_id = $portfolio_id  order by trade_date asc";
+        $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
+        
+        if(count($trades)>0){
+        
+        foreach($trades as $trd){$ins_ids[] = $trd['instrument_id'];} 
+        
+        $insids = implode("','", $ins_ids);          
+                        
+        $portfolio_return_sql = "select p.trade_date,
+                                sum((select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id)) pnl,
+                                sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id)) top
+                                from prices p
+                                where p.is_current = 1 and instrument_id in ('$insids') and " . $where .  
+                                " group by  p.trade_date
+                                order by p.trade_date asc";
+        $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
+        
+        if(count($portfolio_returns)>0){
+        $i = 0;
+        foreach($portfolio_returns as $price){
+            $rawData[$i]['id'] = $i;    
+            $rawData[$i]['trade_date'] = $price['trade_date'];
+            $rawData[$i]['top'] = $price['top'];
+            $rawData[$i]['pnl'] = $price['pnl'];
+            $rawData[$i]['return'] = 1;                          
+             
+            if($i>0){        
+                    $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'];
+                    
+                    if($div>0){
+                        $rawData[$i]['return'] = $rawData[$i]['top']/$div;
+                    }else{
+                        $rawData[$i]['return'] = 1;
+                    }
+               }
+         
+              //checking if the return for current instrument is not exist and inserting the calculated return.//
+               $existing_return  = PortfolioReturns::model()->findByAttributes(['portfolio_id'=>$portfolio_id, 'trade_date' =>$rawData[$i]['trade_date'], 'is_prtfolio_or_group' =>1]);
+                   if(count($existing_return)==0){
+                       $return = new PortfolioReturns;
+                       $return->portfolio_id = $portfolio_id;
+                       $return->is_prtfolio_or_group = 1;
+                       $return->trade_date = $rawData[$i]['trade_date'];
+                       $return->return = $rawData[$i]['return'];
+                       $return->save(); 
+                   }else{
+                           $existing_return->return = $rawData[$i]['return'];
+                           $existing_return->save(); 
+                        }
+               $i++;
+               }     
+          }else{
+            ///portfolio return is empty////
+          }  
+        }else{
+            ///treades are not found//
+        }
+        }    
+        
+        $this->redirect('portfolioReturns/admin');
+
+             
             
-		$this->render('portfolio_returns', ['portfolio' => $portfolio, 'dt' => $dt]);
+        ///////////////////////////////////////////////////////////////////////////////////    
+	//	$this->render('portfolio_returns', ['portfolio' => $portfolio, 'dt' => $dt]);
        
     }
     

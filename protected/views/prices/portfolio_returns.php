@@ -75,9 +75,6 @@ $update_nominals_sql = "UPDATE ledger t1
 Yii::app()->db->createCommand($update_nominals_sql)->execute();
 */
 
-
-
-
 if($portfolio_id >0){
 //Trades
 /*
@@ -108,8 +105,7 @@ foreach($trades as $trd){
 } 
 
 $insids = implode("','", $ins_ids);
-// var_dump($insids);
- //exit;  
+ 
 /*
 $columnsArray = array('Trade Date', 'Instrument', 'Nominal', 'Price', 'Total Nominal');
     $cnt=count($trades);
@@ -177,57 +173,36 @@ foreach($portfolio_returns as $price){
     // $amount_nominal[$i] = 0;
     // $porfolio_amount[$i] = 0;
      
-    if($i>0){
-          //  $rawData[$i]['chart'] = $rawData[$i]['price']/$rawData[0]['price'];      
-        
+    if($i>0){        
             $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'];
             
             if($div>0){
-                $rawData[$i]['return'] = $rawData[$i]['top'] /$div;
+                $rawData[$i]['return'] = $rawData[$i]['top']/$div;
             }else{
                 $rawData[$i]['return'] = 1;
             }
-        
-            // $porfolio_amount[$i] = $porfolio_amount[$i] + $rawData[$i]['nominal'] * $rawData[$i]['price'];
-            // $amount_traded[$i] = $amount_traded[$i] + $rawData[$i]['pnl'];
        }
  
-
       //checking if the return for current instrument is not exist and inserting the calculated return.//
-      /*
-       $existing_return  = Returns::model()->findByAttributes(['instrument_id'=>$trade['instrument_id'], 'trade_date' =>$rawData[$i]['trade_date']]);
+       $existing_return  = PortfolioReturns::model()->findByAttributes(['portfolio_id'=>$portfolio_id, 'trade_date' =>$rawData[$i]['trade_date'], 'is_prtfolio_or_group' =>1]);
            if(count($existing_return)==0){
-               $return = new Returns;
-               $return->instrument_id = $trade['instrument_id'];
+               $return = new PortfolioReturns;
+               $return->portfolio_id = $portfolio_id;
+               $return->is_prtfolio_or_group = 1;
                $return->trade_date = $rawData[$i]['trade_date'];
-               $return->return = $rawData[$i]['return'.$trade['instrument_id']];
+               $return->return = $rawData[$i]['return'];
                $return->save(); 
-           }
-       */
-       $i++;
-       }
-        
-        //////////////////Portfolio calculation////////////////////
-        /*
-            if($i == 0){
-                $rawData[$i]['portfolio'] = 1;
-            }else{   
-                //$dev1 = $amount_nominal[$i-1] * $rawData[$i-1][$column] + $amount_traded[$i];
-                $dev1 = $porfolio_amount[$i-1] + $amount_traded[$i];
-                if($dev1 >0){
-                    $rawData[$i]['portfolio'] = ($porfolio_amount[$i])/$dev1;
-               // if(($amount_portfolio[$i-1]+$amount_traded[$i])>0){
-                //$rawData[$i]['portfolio'] = $amount_portfolio[$i]/($amount_portfolio[$i-1]+$amount_traded[$i]);                
-                }else{
-                    $rawData[$i]['portfolio'] = 1;
+           }else{
+                   $existing_return->return = $rawData[$i]['return'];
+                   $existing_return->save(); 
                 }
-            }
-        */
-        //////////////////////////////////////////////////////////
-    
+       
+       $i++;
+       } 
 ?>
 <div class="row-fluid"></div>
-    <?php
+    <?php 
+
 	$dp=new CArrayDataProvider($rawData, ['pagination'=>['pageSize'=>70, 'params' => ['portfolio' => $portfolio_id, 'dt' => $dt]], 
     /*'sort'=>array('attributes'=> array('Group', 'Subgroup', 'Category', 'Total'),),*/
     ]);

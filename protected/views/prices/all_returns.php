@@ -176,16 +176,19 @@ foreach($prices as $price){
  
 
       //checking if the return for current instrument is not exist and inserting the calculated return.//
-      /*
-       $existing_return  = Returns::model()->findByAttributes(['instrument_id'=>$trade['instrument_id'], 'trade_date' =>$rawData[$i]['trade_date']]);
+      
+       $existing_return  = Returns::model()->findByAttributes(['instrument_id'=>$instrument_id, 'trade_date' =>$rawData[$i]['trade_date']]);
            if(count($existing_return)==0){
                $return = new Returns;
-               $return->instrument_id = $trade['instrument_id'];
+               $return->instrument_id = $instrument_id;
                $return->trade_date = $rawData[$i]['trade_date'];
-               $return->return = $rawData[$i]['return'.$trade['instrument_id']];
+               $return->return = $rawData[$i]['return'];
                $return->save(); 
+           }else{
+               $existing_return->return = $rawData[$i]['return'];
+               $existing_return->save(); 
            }
-       */
+       
        $i++;
        }
         

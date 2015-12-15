@@ -56,7 +56,6 @@ class PortfolioReturnsController extends Controller
 		));
 	}
     
-    
     public function actionPortfolioReturnsCalc()
 	{
 	   $this->layout='column1';
@@ -127,12 +126,18 @@ class PortfolioReturnsController extends Controller
                }     
           }else{
             ///portfolio return is empty////
+            Yii::app()->user->setFlash('notice', "Prices not fount.");
+            //Yii::app()->user->setFlash('success', "Data1 saved!");
+            //Yii::app()->user->setFlash('error', "Data2 failed!");        
+            
+            
           }  
         }else{
             ///treades are not found//
+            Yii::app()->user->setFlash('notice', "Ledgar information not found.");
         }
         }    
-        
+        Yii::app()->user->setFlash('success', "Portfolio returns updated.");
         $this->redirect('admin');       
     }
     

@@ -5,6 +5,13 @@
     	background-size: 100% 100%;
     }
 </style>
+
+<?php
+    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="alert alert-info span5"><div class="flash-' . $key . '">' . $message . "</div></div>\n";
+    }
+?>
+
 <div class="span1"></div>
 <div class="span11">
     <h2>Time-weighted return calculation for selected portfolio</h2>

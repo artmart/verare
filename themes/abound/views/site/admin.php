@@ -60,6 +60,10 @@ echo CHtml::link('Return Calculation',array('/prices/allReturns'));
 <?php  echo CHtml::link('Portfolio Returns',array('/portfolioReturns/admin')); ?> 
 </br>
 <?php  echo CHtml::link('All Stats',array('/prices/allStats')); ?> 
+</br>
+<?php  echo CHtml::link('Access Levels',array('/accessLevels/admin')); ?> 
+
+
 
 
 

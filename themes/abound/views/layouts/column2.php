@@ -74,12 +74,13 @@
 <?php  echo CHtml::link('Portfolio Returns',array('/portfolioReturns/admin')); ?> 
 </br>
 <?php  echo CHtml::link('All Stats',array('/prices/allStats')); ?> 
-
+</br>
+<?php  echo CHtml::link('Access Levels',array('/accessLevels/admin')); ?> 
  
     
         
         
-        
+  <!--     
         <br /><br/>
         <table class="table table-striped table-bordered">
           <tbody>
@@ -131,7 +132,7 @@
               
             </dl>
       </div>
-		
+-->		
     </div><!--/span-->
     <div class="span9">
     

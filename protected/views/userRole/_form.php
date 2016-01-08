@@ -1,9 +1,3 @@
-<?php
-/* @var $this UserRoleController */
-/* @var $model UserRole */
-/* @var $form CActiveForm */
-?>
-
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -14,91 +8,154 @@
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 	<?php echo $form->errorSummary($model); ?>
-     
- <div class="row">
-     <div class="form-group">
-     <div class="span2">
-        <?php echo $form->labelEx($model,'user_role'); ?>
-     </div>
-      <div class="col-sm-6 clearLeftPadding">      
-        <?php echo $form->textField($model,'user_role',array('size'=>255,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'user_role'); ?>
-      </div>
-    </div>
-  </div>
-    
-  <div class="row">
-	<div class="form-group">
-     <div class="span2">
-		<?php echo $form->labelEx($model,'trade_creation'); ?>
-        </div>
-        <div class="col-sm-8 clearLeftPadding">
-		<?php //echo $form->textField($model,'trade_creation'); 
-              echo $form->checkBox($model,'trade_creation',array('value'=>1,'uncheckValue'=>0,'style'=>'margin-top:7px;'));
-        ?>
-		<?php echo $form->error($model,'trade_creation'); ?>
+
+	<div class="row">
+		<?php //echo $form->labelEx($model,'trade_role'); ?>
+		<?php //echo $form->textField($model,'trade_role'); ?>
+		<?php //echo $form->error($model,'trade_role'); ?>
 	</div>
-    </div>
- </div>
 
- <div class="row">
-	<div class="form-group">
-     <div class="span2">
-		<?php echo $form->labelEx($model,'trade_confirmation'); ?>
+	<div class="row">
+        <div class="span3">
+		<?php echo $form->labelEx($model,'user_role'); ?>
         </div>
-        <div class="col-sm-6 clearLeftPadding">
-		<?php //echo $form->textField($model,'trade_confirmation'); 
-              echo $form->checkBox($model,'trade_confirmation',array('value'=>1,'uncheckValue'=>0,'style'=>'margin-top:7px;'));
-        ?>
-		<?php echo $form->error($model,'trade_confirmation'); ?>
-	   </div>
-    </div>
-  </div>
+		<?php echo $form->textField($model,'user_role',array('size'=>100,'maxlength'=>255, 'class' => 'span4')); ?>
+		<?php echo $form->error($model,'user_role'); ?>
+	</div>
 
-<div class="row">
-	<div class="form-group">
-     <div class="span2">
-		<?php echo $form->labelEx($model,'trade_cancellation'); ?>
-        </div>
-        <div class="col-sm-6 clearLeftPadding">
-		<?php //echo $form->textField($model,'trade_cancellation'); 
-              echo $form->checkBox($model,'trade_cancellation',array('value'=>1,'uncheckValue'=>0,'style'=>'margin-top:7px;'));
-        ?>
-		<?php echo $form->error($model,'trade_cancellation'); ?>
-	   </div>
-    </div>
-  </div>
+	<div class="row">
+		<?php //echo $form->labelEx($model,'trade_creation'); ?>
+		<?php //echo $form->textField($model,'trade_creation'); ?>
+		<?php //echo $form->error($model,'trade_creation'); ?>
+	</div>
 
-<div class="row">
-	<div class="form-group">
-     <div class="span2">
-		<?php echo $form->labelEx($model,'price_administration'); ?>
-        </div>
-        <div class="col-sm-6 clearLeftPadding">
-		<?php //echo $form->textField($model,'price_administration'); 
-              echo $form->checkBox($model,'price_administration',array('value'=>1,'uncheckValue'=>0,'style'=>'margin-top:7px;'));
-        ?>
-		<?php echo $form->error($model,'price_administration'); ?>
-	   </div>
-    </div>
-  </div>
+	<div class="row">
+		<?php //echo $form->labelEx($model,'trade_confirmation'); ?>
+		<?php //echo $form->textField($model,'trade_confirmation'); ?>
+		<?php //echo $form->error($model,'trade_confirmation'); ?>
+	</div>
 
-<div class="row">
-	<div class="form-group">
-     <div class="span2">
-		<?php echo $form->labelEx($model,'instrument_administration'); ?>
+	<div class="row">
+		<?php //echo $form->labelEx($model,'trade_cancellation'); ?>
+		<?php //echo $form->textField($model,'trade_cancellation'); ?>
+		<?php //echo $form->error($model,'trade_cancellation'); ?>
+	</div>
+
+	<div class="row">
+		<?php //echo $form->labelEx($model,'price_administration'); ?>
+		<?php //echo $form->textField($model,'price_administration'); ?>
+		<?php //echo $form->error($model,'price_administration'); ?>
+	</div>
+
+	<div class="row">
+		<?php //echo $form->labelEx($model,'instrument_administration'); ?>
+		<?php //echo $form->textField($model,'instrument_administration'); ?>
+		<?php //echo $form->error($model,'instrument_administration'); ?>
+	</div>
+
+	<div class="row">
+        <div class="span3">
+		<?php echo $form->labelEx($model,'ledger_access_level'); ?>
         </div>
-        <div class="col-sm-6 clearLeftPadding">
-		<?php //echo $form->textField($model,'instrument_administration'); 
-                echo $form->checkBox($model,'instrument_administration',array('value'=>1,'uncheckValue'=>0,'style'=>'margin-top:7px;'));
+		<?php //echo $form->textField($model,'ledger_access_level'); 
+              echo $form->dropDownList($model, 'ledger_access_level',  CHtml::listData(AccessLevels::model()->findAll(array('select'=>'id, access_level', 'order'=>'access_level')),'id','access_level'), array('empty' => '- Select -'));
         ?>
-		<?php echo $form->error($model,'instrument_administration'); ?>
-	   </div>
-    </div>
-  </div>
+		<?php echo $form->error($model,'ledger_access_level'); ?>
+	</div>
+
+	<div class="row">
+        <div class="span3">
+		<?php echo $form->labelEx($model,'users_access_level'); ?>
+        </div>
+		<?php //echo $form->textField($model,'users_access_level'); 
+              echo $form->dropDownList($model, 'users_access_level',  CHtml::listData(AccessLevels::model()->findAll(array('select'=>'id, access_level', 'order'=>'access_level')),'id','access_level'), array('empty' => '- Select -'));
+        ?>
+		<?php echo $form->error($model,'users_access_level'); ?>
+	</div>
+
+	<div class="row">
+        <div class="span3">
+		<?php echo $form->labelEx($model,'user_roles_access_level'); ?>
+        </div>
+		<?php //echo $form->textField($model,'user_roles_access_level'); 
+              echo $form->dropDownList($model, 'user_roles_access_level',  CHtml::listData(AccessLevels::model()->findAll(array('select'=>'id, access_level', 'order'=>'access_level')),'id','access_level'), array('empty' => '- Select -'));
+        ?>
+		<?php echo $form->error($model,'user_roles_access_level'); ?>
+	</div>
+
+	<div class="row">
+        <div class="span3">
+		<?php echo $form->labelEx($model,'portfolios_access_level'); ?>
+        </div>
+		<?php //echo $form->textField($model,'portfolios_access_level'); 
+              echo $form->dropDownList($model, 'portfolios_access_level',  CHtml::listData(AccessLevels::model()->findAll(array('select'=>'id, access_level', 'order'=>'access_level')),'id','access_level'), array('empty' => '- Select -'));
+        ?>
+		<?php echo $form->error($model,'portfolios_access_level'); ?>
+	</div>
+
+	<div class="row">
+        <div class="span3">
+		<?php echo $form->labelEx($model,'instruments_access_level'); ?>
+        </div>
+		<?php //echo $form->textField($model,'instruments_access_level'); 
+              echo $form->dropDownList($model, 'instruments_access_level',  CHtml::listData(AccessLevels::model()->findAll(array('select'=>'id, access_level', 'order'=>'access_level')),'id','access_level'), array('empty' => '- Select -'));
+        ?>
+		<?php echo $form->error($model,'instruments_access_level'); ?>
+	</div>
+
+	<div class="row">
+        <div class="span3">
+		<?php echo $form->labelEx($model,'counterparties_access_level'); ?>
+        </div>
+		<?php //echo $form->textField($model,'counterparties_access_level'); 
+              echo $form->dropDownList($model, 'counterparties_access_level',  CHtml::listData(AccessLevels::model()->findAll(array('select'=>'id, access_level', 'order'=>'access_level')),'id','access_level'), array('empty' => '- Select -'));
+        ?>
+		<?php echo $form->error($model,'counterparties_access_level'); ?>
+	</div>
+
+	<div class="row">
+        <div class="span3">
+		<?php echo $form->labelEx($model,'documents_access_level'); ?>
+        </div>
+		<?php //echo $form->textField($model,'documents_access_level'); 
+              echo $form->dropDownList($model, 'documents_access_level',  CHtml::listData(AccessLevels::model()->findAll(array('select'=>'id, access_level', 'order'=>'access_level')),'id','access_level'), array('empty' => '- Select -'));
+        ?>
+		<?php echo $form->error($model,'documents_access_level'); ?>
+	</div>
+
+	<div class="row">
+        <div class="span3">
+		<?php echo $form->labelEx($model,'prices_access_level'); ?>
+        </div>
+		<?php //echo $form->textField($model,'prices_access_level'); 
+              echo $form->dropDownList($model, 'prices_access_level',  CHtml::listData(AccessLevels::model()->findAll(array('select'=>'id, access_level', 'order'=>'access_level')),'id','access_level'), array('empty' => '- Select -'));
+        ?>
+		<?php echo $form->error($model,'prices_access_level'); ?>
+	</div>
+
+	<div class="row">
+        <div class="span3">
+		<?php echo $form->labelEx($model,'audit_trails_access_level'); ?>
+        </div>
+		<?php //echo $form->textField($model,'audit_trails_access_level'); 
+              echo $form->dropDownList($model, 'audit_trails_access_level',  CHtml::listData(AccessLevels::model()->findAll(array('select'=>'id, access_level', 'order'=>'access_level')),'id','access_level'), array('empty' => '- Select -'));
+        ?>
+		<?php echo $form->error($model,'audit_trails_access_level'); ?>
+	</div>
+
+	<div class="row">
+        <div class="span3">
+		<?php echo $form->labelEx($model,'grouping_access_level'); ?>
+        </div>
+		<?php //echo $form->textField($model,'grouping_access_level'); 
+              echo $form->dropDownList($model, 'grouping_access_level',  CHtml::listData(AccessLevels::model()->findAll(array('select'=>'id, access_level', 'order'=>'access_level')),'id','access_level'), array('empty' => '- Select -'));
+        ?>
+		<?php echo $form->error($model,'grouping_access_level'); ?>
+	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', ['class'=>"btn btn-primary"]); ?>
+        <div class="span3"></div>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', ['class'=>"btn btn-primary span4"]); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

@@ -12,31 +12,51 @@
 	<?php echo $form->errorSummary(array($model,$profile)); ?>
 
 	<div class="row">
+        <div class="span2">
 		<?php echo $form->labelEx($model,'username'); ?>
+        </div>
 		<?php echo $form->textField($model,'username',array('size'=>20,'maxlength'=>20)); ?>
 		<?php echo $form->error($model,'username'); ?>
 	</div>
 
 	<div class="row">
+        <div class="span2">
 		<?php echo $form->labelEx($model,'password'); ?>
+        </div>
 		<?php echo $form->passwordField($model,'password',array('size'=>60,'maxlength'=>128)); ?>
 		<?php echo $form->error($model,'password'); ?>
 	</div>
 
 	<div class="row">
+        <div class="span2">
 		<?php echo $form->labelEx($model,'email'); ?>
+        </div>
 		<?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>128)); ?>
 		<?php echo $form->error($model,'email'); ?>
 	</div>
-
+<!--
 	<div class="row">
-		<?php echo $form->labelEx($model,'superuser'); ?>
-		<?php echo $form->dropDownList($model,'superuser',User::itemAlias('AdminStatus')); ?>
-		<?php echo $form->error($model,'superuser'); ?>
+        <div class="span2">
+		<?php //echo $form->labelEx($model,'superuser'); ?>
+        </div>
+		<?php //echo $form->dropDownList($model,'superuser',User::itemAlias('AdminStatus')); ?>
+		<?php //echo $form->error($model,'superuser'); ?>
+	</div>
+ -->   
+    <div class="row">
+        <div class="span2">
+		<?php echo $form->labelEx($model,'user_role'); ?>
+        </div>
+		<?php //echo $form->dropDownList($model,'user_role',User::itemAlias('AdminStatus')); 
+              echo $form->dropDownList($model, 'user_role',  CHtml::listData(UserRole::model()->findAll(array('select'=>'id, user_role', 'order'=>'user_role')),'id','user_role'), array('empty' => '- Select -'));
+        ?>
+		<?php echo $form->error($model,'user_role'); ?>
 	</div>
 
 	<div class="row">
+        <div class="span2">
 		<?php echo $form->labelEx($model,'status'); ?>
+        </div>
 		<?php echo $form->dropDownList($model,'status',User::itemAlias('UserStatus')); ?>
 		<?php echo $form->error($model,'status'); ?>
 	</div>
@@ -46,7 +66,9 @@
 			foreach($profileFields as $field) {
 			?>
 	<div class="row">
+        <div class="span2">
 		<?php echo $form->labelEx($profile,$field->varname); ?>
+        </div>
 		<?php 
 		if ($widgetEdit = $field->widgetEdit($profile)) {
 			echo $widgetEdit;
@@ -65,7 +87,8 @@
 		}
 ?>
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? UserModule::t('Create') : UserModule::t('Save')); ?>
+        <div class="span2"></div>
+		<?php echo CHtml::submitButton($model->isNewRecord ? UserModule::t('Create') : UserModule::t('Save'), ['class'=>"btn btn-primary span2"]); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

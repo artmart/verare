@@ -59,9 +59,9 @@ class User extends CActiveRecord
 			array('superuser', 'in', 'range'=>array(0,1)),
             array('create_at', 'default', 'value' => date('Y-m-d H:i:s'), 'setOnEmpty' => true, 'on' => 'insert'),
             array('lastvisit_at', 'default', 'value' => '0000-00-00 00:00:00', 'setOnEmpty' => true, 'on' => 'insert'),
-			array('username, email, superuser, status', 'required'),
-			array('superuser, status', 'numerical', 'integerOnly'=>true),
-			array('id, username, password, email, activkey, create_at, lastvisit_at, superuser, status', 'safe', 'on'=>'search'),
+			array('username, email, superuser, status, user_role', 'required'),
+			array('superuser, status, superuser', 'numerical', 'integerOnly'=>true),
+			array('id, username, password, email, activkey, create_at, lastvisit_at, superuser, status, user_role', 'safe', 'on'=>'search'),
 		):((Yii::app()->user->id==$this->id)?array(
 			array('username, email', 'required'),
 			array('username', 'length', 'max'=>20, 'min' => 3,'message' => UserModule::t("Incorrect username (length between 3 and 20 characters).")),
@@ -97,11 +97,11 @@ class User extends CActiveRecord
 			'verifyCode'=>UserModule::t("Verification Code"),
 			'activkey' => UserModule::t("activation key"),
 			'createtime' => UserModule::t("Registration date"),
-			'create_at' => UserModule::t("Registration date"),
-			
+			'create_at' => UserModule::t("Registration date"),			
 			'lastvisit_at' => UserModule::t("Last visit"),
 			'superuser' => UserModule::t("Superuser"),
 			'status' => UserModule::t("Status"),
+            'user_role' => 'User Role',
 		);
 	}
 	
@@ -121,7 +121,7 @@ class User extends CActiveRecord
                 'condition'=>'superuser=1',
             ),
             'notsafe'=>array(
-            	'select' => 'id, username, password, email, activkey, create_at, lastvisit_at, superuser, status',
+            	'select' => 'id, username, password, email, activkey, create_at, lastvisit_at, superuser, status, user_role',
             ),
         );
     }
@@ -130,7 +130,7 @@ class User extends CActiveRecord
     {
         return CMap::mergeArray(Yii::app()->getModule('user')->defaultScope,array(
             'alias'=>'user',
-            'select' => 'user.id, user.username, user.email, user.create_at, user.lastvisit_at, user.superuser, user.status',
+            'select' => 'user.id, user.username, user.email, user.create_at, user.lastvisit_at, user.superuser, user.user_role, user.status',
         ));
     }
 	
@@ -145,8 +145,14 @@ class User extends CActiveRecord
 				'0' => UserModule::t('No'),
 				'1' => UserModule::t('Yes'),
 			),
+            'UserRoleStatus' =>[
+                CHtml::listData(UserRole::model()->findAll(array('select'=>'id, user_role', 'order'=>'user_role')),'id','user_role'),
+            ],
+            
+            
+            
 		);
-		if (isset($code))
+		if(isset($code))
 			return isset($_items[$type][$code]) ? $_items[$type][$code] : false;
 		else
 			return isset($_items[$type]) ? $_items[$type] : false;
@@ -171,6 +177,7 @@ class User extends CActiveRecord
         $criteria->compare('create_at',$this->create_at);
         $criteria->compare('lastvisit_at',$this->lastvisit_at);
         $criteria->compare('superuser',$this->superuser);
+        $criteria->compare('user_role',$this->user_role);
         $criteria->compare('status',$this->status);
 
         return new CActiveDataProvider(get_class($this), array(

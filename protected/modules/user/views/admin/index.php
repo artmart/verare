@@ -58,10 +58,15 @@ $('.search-form form').submit(function(){
 		),
 		'create_at',
 		'lastvisit_at',
-		array(
-			'name'=>'superuser',
-			'value'=>'User::itemAlias("AdminStatus",$data->superuser)',
-			'filter'=>User::itemAlias("AdminStatus"),
+		//array(
+		//	'name'=>'superuser',
+		//	'value'=>'User::itemAlias("AdminStatus",$data->superuser)',
+		//	'filter'=>User::itemAlias("AdminStatus"),
+		//),
+        array(
+			'name'=>'user_role',
+			//'value'=>'User::itemAlias("AdminStatus",$data->superuser)',
+			//'filter'=>User::itemAlias("AdminStatus"),
 		),
 		array(
 			'name'=>'status',

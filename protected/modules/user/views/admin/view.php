@@ -41,10 +41,17 @@ $this->menu=array(
 		'activkey',
 		'create_at',
 		'lastvisit_at',
-		array(
-			'name' => 'superuser',
-			'value' => User::itemAlias("AdminStatus",$model->superuser),
+	//	array(
+	//		'name' => 'superuser',
+	////		'value' => User::itemAlias("AdminStatus",$model->superuser),
+	//	),
+        array(
+			'name' => 'user_role',
+			//'value' => UserRole::itemAlias("UserRole",$model->user_role),
 		),
+        
+        
+        
 		array(
 			'name' => 'status',
 			'value' => User::itemAlias("UserStatus",$model->status),

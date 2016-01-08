@@ -36,8 +36,13 @@
     </div>
 
     <div class="row">
-        <?php echo $form->label($model,'superuser'); ?>
-        <?php echo $form->dropDownList($model,'superuser',$model->itemAlias('AdminStatus')); ?>
+        <?php //echo $form->label($model,'superuser'); ?>
+        <?php //echo $form->dropDownList($model,'superuser',$model->itemAlias('AdminStatus')); ?>
+    </div>
+    
+    <div class="row">
+        <?php echo $form->label($model,'user_role'); ?>
+        <?php echo $form->dropDownList($model,'user_role',$model->itemAlias('UserRoleStatus')); ?>
     </div>
 
     <div class="row">

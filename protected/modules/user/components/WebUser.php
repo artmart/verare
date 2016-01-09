@@ -40,7 +40,8 @@ class WebUser extends CWebUser
                                                 'username'=>$user->username,
                                                 'create_at'=>$user->create_at,
                                                 'lastvisit_at'=>$user->lastvisit_at,
-                                           ),$user->profile->widgetAttributes());
+                                                'user_role' =>$user->user_role,
+                                           ),$user->profile->getAttributes());
         foreach ($userAttributes as $attrName=>$attrValue) {
             $this->setState($attrName,$attrValue);
         }
@@ -53,6 +54,12 @@ class WebUser extends CWebUser
     public function user($id=0) {
         return $this->model($id);
     }
+    
+   // public function userroles($id=0){
+    //    return UserRole::model()->findByPk($this->model($id));
+   // }
+    
+    
 
     public function getUserByName($username) {
         return Yii::app()->getModule('user')->getUserByName($username);

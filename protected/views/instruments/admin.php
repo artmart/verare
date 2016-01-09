@@ -1,16 +1,36 @@
 <?php
-/* @var $this InstrumentsController */
-/* @var $model Instruments */
+$this->breadcrumbs=['Instruments'=>['admin'], 'Manage'];
 
-$this->breadcrumbs=array(
-	'Instruments'=>array('index'),
-	'Manage',
-);
+//$access_buttons = '{view} {update} {delete}';
+$access_level = 5;
+$access_buttons = '';
+if(isset(Yii::app()->user->user_role)){
+              $user_rols = UserRole::model()->findByPk(Yii::app()->user->user_role);
+              if($user_rols){$access_level = $user_rols->instruments_access_level;}
+}
 
-$this->menu=array(
-	array('label'=>'List Instruments', 'url'=>array('index')),
-	array('label'=>'Create Instruments', 'url'=>array('create')),
-);
+switch ($access_level) {
+    case 1:
+    $this->menu=[['label'=>'Create Instruments', 'url'=>['create']]];
+        break;
+    case 2:
+        $access_buttons = '{update}';
+        break;
+    case 3:
+        $access_buttons = '{delete}';
+        break;
+    case 4:
+        $access_buttons = '{view} {update} {delete}';
+        $this->menu=[['label'=>'Create Instruments', 'url'=>['create']]];
+        break;
+} 
+
+/*
+$this->menu=[
+	['label'=>'List Instruments', 'url'=>['index'],
+	['label'=>'Create Instruments', 'url'=>['create']],
+];
+*/
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -57,6 +77,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'created_at',
 		array(
 			'class'=>'CButtonColumn',
+            'template' => $access_buttons,
 		),
 	),
 )); ?>

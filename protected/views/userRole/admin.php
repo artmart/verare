@@ -6,10 +6,44 @@
 <?php
 $this->breadcrumbs=['User Roles'=>['admin'], 'Manage'];
 
+//$access_buttons = '{view} {update} {delete}';
+$access_level = 5;
+$access_buttons = '';
+if(isset(Yii::app()->user->user_role)){
+              $user_rols = UserRole::model()->findByPk(Yii::app()->user->user_role);
+              if($user_rols){$access_level = $user_rols->user_roles_access_level;}
+}
+
+switch ($access_level) {
+    case 1:
+    $this->menu=array(
+            //	array('label'=>'List UserRole', 'url'=>array('index')),
+            	array('label'=>'Create UserRole', 'url'=>array('create')),
+            );
+        break;
+    case 2:
+        $access_buttons = '{update}';
+        break;
+    case 3:
+        $access_buttons = '{delete}';
+        break;
+    case 4:
+        $access_buttons = '{view} {update} {delete}';
+        $this->menu=array(
+        //	array('label'=>'List UserRole', 'url'=>array('index')),
+        	array('label'=>'Create UserRole', 'url'=>array('create')),
+        );
+        break;
+} 
+
+
+
+/*
 $this->menu=array(
 //	array('label'=>'List UserRole', 'url'=>array('index')),
 	array('label'=>'Create UserRole', 'url'=>array('create')),
 );
+*/
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -175,6 +209,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		
 		array(
 			'class'=>'CButtonColumn',
+            'template' => $access_buttons,
 		),
 	),
 )); ?>

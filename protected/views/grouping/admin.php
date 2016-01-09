@@ -1,16 +1,36 @@
 <?php
-/* @var $this GroupingController */
-/* @var $model Grouping */
+$this->breadcrumbs=['Groupings'=>['admin'], 'Manage'];
 
-$this->breadcrumbs=array(
-	'Groupings'=>array('index'),
-	'Manage',
-);
+//$access_buttons = '{view} {update} {delete}';
+$access_level = 5;
+$access_buttons = '';
+if(isset(Yii::app()->user->user_role)){
+              $user_rols = UserRole::model()->findByPk(Yii::app()->user->user_role);
+              if($user_rols){$access_level = $user_rols->grouping_access_level;}
+}
 
-$this->menu=array(
-	array('label'=>'List Grouping', 'url'=>array('index')),
-	array('label'=>'Create Grouping', 'url'=>array('create')),
-);
+switch ($access_level) {
+    case 1:
+    $this->menu=[['label'=>'Create Grouping', 'url'=>['create']]];
+        break;
+    case 2:
+        $access_buttons = '{update}';
+        break;
+    case 3:
+        $access_buttons = '{delete}';
+        break;
+    case 4:
+        $access_buttons = '{view} {update} {delete}';
+        $this->menu=[['label'=>'Create Grouping', 'url'=>['create']]];
+        break;
+} 
+
+/*
+$this->menu=[
+	['label'=>'List Grouping', 'url'=>['index']],
+	['label'=>'Create Grouping', 'url'=>['create']],
+];
+*/
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -51,6 +71,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'created_at',
 		array(
 			'class'=>'CButtonColumn',
+            'template' => $access_buttons,
 		),
 	),
 )); ?>

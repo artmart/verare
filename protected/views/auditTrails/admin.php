@@ -1,16 +1,35 @@
 <?php
-/* @var $this AuditTrailsController */
-/* @var $model AuditTrails */
+$this->breadcrumbs=['Audit Trails'=>['admin'], 'Manage'];
 
-$this->breadcrumbs=array(
-	'Audit Trails'=>array('index'),
-	'Manage',
-);
+//$access_buttons = '{view} {update} {delete}';
+$access_level = 5;
+$access_buttons = '';
+if(isset(Yii::app()->user->user_role)){
+              $user_rols = UserRole::model()->findByPk(Yii::app()->user->user_role);
+              if($user_rols){$access_level = $user_rols->audit_trails_access_level;}
+}
 
-$this->menu=array(
-	array('label'=>'List AuditTrails', 'url'=>array('index')),
-	array('label'=>'Create AuditTrails', 'url'=>array('create')),
-);
+switch ($access_level) {
+    case 1:
+    $this->menu=[['label'=>'Create AuditTrails', 'url'=>['create']]];
+        break;
+    case 2:
+        $access_buttons = '{update}';
+        break;
+    case 3:
+        $access_buttons = '{delete}';
+        break;
+    case 4:
+        $access_buttons = '{view} {update} {delete}';
+        $this->menu=[['label'=>'Create AuditTrails', 'url'=>['create']]];
+        break;
+} 
+/*
+$this->menu=[
+	['label'=>'List AuditTrails', 'url'=>['index']],
+	['label'=>'Create AuditTrails', 'url'=>['create']],
+];
+*/
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -53,6 +72,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'is_current',
 		array(
 			'class'=>'CButtonColumn',
+            'template' => $access_buttons,
 		),
 	),
 )); ?>

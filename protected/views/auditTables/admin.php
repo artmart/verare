@@ -1,16 +1,10 @@
 <?php
-/* @var $this AuditTablesController */
-/* @var $model AuditTables */
+$this->breadcrumbs=['Audit Tables'=>['admin'], 'Manage'];
 
-$this->breadcrumbs=array(
-	'Audit Tables'=>array('index'),
-	'Manage',
-);
-
-$this->menu=array(
-	array('label'=>'List AuditTables', 'url'=>array('index')),
-	array('label'=>'Create AuditTables', 'url'=>array('create')),
-);
+$this->menu=[
+	['label'=>'List AuditTables', 'url'=>['index']],
+	['label'=>'Create AuditTables', 'url'=>['create']],
+];
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){

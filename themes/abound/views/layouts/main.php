@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>Verare</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Free yii themes, free web application theme">
+    <meta name="description" content="Verare">
     <meta name="author" content="Artak Martirosyan">
 	<link href='http://fonts.googleapis.com/css?family=Carrois+Gothic' rel='stylesheet' type='text/css'>
 

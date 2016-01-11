@@ -6,9 +6,9 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-     
+          <?php $baseUrl = Yii::app()->baseUrl; ?>
           <!-- Be sure to leave the brand out there if you want it shown -->
-          <a class="brand" href="#">VEREARE <small>Admin Dashboard</small></a>
+          <a class="brand" href="<?php echo $baseUrl; ?>/site/admin">VEREARE <small>Admin Dashboard</small></a>
           
           <div class="nav-collapse">
 			<?php $this->widget('zii.widgets.CMenu',array(
@@ -18,7 +18,7 @@
                     'encodeLabel'=>false,
                     'items'=>array(
                     
-                        array('label'=>'Admin menu', 'url'=>array('/site/admin')),
+                        array('label'=>'Home', 'url'=>array('/site/admin')),
                         array('label'=>'Dashboard', 'url'=>array('/site/index')),
                         array('label'=>'Graphs & Charts', 'url'=>array('/site/page', 'view'=>'graphs')),
                         array('label'=>'Forms', 'url'=>array('/site/page', 'view'=>'forms')),

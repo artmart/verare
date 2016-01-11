@@ -3,8 +3,9 @@
 $this->pageTitle=Yii::app()->name;
 ?>
 
-<h3> <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h3>
+<h3> Welcome <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h3>
 </br>
+<?php /*
 <h3><?php  echo CHtml::link('Admin menu',array('/site/admin')); ?></h4>
 
 </br>
@@ -62,7 +63,8 @@ echo CHtml::link('Return Calculation',array('/prices/allReturns'));
 </br>
 <?php  echo CHtml::link('Access Levels',array('/accessLevels/admin')); ?> 
 
-
+*/
+?>
 
 
 

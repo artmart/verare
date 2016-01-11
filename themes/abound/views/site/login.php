@@ -14,6 +14,7 @@ $this->breadcrumbs=array(
 <div class="row-fluid">
 	
     <div class="span6 offset3">
+    <h2>Welcome to <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h2>
 <?php
 	$this->beginWidget('zii.widgets.CPortlet', array(
 		'title'=>"Private access",
@@ -37,28 +38,45 @@ $this->breadcrumbs=array(
         <p class="note">Fields with <span class="required">*</span> are required.</p>
     
         <div class="row">
-            <?php echo $form->labelEx($model,'username'); ?>
+            <div class="span3">
+                <?php echo $form->labelEx($model,'username'); ?>
+            </div>
+            <div class="span2">
             <?php echo $form->textField($model,'username'); ?>
             <?php echo $form->error($model,'username'); ?>
+            </div>
         </div>
     
         <div class="row">
-            <?php echo $form->labelEx($model,'password'); ?>
+            <div class="span3">
+                <?php echo $form->labelEx($model,'password'); ?>
+            </div>
+            <div class="span2">
             <?php echo $form->passwordField($model,'password'); ?>
             <?php echo $form->error($model,'password'); ?>
-            <p class="hint">
+            </div>
+           <!-- <p class="hint">
                 Hint: You may login with <kbd>demo</kbd>/<kbd>demo</kbd> or <kbd>admin</kbd>/<kbd>admin</kbd>.
             </p>
+			-->
         </div>
     
         <div class="row rememberMe">
+            <div class="span3">
+                <?php echo $form->label($model,'rememberMe'); ?>
+                
+            </div>
+            <div class="span2">
             <?php echo $form->checkBox($model,'rememberMe'); ?>
-            <?php echo $form->label($model,'rememberMe'); ?>
             <?php echo $form->error($model,'rememberMe'); ?>
+            </div>
         </div>
     
         <div class="row buttons">
-            <?php echo CHtml::submitButton('Login',array('class'=>'btn btn btn-primary')); ?>
+            <div class="span3"></div>
+            <div class="span2">
+            <?php echo CHtml::submitButton('Login',array('class'=>'btn btn btn-primary', 'style' => 'width: 220px')); ?>
+            </div>
         </div>
     
     <?php $this->endWidget(); ?>

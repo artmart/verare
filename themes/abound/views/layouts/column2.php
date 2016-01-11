@@ -5,7 +5,61 @@
 	<div class="span3">
 		<div class="sidebar-nav">
         
-		  <?php $this->widget('zii.widgets.CMenu', array(
+<?php
+$usermenu=[];
+
+$access_level = 5;
+if(isset(Yii::app()->user->user_role)){
+          $user_rols = UserRole::model()->findByPk(Yii::app()->user->user_role);
+          if($user_rols)
+          {              
+              $ledger_access_level = $user_rols->ledger_access_level;
+              $users_access_level = $user_rols->users_access_level;
+              $user_roles_access_level = $user_rols->user_roles_access_level;
+              $portfolios_access_level = $user_rols->portfolios_access_level;
+              $instruments_access_level = $user_rols->instruments_access_level;
+              $counterparties_access_level = $user_rols->counterparties_access_level;//???????
+              $documents_access_level = $user_rols->documents_access_level;
+              $prices_access_level = $user_rols->prices_access_level;
+              $audit_trails_access_level = $user_rols->audit_trails_access_level;
+              $grouping_access_level = $user_rols->grouping_access_level;
+              
+              if($ledger_access_level !== 5){$usermenu[]=['label'=>'Ledger', 'url'=>['/ledger/admin']];}
+              if($users_access_level !== 5){$usermenu[]=['label'=>'Users', 'url'=>['/user/admin']];}
+              if($user_roles_access_level !== 5){$usermenu[]=['label'=>'User Roles', 'url'=>['userRole/admin']];}
+              if($portfolios_access_level !== 5){$usermenu[]=['label'=>'Portfolios', 'url'=>['/portfolios/admin']];}
+              if($instruments_access_level !== 5){$usermenu[]=['label'=>'Instruments', 'url'=>['/instruments/admin']];}
+              //if($counterparties_access_level !== 5){$usermenu[]=['label'=>'Ledger', 'url'=>['/ledger/admin']];}
+              if($documents_access_level !== 5){$usermenu[]=['label'=>'Documents', 'url'=>['/documents/admin']];}
+              if($prices_access_level !== 5){$usermenu[]=['label'=>'Prices', 'url'=>['/prices/admin']];}
+              if($audit_trails_access_level !== 5){$usermenu[]=['label'=>'Audit Trails', 'url'=>['/auditTrails/admin']];}
+              if($grouping_access_level !== 5){$usermenu[]=['label'=>'Grouping', 'url'=>['/grouping/admin']];}
+             
+              //Admin Menu//
+              if(Yii::app()->getModule('user')->isAdmin())
+              {
+                $usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
+                $usermenu[]=['label'=>'Portfolio UserS with Roles', 'url'=>['/portfolioUserRoles/admin']];
+                $usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
+                $usermenu[]=['label'=>'Instrument Types', 'url'=>['/instrumentTypes/admin']];
+                $usermenu[]=['label'=>'Group Item', 'url'=>['/groupItem/admin']];                
+                $usermenu[]=['label'=>'Group Benchmark', 'url'=>['/groupBenchmark/admin']];
+                $usermenu[]=['label'=>'Document Types', 'url'=>['/documentTypes/admin']];
+                $usermenu[]=['label'=>'Document Locations', 'url'=>['/documentLocations/admin']];
+                $usermenu[]=['label'=>'Clients', 'url'=>['/clients/admin']];
+                $usermenu[]=['label'=>'Audit Tables', 'url'=>['/auditTables/admin']];
+                $usermenu[]=['label'=>'Upload pricies', 'url'=>['/uploads/create']];
+                $usermenu[]=['label'=>'Return', 'url'=>['/prices/return']];
+                $usermenu[]=['label'=>'Returns', 'url'=>['/returns/admin']];
+                $usermenu[]=['label'=>'Return Calculation', 'url'=>['/prices/allReturns']];
+                $usermenu[]=['label'=>'Portfolio Returns', 'url'=>['/portfolioReturns/admin']];
+                $usermenu[]=['label'=>'All Stats', 'url'=>['/prices/allStats']];                            
+                $usermenu[]=['label'=>'Access Levels', 'url'=>['/accessLevels/admin']];               
+              }
+              
+           }
+}              
+          $this->widget('zii.widgets.CMenu', array(
 			/*'type'=>'list',*/
 			'encodeLabel'=>false,
 			'items'=>array(
@@ -14,11 +68,13 @@
 				array('label'=>'<i class="icon icon-envelope"></i> Messages <span class="badge badge-success pull-right">12</span>', 'url'=>'#'),
 				// Include the operations menu
 				array('label'=>'OPERATIONS','items'=>$this->menu),
+                array('label'=>'ACCESSABLE ACTIONS','items'=>$usermenu),                
 			),
 			));?>
-		</div>
-        
-        
+		</div> 
+        <br />   
+<?php
+/*        
         </br>
 <h3><?php  echo CHtml::link('Admin menu',array('/site/admin')); ?></h4>
 
@@ -77,6 +133,8 @@
 </br>
 <?php  echo CHtml::link('Access Levels',array('/accessLevels/admin')); ?> 
  
+ */
+ ?>
     
         
         

@@ -55,19 +55,23 @@
         </div>
         <div class="col-sm-8 clearLeftPadding">
         <?php  $this->widget('CMultiFileUpload',
-            array(
-                       'model'=>$model,
-                       //'name' => 'documents',
-                       'attribute' => 'documents',
-                       'accept'=>'csv, doc, docx, pdf, txt,',
-                       'denied'=>'Selected file type is not allowed', 
-                       'max'=>1,
-                       'remove'=>'[x]',
-                       'duplicate'=>'Already Selected',
-                    )
+            [
+               'model'=>$model,
+               //'name' => '$model',
+               'attribute' => 'documents',
+               'accept'=>'csv, doc, docx, pdf, txt',
+               'denied'=>'Selected file type is not allowed', 
+               'max'=>1,
+               'remove'=>'[x]',
+               'duplicate'=>'Already Selected',
+            ]
             );?>
         </div>
-		<?php //echo $form->textField($model,'upload_file',array('size'=>60,'maxlength'=>255)); ?>
+		<?php 
+        foreach($model->documents as $mm){
+        echo $mm;
+        }
+        //echo $form->textField($model,'upload_file',array('size'=>60,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'documents'); ?>
 	</div>
     </div>

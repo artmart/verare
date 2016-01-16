@@ -90,6 +90,7 @@ class CounterpartiesController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
+        $path = Yii::getPathOfAlias('webroot').'/uploads/';
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -97,13 +98,16 @@ class CounterpartiesController extends Controller
 		if(isset($_POST['Counterparties']))
 		{
 			$model->attributes=$_POST['Counterparties'];
+            if($upload_file=self::uploadMultifile($model,'documents', $path))
+               {$model->documents = implode(",", $upload_file);}
+            
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('update',array(
-			'model'=>$model,
-		));
+        $mm = explode(",", $model->documents);
+        $model->documents = $mm;
+		$this->render('update',['model'=>$model]);
 	}
     
     

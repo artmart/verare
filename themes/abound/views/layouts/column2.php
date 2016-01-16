@@ -29,7 +29,7 @@ if(isset(Yii::app()->user->user_role)){
               if($user_roles_access_level !== 5){$usermenu[]=['label'=>'User Roles', 'url'=>['userRole/admin']];}
               if($portfolios_access_level !== 5){$usermenu[]=['label'=>'Portfolios', 'url'=>['/portfolios/admin']];}
               if($instruments_access_level !== 5){$usermenu[]=['label'=>'Instruments', 'url'=>['/instruments/admin']];}
-              //if($counterparties_access_level !== 5){$usermenu[]=['label'=>'Ledger', 'url'=>['/ledger/admin']];}
+              if($counterparties_access_level !== 5){$usermenu[]=['label'=>'Counterparties', 'url'=>['/counterparties/admin']];}
               if($documents_access_level !== 5){$usermenu[]=['label'=>'Documents', 'url'=>['/documents/admin']];}
               if($prices_access_level !== 5){$usermenu[]=['label'=>'Prices', 'url'=>['/prices/admin']];}
               if($audit_trails_access_level !== 5){$usermenu[]=['label'=>'Audit Trails', 'url'=>['/auditTrails/admin']];}

@@ -38,7 +38,7 @@ class Counterparties extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, contact_info, company_id, documents', 'required'),
+			array('name', 'required'),
 			array('company_id', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>100),
 			array('contact_info', 'length', 'max'=>255),

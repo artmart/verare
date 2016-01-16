@@ -62,22 +62,24 @@ class CounterpartiesController extends Controller
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionCreate()
-	{
+	{  
 		$model=new Counterparties;
+        $path = Yii::getPathOfAlias('webroot').'/uploads/';
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
 		if(isset($_POST['Counterparties']))
 		{
 			$model->attributes=$_POST['Counterparties'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			
+            if($upload_file=self::uploadMultifile($model,'documents', $path))
+               {$model->documents = implode(",", $upload_file);}
+            
+            if($model->save())
+			$this->redirect(array('view','id'=>$model->id));
 		}
-
-		$this->render('create',array(
-			'model'=>$model,
-		));
+  
+		$this->render('create',['model'=>$model]);
 	}
 
 	/**
@@ -103,6 +105,29 @@ class CounterpartiesController extends Controller
 			'model'=>$model,
 		));
 	}
+    
+    
+    //Function for uploading and saving Multiple files
+    public function uploadMultifile($model,$attr,$path)
+    {
+    /*
+     * path when uploads folder is on site root.*/
+    $path='../../uploads/';
+     
+    if($sfile=CUploadedFile::getInstances($model, $attr)){
+
+      foreach ($sfile as $i=>$file){  
+
+        $formatName=time().$i.'.'.$file->getExtensionName();
+        $fileName = "{$sfile[$i]}";
+         $formatName=time().$i.'_'.$fileName;
+         //$formatName=$fileName;
+         $file->saveAs(Yii::getPathOfAlias('webroot').'/uploads/'.$formatName);
+         $ffile[$i]=$formatName;
+         }
+        return ($ffile);
+       }
+     }
 
 	/**
 	 * Deletes a particular model.

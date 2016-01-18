@@ -6,26 +6,28 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <?php $baseUrl = Yii::app()->baseUrl; ?>
-          <!-- Be sure to leave the brand out there if you want it shown -->
-          <a class="brand" href="<?php echo $baseUrl; ?>/site/admin">VEREARE <small>Admin Dashboard</small></a>
-          
-          <div class="nav-collapse">
+		  <?php $baseUrl1 = Yii::app()->baseUrl; ?>
+          <!-- Be sure to leave the brand out there if you want it shown-->
+          <a class="brand" href="<?php echo $baseUrl1;?>/site/index">VERARE</a> 
+          <!--<a class="brand" href="<?php //echo $baseUrl1;?>/site/index"><img src="<?php //echo $baseUrl;?>/img/rdl-logo.png" style= 'height: 18px;'/></a>-->
+		  <div class="span5"></div>	  
+          <div class="nav-collapse" style="float: left;">
 			<?php $this->widget('zii.widgets.CMenu',array(
                     'htmlOptions'=>array('class'=>'pull-right nav'),
                     'submenuHtmlOptions'=>array('class'=>'dropdown-menu'),
 					'itemCssClass'=>'item-test',
                     'encodeLabel'=>false,
                     'items'=>array(
-                    
-                        array('label'=>'Home', 'url'=>array('/site/admin')),
-                        array('label'=>'Dashboard', 'url'=>array('/site/index')),
-                        array('label'=>'Graphs & Charts', 'url'=>array('/site/page', 'view'=>'graphs')),
-                        array('label'=>'Forms', 'url'=>array('/site/page', 'view'=>'forms')),
-                        array('label'=>'Tables', 'url'=>array('/site/page', 'view'=>'tables')),
-						array('label'=>'Interface', 'url'=>array('/site/page', 'view'=>'interface')),
-                        array('label'=>'Typography', 'url'=>array('/site/page', 'view'=>'typography')),
+                        array('label'=>'Home', 'url'=>array('/site/index')),
+                        array('label'=>'Dashboard', 'url'=>array('/site/admin')),
+                        
+                        array('label'=>'Overview', 'url'=>array('/site/page', 'view'=>'graphs')),
+                        array('label'=>'Analysis', 'url'=>array('/site/page', 'view'=>'forms')),
+                       // array('label'=>'Tables', 'url'=>array('/site/page', 'view'=>'tables')),
+					//	array('label'=>'Interface', 'url'=>array('/site/page', 'view'=>'interface')),
+                      //  array('label'=>'Typography', 'url'=>array('/site/page', 'view'=>'typography')),
                         /*array('label'=>'Gii generated', 'url'=>array('customer/index')),*/
+                    /*
                         array('label'=>'My Account <span class="caret"></span>', 'url'=>'#','itemOptions'=>array('class'=>'dropdown','tabindex'=>"-1"),'linkOptions'=>array('class'=>'dropdown-toggle','data-toggle'=>"dropdown"), 
                         'items'=>array(
                             array('label'=>'My Messages <span class="badge badge-warning pull-right">26</span>', 'url'=>'#'),
@@ -34,33 +36,105 @@
 							array('label'=>'Separated link', 'url'=>'#'),
 							array('label'=>'One more separated link', 'url'=>'#'),
                         )),
+                        */
                         array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
                         array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest),
                     ),
                 )); ?>
-    	</div>
+		</div>
+
+<div class="dropdown" style="float: left;">
+            <a id="dLabel"  data-toggle="dropdown" class="btn btn-primary" data-target="#" href="#">ADMIN <span class="caret"></span>
+            </a>
+    		<ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+              <li>
+                <a href="<?php echo $baseUrl1; ?>/ledger/admin">Ledger</a>
+                <a href="<?php echo $baseUrl1; ?>/documents/admin">Documents</a>
+              </li>
+              <li class="divider"></li>
+                <li>
+                <a href="<?php echo $baseUrl1; ?>/instruments/admin">Instruments</a>
+                <a href="<?php echo $baseUrl1; ?>/prices/admin">Prices</a>
+              </li>
+              <li class="divider"></li>
+                <li>
+                <a href="<?php echo $baseUrl1; ?>/portfolios/admin">Portfolios</a>
+                <a href="<?php echo $baseUrl1; ?>/grouping/admin">Grouping</a>
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a href="<?php echo $baseUrl1; ?>/counterparties/admin">Counterparties</a>  
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a href="<?php echo $baseUrl1; ?>/user/admin">Users</a>
+                <a href="<?php echo $baseUrl1; ?>/userRole/admin">User Roles</a>
+              </li>
+ 
+<?php /*           
+              
+              <li class="divider"></li>
+              <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">Customers</a>
+                <ul class="dropdown-menu">
+				  <li><a tabindex="-1" href="/custGroups/admin">Customer Groups</a></li>
+				  <li><a tabindex="-1" href="/customergroups/admin">Manage Groups</a></li>
+                  <li><a tabindex="-1" href="/customers/customerupdate">Update Customers from Server</a></li>
+                </ul>
+              </li>
+			  
+			  <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">products</a>
+                <ul class="dropdown-menu">				
+				  <li><a tabindex="-1" href="/products/admin">Custom Product Grouping</a></li>
+                  <li><a tabindex="-1" href="/products/productupdate">Update Products from SQL database</a></li>
+				  <li><a tabindex="-1" href="/categories/groupview">Groups, Subgroups and categories</a></li>
+				  <li><a tabindex="-1" href="/productGroups/admin">Product Groups</a></li>
+                </ul>
+              </li>
+			  <li><a href="/zipMsa/create">Zip-CBSA Administration</a></li>
+			  <li><a href="/customers/customersWithoutGeocode">Update Geocodes</a></li>
+					
+			  <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">Update/Edit</a>
+                <ul class="dropdown-menu">
+                  <li><a tabindex="-1" href="/groups/admin">Groups</a></li>
+				  <li><a tabindex="-1" href="/subgroups/admin">Subgroups</a></li>
+				  <li><a tabindex="-1" href="/categories/admin">Categories</a></li>
+				  <li><a tabindex="-1" href="/departments/admin">Department colors</a></li>
+				  
+                </ul>
+              </li>
+				
+			  <li><a href="/cronLogs/admin">Cron Logs</a></li>
+			  <li><a href="/site/start">Database connection settings</a></li>
+			   <li><a href="/settings/update/1">Daily Average Sales Goal</a></li>
+			
+		<!--	  <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">Hover me for more options</a>
+                <ul class="dropdown-menu">
+                  <li><a tabindex="-1" href="#">Second level</a></li>
+                  <li class="dropdown-submenu">
+                    <a href="#">Even More..</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">3rd level</a></li>
+                    	<li><a href="#">3rd level</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#">Second level</a></li>
+                  <li><a href="#">Second level</a></li>
+                </ul>
+              </li>
+			 --> 
+			*/
+            ?>  
+            </ul>
+        </div>
+
+
+		
+    	
     </div>
 	</div>
 </div>
 
-<div class="subnav navbar navbar-fixed-top">
-    <div class="navbar-inner">
-    	<div class="container">
-        
-        	<div class="style-switcher pull-left">
-                <a href="javascript:chooseStyle('none', 60)" checked="checked"><span class="style" style="background-color:#0088CC;"></span></a>
-                <a href="javascript:chooseStyle('style2', 60)"><span class="style" style="background-color:#7c5706;"></span></a>
-                <a href="javascript:chooseStyle('style3', 60)"><span class="style" style="background-color:#468847;"></span></a>
-                <a href="javascript:chooseStyle('style4', 60)"><span class="style" style="background-color:#4e4e4e;"></span></a>
-                <a href="javascript:chooseStyle('style5', 60)"><span class="style" style="background-color:#d85515;"></span></a>
-                <a href="javascript:chooseStyle('style6', 60)"><span class="style" style="background-color:#a00a69;"></span></a>
-                <a href="javascript:chooseStyle('style7', 60)"><span class="style" style="background-color:#a30c22;"></span></a>
-          	</div>
-           <form class="navbar-search pull-right" action="">
-           	 
-           <input type="text" class="search-query span2" placeholder="Search">
-           
-           </form>
-    	</div><!-- container -->
-    </div><!-- navbar-inner -->
-</div><!-- subnav -->

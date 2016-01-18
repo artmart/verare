@@ -1,12 +1,11 @@
 <?php 
 $baseUrl = Yii::app()->theme->baseUrl; 
 $baseUrl1 = Yii::app()->baseUrl;
-//var_dump($_REQUEST);
 ?>
 <script>
-function redirecttologin(){
- window.location.href='<?php echo $baseUrl1;?>/user/login';
-}
+//function redirecttologin(){
+// window.location.href='<?php echo $baseUrl1;?>/user/login';
+//}
 </script>
 		<!-- start preloader -->
 		<div class="preloader">

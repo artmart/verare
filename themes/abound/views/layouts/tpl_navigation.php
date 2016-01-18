@@ -8,7 +8,7 @@
           </a>
 		  <?php $baseUrl1 = Yii::app()->baseUrl; ?>
           <!-- Be sure to leave the brand out there if you want it shown-->
-          <a class="brand" href="<?php echo $baseUrl1;?>/site/index">VERARE</a> 
+          <a class="brand" href="<?php echo $baseUrl1;?>/site/index">Verare</a> 
           <!--<a class="brand" href="<?php //echo $baseUrl1;?>/site/index"><img src="<?php //echo $baseUrl;?>/img/rdl-logo.png" style= 'height: 18px;'/></a>-->
 		  <div class="span5"></div>	  
           <div class="nav-collapse" style="float: left;">

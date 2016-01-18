@@ -21,7 +21,7 @@ $baseUrl1 = Yii::app()->baseUrl;
 						<span class="icon icon-bar"></span>
 						<span class="icon icon-bar"></span>
 					</button>
-					<a href="#" class="navbar-brand">Boxer</a>
+					<a href="#" class="navbar-brand">Verare</a>
 				</div>
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav navbar-right text-uppercase">

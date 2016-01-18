@@ -1,6 +1,7 @@
 <?php 
 $baseUrl = Yii::app()->theme->baseUrl; 
 $baseUrl1 = Yii::app()->baseUrl;
+//var_dump($_REQUEST);
 ?>
 <script>
 function redirecttologin(){
@@ -28,9 +29,10 @@ function redirecttologin(){
 						<li><a href="#home">Home</a></li>
 						<li><a href="#feature">Features</a></li>
 						<li><a href="#pricing">Pricing</a></li>
-						<li><a href="#download">Download</a></li>
-						<li><a href="#contact">Contact</a></li>
-                        <li><a onclick="redirecttologin()" href="<?php echo $baseUrl1;?>/user/login">Login</a></li>
+                        <li><a href="#contact">Contact</a></li>
+						<li><a href="#download">Login</a></li>
+						
+                        <!--<li><a onclick="redirecttologin()" href="<?php //echo $baseUrl1;?>/user/login">Login</a></li>-->
 					</ul>
 				</div>
 			</div>
@@ -178,9 +180,15 @@ function redirecttologin(){
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6 wow fadeInLeft" data-wow-delay="0.6s">
-						<h2 class="text-uppercase">Download Our Software</h2>
+						<h2 class="text-uppercase">LOGIN</h2>
+                        <?php
+                        $model=new LoginForm;
+                        $this->renderPartial('login', ['model'=>$model]);
+                        /*
+                        ?>
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation. </p>
 						<button class="btn btn-primary text-uppercase"><i class="fa fa-download"></i> Download</button>
+                        <?php */?>
 					</div>
 					<div class="col-md-6 wow fadeInRight" data-wow-delay="0.6s">
 						<img src="<?php echo $baseUrl;?>/images/software-img.png" class="img-responsive" alt="feature img">
@@ -206,7 +214,7 @@ function redirecttologin(){
 						</div>
 						<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
 							<div class="contact-form">
-								<form action="#" method="post">
+								<form action="/user/login" method="post">
 									<div class="col-md-6">
 										<input type="text" class="form-control" placeholder="Name">
 									</div>
@@ -230,8 +238,3 @@ function redirecttologin(){
 			</div>
 		</section>
 		<!-- end contact -->
-
-
-
-
-        

@@ -69,9 +69,11 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 
 <?php 
 $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'ledger-grid',
+	//'id'=>'ledger-grid',
+    'id'=>"example1",
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+    'htmlOptions'=>array('class'=>"table table-bordered table-hover"),
 	'columns'=>array(
 		//'id',
 		'trade_date',
@@ -80,7 +82,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 		'nominal',
 		'price',
 		'created_by',
-		'created_at',
+		//'created_at',
 		'trade_status_id',
        /*
         array(
@@ -97,23 +99,23 @@ $this->widget('zii.widgets.grid.CGridView', array(
 			),
             */
 		'confirmed_by',
-		'confirmed_at',
+		//'confirmed_at',
 		'version_number',
-		'document_id',
-		'custody_account',
-		'custody_comment',
-		'account_number',
-		'is_current',
+		//'document_id',
+		//'custody_account',
+		//'custody_comment',
+		//'account_number',
+		//'is_current',
 		
-		array(
+		[
 			'class'=>'CButtonColumn',
             'template' => $access_buttons,
-            'buttons'=>array(
-                            'update'=>['visible'=>'!($data->trade_status_id==2)'],
-                            'delete'=>['visible'=>'!($data->trade_status_id==2)'],
-                            'view'=>['visible'=>'!($data->trade_status_id==2)'],
-                            )  
+            'buttons'=>[
+                        'update'=>['visible'=>'!($data->trade_status_id==2)'],
+                        'delete'=>['visible'=>'!($data->trade_status_id==2)'],
+                        'view'=>['visible'=>'!($data->trade_status_id==2)'],
+                        ]  
             //'visible'=>'$data->trade_status_id!==2', 
-		),
+		],
 	),
 )); ?>

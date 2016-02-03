@@ -32,7 +32,7 @@ class LedgerController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'ledger'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -128,21 +128,52 @@ class LedgerController extends Controller
 			'dataProvider'=>$dataProvider,
 		));
 	}
+    
+    public function actionLedger(){
+           require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/ledger.php');
+    
+   // require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/Editor/Editor.php');
+    //require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/Editor/Field.php');
+    //require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/Editor/Format.php');
+    //require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/Editor/Join.php');
+    //require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/Editor/Upload.php');
+    //require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/Editor/Validate.php');
+
+    }
 
 	/**
 	 * Manages all models.
 	 */
 	public function actionAdmin()
 	{
+	  // var_dump(Yii::app()->db);
+       //exit;
+       
 		$model=new Ledger('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Ledger']))
 			$model->attributes=$_GET['Ledger'];
 
-		$this->render('admin',array(
+		$this->render('admin_datatable',array(
 			'model'=>$model,
 		));
 	}
+    
+    
+    /*
+    	public function actionAdmin()
+	{
+		$model=new Ledger('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Ledger']))
+			$model->attributes=$_GET['Ledger'];
+
+		$this->render('admin_datatable',array(
+			'model'=>$model,
+		));
+	}
+    */
+    
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.

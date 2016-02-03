@@ -27,11 +27,11 @@
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
 	  $cs->registerCssFile($baseUrl.'/css/abound.css');
-	  //$cs->registerCssFile($baseUrl.'/css/style-blue.css');
+	  $cs->registerCssFile($baseUrl.'/css/style-blue.css');
 	  ?>
       <!-- styles for style switcher -->
       	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/style-blue.css" />
-        <link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/datatables/media/css/jquery.dataTables.css" />
+        <!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/datatables/media/css/jquery.dataTables.css" />-->
         
 	  <?php
 	  $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js');

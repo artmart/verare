@@ -1,3 +1,72 @@
+<?php  $baseUrl1 = Yii::app()->baseUrl; ?>
+
+<!-- start navigation -->
+		<nav class="navbar navbar-default navbar-fixed-top templatemo-nav" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="icon icon-bar"></span>
+						<span class="icon icon-bar"></span>
+						<span class="icon icon-bar"></span>
+					</button>
+					<a href="#" class="navbar-brand">Verare</a>
+				</div>
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-right text-uppercase">
+						<li><a href="<?php echo $baseUrl1;?>/site/index">Home</a></li>
+						<li><a href="<?php echo $baseUrl1;?>/site/admin">Dashboard</a></li>
+                        <?php if(Yii::app()->user->isGuest){?>
+                        <li><a class="login-hide" href="<?php echo $baseUrl1;?>/site/login">Login</a></li>
+                        <?php }else{ ?>
+                        <li><a href="<?php echo $baseUrl1;?>/site/logout">Logout (<?php echo Yii::app()->user->name; ?>)</a></li>
+                        <?php } ?>
+		
+                        <!--<li><a onclick="redirecttologin()" href="<?php //echo $baseUrl1;?>/user/login">Login</a></li>-->
+					</ul>
+				</div>
+                
+
+  <?php /*          
+   <div class="dropdown span">
+            <a id="dLabel"  data-toggle="dropdown" class="btn btn-primary" data-target="#" href="#">ADMIN <span class="caret"></span>
+            </a>
+    		<ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+              <li>
+                <a href="<?php echo $baseUrl1; ?>/ledger/admin">Ledger</a>
+                <a href="<?php echo $baseUrl1; ?>/documents/admin">Documents</a>
+              </li>
+              <li class="divider"></li>
+                <li>
+                <a href="<?php echo $baseUrl1; ?>/instruments/admin">Instruments</a>
+                <a href="<?php echo $baseUrl1; ?>/prices/admin">Prices</a>
+              </li>
+              <li class="divider"></li>
+                <li>
+                <a href="<?php echo $baseUrl1; ?>/portfolios/admin">Portfolios</a>
+                <a href="<?php echo $baseUrl1; ?>/grouping/admin">Grouping</a>
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a href="<?php echo $baseUrl1; ?>/counterparties/admin">Counterparties</a>  
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a href="<?php echo $baseUrl1; ?>/user/admin">Users</a>
+                <a href="<?php echo $baseUrl1; ?>/userRole/admin">User Roles</a>
+              </li>
+       </ul>
+</div>
+*/
+?> 
+
+</div>
+		</nav>
+		<!-- end navigation -->
+
+
+<?php
+/*
+
 <div class="navbar navbar-inverse navbar-fixed-top">
 	<div class="navbar-inner">
     <div class="container">
@@ -36,7 +105,7 @@
 							array('label'=>'Separated link', 'url'=>'#'),
 							array('label'=>'One more separated link', 'url'=>'#'),
                         )),
-                        */
+                        *//*
                         array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
                         array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest),
                     ),
@@ -126,7 +195,7 @@
                 </ul>
               </li>
 			 --> 
-			*/
+			*//*
             ?>  
             </ul>
         </div>
@@ -137,4 +206,8 @@
     </div>
 	</div>
 </div>
+*/
+?>
+
+
 

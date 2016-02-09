@@ -27,22 +27,38 @@
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
 	  $cs->registerCssFile($baseUrl.'/css/abound.css');
-	  $cs->registerCssFile($baseUrl.'/css/style-blue.css');
+	  //$cs->registerCssFile($baseUrl.'/css/style-blue.css');
 	  ?>
       <!-- styles for style switcher -->
-      	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/style-blue.css" />
         <!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/datatables/media/css/jquery.dataTables.css" />-->
+
+
+        <!--<link href="plugins/jvectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />-->
         
+        <!-- animate css -->
+		<link rel="stylesheet" href="<?php echo $baseUrl;?>/css/animate.min.css">
+		<!-- bootstrap css 
+		<link rel="stylesheet" href="<?php //echo $baseUrl;?>/css/bootstrap.min.css">-->
+		<!-- font-awesome -->
+		<link rel="stylesheet" href="<?php echo $baseUrl;?>/css/font-awesome.min.css">
+		<!-- google font 
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,700,800' rel='stylesheet' type='text/css'>-->
+		<!-- custom css -->
+		<link rel="stylesheet" href="<?php echo $baseUrl;?>/css/templatemo-style.css">
+
 	  <?php
 	  $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js');
-	  $cs->registerScriptFile($baseUrl.'/js/plugins/jquery.sparkline.js');
-	  $cs->registerScriptFile($baseUrl.'/js/plugins/jquery.flot.min.js');
-	  $cs->registerScriptFile($baseUrl.'/js/plugins/jquery.flot.pie.min.js');
-	  $cs->registerScriptFile($baseUrl.'/js/charts.js');
-	  $cs->registerScriptFile($baseUrl.'/js/plugins/jquery.knob.js');
-	  $cs->registerScriptFile($baseUrl.'/js/plugins/jquery.masonry.min.js');
+	  //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.sparkline.js');
+	  //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.flot.min.js');
+	  //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.flot.pie.min.js');
+	  //$cs->registerScriptFile($baseUrl.'/js/charts.js');
+	  //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.knob.js');
+	  //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.masonry.min.js');
 	  //$cs->registerScriptFile($baseUrl.'/js/styleswitcher.js');
       //$cs->registerScriptFile($baseUrl.'/datatables/media/js/jquery.dataTables.min.js');
+      $cs->registerScriptFile($baseUrl.'/js/wow.min.js');
+	  $cs->registerScriptFile($baseUrl.'/js/jquery.singlePageNav.min.js');
+	  $cs->registerScriptFile($baseUrl.'/js/custom.js');
 	?>
   </head>
 

@@ -11,7 +11,7 @@
 					</button>
 					<a href="#" class="navbar-brand">Verare</a>
 				</div>
-				<div class="collapse navbar-collapse">
+				<div class="collapse navbar-collapse span6">
 					<ul class="nav navbar-nav navbar-right text-uppercase">
 						<li><a href="<?php echo $baseUrl1;?>/site/index">Home</a></li>
 						<li><a href="<?php echo $baseUrl1;?>/site/admin">Dashboard</a></li>
@@ -23,11 +23,9 @@
 		
                         <!--<li><a onclick="redirecttologin()" href="<?php //echo $baseUrl1;?>/user/login">Login</a></li>-->
 					</ul>
-				</div>
-                
-
-  <?php /*          
-   <div class="dropdown span">
+                </div>
+				
+   <div class="dropdown span2" style="padding-top: 12px;">
             <a id="dLabel"  data-toggle="dropdown" class="btn btn-primary" data-target="#" href="#">ADMIN <span class="caret"></span>
             </a>
     		<ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
@@ -56,11 +54,12 @@
               </li>
        </ul>
 </div>
-*/
-?> 
+
 
 </div>
-		</nav>
+</nav>
+
+
 		<!-- end navigation -->
 
 

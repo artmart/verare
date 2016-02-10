@@ -11,7 +11,7 @@
 					</button>
 					<a href="#" class="navbar-brand">Verare</a>
 				</div>
-				<div class="collapse navbar-collapse span6">
+				<div class="collapse navbar-collapse span8">
 					<ul class="nav navbar-nav navbar-right text-uppercase">
 						<li><a href="<?php echo $baseUrl1;?>/site/index">Home</a></li>
 						<li><a href="<?php echo $baseUrl1;?>/site/admin">Dashboard</a></li>

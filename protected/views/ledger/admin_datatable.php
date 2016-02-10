@@ -129,11 +129,11 @@ $this->widget('zii.widgets.grid.CGridView', array(
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.0/css/select.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/css/editor.dataTables.min.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/examples/resources/demo.css"> 
+	<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.css">
+	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/examples/resources/demo.css"> -->
     <style type="text/css" class="init">
 	</style>
-	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js">
+	<!--<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js">-->
 	</script>
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js">
 	</script>

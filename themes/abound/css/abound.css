@@ -211,6 +211,10 @@ text-align: center !important;
   left:0;
 }
  
+.dropdown{
+	padding-top: 12px;
+}
+ 
 .dropdown-menu li > a:hover,
 .dropdown-menu li > a:focus,
 .dropdown-submenu:hover > a {
@@ -242,10 +246,10 @@ text-align: center !important;
   outline: 0;
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#848282', endColorstr='#9e9090', GradientType=0);
 }
-/*Side Nav*/
-.sidebar-nav {
-  padding:0!important;
-}
+/*Side Nav
+//.sidebar-nav {
+ // padding:0!important;
+//}*/
 
 .sidebar-nav ul{
   padding:0;

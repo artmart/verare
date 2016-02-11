@@ -25,8 +25,8 @@
 					</ul>
                 </div>
 				
-   <div class="dropdown span2" style="padding-top: 12px;">
-            <a id="dLabel"  data-toggle="dropdown" class="btn btn-primary" data-target="#" href="#">ADMIN <span class="caret"></span>
+   <div class="dropdown span2">
+            <a id="dLabel"  data-toggle="dropdown" class="btn" data-target="#" href="#">ADMIN <span class="caret"></span>
             </a>
     		<ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
               <li>

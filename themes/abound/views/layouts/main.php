@@ -63,7 +63,6 @@
 	  //$cs->registerScriptFile($baseUrl.'/js/custom.js');
 	?>
   </head>
-
 <body>
 
 <section id="navigation-main">   

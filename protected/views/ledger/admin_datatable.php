@@ -130,26 +130,27 @@ $this->widget('zii.widgets.grid.CGridView', array(
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.0/css/select.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/css/editor.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.css">
-	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/examples/resources/demo.css"> -->
+	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/css/buttons.dataTables.min.css"> -->
     <style type="text/css" class="init">
 	</style>
-	<!--<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js">-->
-	</script>
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js">
-	</script>
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js">
-	</script>
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.1.0/js/dataTables.select.min.js">
-	</script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.editor.min.js">
-	</script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.js">
-	</script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/demo.js">
-	</script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/editor-demo.js">
-	</script>
+	<!--<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.1.0/js/dataTables.select.min.js"></script>
+	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.editor.min.js"></script>
+	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.js"></script>
+	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/demo.js"></script>
+	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/editor-demo.js"></script>
+    
+    
+    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.colVis.min.js"></script>
+    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.colVis.min.js"></script>
+   
+       
+    
 	<script type="text/javascript" language="javascript" class="init">       
+
 var editor; // use a global for the submit and return data rendering in the examples
 //var path = "<?php //echo Yii::app()->basePath; ?>";
 $(document).ready(function() {
@@ -178,12 +179,38 @@ $(document).ready(function() {
             }, {
                 label: "Created At:",
                 name: "created_at"
-            }
+            },
+            {
+                label: "Created By:",
+                name: "created_by"
+            },
+            {
+                label: "Confirmed By:",
+                name: "confirmed_by"
+            },
+            {
+                label: "Confirmed At:",
+                name: "confirmed_at"
+            },
+            {
+                label: "Trade Status Id:",
+                name: "trade_status_id"
+            },
+            
         ]
     } );
- 
+    
     $('#example').DataTable( {
-        dom: "Bfrtip",
+        //dom: "Bfrtip",
+        displayLength: 10,
+        filter: true,
+        paginate: true,
+        sort: true,
+        info: false,
+        
+        dom: '<"clear">&lt;<"clear">Bfrtip<"clear">', 
+        //colVis: { exclude: [ 1 ] },
+        //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
         ajax: "ledger/",
         columns: [
         /*
@@ -197,19 +224,24 @@ $(document).ready(function() {
             { data: "portfolio_id" },
             { data: "nominal" },
             { data: "price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
-            { data: "created_at" }
-            
+            { data: "created_at" },
+            { data: "created_by" },
+            { data: "confirmed_by" },
+            { data: "confirmed_at" },
+            { data: "trade_status_id" },
         ],
         select: true,
         buttons: [
             { extend: "create", editor: editor },
             { extend: "edit",   editor: editor },
-            { extend: "remove", editor: editor }
+            { extend: "remove", editor: editor },
+            { extend: 'colvis', collectionLayout: 'fixed two-column',},
+            
         ]
     } );
 } );
 </script>
-
+<!-- page script -->
 <table id="example" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
@@ -219,6 +251,10 @@ $(document).ready(function() {
                 <th>Nominal</th>
                 <th>Price</th>
                 <th>Created At</th>
+                <th>Created By</th>
+                <th>Confirmed By</th>
+                <th>Confirmed At</th>
+                <th>Trade Status Id</th>
             </tr>
         </thead>
         <tfoot>
@@ -229,6 +265,10 @@ $(document).ready(function() {
                 <th>Nominal</th>
                 <th>Price</th>
                 <th>Created At</th>
+                <th>Created By</th>
+                <th>Confirmed By</th>
+                <th>Confirmed At</th>
+                <th>Trade Status Id</th>
             </tr>
         </tfoot>
     </table>

@@ -132,7 +132,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                     <div class="col-sm-3 col-xs-6">
                       <div class="description-block border-right">
                         <span class="description-text">RETURN All Time</span><p>
-                        <span class="description-percentage text-black"><?php echo number_format(Calculators::ReturnAll($portfolio);, 2); ?>%</span>
+                        <span class="description-percentage text-black"><?php echo number_format(Calculators::ReturnAll($portfolio), 2); ?>%</span>
                       </div><!-- /.description-block -->
                     </div><!-- /.col -->
                     <div class="col-sm-3 col-xs-6">

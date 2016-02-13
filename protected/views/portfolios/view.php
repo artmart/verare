@@ -27,5 +27,6 @@ $this->menu=array(
 		'description',
 		'is_current',
 		'created_at',
+        'type_id',
 	),
 )); ?>

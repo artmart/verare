@@ -111,6 +111,22 @@
 	</div>
  </div>
 </div>
+
+	<div class="row">
+	<div class="form-group">
+     <div class="span2">
+		<?php echo $form->labelEx($model,'type_id'); ?>
+        </div>
+        <div class="col-sm-8 clearLeftPadding">
+		<?php //echo $form->textField($model,'type_id'); 
+              echo $form->dropDownList($model, 'type_id',  CHtml::listData(PortfolioTypes::model()->findAll(array('select'=>'id, portfolio_type', 'order'=>'portfolio_type')),'id','portfolio_type'), array('empty' => '- Select -'));
+        ?>
+		<?php echo $form->error($model,'type_id'); ?>
+	</div>
+    </div>
+ </div>
+
+
     
     <div class="clearfix"></div>
 <br />    

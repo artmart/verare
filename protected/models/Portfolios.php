@@ -15,6 +15,7 @@
  * @property Ledger[] $ledgers
  * @property PortfolioUserRoles[] $portfolioUserRoles
  * @property Clients $client
+ * type_id
  */
 class Portfolios extends CActiveRecord
 {
@@ -45,11 +46,11 @@ class Portfolios extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('client_id, portfolio, description, created_at', 'required'),
-			array('client_id, is_current', 'numerical', 'integerOnly'=>true),
+			array('client_id, is_current, type_id', 'numerical', 'integerOnly'=>true),
 			array('portfolio', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, client_id, portfolio, description, is_current, created_at', 'safe', 'on'=>'search'),
+			array('id, type_id, client_id, portfolio, description, is_current, created_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -79,6 +80,7 @@ class Portfolios extends CActiveRecord
 			'description' => 'Description',
 			'is_current' => 'Is Current',
 			'created_at' => 'Created At',
+            'type_id' => 'Type Id',
 		);
 	}
 
@@ -99,7 +101,8 @@ class Portfolios extends CActiveRecord
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('is_current',$this->is_current);
 		$criteria->compare('created_at',$this->created_at,true);
-
+        $criteria->compare('type_id',$this->type_id);
+  
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

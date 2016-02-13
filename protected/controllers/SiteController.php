@@ -43,7 +43,7 @@ class SiteController extends Controller
 	   $this->layout='//layouts/column2';
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('admin');
+		$this->render('overview');
 	}   
 
     

@@ -70,6 +70,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'description',
 		'is_current',
 		'created_at',
+        'type_id',
 		array(
 			'class'=>'CButtonColumn',
             'template' => $access_buttons,

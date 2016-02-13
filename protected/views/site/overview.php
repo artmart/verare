@@ -1,20 +1,77 @@
-<?php
-/* @var $this SiteController */
-
-$this->pageTitle=Yii::app()->name;
+<?php 
+    $this->pageTitle=Yii::app()->name; 
+    $portfolio = 1;
+    $start_date = '2015-01-01';
+    $end_date = '2016-01-01';
 ?>
 
 <h3> <i><?php //echo CHtml::encode(Yii::app()->name); ?></i></h3>
 
         <!-- Content Header (Page header) -->
+
         <section class="content-header">
-          <h1>Overview
+          <h1 class="span1">Overview
             <small>
                 <?php
                   //  echo $_SESSION["company"];
                 ?> 
             </small>
-            </h1>
+          </h1>
+<div class="span1">Start Date:</div>           
+<div class="span2">
+<?php
+$this->widget('zii.widgets.jui.CJuiDatePicker',[
+        'name'=>'start_date',
+        //'language'=>'nl',
+        //'attribute'=>'SaleDate',
+        //'model'=>$model,
+        // additional javascript options for the date picker plugin
+        //'cssFile' => 'jquery-ui-1.9.2.custom.css',
+        'options'=>[
+            'showAnim'=>'fold',
+            'dateFormat'=>'yy-mm-dd',
+            //'onselect'=>'loaddata()'
+        ],
+        'htmlOptions'=>['placeholder'=>'YYYY-MM-DD'],
+    ]);
+
+?>
+</div>
+<div class="span1">End Date:</div>           
+<div class="span2">
+<?php
+$this->widget('zii.widgets.jui.CJuiDatePicker',[
+        'name'=>'end_date',
+        //'language'=>'nl',
+        //'attribute'=>'SaleDate',
+        //'model'=>$model,
+        // additional javascript options for the date picker plugin
+        //'cssFile' => 'jquery-ui-1.9.2.custom.css',
+        'options'=>[
+            'showAnim'=>'fold',
+            'dateFormat'=>'yy-mm-dd',
+            //'onselect'=>'loaddata()'
+        ],
+        'htmlOptions'=>['placeholder'=>'YYYY-MM-DD'],
+    ]);
+
+?>
+</div>
+<div class="span1">Portfolio:</div>           
+<div class="span2">
+    <?php
+    $list = CHtml::listData(Portfolios::model()->findAll(array('select'=>'id, portfolio', 'order'=>'portfolio')),'id','portfolio');
+    echo CHtml::dropDownList('portfolio', $portfolio,  $list, ['empty' => '-- Select --',  /*'onchange'=>'loaddata()', 'multiple' => true, 'size'=>'10'*/]);
+    
+    if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
+    if(isset($_REQUEST['end_date'])){$end_date = $_REQUEST['end_date'];}
+    if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
+    ?>
+</div>
+            
+            
+            
+            <!--
                     <ol class="breadcrumb">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -37,6 +94,7 @@ $this->pageTitle=Yii::app()->name;
                             </ul>
                         </li>
                     </ol>
+            -->
         </section>
 
 
@@ -58,8 +116,8 @@ $this->pageTitle=Yii::app()->name;
                       <div class="description-block border-right">
                         <span class="description-text">O/N P/L</span><p>
                               <?php
-                              /*
-                                  $pnl = GetPnL($dtmax,'Index',$_SESSION['company']);
+                                  //$pnl = GetPnL($dtmax,'Index',$_SESSION['company']);
+                                  $pnl = Calculators::PNL($start_date, $end_date, $portfolio);
                                   if($pnl >= 0)
                                   {
                                       echo "<span class='description-percentage text-green'><i class='fa fa-caret-up'></i> " . number_format($pnl) . "</span>";
@@ -67,15 +125,14 @@ $this->pageTitle=Yii::app()->name;
                                   else
                                   {
                                       echo "<span class='description-percentage text-red'><i class='fa fa-caret-down'></i> " . number_format($pnl) . "</span>";
-                                  }
-                                  */
+                                  } 
                               ?>
                       </div><!-- /.description-block -->
                     </div><!-- /.col -->
                     <div class="col-sm-3 col-xs-6">
                       <div class="description-block border-right">
                         <span class="description-text">RETURN All Time</span><p>
-                        <span class="description-percentage text-black"><?php //echo number_format($rall, 2); ?>%</span>
+                        <span class="description-percentage text-black"><?php echo number_format(Calculators::ReturnAll($portfolio);, 2); ?>%</span>
                       </div><!-- /.description-block -->
                     </div><!-- /.col -->
                     <div class="col-sm-3 col-xs-6">
@@ -139,16 +196,46 @@ $this->pageTitle=Yii::app()->name;
                     </div><!-- /.col -->
 					
                     <div class="col-md-4">
-					  <canvas id="pieChart" height="250"></canvas>
+					  <!--<canvas id="pieChart" height="250"></canvas>-->
+                      <?php
+                      $data1 = [ ['Equities', 50],
+                                  ['Rates', 40],
+                                  ['Alternatives', 10]
+                                ];
+                      $this->Widget('ext.highcharts.HighchartsWidget', array(
+                        'options' => [
+                          'colors'=>['#6AC36A', '#FFD148', '#0563FE', '#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
+                          'gradient' => ['enabled'=> true],
+                          'credits' => ['enabled' => false],
+                          'exporting' => ['enabled' => false],
+                          'chart' => ['plotBackgroundColor' => '#ffffff', 'plotBorderWidth' => null, 'plotShadow' => false, 'height' => 300],
+                          'title' => false,
+                          'tooltip' => [
+                    		//'pointFormat' =>array('Value'=> 'point.y:,.0f'),
+                            // 'pointFormat' => '{series.name}: <b>{point.percentage}%</b>',
+                            //'percentageDecimals' => 1,
+                            'formatter'=> 'js:function() { return this.point.name+":  <b>"+ this.y.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g,"$1,")+"</b><br/>percent: <b>" +this.point.percentage.toFixed(2)+"</b>%"; }',
+                            //the reason it didnt work before was because you need to use javascript functions to round and refrence the JSON as this.<array>.<index> ~jeffrey
+                          ],
+                          'plotOptions' => [
+                            'pie' => ['allowPointSelect' => true, 'cursor' => 'pointer', 
+                    					   'dataLabels' => ['enabled' => true, 'color' => '#AAAAAA', 'connectorColor' => '#AAAAAA'],
+                    					   'showInLegend'=>true,
+                            ]
+                          ],
+                          'series' => [['type' => 'pie', 'name' => 'Percentage', 'data' => $data1]],
+                        ]
+                      ));
+                      ?>
                     </div><!-- /.col -->
-					
+					<!--
                     <div class="col-md-4">
                       <ul class="chart-legend clearfix">
                         <li><i class="fa fa-circle-o text-red"></i> Equities</li>
                         <li><i class="fa fa-circle-o text-light-blue"></i> Rates</li>
                         <li><i class="fa fa-circle-o text-green"></i> Alternatives</li>
                       </ul>
-                    </div><!-- /.col -->
+                    </div> /.col -->
 					
                   </div><!-- /.row -->
                 </div><!-- ./box-body -->
@@ -156,8 +243,6 @@ $this->pageTitle=Yii::app()->name;
               </div><!-- /.box -->
             </div><!-- /.col -->
           </div><!-- /.row -->
-		  
-		  
 		  
           <div class="row">
             <div class="col-md-12">
@@ -191,7 +276,24 @@ $this->pageTitle=Yii::app()->name;
                   </div><!-- /.row -->
                   <div class="row">
                     <div class="col-md-12">
-					  <canvas id="areaChart" height="200"></canvas>
+					  <!--<canvas id="areaChart" height="200"></canvas>-->
+                      	<?php 
+                        
+                          $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                          $series[] = ['name' => 'Index', 'data' => [5, 6, 7, 10, 20, 8, 3, 4, 9, 6, 11, 2]];
+                          $series[] = ['name' => 'Benchmark', 'data' => [7, 4, 8, 2, 7, 6, 7, 1, 1, 2, 8, 9]]; 
+                          $this->Widget('ext.highcharts.HighchartsWidget', [
+                        		   'options'=>[
+                        			  'title' => ['text' => ''],
+                        			  'xAxis' => ['categories' => $months, 'type' => 'datetime', 'title' => ['text'=> null], 'labels' => ['enabled' => true]],
+                        			  'yAxis' => ['title' => ['text' => ''], 'min' => 0],
+                        			  'chart' => ['type'=>'spline', 'plotBackgroundColor' => '#ffffff', 'plotBorderWidth' => null, 'plotShadow' => false, 'height' => 300],
+                        			  'colors'=> ['#6AC36A', '#FFD148', '#0563FE', '#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
+                        			  'credits' => ['enabled' => false],
+                        			  'series' => $series,
+                        		   ]
+                        		]);
+                        ?>
                     </div><!-- /.col -->
                   </div><!-- /.row -->
 					  
@@ -325,11 +427,12 @@ $this->pageTitle=Yii::app()->name;
 	
 	
     <script>
+    /*
       $(function () {
         /* ChartJS
          * -------
          * Here we will create a few charts using ChartJS
-         */
+         *//*
 		 
 		 
         //--------------
@@ -428,6 +531,7 @@ $this->pageTitle=Yii::app()->name;
         pieChart.Pie(PieData, pieOptions);
 
       });
+      */
     </script>
 	
 

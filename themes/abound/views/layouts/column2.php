@@ -54,7 +54,9 @@ if(isset(Yii::app()->user->user_role)){
                 $usermenu[]=['label'=>'Return Calculation', 'url'=>['/prices/allReturns']];
                 $usermenu[]=['label'=>'Portfolio Returns', 'url'=>['/portfolioReturns/admin']];
                 $usermenu[]=['label'=>'All Stats', 'url'=>['/prices/allStats']];                            
-                $usermenu[]=['label'=>'Access Levels', 'url'=>['/accessLevels/admin']];               
+                $usermenu[]=['label'=>'Access Levels', 'url'=>['/accessLevels/admin']]; 
+                $usermenu[]=['label'=>'Portfolio Types', 'url'=>['/portfolioTypes/admin']];
+                              
               }
               
            }

@@ -17,6 +17,7 @@
 	  $baseUrl = Yii::app()->theme->baseUrl; 
 	  $cs = Yii::app()->getClientScript();
 	  Yii::app()->clientScript->registerCoreScript('jquery');
+      //Yii::app()->clientScript->registerCoreScript('jquery.ui'); 
 	?>
     <!-- Fav and Touch and touch icons -->
     <link rel="shortcut icon" href="<?php echo $baseUrl;?>/img/icons/favicon.ico">
@@ -24,16 +25,17 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?php echo $baseUrl;?>/img/icons/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="<?php echo $baseUrl;?>/img/icons/apple-touch-icon-57-precomposed.png">
 	<?php  
+      
+      $cs->registerCssFile($baseUrl.'/css/AdminLTE.min.css');
+      $cs->registerCssFile($baseUrl.'/css/templatemo-style.css');
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
 	  $cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
       
       $cs->registerCssFile($baseUrl.'/css/animate.min.css');
       //$cs->registerCssFile($baseUrl.'/css/font-awesome.min.css');
-      $cs->registerCssFile($baseUrl.'/css/templatemo-style.css');
+      
       
       //$cs->registerCssFile($baseUrl.'/css/ionicons.min.css');
-      
-      $cs->registerCssFile($baseUrl.'/css/AdminLTE.min.css');
       
 	  $cs->registerCssFile($baseUrl.'/css/abound.css');
 	  //$cs->registerCssFile($baseUrl.'/css/style-blue.css');
@@ -66,6 +68,7 @@
 			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
 	  <?php
+      $cs->registerScriptFile($baseUrl.'/js/app.min.js');
 	  $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js');
 	  $cs->registerScriptFile($baseUrl.'/js/plugins/jquery.sparkline.js');
 	  //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.flot.min.js');
@@ -75,10 +78,11 @@
 	  //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.masonry.min.js');
 	  //$cs->registerScriptFile($baseUrl.'/js/styleswitcher.js');
       //$cs->registerScriptFile($baseUrl.'/datatables/media/js/jquery.dataTables.min.js');
+      
       $cs->registerScriptFile($baseUrl.'/js/wow.min.js');
 	  $cs->registerScriptFile($baseUrl.'/js/jquery.singlePageNav.min.js');
 	  //$cs->registerScriptFile($baseUrl.'/js/custom.js');
-      $cs->registerScriptFile($baseUrl.'/js/app.min.js');
+      
 	?>
   </head>
 <body>

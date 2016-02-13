@@ -66,10 +66,35 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
     if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
     if(isset($_REQUEST['end_date'])){$end_date = $_REQUEST['end_date'];}
     if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
-    ?>
+    
+    $sql_table1 = "select pt.portfolio_type, p.portfolio, i.instrument, pt.allocation_min, pt.allocation_max, pt.allocation_normal, l.nominal*l.price nav from ledger l
+                    inner join instruments i on i.id = l.instrument_id
+                    inner join portfolios p on p.id = l.portfolio_id
+                    left join portfolio_types pt on pt.id = p.type_id
+                    where l.portfolio_id = 1 and l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
+                    group by pt.portfolio_type, p.portfolio, i.instrument, pt.allocation_min, pt.allocation_max, pt.allocation_normal";
+    $table1_results = Yii::app()->db->createCommand($sql_table1)->queryAll(true);
+    $returns = Calculators::ReturnAllAndYTD($portfolio);
+    $pnl = Calculators::PNL($start_date, $end_date, $portfolio);
+    
+    
+    $inst_data = '';
+    $index_value = 0;
+    
+    foreach($table1_results as $pc){
+        $index_value = $index_value + $pc['nav'];
+        $inst_data .= 
+							  '<tr>
+								<td>'.$pc['instrument'].'</td>
+								<td>'.number_format($pc['nav']).'</td>
+								<td>'.number_format($pc['nav']/$pnl[1], 1).'%</td>
+								<td>'.number_format($pc['allocation_normal'], 1).'%</td>
+								<td>'.number_format($pc['allocation_normal']-$pc['nav']/$pnl[1], 1).'%</td>
+								<td>'.number_format($pc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
+							  </tr>';                         
+  } ?>
 </div>
-            
-            
+             
             
             <!--
                     <ol class="breadcrumb">
@@ -109,7 +134,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                     <div class="col-sm-3 col-xs-6">
                       <div class="description-block border-right">
                         <span class="description-text">MARKET VALUE</span><p>
-                        <span class="description-percentage text-black"><b><?php // echo $index_nav ?></b></span>
+                        <span class="description-percentage text-black"><b><?php echo number_format($index_value); ?></b></span>
                       </div><!-- /.description-block -->
                     </div><!-- /.col -->
                     <div class="col-sm-3 col-xs-6">
@@ -120,11 +145,11 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                                   $pnl = Calculators::PNL($start_date, $end_date, $portfolio);
                                   if($pnl >= 0)
                                   {
-                                      echo "<span class='description-percentage text-green'><i class='fa fa-caret-up'></i> " . number_format($pnl) . "</span>";
+                                      echo "<span class='description-percentage text-green'><i class='fa fa-caret-up'></i> " . number_format($pnl[0]) . "</span>";
                                   }
                                   else
                                   {
-                                      echo "<span class='description-percentage text-red'><i class='fa fa-caret-down'></i> " . number_format($pnl) . "</span>";
+                                      echo "<span class='description-percentage text-red'><i class='fa fa-caret-down'></i> " . number_format($pnl[0]) . "</span>";
                                   } 
                               ?>
                       </div><!-- /.description-block -->
@@ -132,13 +157,13 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                     <div class="col-sm-3 col-xs-6">
                       <div class="description-block border-right">
                         <span class="description-text">RETURN All Time</span><p>
-                        <span class="description-percentage text-black"><?php echo number_format(Calculators::ReturnAll($portfolio), 2); ?>%</span>
+                        <span class="description-percentage text-black"><?php echo number_format($returns[0], 2); ?>%</span>
                       </div><!-- /.description-block -->
                     </div><!-- /.col -->
                     <div class="col-sm-3 col-xs-6">
                       <div class="description-block border-right">
                         <span class="description-text">RETURN YTD</span><p>
-                        <span class="description-percentage text-black"><?php //echo number_format($rytd, 2); ?>%</span>
+                        <span class="description-percentage text-black"><?php echo number_format($returns[1], 2); ?>%</span>
                       </div><!-- /.description-block -->
                     </div><!-- /.col -->
                   </div><!-- /.row -->
@@ -162,7 +187,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 				
 				
                 <div class="box-body">
-                  <div class="row">
+                 <!-- <div class="row">-->
                     <div class="col-md-8">
 					
                       <div class="chart">
@@ -181,13 +206,15 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 							<tbody>
 							  <tr>
 								<td>Index</td>
-								<td><?php //echo $index_nav ?></td>
+								<td><?php echo number_format($index_value); ?></td>
 								<td></td>
 								<td></td>
 								<td></td>
 								<td></td>
 							  </tr>
-                              <?php //$pdata=GetCompositionTable($dtmax, $_SESSION['company'], $index_nav_num); ?>
+                              <?php echo $inst_data; //$pdata=GetCompositionTable($dtmax, $_SESSION['company'], $index_nav_num); 
+                              
+                              ?>
 							<tbody>
 						  </table>
 							  
@@ -237,7 +264,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                       </ul>
                     </div> /.col -->
 					
-                  </div><!-- /.row -->
+                  <!--</div> /.row -->
                 </div><!-- ./box-body -->
 				
               </div><!-- /.box -->

@@ -4,6 +4,7 @@ XPHPExcel::init();
 
 class Calculators {
    ///regression example// 
+    /*
      public static function coeff($ankax_id, $kaxyal_id, $update_year)
      {  
         $n = 0; 
@@ -26,6 +27,7 @@ class Calculators {
         $ab = PHPExcel_Calculation_Statistical::LINEST($kaxyal, $ankax,TRUE, FALSE);
         return array(floatval($ab['1']), floatval($ab['0']));
     }
+    */
     
      public static function PNL($start_date, $end_date, $portfolio)
      {  
@@ -44,10 +46,28 @@ class Calculators {
             $i++;
         }
         $onpl = $nav_today - $nav_yesterday;
-        return $onpl;
+        return [$onpl, $nav_today];
     }    
     
-    public static function ReturnAll($portfolio)
+    public static function ReturnAllAndYTD($portfolio)
+     {  
+        
+        $sql = "select pr.trade_date, pr.return, if(pr.trade_date >= MAKEDATE(year(now()),1), pr.return, 1) ytd  from portfolio_returns pr where pr.portfolio_id = '$portfolio'";
+        $results = Yii::app()->db->createCommand($sql)->queryAll(true);
+        
+        
+        $product = 1;
+        $all_time_return = 1;
+        $year_to_date_return = 1;
+        foreach($results as $res){
+            $all_time_return = $all_time_return * $res['return'];
+            $year_to_date_return = $year_to_date_return * $res['ytd'];            
+        }
+
+        return [($all_time_return - 1)*100, ($year_to_date_return - 1)*100];
+    }
+    
+    public static function ReturnYTD($portfolio)
      {  
         /*
         $sql1 = "select trade_date, nominal*price nav from ledger
@@ -66,7 +86,7 @@ class Calculators {
         }
         $onpl = $nav_today - $nav_yesterday;
         */
-        return 4.95;
+        return 3.04;
     }
     
     public static function CalcAllStats($data, $benchmark)

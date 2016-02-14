@@ -2,6 +2,10 @@
 <script src="https://code.highcharts.com/modules/data.js"></script>
 <script src="https://code.highcharts.com/modules/drilldown.js"></script>
 
+<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables_themeroller.css">
+<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
+
 <?php 
     $this->pageTitle=Yii::app()->name; 
     $portfolio = 1;
@@ -205,7 +209,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 					
                       <div class="chart">
 					       <div class="scrollit">
-						  <table id="tableOverview" class="table table-bordered table-hover">
+						  <table id="exampleTable" class="table table-bordered table-hover">
 							<thead>
 							  <tr>
 								<th>Name</th>
@@ -533,5 +537,76 @@ $(document).ready(function ($) {loaddata();})
               //loadtable();        
     }
 */
+
+
+
+function fnFormatDetails(table_id, html) {
+    var sOut = "<table id=\"exampleTable_" + table_id + "\">";
+    sOut += html;
+    sOut += "</table>";
+    return sOut;
+}
+
+
+
+var iTableCounter = 1;
+    var oTable;
+    var oInnerTable;
+    var TableHtml;
+
+    //Run On HTML Build
+    $(document).ready(function () {
+        TableHtml = $("#exampleTable").html();
+
+
+        //Insert a 'details' column to the table
+        var nCloneTh = document.createElement('th');
+        var nCloneTd = document.createElement('td');
+        nCloneTd.innerHTML = '<img src="http://i.imgur.com/SD7Dz.png">';
+        nCloneTd.className = "center";
+
+        $('#exampleTable thead tr').each(function () {
+            this.insertBefore(nCloneTh, this.childNodes[0]);
+        });
+
+        $('#exampleTable tbody tr').each(function () {
+            this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
+        });
+
+        //Initialse DataTables, with no sorting on the 'details' column
+        var oTable = $('#exampleTable').dataTable({
+            "bJQueryUI": true,
+            "sPaginationType": "full_numbers",
+            "aoColumnDefs": [
+            { "bSortable": false, "aTargets": [0] }
+        ],
+            "aaSorting": [[1, 'asc']]
+        });
+
+        /* Add event listener for opening and closing details
+        * Note that the indicator for showing which row is open is not controlled by DataTables,
+        * rather it is done here
+        */
+        $('#exampleTable tbody td img').live('click', function () {
+            var nTr = $(this).parents('tr')[0];
+            if (oTable.fnIsOpen(nTr)) {
+                /* This row is already open - close it */
+                this.src = "http://i.imgur.com/SD7Dz.png";
+                oTable.fnClose(nTr);
+            }
+            else {
+                /* Open this row */
+                this.src = "http://i.imgur.com/d4ICC.png";
+                oTable.fnOpen(nTr, fnFormatDetails(iTableCounter, TableHtml), 'details');
+                oInnerTable = $("#exampleTable_" + iTableCounter).dataTable({
+                    "bJQueryUI": true,
+                    "sPaginationType": "full_numbers"
+                });
+                iTableCounter = iTableCounter + 1;
+            }
+        });
+
+
+    });
 </script>	
 

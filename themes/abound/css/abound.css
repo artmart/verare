@@ -529,3 +529,9 @@ footer {
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ff5bc0de', endColorstr='#ff2f96b4', GradientType=0);
   filter: progid:dximagetransform.microsoft.gradient(enabled=false);
 }
+
+.scrollit {
+    overflow:scroll;
+	overflow-x: hidden;
+    height:330px;
+}

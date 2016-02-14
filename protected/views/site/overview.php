@@ -1,8 +1,14 @@
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+
 <?php 
     $this->pageTitle=Yii::app()->name; 
     $portfolio = 1;
     $start_date = '2015-01-01';
     $end_date = '2016-01-01';
+    $baseUrl = Yii::app()->baseUrl;
+    //var_dump($baseUrl);
 ?>
 
 <h3> <i><?php //echo CHtml::encode(Yii::app()->name); ?></i></h3>
@@ -22,6 +28,8 @@
 <?php
 $this->widget('zii.widgets.jui.CJuiDatePicker',[
         'name'=>'start_date',
+        'id'=>'start_date',
+        'value' => $start_date,
         //'language'=>'nl',
         //'attribute'=>'SaleDate',
         //'model'=>$model,
@@ -30,7 +38,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
         'options'=>[
             'showAnim'=>'fold',
             'dateFormat'=>'yy-mm-dd',
-            //'onselect'=>'loaddata()'
+            'onselect'=>'loaddata()',
         ],
         'htmlOptions'=>['placeholder'=>'YYYY-MM-DD'],
     ]);
@@ -42,6 +50,8 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 <?php
 $this->widget('zii.widgets.jui.CJuiDatePicker',[
         'name'=>'end_date',
+        'id'=>'end_date',
+        'value' =>$end_date,
         //'language'=>'nl',
         //'attribute'=>'SaleDate',
         //'model'=>$model,
@@ -50,7 +60,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
         'options'=>[
             'showAnim'=>'fold',
             'dateFormat'=>'yy-mm-dd',
-            //'onselect'=>'loaddata()'
+            'onselect'=>'loaddata()',
         ],
         'htmlOptions'=>['placeholder'=>'YYYY-MM-DD'],
     ]);
@@ -61,9 +71,10 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 <div class="span2">
     <?php
     $list = CHtml::listData(Portfolios::model()->findAll(array('select'=>'id, portfolio', 'order'=>'portfolio')),'id','portfolio');
-    echo CHtml::dropDownList('portfolio', $portfolio,  $list, ['empty' => '-- Select --',  /*'onchange'=>'loaddata()', 'multiple' => true, 'size'=>'10'*/]);
-    
-    if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
+    echo CHtml::dropDownList('portfolio', $portfolio,  $list, [ 'id' => 'portfolio', 'empty' => '-- Select --',  'onchange'=>'loaddata()', /*'multiple' => true, 'size'=>'10'*/]);
+
+   
+        if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
     if(isset($_REQUEST['end_date'])){$end_date = $_REQUEST['end_date'];}
     if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
     
@@ -92,10 +103,12 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 								<td>'.number_format($pc['allocation_normal']-$pc['nav']/$pnl[1], 1).'%</td>
 								<td>'.number_format($pc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
 							  </tr>';                         
-  } ?>
+  }
+  
+ ?>
 </div>
-             
-            
+<!--<div id="overview"></div>-->          
+           
             <!--
                     <ol class="breadcrumb">
                         <li class="dropdown">
@@ -191,7 +204,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                     <div class="col-md-8">
 					
                       <div class="chart">
-					  
+					       <div class="scrollit">
 						  <table id="tableOverview" class="table table-bordered table-hover">
 							<thead>
 							  <tr>
@@ -205,7 +218,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 							</thead>
 							<tbody>
 							  <tr>
-								<td>Index</td>
+								<td>Portfolio</td>
 								<td><?php echo number_format($index_value); ?></td>
 								<td></td>
 								<td></td>
@@ -217,14 +230,60 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                               ?>
 							<tbody>
 						  </table>
-							  
+						</div>	  
                       </div><!-- /.chart-responsive -->
 					  
                     </div><!-- /.col -->
 					
                     <div class="col-md-4">
 					  <!--<canvas id="pieChart" height="250"></canvas>-->
+                      <?php //$this->renderPartial('/site/pia_chart', []);?>                   
+                     
                       <?php
+                      
+                    $level1 = array();
+                    $level1[] = array('name' => 'GroupOne', 'y' => 11, 'drilldown' => 'dd1');
+                    $level1[] = array('name' => 'GroupTwo', 'y' => 22, 'drilldown' => 'dd2');
+                    $level1[] = array('name' => 'GroupThree', 'y' => 33, 'drilldown' => 'dd3');
+                     
+                    $level2 = array();
+                    $level2[] = array('id' => 'dd1', 'data' => array(array('Detail1', 1), array('Detail2', 2), array('Detail3', 4)));
+                    $level2[] = array('id' => 'dd2', 'data' => array(array('Detaila', 8), array('Detailb', 9), array('Detailc', 3)));
+                    $level2[] = array('id' => 'dd3', 'data' => array(array('DetailX', 7), array('DetailY', 5), array('DetailZ', 6)));
+                     
+                    $this->Widget('ext.highcharts.HighchartsWidget', array(
+                            'scripts' => array(
+                            'modules/drilldown', // in fact, this is mandatory :)
+                            ),
+                        'options'=>array(
+                            'colors'=>['#6AC36A', '#FFD148', '#0563FE', '#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
+                            'chart' => array('type' => 'pie'),
+                            'title' => array('text' => 'Levels 1 and 2'),
+                            'subtitle' => array('text' => 'Click the columns to view details.'),
+                            'xAxis' => array('type' => 'category'),
+                            'yAxis' => array('title' => array('text' => 'Vertical legend',)),
+                            'legend' => array('enabled' => false),
+                            'plotOptions' => array (
+                                'series' => array (
+                                                'borderWidth' => 0,
+                                                'dataLabels' => array(
+                                                    'enabled' => true,
+                                                ),
+                                            ),
+                                        ),
+                            'series' => array (array(
+                                            'name' => 'MyData',
+                                            'colorByPoint' => true,
+                                            'data' => $level1,
+                                        )),
+                            'drilldown' => array(
+                                            'series' => $level2,
+                                        ),
+                        ),
+                    ));
+                 
+                      
+                      /*
                       $data1 = [ ['Equities', 50],
                                   ['Rates', 40],
                                   ['Alternatives', 10]
@@ -253,6 +312,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                           'series' => [['type' => 'pie', 'name' => 'Percentage', 'data' => $data1]],
                         ]
                       ));
+                      */
                       ?>
                     </div><!-- /.col -->
 					<!--
@@ -450,115 +510,28 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
           </div><!-- /.row -->
 		  
         </section>
+
 		
-	
-	
-    <script>
-    /*
-      $(function () {
-        /* ChartJS
-         * -------
-         * Here we will create a few charts using ChartJS
-         *//*
-		 
-		 
-        //--------------
-        //- AREA CHART -
-        //--------------
+<script>
+/*
+$(document).ready(function ($) {loaddata();})
 
-        // Get context with jQuery - using jQuery's .get() method.
-        var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
-        // This will get the first returned node in the jQuery collection.
-        var areaChart = new Chart(areaChartCanvas);
-        
-
-        <?php
-            //echo GetDetailsChart("areaChartData", array("Index", "Benchmark"));
-        ?>
-
-
-        var areaChartOptions = {
-          //Boolean - If we should show the scale at all
-          showScale: true,
-          //Boolean - Whether grid lines are shown across the chart
-          scaleShowGridLines: false,
-          //String - Colour of the grid lines
-          scaleGridLineColor: "rgba(0,0,0,.05)",
-          //Number - Width of the grid lines
-          scaleGridLineWidth: 1,
-          //Boolean - Whether to show horizontal lines (except X axis)
-          scaleShowHorizontalLines: true,
-          //Boolean - Whether to show vertical lines (except Y axis)
-          scaleShowVerticalLines: true,
-          //Boolean - Whether the line is curved between points
-          bezierCurve: true,
-          //Number - Tension of the bezier curve between points
-          bezierCurveTension: 0.3,
-          //Boolean - Whether to show a dot for each point
-          pointDot: false,
-          //Number - Radius of each point dot in pixels
-          pointDotRadius: 4,
-          //Number - Pixel width of point dot stroke
-          pointDotStrokeWidth: 1,
-          //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-          pointHitDetectionRadius: 20,
-          //Boolean - Whether to show a stroke for datasets
-          datasetStroke: true,
-          //Number - Pixel width of dataset stroke
-          datasetStrokeWidth: 2,
-          //Boolean - Whether to fill the dataset with a color
-          datasetFill: false,
-          //String - A legend template
-          legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
-          //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-          maintainAspectRatio: false,
-          //Boolean - whether to make the chart responsive to window resizing
-          responsive: true
-        };
-
-        //Create the line chart
-        areaChart.Line(areaChartData, areaChartOptions);
-
-		 
-        //-------------
-        //- PIE CHART -
-        //-------------
-        // Get context with jQuery - using jQuery's .get() method.
-        var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
-        var pieChart = new Chart(pieChartCanvas);
-
-          <?php //echo $pdata; ?>
-
-        var pieOptions = {
-          //Boolean - Whether we should show a stroke on each segment
-          segmentShowStroke: true,
-          //String - The colour of each segment stroke
-          segmentStrokeColor: "#fff",
-          //Number - The width of each segment stroke
-          segmentStrokeWidth: 2,
-          //Number - The percentage of the chart that we cut out of the middle
-          percentageInnerCutout: 30, // This is 0 for Pie charts
-          //Number - Amount of animation steps
-          animationSteps: 100,
-          //String - Animation easing effect
-          animationEasing: "easeOutBounce",
-          //Boolean - Whether we animate the rotation of the Doughnut
-          animateRotate: true,
-          //Boolean - Whether we animate scaling the Doughnut from the centre
-          animateScale: false,
-          //Boolean - whether to make the chart responsive to window resizing
-          responsive: true,
-          // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-          maintainAspectRatio: false,
-          //String - A legend template
-          legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
-        };
-        //Create pie or douhnut chart
-        //pieChart.Doughnut(PieData, pieOptions);
-        pieChart.Pie(PieData, pieOptions);
-
-      });
-      */
-    </script>
-	
+    function loaddata(){
+    	$.ajax({
+    			type: 'post',
+    			url: '<?php //echo $baseUrl;?>/site/overviewLoad', 
+    			data: {
+                start_date: $('#start_date').val(), 
+                end_date: $('#end_date').val(),
+                portfolio: $('#portfolio').val(),
+    			},
+    			success: function (response) {
+    			// We get the element having id of display_info and put the response inside it
+    			$( '#overview' ).html(response);
+    			}
+    		   });
+              //loadtable();        
+    }
+*/
+</script>	
 

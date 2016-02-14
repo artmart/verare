@@ -45,6 +45,18 @@ class SiteController extends Controller
 		// using the default layout 'protected/views/layouts/main.php'
 		$this->render('overview');
 	}   
+    
+    
+    public function actionOverviewLoad()
+	{
+	   //$this->layout='//layouts/column2';
+		// renders the view file 'protected/views/site/index.php'
+		// using the default layout 'protected/views/layouts/main.php'
+		$this->render('overview_load');
+	} 
+    
+    
+    
 
     
     public function actionSparklines()

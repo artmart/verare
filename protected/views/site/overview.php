@@ -167,7 +167,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
     
      foreach($portfolio_composition as $pgc){ 
                 $value[$pgc['instrument_group_id']] = 0; 
-                $allocation[$pgc['instrument_group_id']] = 0;
+                //$allocation[$pgc['instrument_group_id']][] = 0;
                 $inst_data1[$pgc['instrument_group_id']] = '';
              }
     
@@ -192,6 +192,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
         foreach($portfolio_composition as $pgc){ 
              if($pc['instrument_group_id'] == $pgc['instrument_group_id']){
                 $value[$pgc['instrument_group_id']] = $value[$pgc['instrument_group_id']] + $pc['nav'];
+                $allocation[$pgc['instrument_group_id']][] = array($pc['instrument'],$pc['nav']/$pnl[1]);
                 $inst_data1[$pgc['instrument_group_id']] .= 
                 					  '<tr>
                 						<td>'.$pc['instrument'].'</td>
@@ -217,7 +218,8 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
   
   
   
-  
+   $level1 = array();
+   $level2 = array();
   
     $i = 2;
     foreach($portfolio_composition as $pgc){ 
@@ -230,6 +232,13 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 						<td>'.number_format($pgc['allocation_normal']-$pc['nav']/$pnl[1], 1).'%</td>
 						<td>'.number_format($pgc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
 					  </tr>';
+                      
+      
+        $level1[] = array('name' => $pgc['group_name'], 'y' => $value[$pgc['instrument_group_id']]/$pnl[1], 'drilldown' => $pgc['instrument_group_id']);
+                     
+                    
+        $level2[] = array('id' => $pgc['instrument_group_id'], 'data' => $allocation[$pgc['instrument_group_id']] /*array(array('Detail1', 1), array('Detail2', 2), array('Detail3', 4))*/);
+                    
         
         
         ?>
@@ -403,7 +412,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                       <?php //$this->renderPartial('/site/pia_chart', []);?>                   
                      
                       <?php
-                      
+                    /*  
                     $level1 = array();
                     $level1[] = array('name' => 'GroupOne', 'y' => 11, 'drilldown' => 'dd1');
                     $level1[] = array('name' => 'GroupTwo', 'y' => 22, 'drilldown' => 'dd2');
@@ -413,7 +422,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                     $level2[] = array('id' => 'dd1', 'data' => array(array('Detail1', 1), array('Detail2', 2), array('Detail3', 4)));
                     $level2[] = array('id' => 'dd2', 'data' => array(array('Detaila', 8), array('Detailb', 9), array('Detailc', 3)));
                     $level2[] = array('id' => 'dd3', 'data' => array(array('DetailX', 7), array('DetailY', 5), array('DetailZ', 6)));
-                     
+                    */
                     $this->Widget('ext.highcharts.HighchartsWidget', array(
                             'scripts' => array(
                             'modules/drilldown', // in fact, this is mandatory :)

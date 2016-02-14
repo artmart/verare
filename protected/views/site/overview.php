@@ -429,8 +429,9 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                             ),
                         'options'=>array(
                             'colors'=>['#6AC36A', '#FFD148', '#0563FE', '#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
-                            'chart' => array('type' => 'pie'),
-                            'title' => array('text' => 'Levels 1 and 2'),
+                            'chart' => array('type' => 'pie', 'height' => 300),
+                            'credits' => ['enabled' => false],
+                            'title' => array('text' => null /* 'Levels 1 and 2'*/),
                             'subtitle' => array('text' => 'Click the columns to view details.'),
                             'xAxis' => array('type' => 'category'),
                             'yAxis' => array('title' => array('text' => 'Vertical legend',)),

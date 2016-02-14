@@ -76,27 +76,81 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
     <?php
     $list = CHtml::listData(Portfolios::model()->findAll(array('select'=>'id, portfolio', 'order'=>'portfolio')),'id','portfolio');
     echo CHtml::dropDownList('portfolio', $portfolio,  $list, [ 'id' => 'portfolio', 'empty' => '-- Select --',  'onchange'=>'loaddata()', /*'multiple' => true, 'size'=>'10'*/]);
-
-   
-        if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
+ ?>
+</div>
+<?php
+    if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
     if(isset($_REQUEST['end_date'])){$end_date = $_REQUEST['end_date'];}
     if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
     
+    /*
     $sql_table1 = "select pt.portfolio_type, p.portfolio, i.instrument, pt.allocation_min, pt.allocation_max, pt.allocation_normal, l.nominal*l.price nav from ledger l
                     inner join instruments i on i.id = l.instrument_id
                     inner join portfolios p on p.id = l.portfolio_id
                     left join portfolio_types pt on pt.id = p.type_id
                     where l.portfolio_id = 1 and l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
                     group by pt.portfolio_type, p.portfolio, i.instrument, pt.allocation_min, pt.allocation_max, pt.allocation_normal";
-    $table1_results = Yii::app()->db->createCommand($sql_table1)->queryAll(true);
+    */
+    
     $returns = Calculators::ReturnAllAndYTD($portfolio);
     $pnl = Calculators::PNL($start_date, $end_date, $portfolio);
+    
+    $portfolio_composition_sql = "select distinct ig.group_name, i.instrument_group_id, p.portfolio, ig.allocation_min, ig.allocation_max, ig.allocation_normal from ledger l
+                            inner join instruments i on i.id = l.instrument_id
+                            inner join portfolios p on p.id = l.portfolio_id
+                            left join instrument_groups ig on ig.id = i.instrument_group_id
+                            where l.portfolio_id = 1 and l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' ";
+    $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
+    
+    $sql_table1 = "select ig.group_name, i.instrument_group_id, p.portfolio, i.instrument, ig.allocation_min, ig.allocation_max, ig.allocation_normal, l.nominal*l.price nav from ledger l
+                    inner join instruments i on i.id = l.instrument_id
+                    inner join portfolios p on p.id = l.portfolio_id
+                    left join instrument_groups ig on ig.id = i.instrument_group_id
+                    where l.portfolio_id = 1 and l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
+                    group by ig.group_name, i.instrument_group_id, p.portfolio, i.instrument, ig.allocation_min, ig.allocation_max, ig.allocation_normal";
+    $table1_results = Yii::app()->db->createCommand($sql_table1)->queryAll(true);
+    
     
     
     $inst_data = '';
     $index_value = 0;
     
-    foreach($table1_results as $pc){
+    
+    $table_head = "<thead><tr>
+						<th>Name</th>
+						<th>Value (SEK)</th>
+						<th>Allocation</th>
+						<th>Normal</th>
+						<th>Diff</th>
+						<th>Min-Max</th>
+				  </tr></thead>";
+    
+  /*
+    $tb_id = 0;
+    foreach($portfolio_composition as $pgc){ ?>
+    
+    
+    
+    
+    
+    
+    
+        <table id="exampleTable<?php echo $tb_id;?>" class="table table-bordered table-hover">
+			<?php echo $table_head; ?>
+			<tbody>
+              <?php echo $inst_data;  
+              
+              ?>
+			<tbody>
+		  </table>
+    
+        
+  <?php   
+        $tb_id++;  
+        
+        
+        
+        /*
         $index_value = $index_value + $pc['nav'];
         $inst_data .= 
 							  '<tr>
@@ -106,11 +160,116 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 								<td>'.number_format($pc['allocation_normal'], 1).'%</td>
 								<td>'.number_format($pc['allocation_normal']-$pc['nav']/$pnl[1], 1).'%</td>
 								<td>'.number_format($pc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
-							  </tr>';                         
+							  </tr>'; 
+        
+    }*/
+    
+    
+     foreach($portfolio_composition as $pgc){ 
+                $value[$pgc['instrument_group_id']] = 0; 
+                $allocation[$pgc['instrument_group_id']] = 0;
+                $inst_data1[$pgc['instrument_group_id']] = '';
+             }
+    
+    
+    
+    foreach($table1_results as $pc){
+        
+        $index_value = $index_value + $pc['nav'];
+        
+        /*
+        $inst_data .= 
+					  '<tr>
+						<td>'.$pc['instrument'].'</td>
+						<td>'.number_format($pc['nav']).'</td>
+						<td>'.number_format($pc['nav']/$pnl[1], 1).'%</td>
+						<td>'.number_format($pc['allocation_normal'], 1).'%</td>
+						<td>'.number_format($pc['allocation_normal']-$pc['nav']/$pnl[1], 1).'%</td>
+						<td>'.number_format($pc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
+					  </tr>'; 
+       */
+        
+        foreach($portfolio_composition as $pgc){ 
+             if($pc['instrument_group_id'] == $pgc['instrument_group_id']){
+                $value[$pgc['instrument_group_id']] = $value[$pgc['instrument_group_id']] + $pc['nav'];
+                $inst_data1[$pgc['instrument_group_id']] .= 
+                					  '<tr>
+                						<td>'.$pc['instrument'].'</td>
+                						<td>'.number_format($pc['nav']).'</td>
+                						<td>'.number_format($pc['nav']/$pnl[1], 1).'%</td>
+                						<td>'.number_format($pc['allocation_normal'], 1).'%</td>
+                						<td>'.number_format($pc['allocation_normal']-$pc['nav']/$pnl[1], 1).'%</td>
+                						<td>'.number_format($pc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
+                					  </tr>'; 
+ 
+             }   
+    
+        }
+    
+        
+        
+        
+        
+        
+                                
   }
   
- ?>
-</div>
+  
+  
+  
+  
+  
+    $i = 2;
+    foreach($portfolio_composition as $pgc){ 
+        $inst_data .= 
+					  '<tr>
+						<td>'.$pgc['group_name'].'</td>
+						<td>'.number_format($value[$pgc['instrument_group_id']]).'</td>
+						<td>'.number_format($value[$pgc['instrument_group_id']]/$pnl[1], 1).'%</td>
+						<td>'.number_format($pgc['allocation_normal'], 1).'%</td>
+						<td>'.number_format($pgc['allocation_normal']-$pc['nav']/$pnl[1], 1).'%</td>
+						<td>'.number_format($pgc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
+					  </tr>';
+        
+        
+        ?>
+    
+    
+    
+    
+    
+    
+    
+        <table id="exampleTable_<?php echo $i;?>" class="table table-bordered table-hover">
+			<?php echo $table_head; ?>
+			<tbody>
+              <?php echo $inst_data1[$pgc['instrument_group_id']]; ?>
+			<tbody>
+		  </table>  
+          <script>
+          var  TableHtml1_<?php echo $i;?> = $("#exampleTable_<?php echo $i;?>").html();
+           $("#exampleTable_<?php echo $i;?>").hide();
+          </script>   
+        <?php 
+        $i++;
+        
+        
+        /*
+        $index_value = $index_value + $pc['nav'];
+        $inst_data .= 
+							  '<tr>
+								<td>'.$pc['instrument'].'</td>
+								<td>'.number_format($pc['nav']).'</td>
+								<td>'.number_format($pc['nav']/$pnl[1], 1).'%</td>
+								<td>'.number_format($pc['allocation_normal'], 1).'%</td>
+								<td>'.number_format($pc['allocation_normal']-$pc['nav']/$pnl[1], 1).'%</td>
+								<td>'.number_format($pc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
+							  </tr>'; 
+        */
+    }
+    
+  
+?>
 <!--<div id="overview"></div>-->          
            
             <!--
@@ -553,10 +712,12 @@ var iTableCounter = 1;
     var oTable;
     var oInnerTable;
     var TableHtml;
+    var TableHtml1;
 
     //Run On HTML Build
     $(document).ready(function () {
         TableHtml = $("#exampleTable").html();
+        //TableHtml1 = $("#exampleTable_" + iTableCounter).html();
 
 
         //Insert a 'details' column to the table
@@ -580,14 +741,14 @@ var iTableCounter = 1;
             "aoColumnDefs": [
             { "bSortable": false, "aTargets": [0] }
         ],
-            "aaSorting": [[1, 'asc']]
+           // "aaSorting": [[1, 'asc']]
         });
 
         /* Add event listener for opening and closing details
         * Note that the indicator for showing which row is open is not controlled by DataTables,
         * rather it is done here
         */
-        $('#exampleTable tbody td img').live('click', function () {
+        $('#exampleTable tbody td img').on('click', function () {
             var nTr = $(this).parents('tr')[0];
             if (oTable.fnIsOpen(nTr)) {
                 /* This row is already open - close it */
@@ -596,16 +757,17 @@ var iTableCounter = 1;
             }
             else {
                 /* Open this row */
+                var tab_num = $(this).closest("tr").index()+1;
+                //alert($(this).closest("tr").index()+1);
                 this.src = "http://i.imgur.com/d4ICC.png";
-                oTable.fnOpen(nTr, fnFormatDetails(iTableCounter, TableHtml), 'details');
+                oTable.fnOpen(nTr, fnFormatDetails(iTableCounter, $("#exampleTable_" + tab_num).html()), 'details');
                 oInnerTable = $("#exampleTable_" + iTableCounter).dataTable({
                     "bJQueryUI": true,
                     "sPaginationType": "full_numbers"
                 });
-                iTableCounter = iTableCounter + 1;
+                //iTableCounter = iTableCounter + 1;
             }
         });
-
 
     });
 </script>	

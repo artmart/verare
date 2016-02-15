@@ -95,14 +95,15 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
     $returns = Calculators::ReturnAllAndYTD($portfolio);
     $pnl = Calculators::PNL($start_date, $end_date, $portfolio);
     
-    $portfolio_composition_sql = "select distinct ig.group_name, i.instrument_group_id, p.portfolio, ig.allocation_min, ig.allocation_max, ig.allocation_normal from ledger l
+    $portfolio_composition_sql = "select ig.group_name, i.instrument_group_id, p.portfolio, ig.allocation_min, ig.allocation_max, ig.allocation_normal, sum(l.nominal*l.price) nav  from ledger l
                             inner join instruments i on i.id = l.instrument_id
                             inner join portfolios p on p.id = l.portfolio_id
                             left join instrument_groups ig on ig.id = i.instrument_group_id
-                            where l.portfolio_id = 1 and l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' ";
+                            where l.portfolio_id = 1 and l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
+                            group by ig.group_name, i.instrument_group_id, p.portfolio, ig.allocation_min, ig.allocation_max, ig.allocation_normal";
     $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
     
-    $sql_table1 = "select ig.group_name, i.instrument_group_id, p.portfolio, i.instrument, ig.allocation_min, ig.allocation_max, ig.allocation_normal, l.nominal*l.price nav from ledger l
+    $sql_table1 = "select ig.group_name, i.instrument_group_id, p.portfolio, i.instrument, ig.allocation_min, ig.allocation_max, ig.allocation_normal, sum(l.nominal*l.price) nav from ledger l
                     inner join instruments i on i.id = l.instrument_id
                     inner join portfolios p on p.id = l.portfolio_id
                     left join instrument_groups ig on ig.id = i.instrument_group_id
@@ -169,13 +170,14 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                 $value[$pgc['instrument_group_id']] = 0; 
                 //$allocation[$pgc['instrument_group_id']][] = 0;
                 $inst_data1[$pgc['instrument_group_id']] = '';
+                $index_value = $index_value + $pgc['nav'];
              }
     
     
     
     foreach($table1_results as $pc){
         
-        $index_value = $index_value + $pc['nav'];
+        //$index_value = $index_value + $pc['nav'];
         
         /*
         $inst_data .= 
@@ -197,9 +199,9 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                 					  '<tr>
                 						<td>'.$pc['instrument'].'</td>
                 						<td>'.number_format($pc['nav']).'</td>
-                						<td>'.number_format($pc['nav']/$pnl[1], 1).'%</td>
+                						<td>'.number_format($pc['nav']*100/$index_value, 1).'%</td>
                 						<td>'.number_format($pc['allocation_normal'], 1).'%</td>
-                						<td>'.number_format($pc['allocation_normal']-$pc['nav']/$pnl[1], 1).'%</td>
+                						<td>'.number_format($pc['allocation_normal']-$pc['nav']*100/$index_value, 1).'%</td>
                 						<td>'.number_format($pc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
                 					  </tr>'; 
  
@@ -227,9 +229,9 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 					  '<tr>
 						<td>'.$pgc['group_name'].'</td>
 						<td>'.number_format($value[$pgc['instrument_group_id']]).'</td>
-						<td>'.number_format($value[$pgc['instrument_group_id']]/$pnl[1], 1).'%</td>
+						<td>'.number_format($value[$pgc['instrument_group_id']]*100/$index_value, 1).'%</td>
 						<td>'.number_format($pgc['allocation_normal'], 1).'%</td>
-						<td>'.number_format($pgc['allocation_normal']-$pc['nav']/$pnl[1], 1).'%</td>
+						<td>'.number_format($pgc['allocation_normal']-$pc['nav']*100/$index_value, 1).'%</td>
 						<td>'.number_format($pgc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
 					  </tr>';
                       
@@ -436,22 +438,18 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                             'xAxis' => array('type' => 'category'),
                             'yAxis' => array('title' => array('text' => 'Vertical legend',)),
                             'legend' => array('enabled' => false),
-                            'plotOptions' => array (
-                                'series' => array (
-                                                'borderWidth' => 0,
-                                                'dataLabels' => array(
-                                                    'enabled' => true,
-                                                ),
-                                            ),
-                                        ),
+                            'plotOptions' => [
+                                                'series' => [
+                                                                'borderWidth' => 0,
+                                                                'dataLabels' => ['enabled' => true,],
+                                                            ],
+                                             ],
                             'series' => array (array(
                                             'name' => 'MyData',
                                             'colorByPoint' => true,
                                             'data' => $level1,
                                         )),
-                            'drilldown' => array(
-                                            'series' => $level2,
-                                        ),
+                            'drilldown' => ['series' => $level2,],
                         ),
                     ));
                  

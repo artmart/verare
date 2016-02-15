@@ -27,10 +27,10 @@
 	<?php  
       
       $cs->registerCssFile($baseUrl.'/css/AdminLTE.min.css');
-      $cs->registerCssFile($baseUrl.'/css/templatemo-style.css');
-	  $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
-	  $cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
       
+	  
+	  $cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
+      $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
       $cs->registerCssFile($baseUrl.'/css/animate.min.css');
       //$cs->registerCssFile($baseUrl.'/css/font-awesome.min.css');
       
@@ -38,6 +38,7 @@
       //$cs->registerCssFile($baseUrl.'/css/ionicons.min.css');
       
 	  $cs->registerCssFile($baseUrl.'/css/abound.css');
+      $cs->registerCssFile($baseUrl.'/css/templatemo-style.css');
 	  //$cs->registerCssFile($baseUrl.'/css/style-blue.css');
 	  ?>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">

@@ -194,7 +194,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
         foreach($portfolio_composition as $pgc){ 
              if($pc['instrument_group_id'] == $pgc['instrument_group_id']){
                 $value[$pgc['instrument_group_id']] = $value[$pgc['instrument_group_id']] + $pc['nav'];
-                $allocation[$pgc['instrument_group_id']][] = array($pc['instrument'],$pc['nav']/$pnl[1]);
+                $allocation[$pgc['instrument_group_id']][] = array($pc['instrument'],$pc['nav']*100/$index_value);
                 $inst_data1[$pgc['instrument_group_id']] .= 
                 					  '<tr>
                 						<td>'.$pc['instrument'].'</td>
@@ -236,7 +236,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 					  </tr>';
                       
       
-        $level1[] = array('name' => $pgc['group_name'], 'y' => $value[$pgc['instrument_group_id']]/$pnl[1], 'drilldown' => $pgc['instrument_group_id']);
+        $level1[] = array('name' => $pgc['group_name'], 'y' => $value[$pgc['instrument_group_id']]*100/$index_value, 'drilldown' => $pgc['instrument_group_id']);
                      
                     
         $level2[] = array('id' => $pgc['instrument_group_id'], 'data' => $allocation[$pgc['instrument_group_id']] /*array(array('Detail1', 1), array('Detail2', 2), array('Detail3', 4))*/);

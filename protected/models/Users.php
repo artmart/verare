@@ -13,22 +13,16 @@
  * @property string $lastvisit_at
  * @property integer $superuser
  * @property integer $status
+ * @property integer $user_role
+ * @property integer $default_portfolio_id
+ * @property string $default_start_date
+ * @property string $default_end_date
  *
  * The followings are the available model relations:
  * @property Profiles $profiles
  */
 class Users extends CActiveRecord
 {
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return Users the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
-
 	/**
 	 * @return string the associated database table name
 	 */
@@ -45,14 +39,16 @@ class Users extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, password, email, create_at', 'required'),
-			array('superuser, status', 'numerical', 'integerOnly'=>true),
-			array('username', 'length', 'max'=>20),
-			array('password, email, activkey', 'length', 'max'=>128),
-			array('lastvisit_at', 'safe'),
+			//array('username, password, email, create_at, default_portfolio_id, default_start_date, default_end_date', 'required'),
+			//array('superuser, status, user_role, default_portfolio_id', 'numerical', 'integerOnly'=>true),
+            array('default_portfolio_id', 'numerical', 'integerOnly'=>true),
+            array('default_start_date, default_end_date', 'length', 'max'=>10),
+			//array('username', 'length', 'max'=>20),
+			//array('password, email, activkey', 'length', 'max'=>128),
+			//array('lastvisit_at', 'safe'),
 			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, username, password, email, activkey, create_at, lastvisit_at, superuser, status', 'safe', 'on'=>'search'),
+			// @todo Please remove those attributes that should not be searched.
+			array('id, username, password, email, activkey, create_at, lastvisit_at, superuser, status, user_role, default_portfolio_id, default_start_date, default_end_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,17 +79,28 @@ class Users extends CActiveRecord
 			'lastvisit_at' => 'Lastvisit At',
 			'superuser' => 'Superuser',
 			'status' => 'Status',
+			'user_role' => 'User Role',
+			'default_portfolio_id' => 'Default Portfolio',
+			'default_start_date' => 'Default Start Date',
+			'default_end_date' => 'Default End Date',
 		);
 	}
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+	 *
+	 * Typical usecase:
+	 * - Initialize the model fields with values from filter form.
+	 * - Execute this method to get CActiveDataProvider instance which will filter
+	 * models according to data in model fields.
+	 * - Pass data provider to CGridView, CListView or any similar widget.
+	 *
+	 * @return CActiveDataProvider the data provider that can return the models
+	 * based on the search/filter conditions.
 	 */
 	public function search()
 	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
 
@@ -106,9 +113,24 @@ class Users extends CActiveRecord
 		$criteria->compare('lastvisit_at',$this->lastvisit_at,true);
 		$criteria->compare('superuser',$this->superuser);
 		$criteria->compare('status',$this->status);
+		$criteria->compare('user_role',$this->user_role);
+		$criteria->compare('default_portfolio_id',$this->default_portfolio_id);
+		$criteria->compare('default_start_date',$this->default_start_date,true);
+		$criteria->compare('default_end_date',$this->default_end_date,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	/**
+	 * Returns the static model of the specified AR class.
+	 * Please note that you should have this exact method in all your CActiveRecord descendants!
+	 * @param string $className active record class name.
+	 * @return Users the static model class
+	 */
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
 	}
 }

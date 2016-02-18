@@ -21,11 +21,17 @@
 					<ul class="nav navbar-nav navbar-right text-uppercase">
 						<li><a href="<?php echo $baseUrl1;?>/site/index">Home</a></li>
 						<li><a href="<?php echo $baseUrl1;?>/site/admin">Dashboard</a></li>
+                        <?php /*
                         <?php if(Yii::app()->user->isGuest){?>
                         <li><a class="login-hide" href="<?php echo $baseUrl1;?>/site/login">Login</a></li>
                         <?php }else{ ?>
                         <li><a href="<?php echo $baseUrl1;?>/site/logout">Logout (<?php echo Yii::app()->user->name; ?>)</a></li>
                         <?php } ?>
+                        */
+                        ?>
+
+
+
 
                         <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMIN<b class="caret"></b></a>
@@ -55,6 +61,24 @@
                           </li>
                           </ul>
                         </li>
+                        
+
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">USER<b class="caret"></b></a>
+                          <ul class="dropdown-menu">
+                          <li>
+                            <a href="<?php echo $baseUrl1; ?>/users/settings">Settings</a>
+                          </li>
+                          <li class="divider"></li>
+                          <?php if(Yii::app()->user->isGuest){?>
+                            <li><a class="login-hide" href="<?php echo $baseUrl1;?>/site/login">Login</a></li>
+                            <?php }else{ ?>
+                            <li><a href="<?php echo $baseUrl1;?>/site/logout">Logout (<?php echo Yii::app()->user->name; ?>)</a></li>
+                          <?php } ?>
+                          </ul>
+                        </li>
+                        
+                        
 		
                         <!--<li><a onclick="redirecttologin()" href="<?php //echo $baseUrl1;?>/user/login">Login</a></li>-->
 					</ul>

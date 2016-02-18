@@ -22,6 +22,9 @@ class User extends CActiveRecord
 	 * @var integer $status
      * @var timestamp $create_at
      * @var timestamp $lastvisit_at
+     * @var integer $default_portfolio_id
+     * @var string $default_start_date
+     * @var string $default_end_date
 	 */
 
 	/**
@@ -60,10 +63,13 @@ class User extends CActiveRecord
             array('create_at', 'default', 'value' => date('Y-m-d H:i:s'), 'setOnEmpty' => true, 'on' => 'insert'),
             array('lastvisit_at', 'default', 'value' => '0000-00-00 00:00:00', 'setOnEmpty' => true, 'on' => 'insert'),
 			array('username, email, superuser, status, user_role', 'required'),
-			array('superuser, status, superuser', 'numerical', 'integerOnly'=>true),
+			array('superuser, status, superuser, default_portfolio_id', 'numerical', 'integerOnly'=>true),
+            array('default_start_date, default_end_date', 'length', 'max'=>10),
 			array('id, username, password, email, activkey, create_at, lastvisit_at, superuser, status, user_role', 'safe', 'on'=>'search'),
 		):((Yii::app()->user->id==$this->id)?array(
 			array('username, email', 'required'),
+            array('default_start_date, default_end_date', 'length', 'max'=>10),
+            array('default_portfolio_id', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>20, 'min' => 3,'message' => UserModule::t("Incorrect username (length between 3 and 20 characters).")),
 			array('email', 'email'),
 			array('username', 'unique', 'message' => UserModule::t("This user's name already exists.")),
@@ -179,6 +185,9 @@ class User extends CActiveRecord
         $criteria->compare('superuser',$this->superuser);
         $criteria->compare('user_role',$this->user_role);
         $criteria->compare('status',$this->status);
+        $criteria->compare('default_portfolio_id',$this->default_portfolio_id);
+        $criteria->compare('default_start_date',$this->default_start_date);
+        $criteria->compare('default_end_date',$this->default_end_date);
 
         return new CActiveDataProvider(get_class($this), array(
             'criteria'=>$criteria,

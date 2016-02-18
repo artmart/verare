@@ -32,7 +32,7 @@ class UsersController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'settings'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -44,7 +44,36 @@ class UsersController extends Controller
 			),
 		);
 	}
+    
+    
+    public function actionSettings()
+	{    
+	   $this->layout='//layouts/column2';
+       
+       //var_dump($_POST['Users']);
+       //exit;
+       
+	   	if(isset($_POST['Users']))
+		{
+		  $id = $_POST['Users']['id'];
+          $model=$this->loadModel($id);
+			$model->attributes=$_POST['Users'];
+            //$model->
+            
+            //$model->save();
+           // print_r($model->getErrors());
+            //exit;
+            
+			if($model->save()){Yii::app()->user->setFlash('success', "Settings saved!");}else{
+			 Yii::app()->user->setFlash('error', "Save failed!");
+			}
+			
+            $this->redirect(array('settings'));
+		}
 
+		$this->render('settings');
+	} 
+    
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed

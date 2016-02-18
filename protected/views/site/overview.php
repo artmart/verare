@@ -7,10 +7,13 @@
 <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
 
 <?php 
+    $id = Yii::app()->user->id;
+    $user_data = Users::model()->findByPk($id);
+    //var_dump($user_data);
     $this->pageTitle=Yii::app()->name; 
-    $portfolio = 1;
-    $start_date = '2015-01-01';
-    $end_date = '2016-01-01';
+    $portfolio = $user_data->default_portfolio_id;
+    $start_date = $user_data->default_start_date;
+    $end_date = $user_data->default_end_date;
     $baseUrl = Yii::app()->baseUrl;
     //var_dump($baseUrl);
 ?>
@@ -27,6 +30,7 @@
                 ?> 
             </small>
           </h1>
+<div class="span2"></div>
 <div class="span1">Start Date:</div>           
 <div class="span2">
 <?php
@@ -44,7 +48,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
             'dateFormat'=>'yy-mm-dd',
             'onselect'=>'loaddata()',
         ],
-        'htmlOptions'=>['placeholder'=>'YYYY-MM-DD'],
+        'htmlOptions'=>['placeholder'=>'YYYY-MM-DD', 'class'=>"form-control"],
     ]);
 
 ?>
@@ -66,7 +70,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
             'dateFormat'=>'yy-mm-dd',
             'onselect'=>'loaddata()',
         ],
-        'htmlOptions'=>['placeholder'=>'YYYY-MM-DD'],
+        'htmlOptions'=>['placeholder'=>'YYYY-MM-DD', 'class'=>"form-control"],
     ]);
 
 ?>
@@ -75,7 +79,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 <div class="span2">
     <?php
     $list = CHtml::listData(Portfolios::model()->findAll(array('select'=>'id, portfolio', 'order'=>'portfolio')),'id','portfolio');
-    echo CHtml::dropDownList('portfolio', $portfolio,  $list, [ 'id' => 'portfolio', 'empty' => '-- Select --',  'onchange'=>'loaddata()', /*'multiple' => true, 'size'=>'10'*/]);
+    echo CHtml::dropDownList('portfolio', $portfolio,  $list, [ 'id' => 'portfolio', 'empty' => '-- Select --',  'onchange'=>'loaddata()', 'class'=>"form-control"  /*'multiple' => true, 'size'=>'10'*/]);
  ?>
 </div>
 <?php

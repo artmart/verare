@@ -14,19 +14,7 @@ $form=$this->beginWidget('CActiveForm', array(
     foreach(Yii::app()->user->getFlashes() as $key => $message) {
         echo '<div  class="alert alert-' . $key . '">' . $message . "</div>\n";
     }
-  // alert alert-success
 ?>
-
-<?php /* if(Yii::app()->user->hasFlash('success')){?>
-    <div class="success">
-        <?php echo Yii::app()->user->getFlash('success'); ?>
-    </div>
-<?php } ?>
-<?php if(Yii::app()->user->hasFlash('error')){?>
-    <div class="error">
-        <?php echo Yii::app()->user->getFlash('error'); ?>
-    </div>
-<?php } */?>
 
 <h2>Default Settings Configuration</h2>
 <br />

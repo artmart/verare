@@ -9,27 +9,33 @@
 <?php 
     $id = Yii::app()->user->id;
     $user_data = Users::model()->findByPk($id);
-    //var_dump($user_data);
     $this->pageTitle=Yii::app()->name; 
-    $portfolio = $user_data->default_portfolio_id;
-    $start_date = $user_data->default_start_date;
-    $end_date = $user_data->default_end_date;
     $baseUrl = Yii::app()->baseUrl;
-    //var_dump($baseUrl);
+    
+    if(isset($user_data->default_portfolio_id)){$portfolio = $user_data->default_portfolio_id;}
+    if(isset($_POST['portfolio'])){$portfolio = $_POST['portfolio'];}
+    
+   	$end_date = Date('Y-m-d');
+	$start_date = date('Y-m-d', strtotime('-1 years'));
+    if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
+    if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
+    if(isset($_POST['start_date'])){$start_date = date_format(date_create($_POST['start_date']),"Y-m-d");}
+    if(isset($_POST['end_date'])){$end_date = date_format(date_create($_POST['end_date']),"Y-m-d");}
 ?>
 
 <h3> <i><?php //echo CHtml::encode(Yii::app()->name); ?></i></h3>
 
-        <!-- Content Header (Page header) -->
+<!-- Content Header (Page header) -->
 
-        <section class="content-header">
-          <h1 class="span1">Overview
-            <small>
-                <?php
-                  //  echo $_SESSION["company"];
-                ?> 
-            </small>
-          </h1>
+<section class="content-header">
+  <h1 class="span1">Overview
+    <small>
+        <?php
+          //  echo $_SESSION["company"];
+        ?> 
+    </small>
+  </h1>
+          
 <div class="span2"></div>
 <div class="span1">Start Date:</div>           
 <div class="span2">
@@ -78,7 +84,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 <div class="span1">Portfolio:</div>           
 <div class="span2">
     <?php
-    $list = CHtml::listData(Portfolios::model()->findAll(array('select'=>'id, portfolio', 'order'=>'portfolio')),'id','portfolio');
+    $list = CHtml::listData(Portfolios::model()->findAll(['select'=>'id, portfolio', 'order'=>'portfolio']),'id','portfolio');
     echo CHtml::dropDownList('portfolio', $portfolio,  $list, [ 'id' => 'portfolio', 'empty' => '-- Select --',  'onchange'=>'loaddata()', 'class'=>"form-control"  /*'multiple' => true, 'size'=>'10'*/]);
  ?>
 </div>
@@ -116,7 +122,6 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
     $table1_results = Yii::app()->db->createCommand($sql_table1)->queryAll(true);
     
     
-    
     $inst_data = '';
     $index_value = 0;
     
@@ -129,72 +134,14 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 						<th>Diff</th>
 						<th>Min-Max</th>
 				  </tr></thead>";
-    
-  /*
-    $tb_id = 0;
-    foreach($portfolio_composition as $pgc){ ?>
-    
-    
-    
-    
-    
-    
-    
-        <table id="exampleTable<?php echo $tb_id;?>" class="table table-bordered table-hover">
-			<?php echo $table_head; ?>
-			<tbody>
-              <?php echo $inst_data;  
-              
-              ?>
-			<tbody>
-		  </table>
-    
         
-  <?php   
-        $tb_id++;  
-        
-        
-        
-        /*
-        $index_value = $index_value + $pc['nav'];
-        $inst_data .= 
-							  '<tr>
-								<td>'.$pc['instrument'].'</td>
-								<td>'.number_format($pc['nav']).'</td>
-								<td>'.number_format($pc['nav']/$pnl[1], 1).'%</td>
-								<td>'.number_format($pc['allocation_normal'], 1).'%</td>
-								<td>'.number_format($pc['allocation_normal']-$pc['nav']/$pnl[1], 1).'%</td>
-								<td>'.number_format($pc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
-							  </tr>'; 
-        
-    }*/
-    
-    
-     foreach($portfolio_composition as $pgc){ 
+    foreach($portfolio_composition as $pgc){ 
                 $value[$pgc['instrument_group_id']] = 0; 
-                //$allocation[$pgc['instrument_group_id']][] = 0;
                 $inst_data1[$pgc['instrument_group_id']] = '';
                 $index_value = $index_value + $pgc['nav'];
              }
     
-    
-    
-    foreach($table1_results as $pc){
-        
-        //$index_value = $index_value + $pc['nav'];
-        
-        /*
-        $inst_data .= 
-					  '<tr>
-						<td>'.$pc['instrument'].'</td>
-						<td>'.number_format($pc['nav']).'</td>
-						<td>'.number_format($pc['nav']/$pnl[1], 1).'%</td>
-						<td>'.number_format($pc['allocation_normal'], 1).'%</td>
-						<td>'.number_format($pc['allocation_normal']-$pc['nav']/$pnl[1], 1).'%</td>
-						<td>'.number_format($pc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
-					  </tr>'; 
-       */
-        
+    foreach($table1_results as $pc){        
         foreach($portfolio_composition as $pgc){ 
              if($pc['instrument_group_id'] == $pgc['instrument_group_id']){
                 $value[$pgc['instrument_group_id']] = $value[$pgc['instrument_group_id']] + $pc['nav'];
@@ -208,24 +155,13 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                 						<td>'.number_format($pc['allocation_normal']-$pc['nav']*100/$index_value, 1).'%</td>
                 						<td>'.number_format($pc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
                 					  </tr>'; 
- 
              }   
     
-        }
-    
-        
-        
-        
-        
-        
-                                
+        }                            
   }
   
-  
-  
-  
-   $level1 = array();
-   $level2 = array();
+   $level1 = [];
+   $level2 = [];
   
     $i = 2;
     foreach($portfolio_composition as $pgc){ 
@@ -239,80 +175,22 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 						<td>'.number_format($pgc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
 					  </tr>';
                       
-      
-        $level1[] = array('name' => $pgc['group_name'], 'y' => $value[$pgc['instrument_group_id']]*100/$index_value, 'drilldown' => $pgc['instrument_group_id']);
-                     
-                    
-        $level2[] = array('id' => $pgc['instrument_group_id'], 'data' => $allocation[$pgc['instrument_group_id']] /*array(array('Detail1', 1), array('Detail2', 2), array('Detail3', 4))*/);
-                    
-        
-        
-        ?>
-    
-    
-    
-    
-    
-    
-    
-        <table id="exampleTable_<?php echo $i;?>" class="table table-bordered table-hover">
-			<?php echo $table_head; ?>
-			<tbody>
-              <?php echo $inst_data1[$pgc['instrument_group_id']]; ?>
-			<tbody>
-		  </table>  
-          <script>
-          var  TableHtml1_<?php echo $i;?> = $("#exampleTable_<?php echo $i;?>").html();
-           $("#exampleTable_<?php echo $i;?>").hide();
-          </script>   
-        <?php 
-        $i++;
-        
-        
-        /*
-        $index_value = $index_value + $pc['nav'];
-        $inst_data .= 
-							  '<tr>
-								<td>'.$pc['instrument'].'</td>
-								<td>'.number_format($pc['nav']).'</td>
-								<td>'.number_format($pc['nav']/$pnl[1], 1).'%</td>
-								<td>'.number_format($pc['allocation_normal'], 1).'%</td>
-								<td>'.number_format($pc['allocation_normal']-$pc['nav']/$pnl[1], 1).'%</td>
-								<td>'.number_format($pc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
-							  </tr>'; 
-        */
-    }
-    
-  
+    $level1[] = array('name' => $pgc['group_name'], 'y' => $value[$pgc['instrument_group_id']]*100/$index_value, 'drilldown' => $pgc['instrument_group_id']);           
+    $level2[] = array('id' => $pgc['instrument_group_id'], 'data' => $allocation[$pgc['instrument_group_id']] /*array(array('Detail1', 1), array('Detail2', 2), array('Detail3', 4))*/);
 ?>
-<!--<div id="overview"></div>-->          
-           
-            <!--
-                    <ol class="breadcrumb">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <?php
-                             //       echo $_SESSION["nowPort"];
-                                ?>
-                             <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <?php
-                         //           foreach($_SESSION["portfolios"] as $p)
-                         //           {
-                          //              echo "<li><a href='#'>" . $p. "</a></li>";
-                          //          }
-                                ?> 
-                                <li class="divider"></li>
-                                <li><a href="#">Settings </a></li>
-                                <li><a href="v_recalc.php">ReCalc</a></li>
-                                <li class="divider"></li>
-                                <li><a href="v_disconnect.php">Logout </a></li>
-                            </ul>
-                        </li>
-                    </ol>
-            -->
-        </section>
-
+    
+    <table id="exampleTable_<?php echo $i;?>" class="table table-bordered table-hover">
+		<?php echo $table_head; ?>
+		<tbody>
+          <?php echo $inst_data1[$pgc['instrument_group_id']]; ?>
+		<tbody>
+	  </table>  
+      <script>
+      var TableHtml1_<?php echo $i;?> = $("#exampleTable_<?php echo $i;?>").html();
+       $("#exampleTable_<?php echo $i;?>").hide();
+      </script>   
+    <?php $i++; } ?>
+</section>
 
         <!-- Main content -->
         <section class="content">
@@ -332,7 +210,6 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                       <div class="description-block border-right">
                         <span class="description-text">O/N P/L</span><p>
                               <?php
-                                  //$pnl = GetPnL($dtmax,'Index',$_SESSION['company']);
                                   $pnl = Calculators::PNL($start_date, $end_date, $portfolio);
                                   if($pnl >= 0)
                                   {
@@ -403,9 +280,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 								<td></td>
 								<td></td>
 							  </tr>
-                              <?php echo $inst_data; //$pdata=GetCompositionTable($dtmax, $_SESSION['company'], $index_nav_num); 
-                              
-                              ?>
+                              <?php echo $inst_data; ?>
 							<tbody>
 						  </table>
 						</div>	  
@@ -417,78 +292,37 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 					  <!--<canvas id="pieChart" height="250"></canvas>-->
                       <?php //$this->renderPartial('/site/pia_chart', []);?>                   
                      
-                      <?php
-                    /*  
-                    $level1 = array();
-                    $level1[] = array('name' => 'GroupOne', 'y' => 11, 'drilldown' => 'dd1');
-                    $level1[] = array('name' => 'GroupTwo', 'y' => 22, 'drilldown' => 'dd2');
-                    $level1[] = array('name' => 'GroupThree', 'y' => 33, 'drilldown' => 'dd3');
-                     
-                    $level2 = array();
-                    $level2[] = array('id' => 'dd1', 'data' => array(array('Detail1', 1), array('Detail2', 2), array('Detail3', 4)));
-                    $level2[] = array('id' => 'dd2', 'data' => array(array('Detaila', 8), array('Detailb', 9), array('Detailc', 3)));
-                    $level2[] = array('id' => 'dd3', 'data' => array(array('DetailX', 7), array('DetailY', 5), array('DetailZ', 6)));
-                    */
-                    $this->Widget('ext.highcharts.HighchartsWidget', array(
-                            'scripts' => array(
-                            'modules/drilldown', // in fact, this is mandatory :)
-                            ),
-                        'options'=>array(
-                            'colors'=>['#6AC36A', '#FFD148', '#0563FE', '#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
-                            'chart' => array('type' => 'pie', 'height' => 300),
-                            'credits' => ['enabled' => false],
-                            'title' => array('text' => null /* 'Levels 1 and 2'*/),
-                            'subtitle' => array('text' => 'Click the columns to view details.'),
-                            'xAxis' => array('type' => 'category'),
-                            'yAxis' => array('title' => array('text' => 'Vertical legend',)),
-                            'legend' => array('enabled' => false),
-                            'plotOptions' => [
-                                                'series' => [
-                                                                'borderWidth' => 0,
-                                                                'dataLabels' => ['enabled' => true,],
-                                                            ],
-                                             ],
-                            'series' => array (array(
-                                            'name' => 'MyData',
-                                            'colorByPoint' => true,
-                                            'data' => $level1,
-                                        )),
-                            'drilldown' => ['series' => $level2,],
-                        ),
-                    ));
-                 
-                      
-                      /*
-                      $data1 = [ ['Equities', 50],
-                                  ['Rates', 40],
-                                  ['Alternatives', 10]
-                                ];
-                      $this->Widget('ext.highcharts.HighchartsWidget', array(
-                        'options' => [
-                          'colors'=>['#6AC36A', '#FFD148', '#0563FE', '#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
-                          'gradient' => ['enabled'=> true],
-                          'credits' => ['enabled' => false],
-                          'exporting' => ['enabled' => false],
-                          'chart' => ['plotBackgroundColor' => '#ffffff', 'plotBorderWidth' => null, 'plotShadow' => false, 'height' => 300],
-                          'title' => false,
-                          'tooltip' => [
-                    		//'pointFormat' =>array('Value'=> 'point.y:,.0f'),
-                            // 'pointFormat' => '{series.name}: <b>{point.percentage}%</b>',
-                            //'percentageDecimals' => 1,
-                            'formatter'=> 'js:function() { return this.point.name+":  <b>"+ this.y.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g,"$1,")+"</b><br/>percent: <b>" +this.point.percentage.toFixed(2)+"</b>%"; }',
-                            //the reason it didnt work before was because you need to use javascript functions to round and refrence the JSON as this.<array>.<index> ~jeffrey
-                          ],
-                          'plotOptions' => [
-                            'pie' => ['allowPointSelect' => true, 'cursor' => 'pointer', 
-                    					   'dataLabels' => ['enabled' => true, 'color' => '#AAAAAA', 'connectorColor' => '#AAAAAA'],
-                    					   'showInLegend'=>true,
-                            ]
-                          ],
-                          'series' => [['type' => 'pie', 'name' => 'Percentage', 'data' => $data1]],
-                        ]
-                      ));
-                      */
-                      ?>
+<?php
+    /*  
+    $level1 = array();
+    $level1[] = array('name' => 'GroupOne', 'y' => 11, 'drilldown' => 'dd1');
+    $level1[] = array('name' => 'GroupTwo', 'y' => 22, 'drilldown' => 'dd2');
+    $level1[] = array('name' => 'GroupThree', 'y' => 33, 'drilldown' => 'dd3');
+     
+    $level2 = array();
+    $level2[] = array('id' => 'dd1', 'data' => array(array('Detail1', 1), array('Detail2', 2), array('Detail3', 4)));
+    $level2[] = array('id' => 'dd2', 'data' => array(array('Detaila', 8), array('Detailb', 9), array('Detailc', 3)));
+    $level2[] = array('id' => 'dd3', 'data' => array(array('DetailX', 7), array('DetailY', 5), array('DetailZ', 6)));
+    */
+    $this->Widget('ext.highcharts.HighchartsWidget', [
+            'scripts' => [
+            'modules/drilldown', // in fact, this is mandatory :)
+            ],
+        'options'=>[
+            'colors'=>['#6AC36A', '#FFD148', '#0563FE', '#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
+            'chart' => ['type' => 'pie', 'height' => 300],
+            'credits' => ['enabled' => false],
+            'title' => ['text' => null /* 'Levels 1 and 2'*/],
+            'subtitle' => ['text' => 'Click the columns to view details.'],
+            'xAxis' => ['type' => 'category'],
+            'yAxis' => ['title' => ['text' => 'Vertical legend',]],
+            'legend' => ['enabled' => false],
+            'plotOptions' => ['series' => ['borderWidth' => 0, 'dataLabels' => ['enabled' => true,],],],
+            'series' => [['name' => 'MyData', 'colorByPoint' => true, 'data' => $level1,]],
+            'drilldown' => ['series' => $level2,],
+        ],
+    ]);
+?>
                     </div><!-- /.col -->
 					<!--
                     <div class="col-md-4">
@@ -518,18 +352,151 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                   </div>
                 </div><!-- /.box-header -->
 				
-				
-
-				
                 <div class="box-body">
                   <div class="row">
                     <div class="col-md-12">
 					
                       <div class="table">
+ <?php
+        //$start    = (new DateTime($start_date))->modify('first day of this month');
+    	//$end      = (new DateTime($end_date))->modify('first day of this month');
+    	
+        //$intr =1;
+    	//$inter = $intr . " " . "month";
+        
+    	//$interval = DateInterval::createFromDateString($inter);
+    	//$period = new DatePeriod($start, $interval, $end);
+        $sql_portfolio = " select * from portfolio_returns where portfolio_id = '$portfolio' and trade_date > '$start_date' and trade_date<'$end_date' order by trade_date asc";
+        $portfolio_returns = Yii::app()->db->createCommand($sql_portfolio)->queryAll(true);
+        foreach($portfolio_returns as $pr){
+            $returns_portfolio[] = floatval($pr['return']); 
+            $returns_portfolio1[] = floatval($pr['return']+0.01);
+            $months[] = $pr['trade_date'];
+        }
+ 
+        
+        $enddate = min($end_date, end($months));
+        $dttmp = date_parse($enddate);
+        $dtytd = $dttmp['year'] . "-01-01";
+        $dt3m=$this->my_date_format($enddate,"-3 months");
+        $dt6m=$this->my_date_format($enddate,"-6 months");
+        $dt9m=$this->my_date_format($enddate,"-9 months");
+        $dt1y=$this->my_date_format($enddate,"-12 months");
+        
+        $sql_1 = " select * from portfolio_returns where portfolio_id = '$portfolio' and 
+                    (trade_date = '$dtytd' or trade_date = '$dt3m' or trade_date = '$dt6m' or trade_date = '$dt9m' or trade_date = '$dt1y' or trade_date = '$enddate' or trade_date = '$start_date')";
+        $portfolio_1 = Yii::app()->db->createCommand($sql_1)->queryAll(true);
+        foreach($portfolio_1 as $p1){
+            if($p1['trade_date'] == $dtytd){$return_ytd = $p1['return'];}
+            if($p1['trade_date'] == $dt3m){$return_3m = $p1['return'];}
+            if($p1['trade_date'] == $dt6m){$return_6m = $p1['return'];}
+            if($p1['trade_date'] == $dt9m){$return_9m = $p1['return'];}
+            if($p1['trade_date'] == $dt1y){$return_1y = $p1['return'];}
+            if($p1['trade_date'] == $enddate){$return_end = $p1['return'];}
+            if($p1['trade_date'] == $start_date){$return_start = $p1['return'];}
+        }
+        $xA=$return_end/$return_start-1;
+        
+        
+        
+        //$xB=$this->GetVolatility($dateStart, $dateEnd, $iN);
+        
+          //  $xS=$this->GetData($startDate, $instName);
+           // $xE=$this->GetData($endDate, $instName);
+            //return $xE[0]/$xS[0]-1;
+        
+       
+ ?>                     
+    <table id='tablePerformance' class='table table-bordered table-hover'>
+        <thead>
+            <tr>
+            <th>Name</th>
+            <th>AllTime</th>
+            <th>YTD</th>
+            <th>3M</th>
+            <th>6M</th>
+            <th>9M</th>
+            <th>1Y</th>
+            <th>Vol</th>
+            <th>Sharpe</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr> 
+                <td>Portfolio</td>
+                <td><?php echo number_format($xA*100, 1); ?>%</td>
+                <td><?php echo number_format(($return_end/$return_ytd-1)*100, 1);?>%</td>
+                <td><?php echo number_format(($return_end/$return_3m-1)*100, 1); ?>%</td>
+                <td><?php echo number_format(($return_end/$return_ytd-1)*100, 1); ?>%</td>
+                <td><?php echo number_format(($return_end/$return_ytd-1)*100, 1); ?>%</td>
+                <td><?php echo number_format(($return_end/$return_ytd-1)*100, 1); ?>%</td>
+                <td><?php //echo number_format($xB*100, 1); ?>%</td>
+                <td><?php //echo number_format($xA/$xB, 1); ?>%</td>
+            </tr>
+            <tr> 
+                <td>Benchmark</td>
+                <td><?php echo number_format($xA*100, 1); ?>%</td>
+                <td><?php echo number_format(($return_end/$return_ytd-1)*100, 1);?>%</td>
+                <td><?php echo number_format(($return_end/$return_3m-1)*100, 1); ?>%</td>
+                <td><?php echo number_format(($return_end/$return_ytd-1)*100, 1); ?>%</td>
+                <td><?php echo number_format(($return_end/$return_ytd-1)*100, 1); ?>%</td>
+                <td><?php echo number_format(($return_end/$return_ytd-1)*100, 1); ?>%</td>
+                <td><?php //echo number_format($xB*100, 1); ?>%</td>
+                <td><?php //echo number_format($xA/$xB, 1); ?>%</td>
+            </tr>
+
+            </tbody>
+            </table>
+                      
+                      
+                      
 					  
-					        <?php
-					            //echo GetDetailsTableSimple(array("Index", "Benchmark"), $dtmin, $dtmax);
-					        ?>
+	        <?php
+	            //echo GetDetailsTableSimple(array("Index", "Benchmark"), $dtmin, $dtmax);
+                /*
+            $result="<table id='tablePerformance' class='table table-bordered table-hover'>";
+            $result.="<thead>";
+            $result.="<tr>";
+            $result.="<th>Name</th>";
+            $result.="<th>AllTime</th>";
+            $result.="<th>YTD</th>";
+            $result.="<th>3M</th>";
+            $result.="<th>6M</th>";
+            $result.="<th>9M</th>";
+            $result.="<th>1Y</th>";
+            $result.="<th>Vol</th>";
+            $result.="<th>Sharpe</th>";
+            $result.="</tr>";
+            $result.="</thead>";
+            $result.="<tbody>";
+            $instIndex=0;
+            $dttmp = date_parse($dateEnd);
+            $dtytd = $dttmp['year'] . "-01-01";
+            $dt3m=$this->my_date_format($dateEnd,"-3 months");
+            $dt6m=$this->my_date_format($dateEnd,"-6 months");
+            $dt9m=$this->my_date_format($dateEnd,"-9 months");
+            $dt1y=$this->my_date_format($dateEnd,"-12 months");
+            foreach($instNames as $iN) {
+                $result.="<tr>";
+                $xA=$this->GetReturn($dateStart, $dateEnd, $iN);
+                $xB=$this->GetVolatility($dateStart, $dateEnd, $iN);
+                $result.="<td><font color=" . GetNextColor($instIndex) . ">" . $iN . "</font></td>";
+                $result.="<td>" . number_format($xA*100, 1) . "%</td>";
+                $result.="<td>" . number_format($this->GetReturn($dtytd, $dateEnd, $iN)*100, 1) . "%</td>";
+                $result.="<td>" . number_format($this->GetReturn($dt3m, $dateEnd, $iN)*100, 1) . "%</td>";
+                $result.="<td>" . number_format($this->GetReturn($dt6m, $dateEnd, $iN)*100, 1) . "%</td>";
+                $result.="<td>" . number_format($this->GetReturn($dt9m, $dateEnd, $iN)*100, 1) . "%</td>";
+                $result.="<td>" . number_format($this->GetReturn($dt1y, $dateEnd, $iN)*100, 1) . "%</td>";
+                $result.="<td>" . number_format($xB*100, 1) . "%</td>";
+                $result.="<td>" . number_format($xA/$xB, 1) . "%</td>";
+                $instIndex++;
+            }
+            $result.="</tbody>";
+            $result.="</table>";
+            echo $result;
+             */                   
+                                   
+?>
 					        
                       </div><!-- /.chart-responsive -->
                     </div><!-- /.col -->
@@ -539,23 +506,22 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                   <div class="row">
                     <div class="col-md-12">
 					  <!--<canvas id="areaChart" height="200"></canvas>-->
-                      	<?php 
-                        
-                          $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                          $series[] = ['name' => 'Index', 'data' => [5, 6, 7, 10, 20, 8, 3, 4, 9, 6, 11, 2]];
-                          $series[] = ['name' => 'Benchmark', 'data' => [7, 4, 8, 2, 7, 6, 7, 1, 1, 2, 8, 9]]; 
-                          $this->Widget('ext.highcharts.HighchartsWidget', [
-                        		   'options'=>[
-                        			  'title' => ['text' => ''],
-                        			  'xAxis' => ['categories' => $months, 'type' => 'datetime', 'title' => ['text'=> null], 'labels' => ['enabled' => true]],
-                        			  'yAxis' => ['title' => ['text' => ''], 'min' => 0],
-                        			  'chart' => ['type'=>'spline', 'plotBackgroundColor' => '#ffffff', 'plotBorderWidth' => null, 'plotShadow' => false, 'height' => 300],
-                        			  'colors'=> ['#6AC36A', '#FFD148', '#0563FE', '#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
-                        			  'credits' => ['enabled' => false],
-                        			  'series' => $series,
-                        		   ]
-                        		]);
-                        ?>
+<?php                                     
+  //$months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  $series[] = ['name' => 'Portfolio', 'data' => $returns_portfolio];
+  $series[] = ['name' => 'Benchmark', 'data' => $returns_portfolio1]; 
+  $this->Widget('ext.highcharts.HighchartsWidget', [
+		   'options'=>[
+			  'title' => ['text' => ''],
+			  'xAxis' => ['categories' => $months, 'minTickInterval' =>30, 'type' => 'datetime', 'title' => ['text'=> null], 'labels' => ['enabled' => true]],
+			  'yAxis' => ['title' => ['text' => ''], 'min' => 0.9, 'max'=>1.2],
+			  'chart' => ['type'=>'spline', 'plotBackgroundColor' => '#ffffff', 'plotBorderWidth' => null, 'plotShadow' => false, 'height' => 300],
+			  'colors'=> ['#6AC36A', '#FFD148', '#0563FE', '#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
+			  'credits' => ['enabled' => false],
+			  'series' => $series,
+		   ]
+		]);                                
+?>
                     </div><!-- /.col -->
                   </div><!-- /.row -->
 					  

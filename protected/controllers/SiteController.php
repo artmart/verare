@@ -55,7 +55,12 @@ class SiteController extends Controller
 	} 
     
     
-    
+    public function my_date_format($tradeDate,$alpha)
+    {
+        $tmp=date_create($tradeDate);
+        date_modify($tmp, $alpha);
+        return date_format($tmp, "Y-m-d");
+    }
 
     
     public function actionSparklines()

@@ -57,9 +57,7 @@ if(isset(Yii::app()->user->user_role)){
                 $usermenu[]=['label'=>'Access Levels', 'url'=>['/accessLevels/admin']]; 
                 $usermenu[]=['label'=>'Portfolio Types', 'url'=>['/portfolioTypes/admin']];
                 $usermenu[]=['label'=>'Benchmarks', 'url'=>['/benchmarks/admin']];
-                $usermenu[]=['label'=>'Benchmark Components', 'url'=>['/benchmarkComponents/admin']];
-                
-                              
+                $usermenu[]=['label'=>'Benchmark Components', 'url'=>['/benchmarkComponents/admin']];             
               }
               
            }

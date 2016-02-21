@@ -21,13 +21,17 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'client_id'); ?>
-		<?php echo $form->textField($model,'client_id'); ?>
+		<?php //echo $form->textField($model,'client_id'); 
+            echo $form->dropDownList($model, 'client_id',  CHtml::listData(clients::model()->findAll(array('select'=>'id, client_name', 'order'=>'client_name')),'id','client_name'), array('empty' => '- Select -'));
+        ?>
 		<?php echo $form->error($model,'client_id'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'portfolio_id'); ?>
-		<?php echo $form->textField($model,'portfolio_id'); ?>
+		<?php //echo $form->textField($model,'portfolio_id'); 
+            echo $form->dropDownList($model, 'portfolio_id',  CHtml::listData(portfolios::model()->findAll(array('select'=>'id, portfolio', 'order'=>'portfolio')),'id','portfolio'), array('empty' => '- Select -'));
+        ?>
 		<?php echo $form->error($model,'portfolio_id'); ?>
 	</div>
 

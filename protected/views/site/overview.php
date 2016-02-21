@@ -296,7 +296,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
             'modules/drilldown', // in fact, this is mandatory :)
             ],
         'options'=>[
-            'colors'=>['#6AC36A', '#FFD148', '#0563FE', '#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
+            'colors'=>['#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5', '#0563FE',  '#6AC36A', '#FFD148'],
             'chart' => ['type' => 'pie', 'height' => 300],
             'credits' => ['enabled' => false],
             'title' => ['text' => null /* 'Levels 1 and 2'*/],
@@ -356,8 +356,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
             $returns_portfolio_daily[] = $pr['return'];
             $months[] = $pr['trade_date'];    
         }
-       
-       
+        
        //Benchmark returns 
         $sql_benchmark = "select p.trade_date, sum(p.price*bc.weight) sums from benchmarks b
                             inner join benchmark_components bc on bc.benchmark_id = b.id
@@ -366,8 +365,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                             where b.portfolio_id = '$portfolio' and p.trade_date > '$start_date' and p.trade_date<'$end_date'
                             group by p.trade_date asc";
         $benchmark_sums = Yii::app()->db->createCommand($sql_benchmark)->queryAll(true);
-       
-       
+
         $return1[0] = 1;
         $return_bench = 1;
         $return_bench_daily[] = 1;
@@ -392,8 +390,6 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
         
         $portfolio_volatility = PHPExcel_Calculation_Statistical::STDEV($returns_portfolio_daily)*sqrt(240);
         $portfolio_avg = PHPExcel_Calculation_Statistical::AVERAGE($returns_portfolio_daily);
-        
-        
         
         $sql_1 = " select * from portfolio_returns where portfolio_id = '$portfolio' and 
                     (trade_date = '$dtytd' or trade_date = '$dt3m' or trade_date = '$dt6m' or trade_date = '$dt9m' or trade_date = '$dt1y' or trade_date = '$enddate' or trade_date = '$start_date')";

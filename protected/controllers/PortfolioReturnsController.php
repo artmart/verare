@@ -79,7 +79,7 @@ class PortfolioReturnsController extends Controller
         
         foreach($trades as $trd){$ins_ids[] = $trd['instrument_id'];} 
         
-        $insids = implode("','", $ins_ids);          
+        $insids = implode("','", array_unique($ins_ids));          
                         
         $portfolio_return_sql = "select p.trade_date,
                                 sum((select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id)) pnl,
@@ -88,6 +88,9 @@ class PortfolioReturnsController extends Controller
                                 where p.is_current = 1 and instrument_id in ('$insids') and " . $where .  
                                 " group by  p.trade_date
                                 order by p.trade_date asc";
+                                
+        //echo $portfolio_return_sql;
+        //exit;
         $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
         
         if(count($portfolio_returns)>0){
@@ -104,9 +107,9 @@ class PortfolioReturnsController extends Controller
                     
                     if($div>0){
                         $rawData[$i]['return'] = $rawData[$i]['top']/$div;
-                    }else{
-                        $rawData[$i]['return'] = 1;
-                    }
+                    }//else{
+                       // $rawData[$i]['return'] = 1;
+                   // }
                }
          
               //checking if the return for current instrument is not exist and inserting the calculated return.//

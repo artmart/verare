@@ -121,10 +121,8 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                     group by ig.group_name, i.instrument_group_id, p.portfolio, i.instrument, ig.allocation_min, ig.allocation_max, ig.allocation_normal";
     $table1_results = Yii::app()->db->createCommand($sql_table1)->queryAll(true);
     
-    
     $inst_data = '';
     $index_value = 0;
-    
     
     $table_head = "<thead><tr>
 						<th>Name</th>
@@ -293,17 +291,6 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                       <?php //$this->renderPartial('/site/pia_chart', []);?>                   
                      
 <?php
-    /*  
-    $level1 = array();
-    $level1[] = array('name' => 'GroupOne', 'y' => 11, 'drilldown' => 'dd1');
-    $level1[] = array('name' => 'GroupTwo', 'y' => 22, 'drilldown' => 'dd2');
-    $level1[] = array('name' => 'GroupThree', 'y' => 33, 'drilldown' => 'dd3');
-     
-    $level2 = array();
-    $level2[] = array('id' => 'dd1', 'data' => array(array('Detail1', 1), array('Detail2', 2), array('Detail3', 4)));
-    $level2[] = array('id' => 'dd2', 'data' => array(array('Detaila', 8), array('Detailb', 9), array('Detailc', 3)));
-    $level2[] = array('id' => 'dd3', 'data' => array(array('DetailX', 7), array('DetailY', 5), array('DetailZ', 6)));
-    */
     $this->Widget('ext.highcharts.HighchartsWidget', [
             'scripts' => [
             'modules/drilldown', // in fact, this is mandatory :)
@@ -357,23 +344,43 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                     <div class="col-md-12">
 					
                       <div class="table">
- <?php
-        //$start    = (new DateTime($start_date))->modify('first day of this month');
-    	//$end      = (new DateTime($end_date))->modify('first day of this month');
-    	
-        //$intr =1;
-    	//$inter = $intr . " " . "month";
-        
-    	//$interval = DateInterval::createFromDateString($inter);
-    	//$period = new DatePeriod($start, $interval, $end);
+ <?php       
+        $return = 1;
+
         $sql_portfolio = " select * from portfolio_returns where portfolio_id = '$portfolio' and trade_date > '$start_date' and trade_date<'$end_date' order by trade_date asc";
         $portfolio_returns = Yii::app()->db->createCommand($sql_portfolio)->queryAll(true);
         foreach($portfolio_returns as $pr){
-            $returns_portfolio[] = floatval($pr['return']); 
-            $returns_portfolio1[] = floatval($pr['return']+0.01);
-            $months[] = $pr['trade_date'];
+            $return = $return * $pr['return'];
+            
+            $returns_portfolio[] = floatval($return); 
+            $returns_portfolio_daily[] = $pr['return'];
+            $months[] = $pr['trade_date'];    
         }
- 
+       
+       
+       //Benchmark returns 
+        $sql_benchmark = "select p.trade_date, sum(p.price*bc.weight) sums from benchmarks b
+                            inner join benchmark_components bc on bc.benchmark_id = b.id
+                            inner join instruments i on i.id = bc.instrument_id and bc.is_instrument_or_portfolio = 0
+                            inner join prices p on p.instrument_id = i.id
+                            where b.portfolio_id = '$portfolio' and p.trade_date > '$start_date' and p.trade_date<'$end_date'
+                            group by p.trade_date asc";
+        $benchmark_sums = Yii::app()->db->createCommand($sql_benchmark)->queryAll(true);
+       
+       
+        $return1[0] = 1;
+        $return_bench = 1;
+        $return_bench_daily[] = 1;
+        $p = 0;
+        foreach($benchmark_sums as $bs){
+            $sums[$p] = $bs['sums'];
+            if($p>0){
+                $return1[$p] = $bs['sums']/$sums[$p-1];
+                $return_bench = $return_bench * $return1[$p];
+                $return_bench_daily[] = floatval($return_bench * $return1[$p]);
+            } 
+            $p++;  
+        }
         
         $enddate = min($end_date, end($months));
         $dttmp = date_parse($enddate);
@@ -382,6 +389,11 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
         $dt6m=$this->my_date_format($enddate,"-6 months");
         $dt9m=$this->my_date_format($enddate,"-9 months");
         $dt1y=$this->my_date_format($enddate,"-12 months");
+        
+        $portfolio_volatility = PHPExcel_Calculation_Statistical::STDEV($returns_portfolio_daily)*sqrt(240);
+        $portfolio_avg = PHPExcel_Calculation_Statistical::AVERAGE($returns_portfolio_daily);
+        
+        
         
         $sql_1 = " select * from portfolio_returns where portfolio_id = '$portfolio' and 
                     (trade_date = '$dtytd' or trade_date = '$dt3m' or trade_date = '$dt6m' or trade_date = '$dt9m' or trade_date = '$dt1y' or trade_date = '$enddate' or trade_date = '$start_date')";
@@ -397,15 +409,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
         }
         $xA=$return_end/$return_start-1;
         
-        
-        
-        //$xB=$this->GetVolatility($dateStart, $dateEnd, $iN);
-        
-          //  $xS=$this->GetData($startDate, $instName);
-           // $xE=$this->GetData($endDate, $instName);
-            //return $xE[0]/$xS[0]-1;
-        
-       
+        //$xB=$this->GetVolatility($dateStart, $dateEnd, $iN);      
  ?>                     
     <table id='tablePerformance' class='table table-bordered table-hover'>
         <thead>
@@ -424,14 +428,14 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
             <tbody>
             <tr> 
                 <td>Portfolio</td>
-                <td><?php echo number_format($xA*100, 1); ?>%</td>
+                <td><?php echo number_format(($return_end/$return_start-1)*100, 1); ?>%</td>
                 <td><?php echo number_format(($return_end/$return_ytd-1)*100, 1);?>%</td>
                 <td><?php echo number_format(($return_end/$return_3m-1)*100, 1); ?>%</td>
                 <td><?php echo number_format(($return_end/$return_ytd-1)*100, 1); ?>%</td>
                 <td><?php echo number_format(($return_end/$return_ytd-1)*100, 1); ?>%</td>
                 <td><?php echo number_format(($return_end/$return_ytd-1)*100, 1); ?>%</td>
-                <td><?php //echo number_format($xB*100, 1); ?>%</td>
-                <td><?php //echo number_format($xA/$xB, 1); ?>%</td>
+                <td><?php echo number_format($portfolio_volatility*100, 1); ?>%</td>
+                <td><?php if(!($portfolio_volatility==0)){echo number_format(($portfolio_avg-1)*100/$portfolio_volatility, 1);}else{echo "N/A";} ?>%</td>
             </tr>
             <tr> 
                 <td>Benchmark</td>
@@ -447,80 +451,44 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 
             </tbody>
             </table>
-                      
-                      
-                      
-					  
-	        <?php
-	            //echo GetDetailsTableSimple(array("Index", "Benchmark"), $dtmin, $dtmax);
-                /*
-            $result="<table id='tablePerformance' class='table table-bordered table-hover'>";
-            $result.="<thead>";
-            $result.="<tr>";
-            $result.="<th>Name</th>";
-            $result.="<th>AllTime</th>";
-            $result.="<th>YTD</th>";
-            $result.="<th>3M</th>";
-            $result.="<th>6M</th>";
-            $result.="<th>9M</th>";
-            $result.="<th>1Y</th>";
-            $result.="<th>Vol</th>";
-            $result.="<th>Sharpe</th>";
-            $result.="</tr>";
-            $result.="</thead>";
-            $result.="<tbody>";
-            $instIndex=0;
-            $dttmp = date_parse($dateEnd);
-            $dtytd = $dttmp['year'] . "-01-01";
-            $dt3m=$this->my_date_format($dateEnd,"-3 months");
-            $dt6m=$this->my_date_format($dateEnd,"-6 months");
-            $dt9m=$this->my_date_format($dateEnd,"-9 months");
-            $dt1y=$this->my_date_format($dateEnd,"-12 months");
-            foreach($instNames as $iN) {
-                $result.="<tr>";
-                $xA=$this->GetReturn($dateStart, $dateEnd, $iN);
-                $xB=$this->GetVolatility($dateStart, $dateEnd, $iN);
-                $result.="<td><font color=" . GetNextColor($instIndex) . ">" . $iN . "</font></td>";
-                $result.="<td>" . number_format($xA*100, 1) . "%</td>";
-                $result.="<td>" . number_format($this->GetReturn($dtytd, $dateEnd, $iN)*100, 1) . "%</td>";
-                $result.="<td>" . number_format($this->GetReturn($dt3m, $dateEnd, $iN)*100, 1) . "%</td>";
-                $result.="<td>" . number_format($this->GetReturn($dt6m, $dateEnd, $iN)*100, 1) . "%</td>";
-                $result.="<td>" . number_format($this->GetReturn($dt9m, $dateEnd, $iN)*100, 1) . "%</td>";
-                $result.="<td>" . number_format($this->GetReturn($dt1y, $dateEnd, $iN)*100, 1) . "%</td>";
-                $result.="<td>" . number_format($xB*100, 1) . "%</td>";
-                $result.="<td>" . number_format($xA/$xB, 1) . "%</td>";
-                $instIndex++;
-            }
-            $result.="</tbody>";
-            $result.="</table>";
-            echo $result;
-             */                   
                                    
-?>
-					        
-                      </div><!-- /.chart-responsive -->
-                    </div><!-- /.col -->
-					
-					
-                  </div><!-- /.row -->
-                  <div class="row">
-                    <div class="col-md-12">
-					  <!--<canvas id="areaChart" height="200"></canvas>-->
+          </div><!-- /.chart-responsive -->
+        </div><!-- /.col -->
+		
+      </div><!-- /.row -->
+      <div class="row">
+        <div class="col-md-12">
+		  <!--<canvas id="areaChart" height="200"></canvas>-->
 <?php                                     
   //$months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   $series[] = ['name' => 'Portfolio', 'data' => $returns_portfolio];
-  $series[] = ['name' => 'Benchmark', 'data' => $returns_portfolio1]; 
+  $series[] = ['name' => 'Benchmark', 'data' => $return_bench_daily]; 
   $this->Widget('ext.highcharts.HighchartsWidget', [
-		   'options'=>[
-			  'title' => ['text' => ''],
-			  'xAxis' => ['categories' => $months, 'minTickInterval' =>30, 'type' => 'datetime', 'title' => ['text'=> null], 'labels' => ['enabled' => true]],
-			  'yAxis' => ['title' => ['text' => ''], 'min' => 0.9, 'max'=>1.2],
-			  'chart' => ['type'=>'spline', 'plotBackgroundColor' => '#ffffff', 'plotBorderWidth' => null, 'plotShadow' => false, 'height' => 300],
-			  'colors'=> ['#6AC36A', '#FFD148', '#0563FE', '#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
-			  'credits' => ['enabled' => false],
-			  'series' => $series,
-		   ]
-		]);                                
+       'options'=>[
+    	  'title' => ['text' => ''],
+    	  'xAxis' => ['categories' => $months, 'minTickInterval' =>30, 'type' => 'datetime', 'title' => ['text'=> null], 'labels' => ['enabled' => true]],
+    	  'yAxis' => ['title' => ['text' => ''], 'min' => 0.98, 'max'=>1.01],
+    	  'chart' => ['type'=>'spline', 'plotBackgroundColor' => '#ffffff', 'plotBorderWidth' => null, 'plotShadow' => false, 'height' => 300],
+          'plotOptions'=> [
+                'spline'=> [
+                    'lineWidth'=> 2,
+                    'states'=> [
+                        'hover'=> [
+                            'lineWidth'=> 5
+                        ]
+                    ],
+                    'marker'=> [
+                        'enabled'=> false
+                    ],
+                   // 'pointInterval'=> 3600000, // one hour
+                   //'pointStart'=> Date.UTC(2015, 4, 31, 0, 0, 0)
+                ]
+            ],
+    	  'colors'=> ['#104E89', '#952C28', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
+    	  'credits' => ['enabled' => false],
+    	  'series' => $series,
+       ]
+    ]);                                
 ?>
                     </div><!-- /.col -->
                   </div><!-- /.row -->
@@ -531,8 +499,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
               </div><!-- /.box -->
             </div><!-- /.col -->
           </div><!-- /.row -->
-		  
-				
+		  	
           <div class="row">
             <div class="col-md-6">
               <div class="box box-primary">

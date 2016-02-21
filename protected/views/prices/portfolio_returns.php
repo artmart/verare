@@ -155,6 +155,9 @@ $portfolio_return_sql = "select p.trade_date,
                         where p.is_current = 1 and instrument_id in ('$insids') and " . $where .  
                         " group by  p.trade_date
                         order by p.trade_date asc";
+                        
+//echo $portfolio_return_sql;
+//exit;
 $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
 
 if(count($portfolio_returns)>0){

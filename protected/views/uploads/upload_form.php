@@ -72,7 +72,7 @@ $form=$this->beginWidget('CActiveForm', array(
 		<?php echo $form->error($model,'upload_file'); ?>
 	</div>
  </div>
-
+</div>
 
 	<div class="row">
 		<?php //echo $form->labelEx($model,'upload_file_name'); ?>
@@ -84,14 +84,12 @@ $form=$this->beginWidget('CActiveForm', array(
 	<div class="form-group">
      <div class="span2">
 		<?php echo $form->labelEx($model,'upload_description'); ?>
-		<?php echo $form->textField($model,'upload_description',array('size'=>60,'maxlength'=>255)); 
+		<?php //echo $form->textField($model,'upload_description',array('size'=>60,'maxlength'=>255)); 
               //echo $form->textArea($model, 'upload_description', array('maxlength' => 255, 'rows' => 4, 'cols' => 150, 'class'=>'span5'));
         ?>
         </div>
         <div class="span6" style="margin-left: -5px;">
-        <?php 
-        
-        $this->widget('application.extensions.eckeditor.ECKEditor', array(
+        <?php $this->widget('application.extensions.eckeditor.ECKEditor', array(
                 'model'=>$model,
                 'attribute'=>'upload_description',
                 'config' => array(
@@ -101,9 +99,7 @@ $form=$this->beginWidget('CActiveForm', array(
                         array('Styles', 'Format', 'Font', 'FontSize'),
                     ),
                     ),
-                )); 
-                
-                ?>
+                )); ?>
 		<?php echo $form->error($model,'upload_description'); ?>
 	</div>
  </div>

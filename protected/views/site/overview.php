@@ -463,7 +463,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
        'options'=>[
     	  'title' => ['text' => ''],
     	  'xAxis' => ['categories' => $months, 'minTickInterval' =>30, 'type' => 'datetime', 'title' => ['text'=> null], 'labels' => ['enabled' => true]],
-    	  'yAxis' => ['title' => ['text' => ''], 'min' => 0.98, 'max'=>1.01],
+    	  'yAxis' => ['title' => ['text' => ''], 'min' => 0.9, 'max'=>1.25],
     	  'chart' => ['type'=>'spline', 'plotBackgroundColor' => '#ffffff', 'plotBorderWidth' => null, 'plotShadow' => false, 'height' => 300],
           'plotOptions'=> [
                 'spline'=> [

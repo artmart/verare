@@ -223,28 +223,7 @@ class UploadsController extends Controller
                             //$new_price->name = $instrument_name;
                             $new_price->save();
                             }
-                }
-                
-                /*
-                  $sql="LOAD DATA LOCAL INFILE '".$tempLoc."'
-                        INTO TABLE `prices` FIELDS TERMINATED BY ';' ENCLOSED BY '' LINES TERMINATED BY '\n' IGNORE 0 LINES 
-                        (`trade_date`, `price`)
-                        SET `upload_file_id` = '$upload_file_id', `instrument_id` = '$instrument_id'";
-                        
-                    $connection=Yii::app()->db;
-                    $transaction=$connection->beginTransaction();
-                        try
-                            {
-                                $connection->createCommand($sql)->execute();
-                                $transaction->commit();
-                            }
-                            catch(Exception $e) // an exception is raised if a query fails
-                             {
-                                print_r($e);
-                                exit;
-                                $transaction->rollBack();
-                             }
-                  */       
+                }    
                              
                   @chmod( $tempLoc, 0777 );
                   @unlink( $tempLoc );           

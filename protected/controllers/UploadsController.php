@@ -112,7 +112,7 @@ class UploadsController extends Controller
                 
 
                   $sql="LOAD DATA LOCAL INFILE '".$tempLoc."'
-                        INTO TABLE `prices` FIELDS TERMINATED BY ';' ENCLOSED BY '' LINES TERMINATED BY '\n' IGNORE 0 LINES 
+                        INTO TABLE `prices` FIELDS TERMINATED BY '\t' ENCLOSED BY '' LINES TERMINATED BY '\n' IGNORE 0 LINES 
                         (`trade_date`, `price`)
                         SET `upload_file_id` = '$upload_file_id', `instrument_id` = '$instrument_id'";
                         

@@ -40,7 +40,7 @@ class SiteController extends Controller
 	 */
 	public function actionAdmin()
 	{
-	   $this->layout='//layouts/column2';
+	   $this->layout='//layouts/column1';
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
 		$this->render('overview');

@@ -1,4 +1,68 @@
-<?php  $baseUrl1 = Yii::app()->baseUrl; ?>
+<?php  $baseUrl1 = Yii::app()->baseUrl; 
+
+$usermenu=[];
+
+$access_level = 5;
+if(isset(Yii::app()->user->user_role)){
+          $user_rols = UserRole::model()->findByPk(Yii::app()->user->user_role);
+          if($user_rols)
+          {              
+              $ledger_access_level = $user_rols->ledger_access_level;
+              $users_access_level = $user_rols->users_access_level;
+              $user_roles_access_level = $user_rols->user_roles_access_level;
+              $portfolios_access_level = $user_rols->portfolios_access_level;
+              $instruments_access_level = $user_rols->instruments_access_level;
+              $counterparties_access_level = $user_rols->counterparties_access_level;//???????
+              $documents_access_level = $user_rols->documents_access_level;
+              $prices_access_level = $user_rols->prices_access_level;
+              $audit_trails_access_level = $user_rols->audit_trails_access_level;
+              $grouping_access_level = $user_rols->grouping_access_level;
+              
+              //if($ledger_access_level !== 5){$usermenu[]=['label'=>'Ledger', 'url'=>['/ledger/admin']];}
+              //if($users_access_level !== 5){$usermenu[]=['label'=>'Users', 'url'=>['/user/admin']];}
+              //if($user_roles_access_level !== 5){$usermenu[]=['label'=>'User Roles', 'url'=>['userRole/admin']];}
+              //if($portfolios_access_level !== 5){$usermenu[]=['label'=>'Portfolios', 'url'=>['/portfolios/admin']];}
+              //if($instruments_access_level !== 5){$usermenu[]=['label'=>'Instruments', 'url'=>['/instruments/admin']];}
+              //if($counterparties_access_level !== 5){$usermenu[]=['label'=>'Counterparties', 'url'=>['/counterparties/admin']];}
+              //if($documents_access_level !== 5){$usermenu[]=['label'=>'Documents', 'url'=>['/documents/admin']];}
+              //if($prices_access_level !== 5){$usermenu[]=['label'=>'Prices', 'url'=>['/prices/admin']];}
+              if($audit_trails_access_level !== 5){$usermenu[]=['label'=>'Audit Trails', 'url'=>['/auditTrails/admin']];}
+              //if($grouping_access_level !== 5){$usermenu[]=['label'=>'Grouping', 'url'=>['/grouping/admin']];}
+             
+              //Admin Menu//
+              if(Yii::app()->getModule('user')->isAdmin())
+              {
+                $usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
+                $usermenu[]=['label'=>'Portfolio UserS with Roles', 'url'=>['/portfolioUserRoles/admin']];
+                $usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
+                $usermenu[]=['label'=>'Instrument Types', 'url'=>['/instrumentTypes/admin']];
+                $usermenu[]=['label'=>'Group Item', 'url'=>['/groupItem/admin']];                
+                $usermenu[]=['label'=>'Group Benchmark', 'url'=>['/groupBenchmark/admin']];
+                $usermenu[]=['label'=>'Document Types', 'url'=>['/documentTypes/admin']];
+                $usermenu[]=['label'=>'Document Locations', 'url'=>['/documentLocations/admin']];
+                $usermenu[]=['label'=>'Clients', 'url'=>['/clients/admin']];
+                $usermenu[]=['label'=>'Audit Tables', 'url'=>['/auditTables/admin']];
+                $usermenu[]=['label'=>'Upload pricies', 'url'=>['/uploads/create']];
+                $usermenu[]=['label'=>'Return', 'url'=>['/prices/return']];
+                $usermenu[]=['label'=>'Returns', 'url'=>['/returns/admin']];
+                $usermenu[]=['label'=>'Return Calculation', 'url'=>['/prices/allReturns']];
+                $usermenu[]=['label'=>'Portfolio Returns', 'url'=>['/portfolioReturns/admin']];
+                $usermenu[]=['label'=>'All Stats', 'url'=>['/prices/allStats']];                            
+                $usermenu[]=['label'=>'Access Levels', 'url'=>['/accessLevels/admin']]; 
+                $usermenu[]=['label'=>'Portfolio Types', 'url'=>['/portfolioTypes/admin']];
+                $usermenu[]=['label'=>'Benchmarks', 'url'=>['/benchmarks/admin']];
+                $usermenu[]=['label'=>'Benchmark Components', 'url'=>['/benchmarkComponents/admin']];             
+              }
+              
+           }
+}  
+
+
+
+
+
+
+?>
 <style>
 .navbar-default {
     position: absolute;
@@ -59,6 +123,17 @@
                             <a href="<?php echo $baseUrl1; ?>/user/admin">Users</a>
                             <a href="<?php echo $baseUrl1; ?>/userRole/admin">User Roles</a>
                           </li>
+                          <li class="divider"></li>
+                          <?php
+                          foreach($usermenu as $item){
+                            echo '<li>
+                                 <a href="'.$baseUrl1."/".$item['url'][0].'">'.$item['label'].'</a>
+                                 </li>';
+                          }
+                          
+                          ?>
+                          
+                          
                           </ul>
                         </li>
                         
@@ -77,6 +152,7 @@
                           <?php } ?>
                           </ul>
                         </li>
+                        
                         
                         
 		

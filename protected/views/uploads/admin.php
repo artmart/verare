@@ -53,11 +53,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
         ['name' => 'instrument_id', 
          //'header' =>'Incoming orders total', 
          'type'=>'raw',
-         'value'=>function($data){
+        /* 'value'=>function($data){
             $instrument_id = $data['instrument_id'];
             $instruments = instruments::model()->findByAttributes(['id'=>$instrument_id]);
             return $instruments->instrument;
             }
+        */
         ], 
 		/*
 		'upload_description',

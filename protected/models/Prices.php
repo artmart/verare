@@ -11,6 +11,7 @@
  * @property integer $is_current
  * @property string $created_at
  * @property integer $upload_file_id
+ * @property string $name
  *
  * The followings are the available model relations:
  * @property Instruments $instrument
@@ -46,6 +47,7 @@ class Prices extends CActiveRecord
 			array('trade_date, instrument_id, price', 'required'),
 			array('instrument_id, is_current, upload_file_id', 'numerical', 'integerOnly'=>true),
 			array('price', 'numerical'),
+            //array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, trade_date, instrument_id, price, is_current, created_at, upload_file_id', 'safe', 'on'=>'search'),
@@ -77,6 +79,7 @@ class Prices extends CActiveRecord
 			'is_current' => 'Is Current',
 			'created_at' => 'Created At',
             'upload_file_id' => 'Upload File Id',
+            //'name' => 'Name',
 		);
 	}
 
@@ -89,7 +92,7 @@ class Prices extends CActiveRecord
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
 
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('trade_date',$this->trade_date,true);
@@ -98,6 +101,8 @@ class Prices extends CActiveRecord
 		$criteria->compare('is_current',$this->is_current);
 		$criteria->compare('created_at',$this->created_at,true);
         $criteria->compare('upload_file_id',$this->upload_file_id);
+        //$criteria->compare('name',$this->name);
+        
         
 
 		return new CActiveDataProvider($this, array(

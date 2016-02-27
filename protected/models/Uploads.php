@@ -28,8 +28,9 @@ class Uploads extends CActiveRecord
 	{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
+        //instrument_id
 		return array(
-			array('upload_file, instrument_id', 'required'),
+			array('upload_file', 'required'),
             //array('upload_file', 'file', 'allowEmpty'=>false, 'types'=>'csv'),
 			array('user_id, instrument_id', 'numerical', 'integerOnly'=>true),
 			array('upload_file, upload_description', 'length', 'max'=>255),

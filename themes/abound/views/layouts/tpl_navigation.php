@@ -43,6 +43,7 @@ if(isset(Yii::app()->user->user_role)){
                 $usermenu[]=['label'=>'Clients', 'url'=>['/clients/admin']];
                 $usermenu[]=['label'=>'Audit Tables', 'url'=>['/auditTables/admin']];
                 $usermenu[]=['label'=>'Upload pricies', 'url'=>['/uploads/create']];
+                $usermenu[]=['label'=>'New Upload pricies', 'url'=>['/uploads/fullupload']];
                 $usermenu[]=['label'=>'Return', 'url'=>['/prices/return']];
                 $usermenu[]=['label'=>'Returns', 'url'=>['/returns/admin']];
                 $usermenu[]=['label'=>'Return Calculation', 'url'=>['/prices/allReturns']];
@@ -51,7 +52,9 @@ if(isset(Yii::app()->user->user_role)){
                 $usermenu[]=['label'=>'Access Levels', 'url'=>['/accessLevels/admin']]; 
                 $usermenu[]=['label'=>'Portfolio Types', 'url'=>['/portfolioTypes/admin']];
                 $usermenu[]=['label'=>'Benchmarks', 'url'=>['/benchmarks/admin']];
-                $usermenu[]=['label'=>'Benchmark Components', 'url'=>['/benchmarkComponents/admin']];             
+                $usermenu[]=['label'=>'Benchmark Components', 'url'=>['/benchmarkComponents/admin']];  
+                
+                           
               }
               
            }
@@ -132,8 +135,6 @@ if(isset(Yii::app()->user->user_role)){
                           }
                           
                           ?>
-                          
-                          
                           </ul>
                         </li>
                         

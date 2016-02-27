@@ -44,7 +44,7 @@ class Instruments extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('instrument, instrument_type_id, fpml, created_at', 'required'),
+			//array('instrument, instrument_type_id, fpml, created_at', 'required'),
 			array('instrument_type_id, is_current', 'numerical', 'integerOnly'=>true),
 			array('instrument', 'length', 'max'=>255),
 			// The following rule is used by search().

@@ -125,6 +125,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
  $baseUrl = Yii::app()->theme->baseUrl;
 ?>
 
+    <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.css">
+
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.0/css/select.dataTables.min.css">
@@ -133,6 +136,12 @@ $this->widget('zii.widgets.grid.CGridView', array(
 	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/css/buttons.dataTables.min.css"> -->
     <style type="text/css" class="init">
 	</style>
+    
+    
+    <!-- jQuery UI 1.10.3 -->
+  <script src="<?php echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui-1.10.3.min.js"></script>
+  <script src="<?php echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.js"></script>
+    
 	<!--<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
@@ -155,21 +164,44 @@ $this->widget('zii.widgets.grid.CGridView', array(
     <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.colVis.min.js"></script>
        
     
-	<script type="text/javascript" language="javascript" class="init">       
+	<script type="text/javascript" language="javascript" class="init">  
+ 
+  $.datepicker.setDefaults({
+    //showOn: "both",
+    buttonImage: "<?php echo $baseUrl;?>/js/plugins/jQueryUI/images/calender.png",
+    buttonImageOnly: true,
+  });         
 
 var editor; // use a global for the submit and return data rendering in the examples
-//var path = "<?php //echo Yii::app()->basePath; ?>";
+
 $(document).ready(function() {
     editor = new $.fn.dataTable.Editor( {
         ajax: 'ledger/ledger',
         table: "#example",
-        fields: [ {
-                label: "Trade Date:",
-                name: "trade_date"
-            }, {
+        fields: [ 
+            //{
+            //    label: "Trade Date:",
+            //    name: "trade_date"
+            //},
+            
+            {
+            label: "Trade Date:",
+            name: "trade_date",
+            type: "date",
+            def: function() {
+              return new Date();
+            },
+           dateFormat: $.datepicker.ISO_8601
+          },
+            
+            {
                 label: "Instrument:",
-                name: "instrument_id"
-            }, {
+                name: "instrument_id",
+                type: "select",
+                ipOpts: instrumentsLoader(),
+              },
+            
+            {
                 label: "Portfolio Id:",
                 name: "portfolio_id"
             }, {
@@ -264,6 +296,36 @@ $(document).ready(function() {
         ]
     } );
 } );
+
+  function SortByName(a, b){
+    var aName = a.label.toLowerCase();
+    var bName = b.label.toLowerCase();
+    return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+  }
+
+  function instrumentsLoader() {
+    var instruments = [{'value': '0', 'label': '-- Select instrument --'}];
+    var path1 = '<?php echo Yii::app()->baseUrl.'/instruments/instruments'; ?>';
+    $.ajax({
+        url: path1,
+        async: false,
+        dataType: 'json',
+        success: function (json) {
+          var data = json.data;
+            for(var a=0; a<data.length; a++) {
+              obj = {
+                "value" : data[a]['id'],
+                "label" : data[a]['instrument']
+              };
+              instruments.push(obj);
+            }
+        }
+    });
+    return instruments.sort(SortByName);
+  }
+
+
+
 </script>
 <!-- page script -->
 <table id="example" class="display" cellspacing="0" width="100%">

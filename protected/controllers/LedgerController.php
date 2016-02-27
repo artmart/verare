@@ -131,14 +131,6 @@ class LedgerController extends Controller
     
     public function actionLedger(){
            require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/ledger.php');
-    
-   // require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/Editor/Editor.php');
-    //require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/Editor/Field.php');
-    //require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/Editor/Format.php');
-    //require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/Editor/Join.php');
-    //require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/Editor/Upload.php');
-    //require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/Editor/Validate.php');
-
     }
 
 	/**

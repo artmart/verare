@@ -8,11 +8,10 @@
         DataTables\Editor\Join,
         DataTables\Editor\Upload,
         DataTables\Editor\Validate;
-     
+ /*    
     //Build our Editor instance and process the data coming from _POST
     Editor::inst( $db, 'ledger' )
         ->fields(
-            //Field::inst( 'instruments.instrument' ),
             Field::inst( 'id' )->validator( 'Validate::notEmpty' ),
             Field::inst( 'instrument_id' )->validator( 'Validate::notEmpty' ),
             Field::inst( 'portfolio_id' )->validator( 'Validate::notEmpty' ),
@@ -41,7 +40,32 @@
                 ->getFormatter( 'Format::date_sql_to_format', Format::DATE_ISO_8601 )
                 ->setFormatter( 'Format::date_format_to_sql', Format::DATE_ISO_8601 )
         )
-        //->leftJoin( 'instruments', 'instruments.id', '=', 'ledger.instrument_id' )
         ->process( $_POST )
         ->json();  
+        
+ */       
+        
+        
+        
+        
+
+
+// Alias Editor classes so they are easy to use
+//use
+   // DataTables\Editor,
+    //DataTables\Editor\Field,
+    //DataTables\Editor\Format,
+    //DataTables\Editor\Join,
+    //DataTables\Editor\Upload,
+    //DataTables\Editor\Validate;
+
+
+// Build our Editor instance and process the data coming from _POST
+Editor::inst( $db, 'instruments')
+    ->fields(
+        Field::inst( 'id' ),
+        Field::inst( 'instrument' )
+    )
+    ->process( $_POST )
+    ->json();
 ?>

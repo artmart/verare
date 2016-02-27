@@ -67,7 +67,7 @@ $form=$this->beginWidget('CActiveForm', array(
             );?>
         </div>
         <br />
-        <p>CSV or TXT file format example is here.</p>
+        <!--<p>CSV or TXT file format example is here.</p>-->
 		<?php //echo $form->textField($model,'upload_file',array('size'=>60,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'upload_file'); ?>
 	</div>
@@ -85,21 +85,26 @@ $form=$this->beginWidget('CActiveForm', array(
      <div class="span2">
 		<?php echo $form->labelEx($model,'upload_description'); ?>
 		<?php //echo $form->textField($model,'upload_description',array('size'=>60,'maxlength'=>255)); 
-              //echo $form->textArea($model, 'upload_description', array('maxlength' => 255, 'rows' => 4, 'cols' => 150, 'class'=>'span5'));
+              
         ?>
         </div>
         <div class="span6" style="margin-left: -5px;">
-        <?php $this->widget('application.extensions.eckeditor.ECKEditor', array(
+        <?php 
+        echo $form->textArea($model, 'upload_description', array('maxlength' => 255, 'rows' => 4, 'cols' => 150, 'class'=>'span5'));
+        /*
+        $this->widget('application.extensions.eckeditor.ECKEditor', array(
                 'model'=>$model,
                 'attribute'=>'upload_description',
                 'config' => array(
                     'toolbar'=>array(
-                        array( /*'Source',*/ '-', 'Bold', 'Italic', 'Underline', 'Strike', 'Undo', 'Redo' ),
+                        array( /*'Source',*//* '-', 'Bold', 'Italic', 'Underline', 'Strike', 'Undo', 'Redo' ),
                         //array( 'Image', 'Link', 'Unlink', 'Anchor' ) ,
                         array('Styles', 'Format', 'Font', 'FontSize'),
                     ),
                     ),
-                )); ?>
+                )); 
+                */
+                ?>
 		<?php echo $form->error($model,'upload_description'); ?>
 	</div>
  </div>
@@ -109,7 +114,7 @@ $form=$this->beginWidget('CActiveForm', array(
 
 <div class="row">
 	<div class="form-group">
-     <div class="span7">
+     <div class="span3">
      </div>
      <div class="col-sm-4 clearLeftPadding">
 	 <?php 

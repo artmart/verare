@@ -16,8 +16,8 @@ $form=$this->beginWidget('CActiveForm', array(
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
     'method' => 'post',
-    //'action'=> array('uploads/fullupload'), // Yii::app()->createUrl('//uploads/fullupload'),
-    'action'=>Yii::app()->createUrl('//uploads/fullupload'),
+    'action'=> array('uploads/fullupload'), // Yii::app()->createUrl('//uploads/fullupload'),
+    //'action'=>Yii::app()->createUrl('//uploads/fullupload'),
 	'enableAjaxValidation'=>false,
     'htmlOptions' => array('enctype' => 'multipart/form-data'),
 )); ?>

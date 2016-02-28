@@ -179,12 +179,13 @@ $(document).ready(function() {
         ajax: 'ledger/ledger',
         table: "#example",
         fields: [ 
-            //{
-            //    label: "Trade Date:",
-            //    name: "trade_date"
-            //},
-            
             {
+                label: "Trade Date:",
+                name: "trade_date",
+                type: "datetime"
+            },
+            
+        /*    {
             label: "Trade Date:",
             name: "trade_date",
             type: "date",
@@ -192,7 +193,7 @@ $(document).ready(function() {
               return new Date();
             },
            dateFormat: $.datepicker.ISO_8601
-          },
+          }, */
             
             {
                 label: "Instrument:",
@@ -210,13 +211,17 @@ $(document).ready(function() {
             }, {
                 label: "Price:",
                 name: "price"
-            }, {
+            }, 
+            /*{
                 label: "Start date:",
                 name: "start_date",
                 type: "datetime"
-            }, {
+            },
+            */
+             {
                 label: "Created At:",
-                name: "created_at"
+                name: "created_at",
+                type: "datetime"
             },
             {
                 label: "Created By:",
@@ -228,7 +233,8 @@ $(document).ready(function() {
             },
             {
                 label: "Confirmed At:",
-                name: "confirmed_at"
+                name: "confirmed_at",
+                type: "datetime"
             },
             {
                 label: "Trade Status Id:",

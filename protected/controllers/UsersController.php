@@ -32,7 +32,7 @@ class UsersController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'settings'),
+				'actions'=>array('create','update', 'settings', 'users'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -73,6 +73,12 @@ class UsersController extends Controller
 
 		$this->render('settings');
 	} 
+    
+    
+    
+    public function actionUsers(){
+        require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/users.php');
+    }
     
 	/**
 	 * Displays a particular model.

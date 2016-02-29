@@ -1,6 +1,6 @@
 <?php
 
-class PortfoliosController extends Controller
+class InstrumentGroupsController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -32,13 +32,12 @@ class PortfoliosController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'portfolios'),
+				'actions'=>array('create','update', 'instrumentgroups'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				//'users'=>array('admin'),
-                'users'=>array('@'),
+				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -56,13 +55,6 @@ class PortfoliosController extends Controller
 			'model'=>$this->loadModel($id),
 		));
 	}
-    
-    
-    
-    
-    public function actionPortfolios(){
-        require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/portfolios.php');
-    }
 
 	/**
 	 * Creates a new model.
@@ -70,14 +62,14 @@ class PortfoliosController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Portfolios;
+		$model=new InstrumentGroups;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Portfolios']))
+		if(isset($_POST['InstrumentGroups']))
 		{
-			$model->attributes=$_POST['Portfolios'];
+			$model->attributes=$_POST['InstrumentGroups'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -86,6 +78,10 @@ class PortfoliosController extends Controller
 			'model'=>$model,
 		));
 	}
+    
+    public function actionInstrumentgroups(){
+        require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/instrumentgroups.php');
+    }
 
 	/**
 	 * Updates a particular model.
@@ -99,9 +95,9 @@ class PortfoliosController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Portfolios']))
+		if(isset($_POST['InstrumentGroups']))
 		{
-			$model->attributes=$_POST['Portfolios'];
+			$model->attributes=$_POST['InstrumentGroups'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -130,7 +126,7 @@ class PortfoliosController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Portfolios');
+		$dataProvider=new CActiveDataProvider('InstrumentGroups');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -141,10 +137,10 @@ class PortfoliosController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Portfolios('search');
+		$model=new InstrumentGroups('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Portfolios']))
-			$model->attributes=$_GET['Portfolios'];
+		if(isset($_GET['InstrumentGroups']))
+			$model->attributes=$_GET['InstrumentGroups'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -155,12 +151,12 @@ class PortfoliosController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Portfolios the loaded model
+	 * @return InstrumentGroups the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Portfolios::model()->findByPk($id);
+		$model=InstrumentGroups::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -168,11 +164,11 @@ class PortfoliosController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Portfolios $model the model to be validated
+	 * @param InstrumentGroups $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='portfolios-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='instrument-groups-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

@@ -44,21 +44,13 @@
         ->json();  
         
  */       
-        
+
 // Build our Editor instance and process the data coming from _POST
-Editor::inst( $db, 'instruments')
+Editor::inst( $db, 'instrument_groups')
     ->fields(
-        Field::inst( 'instrument_types.instrument_type' ),
-        Field::inst( 'instrument_groups.group_name' ),
-        Field::inst( 'instruments.id' ),
-        Field::inst( 'instruments.instrument' ),
-        Field::inst( 'instruments.instrument_type_id' ),
-        Field::inst( 'instruments.is_current' ),
-        Field::inst( 'instruments.created_at' ),
-        Field::inst( 'instruments.instrument_group_id' )      
+        Field::inst( 'id' ),
+        Field::inst( 'group_name' )
     )
-    ->leftJoin( 'instrument_types', 'instrument_types.id', '=', 'instruments.instrument_type_id' )
-    ->leftJoin( 'instrument_groups', 'instrument_groups.id', '=', 'instruments.instrument_group_id' )
     ->process( $_POST )
     ->json();
 ?>

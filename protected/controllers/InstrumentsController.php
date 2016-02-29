@@ -6,7 +6,7 @@ class InstrumentsController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout='//layouts/column1';
 
 	/**
 	 * @return array action filters
@@ -143,9 +143,7 @@ class InstrumentsController extends Controller
 		if(isset($_GET['Instruments']))
 			$model->attributes=$_GET['Instruments'];
 
-		$this->render('admin',array(
-			'model'=>$model,
-		));
+		$this->render('admin_datatable'/*,array('model'=>$model,)*/);
 	}
 
 	/**

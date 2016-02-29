@@ -32,7 +32,7 @@ class InstrumentTypesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'instrumenttypes'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -55,6 +55,11 @@ class InstrumentTypesController extends Controller
 			'model'=>$this->loadModel($id),
 		));
 	}
+    
+    
+    public function actionInstrumenttypes(){
+        require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/instrumenttypes.php');
+    }
 
 	/**
 	 * Creates a new model.

@@ -53,7 +53,7 @@ $('.search-form form').submit(function(){
 ");*/
 ?>
 
-<h1>Manage Ledgers</h1>
+<h1>Manage Portfolios</h1>
 
 <!--
 <p>
@@ -169,63 +169,35 @@ var editor; // use a global for the submit and return data rendering in the exam
 
 $(document).ready(function() {
     editor = new $.fn.dataTable.Editor( {
-        ajax: 'ledger/ledger',
+        ajax: 'portfolios/portfolios',
         table: "#example",
-        fields: [ 
-                        
+        fields: [  
             {
-                label: "Instrument:",
-                name: "ledger.instrument_id",
-                type: "select",
-                ipOpts: instrumentsLoader(),
-              },
-              {
-                label: "Trade Date:",
-                name: "ledger.trade_date",
-                type: "datetime"
+                label: "Portfolio:",
+                name: "portfolio",
             },
-            
             {
-                label: "Portfolio Id:",
-                name: "ledger.portfolio_id",
+                label: "Description:",
+                name: "description",
+                type: "textarea"
+            },           
+            {
+                label: "client:",
+                name: "client_name",
                 type: "select",
-                ipOpts: portfolioLoader(),
-            }, {
-                label: "Nominal:",
-                name: "ledger.nominal"
-            }, {
-                label: "Price:",
-                name: "ledger.price"
+                ipOpts: clientLoader(),
             }, 
-             /*{
+            {
                 label: "Created At:",
-                name: "ledger.created_at",
-                type: "datetime"
-            },
-            {
-                label: "Created By:",
-                name: "ledger.created_by",
-                type: "select",
-                ipOpts: userLoader(),
-            },
-            {
-                label: "Confirmed At:",
-                name: "ledger.confirmed_at",
+                name: "created_at",
                 type: "datetime"
             },
              {
-                label: "Confirmed By:",
-                name: "ledger.confirmed_by",
+                label: "Portfolio Type:",
+                name: "portfolio_type",
                 type: "select",
-                ipOpts: userLoader(),
-            },*/
-            {
-                label: "Trade Status:",
-                name: "ledger.trade_status_id",
-                type: "select",
-                ipOpts: tradestatusLoader(),
-            },
-            
+                ipOpts: portfoliotypeLoader(),
+            },            
         ]
     } );
     
@@ -240,26 +212,22 @@ $(document).ready(function() {
         dom: '<"clear">&lt;<"clear">Bfrtip<"clear">', 
         //colVis: { exclude: [ 1 ] },
         //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
-        ajax: "ledger/",
+        ajax: "portfolios/",
         columns: [
         /*
             { data: null, render: function ( data, type, row ) {
                 // Combine the first and last names into a single table field
                 return data.first_name+' '+data.last_name;
             } },
-        */
-            { data: "ledger.trade_date" },
-            //{ data: "ledger.instrument_id" },
-            { data: "instruments.instrument" },
-            //{ data: "ledger.portfolio_id" },
-            { data: "portfolios.portfolio" },
-            { data: "ledger.nominal" },
-            { data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
-            { data: "ledger.created_at" },
-            { data: "prof1.firstname" },
-            { data: "prof2.firstname" },
-            { data: "ledger.confirmed_at" },
-            { data: "trade_status.trade_status" },
+        */               
+            { data: "id" },
+            { data: "portfolio" },
+            { data: "description" },
+            { data: "client_name" },
+            { data: "is_current" },
+            //{ data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
+            { data: "created_at" },
+            { data: "portfolio_type" },            
         ],
         select: true,
         buttons: [
@@ -298,9 +266,9 @@ $(document).ready(function() {
     return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
   }
 
-  function instrumentsLoader() {
-    var instruments = [{'value': '0', 'label': '-- Select instrument --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/instruments/instruments'; ?>';
+  function clientLoader() {
+    var instruments = [{'value': '0', 'label': '-- Select Client --'}];
+    var path1 = '<?php echo Yii::app()->baseUrl.'/clients/clients'; ?>';
     $.ajax({
         url: path1,
         async: false,
@@ -310,7 +278,7 @@ $(document).ready(function() {
             for(var a=0; a<data.length; a++) {
               obj = {
                 "value" : data[a]['id'],
-                "label" : data[a]['instrument']
+                "label" : data[a]['client_name']
               };
               instruments.push(obj);
             }
@@ -319,9 +287,9 @@ $(document).ready(function() {
     return instruments.sort(SortByName);
   }
   
-  function portfolioLoader() {
-    var instruments = [{'value': '0', 'label': '-- Select Portfolio --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/portfolios/portfolios'; ?>';
+  function portfoliotypeLoader() {
+    var instruments = [{'value': '0', 'label': '-- Select Portfolio Type --'}];
+    var path1 = '<?php echo Yii::app()->baseUrl.'/portfoliotypes/portfoliotypes'; ?>';
     $.ajax({
         url: path1,
         async: false,
@@ -331,7 +299,7 @@ $(document).ready(function() {
             for(var a=0; a<data.length; a++) {
               obj = {
                 "value" : data[a]['id'],
-                "label" : data[a]['portfolio']
+                "label" : data[a]['portfolio_type']
               };
               instruments.push(obj);
             }
@@ -340,79 +308,35 @@ $(document).ready(function() {
     return instruments.sort(SortByName);
   }
   
-  function userLoader(){
-    var instruments = [{'value': '0', 'label': '-- Select User --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/users/users'; ?>';
-    $.ajax({
-        url: path1,
-        async: false,
-        dataType: 'json',
-        success: function (json) {
-          var data = json.data;
-            for(var a=0; a<data.length; a++) {
-              obj = {
-                "value" : data[a]['user_id'],
-                "label" : data[a]['firstname']+" "+data[a]['lastname']
-              };
-              instruments.push(obj);
-            }
-        }
-    });
-    return instruments.sort(SortByName);
-  }
-  
-  function tradestatusLoader(){
-    var instruments = [{'value': '0', 'label': '-- Select Trade Status --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/tradestatus/tradestatus'; ?>';
-    $.ajax({
-        url: path1,
-        async: false,
-        dataType: 'json',
-        success: function (json) {
-          var data = json.data;
-            for(var a=0; a<data.length; a++) {
-              obj = {
-                "value" : data[a]['id'],
-                "label" : data[a]['trade_status']
-              };
-              instruments.push(obj);
-            }
-        }
-    });
-    return instruments.sort(SortByName);
-  }
+  function iscurrentLoader(){
+    var instruments = [{'value': '0', 'label': 'No'}];
 
-
+    return instruments.sort(SortByName);
+  }
 
 </script>
 <!-- page script -->
 <table id="example" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>Trade Date</th>
-                <th>Instrument</th>
+                <th>Portfolio Id</th>
                 <th>Portfolio</th>
-                <th>Nominal</th>
-                <th>Price</th>
+                <th>Description</th>
+                <th>Client</th>
+                <th>Is Current</th>
                 <th>Created At</th>
-                <th>Created By</th>
-                <th>Confirmed By</th>
-                <th>Confirmed At</th>
-                <th>Trade Status</th>
+                <th>Portfolio Type</th>
             </tr>
         </thead>
         <tfoot>
             <tr>
-                <th>Trade Date</th>
-                <th>Instrument</th>
+                <th>Portfolio Id</th>
                 <th>Portfolio</th>
-                <th>Nominal</th>
-                <th>Price</th>
+                <th>Description</th>
+                <th>Client</th>
+                <th>Is Current</th>
                 <th>Created At</th>
-                <th>Created By</th>
-                <th>Confirmed By</th>
-                <th>Confirmed At</th>
-                <th>Trade Status</th>
+                <th>Portfolio Type</th>
             </tr>
         </tfoot>
     </table>

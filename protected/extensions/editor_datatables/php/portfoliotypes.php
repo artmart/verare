@@ -46,21 +46,11 @@
  */       
 
 // Build our Editor instance and process the data coming from _POST
-Editor::inst( $db, 'portfolios')
+Editor::inst( $db, 'portfolio_types', 'id')
     ->fields(
-        Field::inst( 'clients.client_name as client_name' ),
-        Field::inst( 'portfolio_types.portfolio_type as portfolio_type' ),
-    
-        Field::inst( 'portfolios.id as id' ),
-        Field::inst( 'portfolios.portfolio as portfolio' ),
-        Field::inst( 'portfolios.client_id as client_id' ),
-        Field::inst( 'portfolios.description as description' ),
-        Field::inst( 'portfolios.is_current as is_current' ),
-        Field::inst( 'portfolios.created_at as created_at' ),
-        Field::inst( 'portfolios.type_id as type_id' )
+        Field::inst( 'id' ),
+        Field::inst( 'portfolio_type' )
     )
-    ->leftJoin( 'clients', 'clients.id', '=', 'portfolios.client_id' )
-    ->leftJoin( 'portfolio_types', 'portfolio_types.id', '=', 'portfolios.type_id' )
     ->process( $_POST )
     ->json();
 ?>

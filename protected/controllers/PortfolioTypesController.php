@@ -32,7 +32,7 @@ class PortfolioTypesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'portfoliotypes'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -55,6 +55,12 @@ class PortfolioTypesController extends Controller
 			'model'=>$this->loadModel($id),
 		));
 	}
+    
+    
+    
+    public function actionPortfoliotypes(){
+        require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/portfoliotypes.php');
+    }
 
 	/**
 	 * Creates a new model.

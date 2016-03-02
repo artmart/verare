@@ -1,7 +1,7 @@
 <?php
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
+$baseUrl = Yii::app()->theme->baseUrl;
 
-//$access_buttons = '{view} {update} {delete}';
 $access_level = 5;
 $access_buttons = '';
 if(isset(Yii::app()->user->user_role)){
@@ -25,100 +25,8 @@ switch ($access_level) {
         $access_buttons = '{ extend: "create", editor: editor }, { extend: "edit",   editor: editor }, { extend: "remove", editor: editor }';
         break;
 } 
-
-
-/*
-$this->menu=[
-	//array('label'=>'List Ledger', 'url'=>array('index')),
-	array('label'=>'Create Ledger', 'url'=>array('create')),
-];
-
-
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$('#ledger-grid').yiiGridView('update', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");*/
 ?>
-
 <h1>Manage Ledgers</h1>
-
-<!--
-<p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
--->
-<?php
-
- //echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display:none">
-<?php //$this->renderPartial('_search',array('model'=>$model,)); ?>
-</div><!-- search-form -->
-
-<?php 
-/*
-$this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'ledger-grid',
-    //'id'=>"example1",
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
-    //'htmlOptions'=>array('class'=>"table table-bordered table-hover"),
-	'columns'=>array(
-		//'id',
-		'trade_date',
-		'instrument_id',
-		'portfolio_id',
-		'nominal',
-		'price',
-		'created_by',
-		//'created_at',
-		'trade_status_id',
-       /*
-        array(
-			'name' => 'trade_status_id',
-            //'header' => 'trade_status_id',
-			'type'=>'raw',
-            //'template'=>'',
-            'value'=>function($data){
-				if($data->trade_status_id == 2){$access_buttons = '';}
-                return $data->trade_status_id;
-            },
-			//'filter'=>CHtml::listData(Locations::model()->findAll(),'location_code', 'locations_name'),
-            //'htmlOptions'=>array('width'=>'150px'),
-			),
-            *//*
-		'confirmed_by',
-		//'confirmed_at',
-		'version_number',
-		//'document_id',
-		//'custody_account',
-		//'custody_comment',
-		//'account_number',
-		//'is_current',
-		
-		[
-			'class'=>'CButtonColumn',
-            'template' => $access_buttons,
-            'buttons'=>[
-                        'update'=>['visible'=>'!($data->trade_status_id==2)'],
-                        'delete'=>['visible'=>'!($data->trade_status_id==2)'],
-                        'view'=>['visible'=>'!($data->trade_status_id==2)'],
-                        ]  
-            //'visible'=>'$data->trade_status_id!==2', 
-		],
-	),
-)); 
-*/
- $baseUrl = Yii::app()->theme->baseUrl;
-?>
 
     <!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.css">-->
@@ -130,10 +38,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
 	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/css/buttons.dataTables.min.css"> -->
 
-    
     <!-- jQuery UI 1.10.3 
-  <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui-1.10.3.min.js"></script>
-  <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.js"></script>-->
+    <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui-1.10.3.min.js"></script>
+    <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.js"></script>-->
     
 	<!--<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
@@ -144,42 +51,35 @@ $this->widget('zii.widgets.grid.CGridView', array(
 	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/demo.js"></script>
 	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/editor-demo.js"></script>
     
-    
     <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.colVis.min.js"></script>
     <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.buttons.min.js"></script>
     
-   
-   <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/jszip.min.js"></script>
-   <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/pdfmake.min.js"></script>
+    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/jszip.min.js"></script>
+    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/pdfmake.min.js"></script>
     <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/vfs_fonts.js"></script>
     <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.html5.min.js"></script>
     
     <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.colVis.min.js"></script>
-       
-    
-	<script type="text/javascript" language="javascript" class="init">  
-       
-
+	
+<script type="text/javascript" language="javascript" class="init">  
 var editor; // use a global for the submit and return data rendering in the examples
 
 $(document).ready(function() {
     editor = new $.fn.dataTable.Editor( {
         ajax: 'ledger/ledger',
         table: "#example",
-        fields: [ 
-                        
+        fields: [             
             {
                 label: "Instrument:",
                 name: "ledger.instrument_id",
                 type: "select",
                 ipOpts: instrumentsLoader(),
-              },
-              {
+            },
+            {
                 label: "Trade Date:",
                 name: "ledger.trade_date",
                 type: "datetime"
             },
-            
             {
                 label: "Portfolio Id:",
                 name: "ledger.portfolio_id",

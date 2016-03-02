@@ -11,18 +11,18 @@ if(isset(Yii::app()->user->user_role)){
 
 switch ($access_level) {
     case 1:
-        $access_buttons = '{ extend: "create", editor: editor },';
+        $access_buttons = '{ extend: "create", editor: editor }';
         break;
     case 2:
         //$access_buttons = '{update}';
-        $access_buttons = '{ extend: "edit",   editor: editor },';
+        $access_buttons = '{ extend: "edit",   editor: editor }';
         break;
     case 3:
         //$access_buttons = '{delete}';
-        $access_buttons = '{ extend: "remove", editor: editor },';
+        $access_buttons = '{ extend: "remove", editor: editor }';
         break;
     case 4:
-        $access_buttons = '{ extend: "create", editor: editor }, { extend: "edit",   editor: editor }, { extend: "remove", editor: editor },';
+        $access_buttons = '{ extend: "create", editor: editor }, { extend: "edit",   editor: editor }, { extend: "remove", editor: editor }';
         break;
 } 
 
@@ -261,7 +261,7 @@ $(document).ready(function() {
             /*{ extend: "create", editor: editor },
             { extend: "edit",   editor: editor },
             { extend: "remove", editor: editor },*/
-            <?php echo $access_buttons; ?>
+            <?php echo $access_buttons; ?>,
             {
                 extend: 'copyHtml5',
                 exportOptions: {

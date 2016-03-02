@@ -14,11 +14,9 @@ switch ($access_level) {
         $access_buttons = '{ extend: "create", editor: editor }';
         break;
     case 2:
-        //$access_buttons = '{update}';
         $access_buttons = '{ extend: "edit",   editor: editor }';
         break;
     case 3:
-        //$access_buttons = '{delete}';
         $access_buttons = '{ extend: "remove", editor: editor }';
         break;
     case 4:
@@ -33,10 +31,10 @@ switch ($access_level) {
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css">
-	<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.0/css/select.dataTables.min.css">-->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.0/css/select.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/css/editor.dataTables.min.css">
 	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.css">
-	<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/css/buttons.dataTables.min.css"> -->
+	<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/css/buttons.dataTables.min.css"> -->  
 
     <!-- jQuery UI 1.10.3 
     <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui-1.10.3.min.js"></script>
@@ -85,13 +83,15 @@ $(document).ready(function() {
                 name: "ledger.portfolio_id",
                 type: "select",
                 ipOpts: portfolioLoader(),
-            }, {
+            },
+            /*
+             {
                 label: "Nominal:",
                 name: "ledger.nominal"
             }, {
                 label: "Price:",
                 name: "ledger.price"
-            }, 
+            }, */
              /*{
                 label: "Created At:",
                 name: "ledger.created_at",
@@ -124,6 +124,34 @@ $(document).ready(function() {
         ]
     } );
     
+    //  $('*[data-editor-trade_status_id]').on( 'click', function (e)
+    $('#example').on( 'click', 'tbody td:not(:first-child)', function (e) {
+        editor.inline( this, { fieldName: 'ledger.trade_status_id', onBlur: 'submit'}
+            );
+        } );
+    
+    // Activate an inline edit on click of a table cell
+/*
+    $('#example').on( 'click', 'tbody td', function (e) {
+        editor.inline( this, {
+            fieldName: "ledger.trade_status_id",
+            onBlur: 'submit'
+        } );
+    } );
+    */
+    /*
+   var editor = new $.fn.Editor({
+    ajax: 'ledger/ledger',
+    table: "#example",
+    formOptions: {
+    inline: {
+    fieldName: "trade_status_id",
+    onBlur: true
+    }
+    }
+    });
+    */
+    
     $('#example').DataTable( {
         //dom: "Bfrtip",
         displayLength: 10,
@@ -154,9 +182,11 @@ $(document).ready(function() {
             { data: "prof1.firstname" },
             { data: "prof2.firstname" },
             { data: "ledger.confirmed_at" },
-            { data: "trade_status.trade_status" },
+            { data: "trade_status.trade_status", editField: "ledger.trade_status_id"   },
+            
         ],
         select: true,
+
         buttons: [
             /*{ extend: "create", editor: editor },
             { extend: "edit",   editor: editor },

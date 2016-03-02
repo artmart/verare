@@ -11,23 +11,18 @@ if(isset(Yii::app()->user->user_role)){
 
 switch ($access_level) {
     case 1:
-    $this->menu=[
-        	//array('label'=>'List Ledger', 'url'=>array('index')),
-        	array('label'=>'Create Ledger', 'url'=>array('create')),
-        ];
+        $access_buttons = '{ extend: "create", editor: editor },';
         break;
     case 2:
-        $access_buttons = '{update}';
+        //$access_buttons = '{update}';
+        $access_buttons = '{ extend: "edit",   editor: editor },';
         break;
     case 3:
-        $access_buttons = '{delete}';
+        //$access_buttons = '{delete}';
+        $access_buttons = '{ extend: "remove", editor: editor },';
         break;
     case 4:
-        $access_buttons = '{view} {update} {delete}';
-        $this->menu=[
-        	//array('label'=>'List Ledger', 'url'=>array('index')),
-        	array('label'=>'Create Ledger', 'url'=>array('create')),
-        ];
+        $access_buttons = '{ extend: "create", editor: editor }, { extend: "edit",   editor: editor }, { extend: "remove", editor: editor },';
         break;
 } 
 
@@ -263,9 +258,10 @@ $(document).ready(function() {
         ],
         select: true,
         buttons: [
-            { extend: "create", editor: editor },
+            /*{ extend: "create", editor: editor },
             { extend: "edit",   editor: editor },
-            { extend: "remove", editor: editor },
+            { extend: "remove", editor: editor },*/
+            <?php echo $access_buttons; ?>
             {
                 extend: 'copyHtml5',
                 exportOptions: {

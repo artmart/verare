@@ -113,13 +113,45 @@ $(document).ready(function() {
                 name: "ledger.confirmed_by",
                 type: "select",
                 ipOpts: userLoader(),
-            },*/
+            },
+            {
+                label: "document_id",
+                name: "ledger.document_id"
+            },
+            */
+            
+            
             {
                 label: "Trade Status:",
                 name: "ledger.trade_status_id",
                 type: "select",
                 ipOpts: tradestatusLoader(),
             },
+            
+            
+            /*
+            {
+                label: "Document:",
+                name: "ledger.document_id",
+                type: "upload",
+                display: function ( file_id ) {
+                    return '<img src="'+table.file( 'documents', file_id ).web_path+'"/>';
+                },
+                clearText: "Clear",
+                noImageText: 'No Document'
+            }
+            */
+            {
+                label: "Document:",
+                name: "documents.file",
+                type: "upload",
+                clearText: "Clear",
+                display: function ( val, row ) {
+                  return val && row.documents.document_name ?
+                      row.documents.document_name :
+                      'No confirmation';
+                }
+            }
             
         ]
     } );
@@ -161,7 +193,32 @@ var table = $('#example').DataTable( {
             { data: "prof1.firstname" },
             { data: "prof2.firstname" },
             { data: "ledger.confirmed_at" },
+            //{ data: "ledger.document_id" },
             { data: "trade_status.trade_status", editField: "ledger.trade_status_id", className: 'editable'    },
+            { data: "documents.document_name" },
+            /*
+            
+            {
+                data: "tbl_files",
+                defaultContent: '',
+                render: function(data, type, row) {
+                  return data.name ? '<a href="/Josef/uploads/' + data.name + '" onclick="window.open(this.href, \'mywin\',\'left=20,top=20,width=500,height=500,toolbar=1,resizable=1\'); return false;">' + data.name + '</a>' : null;
+                }
+              }
+            
+            
+            
+            {
+                data: "ledger.document_id",
+                render: function ( file_id ) {
+                    return file_id ?
+                        '<img src="'+table.file( 'documents', file_id ).web_path+'"/>' :
+                        null;
+                },
+                defaultContent: "No Document",
+                title: "Document"
+            },
+            */
             
         ],
         select: true,
@@ -192,6 +249,7 @@ var table = $('#example').DataTable( {
             { extend: 'colvis', collectionLayout: 'fixed two-column',},
             
         ]
+        
     } );
 
 
@@ -332,6 +390,7 @@ table.button( 'edit:trade_status_id' ).enable();
                 <th>Confirmed By</th>
                 <th>Confirmed At</th>
                 <th>Trade Status</th>
+                <th>Document</th>
             </tr>
         </thead>
         <tfoot>
@@ -346,6 +405,7 @@ table.button( 'edit:trade_status_id' ).enable();
                 <th>Confirmed By</th>
                 <th>Confirmed At</th>
                 <th>Trade Status</th>
+                <th>Document</th>
             </tr>
         </tfoot>
     </table>

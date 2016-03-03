@@ -6,7 +6,7 @@ class DocumentsController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout='//layouts/column1';
 
 	/**
 	 * @return array action filters
@@ -32,7 +32,7 @@ class DocumentsController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'documents'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -56,6 +56,11 @@ class DocumentsController extends Controller
 			'model'=>$this->loadModel($id),
 		));
 	}
+    
+    
+    public function actionDocuments(){
+        require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/documents.php');
+    }
 
 	/**
 	 * Creates a new model.
@@ -139,9 +144,7 @@ class DocumentsController extends Controller
 		if(isset($_GET['Documents']))
 			$model->attributes=$_GET['Documents'];
 
-		$this->render('admin',array(
-			'model'=>$model,
-		));
+		$this->render('admin_datatable' /*,array('model'=>$model,)*/);
 	}
 
 	/**

@@ -13,14 +13,14 @@
     $baseUrl = Yii::app()->baseUrl;
     
     if(isset($user_data->default_portfolio_id)){$portfolio = $user_data->default_portfolio_id;}
-    if(isset($_POST['portfolio'])){$portfolio = $_POST['portfolio'];}
+    //if(isset($_POST['portfolio'])){$portfolio = $_POST['portfolio'];}
     
    	$end_date = Date('Y-m-d');
 	$start_date = date('Y-m-d', strtotime('-1 years'));
     if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
     if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
-    if(isset($_POST['start_date'])){$start_date = date_format(date_create($_POST['start_date']),"Y-m-d");}
-    if(isset($_POST['end_date'])){$end_date = date_format(date_create($_POST['end_date']),"Y-m-d");}
+    //if(isset($_POST['start_date'])){$start_date = date_format(date_create($_POST['start_date']),"Y-m-d");}
+    //if(isset($_POST['end_date'])){$end_date = date_format(date_create($_POST['end_date']),"Y-m-d");}
 ?>
 
 <h3> <i><?php //echo CHtml::encode(Yii::app()->name); ?></i></h3>
@@ -35,7 +35,9 @@
         ?> 
     </small>
   </h1>
-          
+
+
+<?php /* ?>          
 <div class="span2"></div>
 <div class="span1">Start Date:</div>           
 <div class="span2">
@@ -85,13 +87,14 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 <div class="span2">
     <?php
     $list = CHtml::listData(Portfolios::model()->findAll(['select'=>'id, portfolio', 'order'=>'portfolio']),'id','portfolio');
-    echo CHtml::dropDownList('portfolio', $portfolio,  $list, [ 'id' => 'portfolio', 'empty' => '-- Select --',  'onchange'=>'loaddata()', 'class'=>"form-control"  /*'multiple' => true, 'size'=>'10'*/]);
+    echo CHtml::dropDownList('portfolio', $portfolio,  $list, [ 'id' => 'portfolio', 'empty' => '-- Select --',  'onchange'=>'loaddata()', 'class'=>"form-control"  /*'multiple' => true, 'size'=>'10'*//*]);
  ?>
 </div>
 <?php
-    if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
-    if(isset($_REQUEST['end_date'])){$end_date = $_REQUEST['end_date'];}
-    if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
+*/
+    //if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
+    //if(isset($_REQUEST['end_date'])){$end_date = $_REQUEST['end_date'];}
+    //if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
     
     /*
     $sql_table1 = "select pt.portfolio_type, p.portfolio, i.instrument, pt.allocation_min, pt.allocation_max, pt.allocation_normal, l.nominal*l.price nav from ledger l

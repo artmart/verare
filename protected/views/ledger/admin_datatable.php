@@ -84,14 +84,14 @@ $(document).ready(function() {
                 type: "select",
                 ipOpts: portfolioLoader(),
             },
-            /*
+            
              {
                 label: "Nominal:",
                 name: "ledger.nominal"
             }, {
                 label: "Price:",
                 name: "ledger.price"
-            }, */
+            }, 
              /*{
                 label: "Created At:",
                 name: "ledger.created_at",
@@ -123,36 +123,15 @@ $(document).ready(function() {
             
         ]
     } );
-    
-    //  $('*[data-editor-trade_status_id]').on( 'click', function (e)
-    $('#example').on( 'click', 'tbody td:not(:first-child)', function (e) {
-        editor.inline( this, { fieldName: 'ledger.trade_status_id', onBlur: 'submit'}
-            );
+  
+    $('#example').on( 'click', 'tbody td.editable', function (e){   
+    if(table.cell( this ).data() === 'Confirmed'){
+        editor.inline( this, { fieldName: 'ledger.trade_status_id', onBlur: 'submit'});
+        }
+        
         } );
-    
-    // Activate an inline edit on click of a table cell
-/*
-    $('#example').on( 'click', 'tbody td', function (e) {
-        editor.inline( this, {
-            fieldName: "ledger.trade_status_id",
-            onBlur: 'submit'
-        } );
-    } );
-    */
-    /*
-   var editor = new $.fn.Editor({
-    ajax: 'ledger/ledger',
-    table: "#example",
-    formOptions: {
-    inline: {
-    fieldName: "trade_status_id",
-    onBlur: true
-    }
-    }
-    });
-    */
-    
-    $('#example').DataTable( {
+            
+var table = $('#example').DataTable( {
         //dom: "Bfrtip",
         displayLength: 10,
         filter: true,
@@ -182,7 +161,7 @@ $(document).ready(function() {
             { data: "prof1.firstname" },
             { data: "prof2.firstname" },
             { data: "ledger.confirmed_at" },
-            { data: "trade_status.trade_status", editField: "ledger.trade_status_id"   },
+            { data: "trade_status.trade_status", editField: "ledger.trade_status_id", className: 'editable'    },
             
         ],
         select: true,
@@ -214,9 +193,37 @@ $(document).ready(function() {
             
         ]
     } );
-    
 
+
+ //   var table = $('#example').DataTable();
+
+//if ( table.rows( { selected: true } ).indexes().length === 0) {
+//table.button( 'edit:trade_status_id' ).disable();
+//}
+//else {
+//table.button( 'edit:trade_status_id' ).enable();
+//} 
+
+/*
+var rowData = table.rows({selected:true}).data();
+if(rowData.trade_status_id === '1'){
+    alert('aaa');
+}   
+*/
 } );
+
+
+
+/*
+if ( table.rows( { selected: true } ).indexes().value === 0) {
+    
+ table.button( 'edit:trade_status_id' ).disable();
+}
+else {
+table.button( 'edit:trade_status_id' ).enable();
+}            
+*/
+  //$("#DTE_Field_ledger-trade_status_id  ").hide();
 
   function SortByName(a, b){
     var aName = a.label.toLowerCase();

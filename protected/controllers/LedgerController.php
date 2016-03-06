@@ -138,17 +138,7 @@ class LedgerController extends Controller
 	 */
 	public function actionAdmin()
 	{
-	  // var_dump(Yii::app()->db);
-       //exit;
-       
-		$model=new Ledger('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Ledger']))
-			$model->attributes=$_GET['Ledger'];
-
-		$this->render('admin_datatable' /*,array(
-			'model'=>$model,
-		)*/);
+		$this->render('admin_datatable');
 	}
     
     

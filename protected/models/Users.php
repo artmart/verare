@@ -41,7 +41,7 @@ class Users extends CActiveRecord
 		return array(
 			//array('username, password, email, create_at, default_portfolio_id, default_start_date, default_end_date', 'required'),
 			//array('superuser, status, user_role, default_portfolio_id', 'numerical', 'integerOnly'=>true),
-            array('default_portfolio_id', 'numerical', 'integerOnly'=>true),
+            array('default_portfolio_id, client_id', 'numerical', 'integerOnly'=>true),
             array('default_start_date, default_end_date', 'length', 'max'=>10),
 			//array('username', 'length', 'max'=>20),
 			//array('password, email, activkey', 'length', 'max'=>128),
@@ -83,6 +83,7 @@ class Users extends CActiveRecord
 			'default_portfolio_id' => 'Default Portfolio',
 			'default_start_date' => 'Default Start Date',
 			'default_end_date' => 'Default End Date',
+            'client_id' =>'client_id'
 		);
 	}
 
@@ -117,6 +118,8 @@ class Users extends CActiveRecord
 		$criteria->compare('default_portfolio_id',$this->default_portfolio_id);
 		$criteria->compare('default_start_date',$this->default_start_date,true);
 		$criteria->compare('default_end_date',$this->default_end_date,true);
+        $criteria->compare('client_id',$this->client_id);
+        
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

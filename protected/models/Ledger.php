@@ -21,27 +21,12 @@
  * @property string $custody_comment
  * @property integer $account_number
  * @property integer $is_current
- *
- * The followings are the available model relations:
- * @property Documents $document
- * @property Instruments $instrument
- * @property Portfolios $portfolio
- * @property TradeStatus $tradeStatus
- * @property Users1 $createdBy
- * @property Users1 $confirmedBy
+ * @property double $total_nominal
+ * @property string $file
+ * @property string $trade_code
  */
 class Ledger extends CActiveRecord
 {
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return Ledger the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
-
 	/**
 	 * @return string the associated database table name
 	 */
@@ -58,13 +43,15 @@ class Ledger extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('trade_date, instrument_id, portfolio_id, nominal, price, created_by, created_at, trade_status_id, confirmed_by, confirmed_at, version_number, document_id, custody_account, custody_comment, account_number', 'required'),
+		//	array('trade_date, instrument_id, portfolio_id, nominal, price, created_by, created_at, trade_status_id, confirmed_by, confirmed_at, version_number, document_id, custody_account, custody_comment, account_number, file, trade_code', 'required'),
 			array('instrument_id, portfolio_id, created_by, trade_status_id, confirmed_by, version_number, document_id, account_number, is_current', 'numerical', 'integerOnly'=>true),
-			array('nominal, price', 'numerical'),
+			array('nominal, price, total_nominal', 'numerical'),
 			array('custody_account, custody_comment', 'length', 'max'=>255),
+			array('file', 'length', 'max'=>100),
+			array('trade_code', 'length', 'max'=>50),
 			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, trade_date, instrument_id, portfolio_id, nominal, price, created_by, created_at, trade_status_id, confirmed_by, confirmed_at, version_number, document_id, custody_account, custody_comment, account_number, is_current', 'safe', 'on'=>'search'),
+			// @todo Please remove those attributes that should not be searched.
+			array('id, trade_date, instrument_id, portfolio_id, nominal, price, created_by, created_at, trade_status_id, confirmed_by, confirmed_at, version_number, document_id, custody_account, custody_comment, account_number, is_current, total_nominal, file, trade_code', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,12 +63,6 @@ class Ledger extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'document' => array(self::BELONGS_TO, 'Documents', 'document_id'),
-			'instrument' => array(self::BELONGS_TO, 'Instruments', 'instrument_id'),
-			'portfolio' => array(self::BELONGS_TO, 'Portfolios', 'portfolio_id'),
-			'tradeStatus' => array(self::BELONGS_TO, 'TradeStatus', 'trade_status_id'),
-			'createdBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
-			'confirmedBy' => array(self::BELONGS_TO, 'Users', 'confirmed_by'),
 		);
 	}
 
@@ -108,17 +89,27 @@ class Ledger extends CActiveRecord
 			'custody_comment' => 'Custody Comment',
 			'account_number' => 'Account Number',
 			'is_current' => 'Is Current',
+			'total_nominal' => 'Total Nominal',
+			'file' => 'File',
+			'trade_code' => 'Trade Code',
 		);
 	}
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+	 *
+	 * Typical usecase:
+	 * - Initialize the model fields with values from filter form.
+	 * - Execute this method to get CActiveDataProvider instance which will filter
+	 * models according to data in model fields.
+	 * - Pass data provider to CGridView, CListView or any similar widget.
+	 *
+	 * @return CActiveDataProvider the data provider that can return the models
+	 * based on the search/filter conditions.
 	 */
 	public function search()
 	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
 
@@ -139,9 +130,23 @@ class Ledger extends CActiveRecord
 		$criteria->compare('custody_comment',$this->custody_comment,true);
 		$criteria->compare('account_number',$this->account_number);
 		$criteria->compare('is_current',$this->is_current);
+		$criteria->compare('total_nominal',$this->total_nominal);
+		$criteria->compare('file',$this->file,true);
+		$criteria->compare('trade_code',$this->trade_code,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	/**
+	 * Returns the static model of the specified AR class.
+	 * Please note that you should have this exact method in all your CActiveRecord descendants!
+	 * @param string $className active record class name.
+	 * @return Ledger the static model class
+	 */
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
 	}
 }

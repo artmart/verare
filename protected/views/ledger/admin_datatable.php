@@ -9,6 +9,12 @@ if(isset(Yii::app()->user->user_role)){
               if($user_rols){$access_level = $user_rols->ledger_access_level;}
 }
 
+
+
+
+
+//, { extend: "remove", editor: editor }
+
 switch ($access_level) {
     case 1:
         $access_buttons = '{ extend: "create", editor: editor }';
@@ -17,10 +23,10 @@ switch ($access_level) {
         $access_buttons = '{ extend: "edit",   editor: editor }';
         break;
     case 3:
-        $access_buttons = '{ extend: "remove", editor: editor }';
+        //$access_buttons = '{ extend: "remove", editor: editor }';
         break;
     case 4:
-        $access_buttons = '{ extend: "create", editor: editor }, { extend: "edit",   editor: editor }, { extend: "remove", editor: editor }';
+        $access_buttons = '{ extend: "create", editor: editor }, { extend: "edit",   editor: editor }';
         break;
 } 
 ?>
@@ -28,7 +34,9 @@ switch ($access_level) {
 
     <!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.css">-->
-
+    
+    <link rel="stylesheet" href="<?php echo $baseUrl;?>/css/bootstrap.min.css">
+    
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.0/css/select.dataTables.min.css">
@@ -40,7 +48,7 @@ switch ($access_level) {
     <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui-1.10.3.min.js"></script>
     <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.js"></script>-->
     
-	<!--<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.1.0/js/dataTables.select.min.js"></script>
@@ -126,6 +134,7 @@ $(document).ready(function() {
                 name: "ledger.trade_status_id",
                 type: "select",
                 ipOpts: tradestatusLoader(),
+                'className': "form-control"
             },
             
             
@@ -141,17 +150,30 @@ $(document).ready(function() {
                 noImageText: 'No Document'
             }
             */
+            /*
             {
                 label: "Document:",
-                name: "documents.file",
+                name: "ledger.file",
+                type: "upload",
+                clearText: "Clear",
+              /*  display: function ( val, row ) {
+                  return val && row.documents.file ?
+                      row.documents.file :
+                      'No confirmation';
+                }
+            }*/
+            
+            {
+                label: "Document:",
+                name: "ledger.file",
                 type: "upload",
                 clearText: "Clear",
                 display: function ( val, row ) {
-                  return val && row.documents.document_name ?
-                      row.documents.document_name :
+                  return val && row.ledger.file ?
+                      row.ledger.file :
                       'No confirmation';
                 }
-            }
+              }
             
         ]
     } );
@@ -174,7 +196,7 @@ var table = $('#example').DataTable( {
         dom: '<"clear">&lt;<"clear">Bfrtip<"clear">', 
         //colVis: { exclude: [ 1 ] },
         //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
-        ajax: "ledger/",
+        ajax: "ledger/ledger",
         columns: [
         /*
             { data: null, render: function ( data, type, row ) {
@@ -195,19 +217,19 @@ var table = $('#example').DataTable( {
             { data: "ledger.confirmed_at" },
             //{ data: "ledger.document_id" },
             { data: "trade_status.trade_status", editField: "ledger.trade_status_id", className: 'editable'    },
-            { data: "documents.document_name" },
-            /*
+            { data: "documents.file" },
             
+            /*
             {
-                data: "tbl_files",
+                data: "documents.document_name",
                 defaultContent: '',
                 render: function(data, type, row) {
-                  return data.name ? '<a href="/Josef/uploads/' + data.name + '" onclick="window.open(this.href, \'mywin\',\'left=20,top=20,width=500,height=500,toolbar=1,resizable=1\'); return false;">' + data.name + '</a>' : null;
+                  return data.document_name ? '<a href="/Josef/uploads/' + data.document_name + '" onclick="window.open(this.href, \'mywin\',\'left=20,top=20,width=500,height=500,toolbar=1,resizable=1\'); return false;">' + data.document_name + '</a>' : null;
                 }
-              }
+              },
+            */
             
-            
-            
+            /*
             {
                 data: "ledger.document_id",
                 render: function ( file_id ) {
@@ -223,11 +245,24 @@ var table = $('#example').DataTable( {
         ],
         select: true,
 
+
         buttons: [
             /*{ extend: "create", editor: editor },
             { extend: "edit",   editor: editor },
             { extend: "remove", editor: editor },*/
             <?php echo $access_buttons; ?>,
+            {
+                extend: "selectedSingle",
+                text: "Delete",
+                action: function ( e, dt, node, config ) {
+                    // Immediately add `250` to the value of the salary and submit
+                    editor
+                        .edit( table.row( { selected: true } ).index(), false )
+                        .set( 'ledger.is_current', 0 )
+                        .submit();
+                }
+            },
+            
             {
                 extend: 'copyHtml5',
                 exportOptions: {
@@ -248,40 +283,43 @@ var table = $('#example').DataTable( {
             },
             { extend: 'colvis', collectionLayout: 'fixed two-column',},
             
-        ]
+        ],
         
     } );
 
 
- //   var table = $('#example').DataTable();
-
-//if ( table.rows( { selected: true } ).indexes().length === 0) {
-//table.button( 'edit:trade_status_id' ).disable();
-//}
-//else {
-//table.button( 'edit:trade_status_id' ).enable();
-//} 
-
 /*
-var rowData = table.rows({selected:true}).data();
-if(rowData.trade_status_id === '1'){
-    alert('aaa');
-}   
-*/
+        new $.fn.dataTable.Buttons( table, [
+           <?php echo $access_buttons; ?>,
+            {
+                extend: 'copyHtml5',
+                exportOptions: {
+                    columns: [ 0, ':visible' ]
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 5 ]
+                }
+            },
+            { extend: 'colvis', collectionLayout: 'fixed two-column',},
+        ] );
+ */           
+        
+         table.buttons().container()
+        .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
 } );
 
 
 
-/*
-if ( table.rows( { selected: true } ).indexes().value === 0) {
-    
- table.button( 'edit:trade_status_id' ).disable();
-}
-else {
-table.button( 'edit:trade_status_id' ).enable();
-}            
-*/
-  //$("#DTE_Field_ledger-trade_status_id  ").hide();
+
 
   function SortByName(a, b){
     var aName = a.label.toLowerCase();
@@ -376,8 +414,8 @@ table.button( 'edit:trade_status_id' ).enable();
 
 
 </script>
-<!-- page script -->
-<table id="example" class="display" cellspacing="0" width="100%">
+<!-- page script    class="display"-->
+<table id="example"  class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>Trade Date</th>

@@ -19,14 +19,33 @@
         $trade_date = $values['ledger']['trade_date'];
         $instrument_id = $values['ledger']['instrument_id'];
         $portfolio_id = $values['ledger']['portfolio_id'];
+        
+        $user_id = Yii::app()->user->id;
+        $user = Users::model()->findByPk($user_id);
+        $client_id = $user->client_id;
             
        $existing_trades = Ledger::model()->findAllByAttributes(['trade_date'=>$trade_date,'instrument_id'=>$instrument_id, 'portfolio_id' =>$portfolio_id]);
        //  $editor->db()->select( 'ledger', "*", "trade_date= '$trade_date' and instrument_id = '$instrument_id' and portfolio_id = '$portfolio_id'", null );
         if($existing_trades && count($existing_trades)>0){
                     $trade_code = $existing_trades[0]->trade_code;
-                }else{$trade_code = 'TMS'.date("Yhis");}
+                    $editor
+                        ->field( 'trade_code' )
+                        ->setValue( $trade_code );
+                    $editor
+                        ->field( 'ledger.client_id' )
+                        ->setValue( $client_id );
+                        
+                }else{
+                        $trade_code = 'TMS'.date("Yhis");
+                        $editor
+                            ->field( 'trade_code' )
+                            ->setValue( $trade_code );
+                        $editor
+                            ->field( 'ledger.client_id' )
+                            ->setValue( $client_id );
+                        }
 
-          return $trade_code;
+          //return $trade_code;
     } 
     
     function editledger ( $editor, $id, $values ) {                
@@ -120,6 +139,7 @@
             Field::inst( 'ledger.account_number' ),
             Field::inst( 'ledger.is_current' ),
             Field::inst( 'ledger.confirmed_at' ),
+            Field::inst( 'ledger.client_id' ),
             Field::inst( 'ledger.trade_code as trade_code' ),
             Field::inst( 'ledger.file' )
             ->setFormatter( 'Format::ifEmpty', null )
@@ -168,9 +188,15 @@
             } )
         */ 
         ->on( 'preCreate', function ( $editor, $values ) {
+                newledger($editor, $values );
+                /*
                 $editor
                     ->field( 'trade_code' )
                     ->setValue( newledger($editor, $values ) );
+                $editor
+                    ->field( 'ledger.client_id' )
+                    ->setValue( $client_id );
+                    */
             } )  
         ->on( 'preEdit', function ( $editor, $id, $values ) {
                editledger( $editor, $id, $values );                    

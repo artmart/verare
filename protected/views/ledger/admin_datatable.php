@@ -48,7 +48,7 @@ switch ($access_level) {
     <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui-1.10.3.min.js"></script>
     <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.js"></script>-->
     
-	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<!--<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.1.0/js/dataTables.select.min.js"></script>
@@ -128,13 +128,21 @@ $(document).ready(function() {
             },
             */
             
+             {
+                label: "is_current",
+                name: "ledger.is_current",
+                type: "hidden",
+            },
+            
             
             {
                 label: "Trade Status:",
                 name: "ledger.trade_status_id",
                 type: "select",
+                //type: "hidden",
+                //type: "readonly",
                 ipOpts: tradestatusLoader(),
-                'className': "form-control"
+                'className': "form-control",
             },
             
             
@@ -178,12 +186,20 @@ $(document).ready(function() {
         ]
     } );
   
+    editor.hide('ledger.trade_status_id');
     $('#example').on( 'click', 'tbody td.editable', function (e){   
     if(table.cell( this ).data() === 'Confirmed'){
+        editor.show('ledger.trade_status_id');
         editor.inline( this, { fieldName: 'ledger.trade_status_id', onBlur: 'submit'});
+        }else{
+            editor.hide('ledger.trade_status_id');
         }
         
         } );
+        
+   //editor.on( 'onInitEdit', function () {
+   //editor.disable('ledger.trade_status_id');
+   //} );
             
 var table = $('#example').DataTable( {
         //dom: "Bfrtip",
@@ -218,6 +234,7 @@ var table = $('#example').DataTable( {
             //{ data: "ledger.document_id" },
             { data: "trade_status.trade_status", editField: "ledger.trade_status_id", className: 'editable'    },
             { data: "documents.file" },
+            //{ data: "ledger.is_current" },
             
             /*
             {
@@ -429,6 +446,7 @@ var table = $('#example').DataTable( {
                 <th>Confirmed At</th>
                 <th>Trade Status</th>
                 <th>Document</th>
+               <!-- <th>Is Current</th>-->
             </tr>
         </thead>
         <tfoot>
@@ -444,6 +462,7 @@ var table = $('#example').DataTable( {
                 <th>Confirmed At</th>
                 <th>Trade Status</th>
                 <th>Document</th>
+                <!--<th>Is Current</th>-->
             </tr>
         </tfoot>
     </table>

@@ -200,7 +200,7 @@ $(document).ready(function() {
    //editor.on( 'onInitEdit', function () {
    //editor.disable('ledger.trade_status_id');
    //} );
-var path1 = '../';            
+         
 var table = $('#example').DataTable( {
         //dom: "Bfrtip",
         displayLength: 10,
@@ -240,7 +240,7 @@ var table = $('#example').DataTable( {
             {
                 data: "documents",
                 defaultContent: '',
-                render: function(data, type, row, path1) {
+                render: function(data, type, row) {
                     if(data.document_name){
                        return "<a href='../uploads/"+data.file +"."+data.extension+"' target='_Blank'>"+ data.file+"."+data.extension+"</a>";
                     }else{
@@ -275,8 +275,6 @@ var table = $('#example').DataTable( {
             { extend: "edit",   editor: editor },
             { extend: "remove", editor: editor },*/
             <?php echo $access_buttons; ?>,
-            
-            
             {
                 extend: 'copyHtml5',
                 exportOptions: {
@@ -299,34 +297,7 @@ var table = $('#example').DataTable( {
             
         ],
         
-    } );
-
-
-/*
-        new $.fn.dataTable.Buttons( table, [
-           <?php //echo $access_buttons; ?>,
-            {
-                extend: 'copyHtml5',
-                exportOptions: {
-                    columns: [ 0, ':visible' ]
-                }
-            },
-            {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {
-                extend: 'pdfHtml5',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 5 ]
-                }
-            },
-            { extend: 'colvis', collectionLayout: 'fixed two-column',},
-        ] );
- */           
-        
+    } );        
          table.buttons().container()
         .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
 } );

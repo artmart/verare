@@ -23,10 +23,32 @@ switch ($access_level) {
         $access_buttons = '{ extend: "edit",   editor: editor }';
         break;
     case 3:
-        //$access_buttons = '{ extend: "remove", editor: editor }';
+        $access_buttons = '{ extend: "remove", editor: editor }, 
+                            {
+                                extend: "selectedSingle",
+                                text: "Delete",
+                                action: function ( e, dt, node, config ) {
+                                    editor
+                                        .edit( table.row( { selected: true } ).index(), false )
+                                        .set( "ledger.is_current", 0 )
+                                        .submit();
+                                }
+                            },';
+            
         break;
     case 4:
-        $access_buttons = '{ extend: "create", editor: editor }, { extend: "edit",   editor: editor }';
+        $access_buttons = '{ extend: "create", editor: editor }, 
+                           { extend: "edit",   editor: editor },
+                           {
+                                extend: "selectedSingle",
+                                text: "Delete",
+                                action: function ( e, dt, node, config ) {
+                                    editor
+                                        .edit( table.row( { selected: true } ).index(), false )
+                                        .set( "ledger.is_current", 0 )
+                                        .submit();
+                                }
+                            }';
         break;
 } 
 ?>
@@ -121,12 +143,13 @@ $(document).ready(function() {
                 name: "ledger.confirmed_by",
                 type: "select",
                 ipOpts: userLoader(),
-            },
+            },*/
             {
-                label: "document_id",
-                name: "ledger.document_id"
+                label: "Note:",
+                name: "ledger.note",
+                type: "textarea"
             },
-            */
+            
             
              {
                 label: "is_current",
@@ -144,45 +167,22 @@ $(document).ready(function() {
                 ipOpts: tradestatusLoader(),
                 'className': "form-control",
             },
-            
-            
-            /*
             {
                 label: "Document:",
-                name: "ledger.document_id",
+                name: "ledger.file",
                 type: "upload",
-                display: function ( file_id ) {
-                    return '<img src="'+table.file( 'documents', file_id ).web_path+'"/>';
-                },
+               // display: function ( file_id ) {
+               //     return table.file( 'documents', file_id ).document_name;
+              //  },
+               //display: function ( val, row ) {
+                //  return val && row.ledger.file ?
+                //      row.ledger.file :
+                //      'No confirmation';
+               // }
+              
                 clearText: "Clear",
                 noImageText: 'No Document'
             }
-            */
-            /*
-            {
-                label: "Document:",
-                name: "ledger.file",
-                type: "upload",
-                clearText: "Clear",
-              /*  display: function ( val, row ) {
-                  return val && row.documents.file ?
-                      row.documents.file :
-                      'No confirmation';
-                }
-            }*/
-            
-            {
-                label: "Document:",
-                name: "ledger.file",
-                type: "upload",
-                clearText: "Clear",
-                display: function ( val, row ) {
-                  return val && row.ledger.file ?
-                      row.ledger.file :
-                      'No confirmation';
-                }
-              }
-            
         ]
     } );
   
@@ -200,7 +200,7 @@ $(document).ready(function() {
    //editor.on( 'onInitEdit', function () {
    //editor.disable('ledger.trade_status_id');
    //} );
-            
+var path1 = '../';            
 var table = $('#example').DataTable( {
         //dom: "Bfrtip",
         displayLength: 10,
@@ -233,18 +233,20 @@ var table = $('#example').DataTable( {
             { data: "ledger.confirmed_at" },
             //{ data: "ledger.document_id" },
             { data: "trade_status.trade_status", editField: "ledger.trade_status_id", className: 'editable'    },
-            { data: "documents.file" },
-            //{ data: "ledger.is_current" },
+           // { data: "documents.file" },
+            { data: "ledger.note" },
             
-            /*
+            
             {
-                data: "documents.document_name",
+                data: "documents",
                 defaultContent: '',
-                render: function(data, type, row) {
-                  return data.document_name ? '<a href="/Josef/uploads/' + data.document_name + '" onclick="window.open(this.href, \'mywin\',\'left=20,top=20,width=500,height=500,toolbar=1,resizable=1\'); return false;">' + data.document_name + '</a>' : null;
+                render: function(data, type, row, path1) {
+                  return data.document_name ? "<a href='../uploads/"+data.file +"."+data.extension+"' target='_Blank'>"+ data.file+"."+data.extension+"</a>": null; // data.file +"."+data.extension: null; // '<a href="/uploads/' + data.file +"."+data.extension '" onclick="window.open(this.href, \'mywin\',\'left=20,top=20,width=500,height=500,toolbar=1,resizable=1\'); return false;">' + data.document_name + '</a>' : null;
+                
+                
                 }
               },
-            */
+            
             
             /*
             {
@@ -268,17 +270,7 @@ var table = $('#example').DataTable( {
             { extend: "edit",   editor: editor },
             { extend: "remove", editor: editor },*/
             <?php echo $access_buttons; ?>,
-            {
-                extend: "selectedSingle",
-                text: "Delete",
-                action: function ( e, dt, node, config ) {
-                    // Immediately add `250` to the value of the salary and submit
-                    editor
-                        .edit( table.row( { selected: true } ).index(), false )
-                        .set( 'ledger.is_current', 0 )
-                        .submit();
-                }
-            },
+            
             
             {
                 extend: 'copyHtml5',
@@ -307,7 +299,7 @@ var table = $('#example').DataTable( {
 
 /*
         new $.fn.dataTable.Buttons( table, [
-           <?php echo $access_buttons; ?>,
+           <?php //echo $access_buttons; ?>,
             {
                 extend: 'copyHtml5',
                 exportOptions: {
@@ -445,6 +437,7 @@ var table = $('#example').DataTable( {
                 <th>Confirmed By</th>
                 <th>Confirmed At</th>
                 <th>Trade Status</th>
+                <th>Note</th>
                 <th>Document</th>
                <!-- <th>Is Current</th>-->
             </tr>
@@ -461,6 +454,7 @@ var table = $('#example').DataTable( {
                 <th>Confirmed By</th>
                 <th>Confirmed At</th>
                 <th>Trade Status</th>
+                <th>Note</th>
                 <th>Document</th>
                 <!--<th>Is Current</th>-->
             </tr>

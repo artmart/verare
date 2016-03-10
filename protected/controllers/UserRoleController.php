@@ -71,6 +71,20 @@ class UserRoleController extends Controller
 		if(isset($_POST['UserRole']))
 		{
 			$model->attributes=$_POST['UserRole'];
+              
+          $ledger_create = 0; 
+          $ledger_edit = 0; 
+          $ledger_delete = 0; 
+          $ledger_status_change = 0;
+          if(isset($_REQUEST["ledger_create"])){$ledger_create = $_REQUEST["ledger_create"]; }
+          if(isset($_REQUEST["ledger_edit"])){$ledger_edit = $_REQUEST["ledger_edit"]; }
+          if(isset($_REQUEST["ledger_delete"])){$ledger_delete = $_REQUEST["ledger_delete"]; }
+          if(isset($_REQUEST["ledger_status_change"])){$ledger_status_change = $_REQUEST["ledger_status_change"]; }
+          
+          $ledgar_access = ['create'=>$ledger_create, 'edit' =>$ledger_edit, 'delete' =>$ledger_delete, 'status_change'=>$ledger_status_change ];
+		  $model->ledger_access_level = json_encode($ledgar_access);
+            
+            
 			if($model->save())
 				//$this->redirect(array('view','id'=>$model->id));
                 $this->redirect(['admin']);
@@ -95,7 +109,19 @@ class UserRoleController extends Controller
 
 		if(isset($_POST['UserRole']))
 		{
-			$model->attributes=$_POST['UserRole'];
+		  $model->attributes=$_POST['UserRole'];
+          
+          $ledger_create = 0; 
+          $ledger_edit = 0; 
+          $ledger_delete = 0; 
+          $ledger_status_change = 0;
+          if(isset($_REQUEST["ledger_create"])){$ledger_create = $_REQUEST["ledger_create"]; }
+          if(isset($_REQUEST["ledger_edit"])){$ledger_edit = $_REQUEST["ledger_edit"]; }
+          if(isset($_REQUEST["ledger_delete"])){$ledger_delete = $_REQUEST["ledger_delete"]; }
+          if(isset($_REQUEST["ledger_status_change"])){$ledger_status_change = $_REQUEST["ledger_status_change"]; }
+          
+          $ledgar_access = ['create'=>$ledger_create, 'edit' =>$ledger_edit, 'delete' =>$ledger_delete, 'status_change'=>$ledger_status_change ];
+		  $model->ledger_access_level = json_encode($ledgar_access);
 			if($model->save())
 				//$this->redirect(array('view','id'=>$model->id));
    	            $this->redirect(['admin']);

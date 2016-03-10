@@ -2,19 +2,46 @@
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
 $baseUrl = Yii::app()->theme->baseUrl;
 
-$access_level = 5;
+//$access_level = 5;
 $access_buttons = '';
+$ledgar_access = '';
 if(isset(Yii::app()->user->user_role)){
               $user_rols = UserRole::model()->findByPk(Yii::app()->user->user_role);
-              if($user_rols){$access_level = $user_rols->ledger_access_level;}
+              if($user_rols){
+                //$access_level = json_decode($user_rols->ledger_access_level);
+               
+                  $ledger_create = 0;
+                  $ledger_edit = 0;
+                  $ledger_delete = 0;
+                  $ledger_status_change = 0;
+                  if(isset($user_rols->ledger_access_level) && $user_rols->ledger_access_level !== ''){
+                    $ledgar_access = json_decode($user_rols->ledger_access_level);
+                  
+                  $ledger_create = $ledgar_access->create;
+                  $ledger_edit = $ledgar_access->edit;
+                  $ledger_delete = $ledgar_access->delete;
+                  $ledger_status_change = $ledgar_access->status_change;
+                  }
+                }
 }
+$access_buttons = '';
 
+if($ledger_create == 1){$access_buttons .= '{ extend: "create", editor: editor }, ';}
+if($ledger_edit == 1){$access_buttons .= '{ extend: "edit",   editor: editor }, ';}
+if($ledger_delete == 1){$access_buttons .= '{
+                                                extend: "selectedSingle",
+                                                text: "Delete",
+                                                action: function ( e, dt, node, config ) {
+                                                    editor
+                                                        .edit( table.row( { selected: true } ).index(), false )
+                                                        .set( "ledger.is_current", 0 )
+                                                        .submit();
+                                                }
+                                            }, '; 
+                                            }                                      
+//if($ledger_edit == 1){$access_buttons .= '{ extend: "edit",   editor: editor }';}
 
-
-
-
-//, { extend: "remove", editor: editor }
-
+/*
 switch ($access_level) {
     case 1:
         $access_buttons = '{ extend: "create", editor: editor }';
@@ -51,6 +78,7 @@ switch ($access_level) {
                             }';
         break;
 } 
+*/
 ?>
 <h1>Manage Ledgers</h1>
 
@@ -102,6 +130,7 @@ $(document).ready(function() {
                 name: "ledger.instrument_id",
                 type: "select",
                 ipOpts: instrumentsLoader(),
+                className: "form-control",
             },
             {
                 label: "Trade Date:",
@@ -109,10 +138,11 @@ $(document).ready(function() {
                 type: "datetime"
             },
             {
-                label: "Portfolio Id:",
+                label: "Portfolio:",
                 name: "ledger.portfolio_id",
                 type: "select",
                 ipOpts: portfolioLoader(),
+                className: "form-control",
             },
             
              {
@@ -165,7 +195,7 @@ $(document).ready(function() {
                 //type: "hidden",
                 //type: "readonly",
                 ipOpts: tradestatusLoader(),
-                'className': "form-control",
+                className: "form-control",
             },
             {
                 label: "Document:",
@@ -188,7 +218,7 @@ $(document).ready(function() {
   
     editor.hide('ledger.trade_status_id');
     $('#example').on( 'click', 'tbody td.editable', function (e){   
-    if(table.cell( this ).data() === 'Confirmed'){
+    if(table.cell( this ).data() === 'Pending'){
         editor.show('ledger.trade_status_id');
         editor.inline( this, { fieldName: 'ledger.trade_status_id', onBlur: 'submit'});
         }else{
@@ -274,7 +304,7 @@ var table = $('#example').DataTable( {
             /*{ extend: "create", editor: editor },
             { extend: "edit",   editor: editor },
             { extend: "remove", editor: editor },*/
-            <?php echo $access_buttons; ?>,
+            <?php echo $access_buttons; ?>
             {
                 extend: 'copyHtml5',
                 exportOptions: {

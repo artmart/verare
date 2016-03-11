@@ -45,7 +45,7 @@ class Ledger extends CActiveRecord
 		return array(
 		//	array('trade_date, instrument_id, portfolio_id, nominal, price, created_by, created_at, trade_status_id, confirmed_by, confirmed_at, version_number, document_id, custody_account, custody_comment, account_number, file, trade_code', 'required'),
 			array('instrument_id, portfolio_id, created_by, trade_status_id, confirmed_by, version_number, document_id, account_number, is_current', 'numerical', 'integerOnly'=>true),
-			array('nominal, price, total_nominal', 'numerical'),
+			array('nominal, price', 'numerical'),
 			array('custody_account, custody_comment, note', 'length', 'max'=>255),
 			array('file', 'length', 'max'=>100),
 			array('trade_code', 'length', 'max'=>50),
@@ -89,7 +89,7 @@ class Ledger extends CActiveRecord
 			'custody_comment' => 'Custody Comment',
 			'account_number' => 'Account Number',
 			'is_current' => 'Is Current',
-			'total_nominal' => 'Total Nominal',
+			//'total_nominal' => 'Total Nominal',
 			'file' => 'File',
 			'trade_code' => 'Trade Code',
             'note' =>'note'
@@ -131,7 +131,7 @@ class Ledger extends CActiveRecord
 		$criteria->compare('custody_comment',$this->custody_comment,true);
 		$criteria->compare('account_number',$this->account_number);
 		$criteria->compare('is_current',$this->is_current);
-		$criteria->compare('total_nominal',$this->total_nominal);
+		//$criteria->compare('total_nominal',$this->total_nominal);
 		$criteria->compare('file',$this->file,true);
 		$criteria->compare('trade_code',$this->trade_code,true);
         $criteria->compare('note',$this->note);

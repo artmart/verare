@@ -34,7 +34,15 @@
                     $editor
                         ->field( 'ledger.client_id' )
                         ->setValue( $client_id );
-                        
+                    $editor
+                        ->field( 'ledger.trade_status_id' )
+                        ->setValue( 1 );  
+                    $editor
+                        ->field( 'ledger.created_by' )
+                        ->setValue( $user_id );
+                    $editor
+                        ->field( 'ledger.is_current' )
+                        ->setValue( 1 );                      
                 }else{
                         $trade_code = 'TMS'.date("Yhis");
                         $editor
@@ -43,9 +51,16 @@
                         $editor
                             ->field( 'ledger.client_id' )
                             ->setValue( $client_id );
+                        $editor
+                            ->field( 'ledger.trade_status_id' )
+                            ->setValue( 1 ); 
+                        $editor
+                            ->field( 'ledger.created_by' )
+                            ->setValue( $user_id ); 
+                        $editor
+                            ->field( 'ledger.is_current' )
+                            ->setValue( 1 );
                         }
-
-          //return $trade_code;
     } 
     
     function editledger ( $editor, $id, $values ) {                

@@ -217,6 +217,7 @@ $(document).ready(function() {
     } );
   
     editor.hide('ledger.trade_status_id');
+    <?php if($ledger_status_change == 1) {?>
     $('#example').on( 'click', 'tbody td.editable', function (e){   
     if(table.cell( this ).data() === 'Pending'){
         editor.show('ledger.trade_status_id');
@@ -225,7 +226,9 @@ $(document).ready(function() {
             editor.hide('ledger.trade_status_id');
         }
         
-        } );
+        });
+        
+    <?php }?>
         
    //editor.on( 'onInitEdit', function () {
    //editor.disable('ledger.trade_status_id');

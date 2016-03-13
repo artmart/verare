@@ -221,7 +221,7 @@
         ->leftJoin( 'trade_status', 'trade_status.id', '=', 'ledger.trade_status_id' )
        // ->leftJoin( 'users', 'users.client_id', '=', 'ledger.client_id' )
         ->leftJoin( 'documents', 'documents.id', '=', 'ledger.file' )
-        ->where( 'ledger.client_id', 1 )
+        ->where( 'ledger.client_id', $client_id )
         ->where( 'ledger.is_current', 1 )
         ->process( $_POST )
         ->json();  

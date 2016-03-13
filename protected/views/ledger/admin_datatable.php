@@ -1,3 +1,9 @@
+<style>
+.btnDeleteRow
+{
+display:none;
+} 
+</style>
 <?php
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
 $baseUrl = Yii::app()->theme->baseUrl;
@@ -38,7 +44,9 @@ if($ledger_delete == 1){$access_buttons .= '{
                                                         .submit();
                                                 }
                                             }, '; 
-                                            }                                      
+                                            }   
+                                            
+                                                                               
 //if($ledger_edit == 1){$access_buttons .= '{ extend: "edit",   editor: editor }';}
 
 /*
@@ -120,6 +128,7 @@ switch ($access_level) {
 <script type="text/javascript" language="javascript" class="init">  
 var editor; // use a global for the submit and return data rendering in the examples
 
+(function($){
 $(document).ready(function() {
     editor = new $.fn.dataTable.Editor( {
         ajax: 'ledger/ledger',
@@ -130,7 +139,7 @@ $(document).ready(function() {
                 name: "ledger.instrument_id",
                 type: "select",
                 ipOpts: instrumentsLoader(),
-                className: "form-control",
+                className: 'full'
             },
             {
                 label: "Trade Date:",
@@ -216,19 +225,31 @@ $(document).ready(function() {
         ]
     } );
   
+  
+    
+  
     editor.hide('ledger.trade_status_id');
-    <?php if($ledger_status_change == 1) {?>
-    $('#example').on( 'click', 'tbody td.editable', function (e){   
+    <?php //if($ledger_status_change == 1) {?>
+    $('#example').on( 'click', 'tbody td.editable', function (e){ 
+        //var buttons = table.buttons( ['.edit', '.delete'] );
+        //var buttons = table.buttons( ['.edit', '.delete'] );
     if(table.cell( this ).data() === 'Pending'){
         editor.show('ledger.trade_status_id');
         editor.inline( this, { fieldName: 'ledger.trade_status_id', onBlur: 'submit'});
+        
+        //table.button( '.buttons-edit' ).enable();
         }else{
             editor.hide('ledger.trade_status_id');
+            //table.button( '.buttons-edit' ).disable();
         }
         
         });
         
-    <?php }?>
+        
+
+
+        
+    <?php //}?>
         
    //editor.on( 'onInitEdit', function () {
    //editor.disable('ledger.trade_status_id');
@@ -329,13 +350,36 @@ var table = $('#example').DataTable( {
             { extend: 'colvis', collectionLayout: 'fixed two-column',},
             
         ],
-        
-    } );        
+                
+    } ); 
+    
+    
+  //  table.on( 'click', 'tbody td:nth-child(2)', function (e) {
+  //      editor.inline( this );
+  //  } );
+    
+      table.on( 'select', function ( e, dt, type, indexes ) {
+		if ( type === 'row' ) {
+			var data = table.rows( indexes ).data().pluck( 'trade_status.trade_status' );
+			if( data[0] == 'Pending')
+			{
+				table.button( '.buttons-edit' ).enable();
+				table.button( '.buttons-selected-single' ).enable();
+			}
+			else
+			{
+			 alert(data[0]);
+				table.button( '.buttons-edit' ).disable();
+				table.button( '.buttons-selected-single' ).disable();
+			}
+		}
+	} );
+               
          table.buttons().container()
         .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
 } );
 
-
+}(jQuery));
 
 
 

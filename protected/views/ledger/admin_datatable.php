@@ -353,22 +353,17 @@ var table = $('#example').DataTable( {
                 
     } ); 
     
-    
-  //  table.on( 'click', 'tbody td:nth-child(2)', function (e) {
-  //      editor.inline( this );
-  //  } );
-    
       table.on( 'select', function ( e, dt, type, indexes ) {
 		if ( type === 'row' ) {
-			var data = table.rows( indexes ).data().pluck( 'trade_status.trade_status' );
+			var data = table.cells(indexes,9).data(); // table.rows( indexes ).data().pluck( 'trade_status.trade_status' );
+                        
 			if( data[0] == 'Pending')
-			{
+			{             
 				table.button( '.buttons-edit' ).enable();
 				table.button( '.buttons-selected-single' ).enable();
 			}
 			else
 			{
-			 alert(data[0]);
 				table.button( '.buttons-edit' ).disable();
 				table.button( '.buttons-selected-single' ).disable();
 			}

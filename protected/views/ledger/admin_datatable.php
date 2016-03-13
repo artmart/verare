@@ -130,6 +130,7 @@ var editor; // use a global for the submit and return data rendering in the exam
 
 (function($){
 $(document).ready(function() {
+
     editor = new $.fn.dataTable.Editor( {
         ajax: 'ledger/ledger',
         table: "#example",
@@ -224,32 +225,37 @@ $(document).ready(function() {
             }
         ]
     } );
+	
+	
+	
+    editor2 = new $.fn.dataTable.Editor( {
+        ajax: 'ledger/ledger',
+        table: "#example",
+        fields: [
+            {
+                label: "Trade Status:",
+                name: "ledger.trade_status_id",
+                type: "select",
+                ipOpts: tradestatusLoader(),
+                className: "form-control",
+            }
+        ]
+    } );
   
   
     
   
     editor.hide('ledger.trade_status_id');
-    <?php //if($ledger_status_change == 1) {?>
+    <?php if($ledger_status_change == 1) {?>
     $('#example').on( 'click', 'tbody td.editable', function (e){ 
-        //var buttons = table.buttons( ['.edit', '.delete'] );
-        //var buttons = table.buttons( ['.edit', '.delete'] );
-    if(table.cell( this ).data() === 'Pending'){
-        editor.show('ledger.trade_status_id');
-        editor.inline( this, { fieldName: 'ledger.trade_status_id', onBlur: 'submit'});
-        
-        //table.button( '.buttons-edit' ).enable();
-        }else{
-            editor.hide('ledger.trade_status_id');
-            //table.button( '.buttons-edit' ).disable();
-        }
-        
-        });
-        
-        
+		//editor.show('ledger.trade_status_id');
+		editor2.inline( this, { fieldName: 'ledger.trade_status_id', onBlur: 'submit'});
+	});
+    
 
 
         
-    <?php //}?>
+    <?php }?>
         
    //editor.on( 'onInitEdit', function () {
    //editor.disable('ledger.trade_status_id');
@@ -352,7 +358,7 @@ var table = $('#example').DataTable( {
         ],
                 
     } ); 
-    
+	
       table.on( 'select', function ( e, dt, type, indexes ) {
 		if ( type === 'row' ) {
 			var data = table.cells(indexes,9).data(); // table.rows( indexes ).data().pluck( 'trade_status.trade_status' );

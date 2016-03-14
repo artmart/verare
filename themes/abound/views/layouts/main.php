@@ -38,6 +38,46 @@
 	  //$cs->registerCssFile($baseUrl.'/css/style-blue.css');
 	  ?>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+      
+      
+      
+      
+      
+   <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui.min.css">
+ 
+    
+   <!-- <link rel="stylesheet" href="<?php //echo $baseUrl;?>/css/jquery-ui.min.css">-->
+    
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/datatables-tabletools/2.1.5/css/TableTools.css">
+    
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
+    
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.0/css/select.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/css/editor.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.css">
+	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/css/buttons.dataTables.min.css">   
+    -->
+       <link rel="stylesheet" href="<?php echo $baseUrl;?>/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.2/css/select.bootstrap.min.css">
+    
+ 
+    <link rel="stylesheet" href="<?php echo $baseUrl;?>/css/editor.bootstrap.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       	<!-- jvectormap 
 		<link href="<?php //echo $baseUrl;?>/css/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />-->
         <!-- Ionicons 
@@ -64,6 +104,39 @@
 			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
+        
+        
+        
+        
+        
+        
+  	<!--<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>-->
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datatables-tabletools/2.1.5/js/TableTools.min.js"></script>
+    
+    
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.bootstrap.min.js"></script>
+    
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.1.0/js/dataTables.select.min.js"></script>
+	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.editor.min.js"></script>
+    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/js/editor.bootstrap.min.js"></script>
+    
+    
+	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.js"></script>
+	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/demo.js"></script>
+	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/editor-demo.js"></script>
+    
+    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.colVis.min.js"></script>
+    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.buttons.min.js"></script>
+    
+    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/jszip.min.js"></script>
+    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/pdfmake.min.js"></script>
+    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/vfs_fonts.js"></script>
+    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.html5.min.js"></script>
+    
+    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.colVis.min.js"></script>
+        
 	  <?php
       $cs->registerScriptFile($baseUrl.'/js/app.min.js');
 	  $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js');
@@ -77,7 +150,7 @@
       //$cs->registerScriptFile($baseUrl.'/datatables/media/js/jquery.dataTables.min.js');
       
       
-      
+      $cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
 	  $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.foundation.min.js');
       $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.jqueryui.min.js');
 	  $cs->registerScriptFile($baseUrl.'/js/plugins/jquery.dataTables.min.js');

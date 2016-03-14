@@ -3,6 +3,10 @@
     overflow-x: auto;
     overflow-y: visible;
 }
+
+.field-st{
+    float:right;
+}
 </style>
 <?php
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
@@ -89,46 +93,75 @@ switch ($access_level) {
 */
 ?>
 <h1>Manage Ledgers</h1>
+    
+<section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title"></h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+<!-- page script    class="display"-->
+<table id="example"  class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Trade Date</th>
+                <th>Instrument</th>
+                <th>Portfolio</th>
+                <th>Nominal</th>
+                <th>Price</th>
+                <th>Created At</th>
+                <th>Created By</th>
+                <th>Confirmed By</th>
+                <th>Confirmed At</th>
+                <th>Trade Status</th>
+                <th>Note</th>
+                <th>Document</th>
+               <!-- <th>Is Current</th>-->
+            </tr>
+        </thead>
+        <!--
+        <tfoot>
+            <tr>
+                <th>Trade Date</th>
+                <th>Instrument</th>
+                <th>Portfolio</th>
+                <th>Nominal</th>
+                <th>Price</th>
+                <th>Created At</th>
+                <th>Created By</th>
+                <th>Confirmed By</th>
+                <th>Confirmed At</th>
+                <th>Trade Status</th>
+                <th>Note</th>
+                <th>Document</th>
+               <th>Is Current</th>
+            </tr>
+        </tfoot>-->
+    </table>
+</div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
 
-    <!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui.min.css">
-    <link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.css">-->
-    
-    <link rel="stylesheet" href="<?php echo $baseUrl;?>/css/bootstrap.min.css">
-    
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.0/css/select.dataTables.min.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/css/editor.dataTables.min.css">
-	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.css">
-	<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/css/buttons.dataTables.min.css"> -->  
 
-    <!-- jQuery UI 1.10.3 
-    <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui-1.10.3.min.js"></script>
-    <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.js"></script>-->
-    
-	<!--<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.1.0/js/dataTables.select.min.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.editor.min.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/demo.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/editor-demo.js"></script>
-    
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.colVis.min.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.buttons.min.js"></script>
-    
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/jszip.min.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/pdfmake.min.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/vfs_fonts.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.html5.min.js"></script>
-    
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.colVis.min.js"></script>
-	
+
 <script type="text/javascript" language="javascript" class="init">  
 var editor; // use a global for the submit and return data rendering in the examples
 
-(function($){
 $(document).ready(function() {
 
     editor = new $.fn.dataTable.Editor( {
@@ -140,7 +173,10 @@ $(document).ready(function() {
                 name: "ledger.instrument_id",
                 type: "select",
                 ipOpts: instrumentsLoader(),
-                className: 'full'
+                //className: 'full'
+                "attr": {
+  "class": "form-control"
+}
             },
             {
                 label: "Trade Date:",
@@ -205,7 +241,7 @@ $(document).ready(function() {
                 //type: "hidden",
                 //type: "readonly",
                 ipOpts: tradestatusLoader(),
-                className: "form-control",
+                //className: "form-control",
             },
             {
                 label: "Document:",
@@ -237,7 +273,7 @@ $(document).ready(function() {
                 name: "ledger.trade_status_id",
                 type: "select",
                 ipOpts: tradestatusLoader(),
-                className: "form-control",
+                //className: "form-control",
             }
         ]
     } );
@@ -257,14 +293,14 @@ $(document).ready(function() {
    //editor.disable('ledger.trade_status_id');
    //} );
    
-  $('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
-        $.fn.dataTable.table( {visible: true, api: true} ).columns.adjust();
-    } );
+//  $('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
+//        $.fn.dataTable.table( {visible: true, api: true} ).columns.adjust();
+//    } );
     
-$('#myTabs a').click(function (e) {
-  e.preventDefault()
-  $(this).tab('show')
-});
+//$('#myTabs a').click(function (e) {
+//  e.preventDefault()
+//  $(this).tab('show')
+//});
     
          
 var table = $('#example').DataTable( {
@@ -400,12 +436,15 @@ var table = $('#example').DataTable( {
 		}
 	} );
                
-         //table.buttons().container().appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
+
+
+        //$(tableTools.fnContainer()).appendTo('#example_wrapper .col-sm-6:eq(0)');
         
-        // $(tableTools.fnContainer()).appendTo('#example .col-sm-6:eq(0)');
+          table.buttons().container()
+        .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
 } );
 
-}(jQuery));
+
 
 
 
@@ -498,45 +537,4 @@ var table = $('#example').DataTable( {
     });
     return instruments.sort(SortByName);
   }
-
-
-
 </script>
-<!-- page script    class="display"-->
-<table id="example"  class="table table-striped table-bordered" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Trade Date</th>
-                <th>Instrument</th>
-                <th>Portfolio</th>
-                <th>Nominal</th>
-                <th>Price</th>
-                <th>Created At</th>
-                <th>Created By</th>
-                <th>Confirmed By</th>
-                <th>Confirmed At</th>
-                <th>Trade Status</th>
-                <th>Note</th>
-                <th>Document</th>
-               <!-- <th>Is Current</th>-->
-            </tr>
-        </thead>
-        <!--
-        <tfoot>
-            <tr>
-                <th>Trade Date</th>
-                <th>Instrument</th>
-                <th>Portfolio</th>
-                <th>Nominal</th>
-                <th>Price</th>
-                <th>Created At</th>
-                <th>Created By</th>
-                <th>Confirmed By</th>
-                <th>Confirmed At</th>
-                <th>Trade Status</th>
-                <th>Note</th>
-                <th>Document</th>
-               <th>Is Current</th>
-            </tr>
-        </tfoot>-->
-    </table>

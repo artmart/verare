@@ -1,8 +1,8 @@
 <style>
-.btnDeleteRow
-{
-display:none;
-} 
+.datatable-scroll {
+    overflow-x: auto;
+    overflow-y: visible;
+}
 </style>
 <?php
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
@@ -241,14 +241,10 @@ $(document).ready(function() {
             }
         ]
     } );
-  
-  
-    
-  
+
     editor.hide('ledger.trade_status_id');
     <?php if($ledger_status_change == 1) {?>
     $('#example').on( 'click', 'tbody td.editable', function (e){ 
-		//editor.show('ledger.trade_status_id');
 		editor2.inline( this, { fieldName: 'ledger.trade_status_id', onBlur: 'submit'});
 	});
     
@@ -260,16 +256,42 @@ $(document).ready(function() {
    //editor.on( 'onInitEdit', function () {
    //editor.disable('ledger.trade_status_id');
    //} );
+   
+  $('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
+        $.fn.dataTable.table( {visible: true, api: true} ).columns.adjust();
+    } );
+    
+$('#myTabs a').click(function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+});
+    
          
 var table = $('#example').DataTable( {
-        //dom: "Bfrtip",
+    
+  
+        //dom: '<"clear">&lt;<"clear">Bfrtip<"clear">',
+        //"Dom": '<"H"lfr>t<"F"ip>' ,
+        //sDom: 'lfrtip',
+        dom: "lBfrtip",
         displayLength: 10,
         filter: true,
         paginate: true,
         sort: true,
         info: false,
+        //scrollX: '100%',
+        //scrollCollapse: true,
+        //paging:         false,
+        "bPaginate": true,
+        //"bSort": true,
+        //"bFilter": false,
+        bJQueryUI: false,
+        bProcessing: true,
+        sScrollX: "100%",
+        sScrollXInner: "110%",
+        bScrollCollapse: true,
         
-        dom: '<"clear">&lt;<"clear">Bfrtip<"clear">', 
+        
         //colVis: { exclude: [ 1 ] },
         //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
         ajax: "ledger/ledger",
@@ -328,7 +350,7 @@ var table = $('#example').DataTable( {
             
         ],
         select: true,
-
+    
 
         buttons: [
             /*{ extend: "create", editor: editor },
@@ -356,8 +378,10 @@ var table = $('#example').DataTable( {
             { extend: 'colvis', collectionLayout: 'fixed two-column',},
             
         ],
+       
                 
     } ); 
+
 	
       table.on( 'select', function ( e, dt, type, indexes ) {
 		if ( type === 'row' ) {
@@ -376,8 +400,9 @@ var table = $('#example').DataTable( {
 		}
 	} );
                
-         table.buttons().container()
-        .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
+         //table.buttons().container().appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
+        
+        // $(tableTools.fnContainer()).appendTo('#example .col-sm-6:eq(0)');
 } );
 
 }(jQuery));
@@ -496,6 +521,7 @@ var table = $('#example').DataTable( {
                <!-- <th>Is Current</th>-->
             </tr>
         </thead>
+        <!--
         <tfoot>
             <tr>
                 <th>Trade Date</th>
@@ -510,7 +536,7 @@ var table = $('#example').DataTable( {
                 <th>Trade Status</th>
                 <th>Note</th>
                 <th>Document</th>
-                <!--<th>Is Current</th>-->
+               <th>Is Current</th>
             </tr>
-        </tfoot>
+        </tfoot>-->
     </table>

@@ -25,14 +25,17 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?php echo $baseUrl;?>/img/icons/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="<?php echo $baseUrl;?>/img/icons/apple-touch-icon-57-precomposed.png">
 	<?php  
+      
+	  //$cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
+      $cs->registerCssFile($baseUrl.'/css/templatemo-style.css');
       $cs->registerCssFile($baseUrl.'/css/AdminLTE.min.css');
-	  $cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
       $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
       $cs->registerCssFile($baseUrl.'/css/animate.min.css');
       //$cs->registerCssFile($baseUrl.'/css/font-awesome.min.css');
       //$cs->registerCssFile($baseUrl.'/css/ionicons.min.css');
-	  $cs->registerCssFile($baseUrl.'/css/abound.css');
-      $cs->registerCssFile($baseUrl.'/css/templatemo-style.css');
+      
+	  //$cs->registerCssFile($baseUrl.'/css/abound.css');
+      
 	  //$cs->registerCssFile($baseUrl.'/css/style-blue.css');
 	  ?>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -86,12 +89,16 @@
 <!-- Require the navigation -->
 <?php require_once('tpl_navigation.php')?>
 </section><!-- /#navigation-main -->
-    
+<br />
+<br />
+<br />    
 <section class="main-body">
-    <div class="container-fluid">
+<div class="row-fluid">
+    <div class="container">
             <!-- Include content pages -->
             <?php echo $content; ?>
     </div>
+</div>
 </section>
 
 <!-- Require the footer -->

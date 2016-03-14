@@ -31,7 +31,7 @@
       $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
       $cs->registerCssFile($baseUrl.'/css/animate.min.css');
       //$cs->registerCssFile($baseUrl.'/css/font-awesome.min.css');
-      //$cs->registerCssFile($baseUrl.'/css/ionicons.min.css');
+      $cs->registerCssFile($baseUrl.'/css/ionicons.min.css');
       
 	  //$cs->registerCssFile($baseUrl.'/css/abound.css');
       
@@ -75,6 +75,13 @@
 	  //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.masonry.min.js');
 	  //$cs->registerScriptFile($baseUrl.'/js/styleswitcher.js');
       //$cs->registerScriptFile($baseUrl.'/datatables/media/js/jquery.dataTables.min.js');
+      
+      
+      
+	  $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.foundation.min.js');
+      $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.jqueryui.min.js');
+	  $cs->registerScriptFile($baseUrl.'/js/plugins/jquery.dataTables.min.js');
+      $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.bootstrap.min.js');
       
       $cs->registerScriptFile($baseUrl.'/js/wow.min.js');
 	  $cs->registerScriptFile($baseUrl.'/js/jquery.singlePageNav.min.js');

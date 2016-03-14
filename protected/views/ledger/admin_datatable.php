@@ -174,29 +174,30 @@ $(document).ready(function() {
                 type: "select",
                 ipOpts: instrumentsLoader(),
                 //className: 'full'
-                "attr": {
-  "class": "form-control"
-}
+                "attr": {"class": "form-control"}
             },
             {
                 label: "Trade Date:",
                 name: "ledger.trade_date",
-                type: "datetime"
+                type: "datetime",
+                "attr": {"class": "form-control"}
             },
             {
                 label: "Portfolio:",
                 name: "ledger.portfolio_id",
                 type: "select",
                 ipOpts: portfolioLoader(),
-                className: "form-control",
+                "attr": {"class": "form-control"}
             },
             
              {
                 label: "Nominal:",
-                name: "ledger.nominal"
+                name: "ledger.nominal",
+                "attr": {"class": "form-control"}
             }, {
                 label: "Price:",
-                name: "ledger.price"
+                name: "ledger.price",
+                "attr": {"class": "form-control"}
             }, 
              /*{
                 label: "Created At:",
@@ -223,7 +224,8 @@ $(document).ready(function() {
             {
                 label: "Note:",
                 name: "ledger.note",
-                type: "textarea"
+                type: "textarea",
+                "attr": {"class": "form-control"}
             },
             
             
@@ -231,6 +233,7 @@ $(document).ready(function() {
                 label: "is_current",
                 name: "ledger.is_current",
                 type: "hidden",
+                "attr": {"class": "form-control"}
             },
             
             
@@ -241,7 +244,7 @@ $(document).ready(function() {
                 //type: "hidden",
                 //type: "readonly",
                 ipOpts: tradestatusLoader(),
-                //className: "form-control",
+                "attr": {"class": "form-control"}
             },
             {
                 label: "Document:",
@@ -257,7 +260,8 @@ $(document).ready(function() {
                // }
               
                 clearText: "Clear",
-                noImageText: 'No Document'
+                noImageText: 'No Document',
+                "attr": {"class": "form-control"}
             }
         ]
     } );

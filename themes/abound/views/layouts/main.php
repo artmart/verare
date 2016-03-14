@@ -59,13 +59,14 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.css">
 	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/css/buttons.dataTables.min.css">   
     -->
-       <link rel="stylesheet" href="<?php echo $baseUrl;?>/css/bootstrap.min.css">
+     <link rel="stylesheet" href="<?php echo $baseUrl;?>/css/editor.bootstrap.min.css">
+       <link rel="stylesheet" href="<?php //echo $baseUrl;?>/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.2/css/select.bootstrap.min.css">
     
  
-    <link rel="stylesheet" href="<?php echo $baseUrl;?>/css/editor.bootstrap.min.css">
+   
       
       
       
@@ -120,7 +121,7 @@
     
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.1.0/js/dataTables.select.min.js"></script>
 	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.editor.min.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/js/editor.bootstrap.min.js"></script>
+    <!--<script type="text/javascript" language="javascript" src="<?php //echo $baseUrl;?>/js/editor.bootstrap.min.js"></script>-->
     
     
 	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.js"></script>

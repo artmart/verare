@@ -28,16 +28,16 @@
 	  //$cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
       $cs->registerCssFile($baseUrl.'/css/templatemo-style.css');
       $cs->registerCssFile($baseUrl.'/css/AdminLTE.min.css');
-      $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
+      
       $cs->registerCssFile($baseUrl.'/css/animate.min.css');
       //$cs->registerCssFile($baseUrl.'/css/font-awesome.min.css');
       $cs->registerCssFile($baseUrl.'/css/ionicons.min.css');
-      
+      $cs->registerCssFile($baseUrl.'/css/bootstrap.min.css');
 	  //$cs->registerCssFile($baseUrl.'/css/abound.css');
       
 	  //$cs->registerCssFile($baseUrl.'/css/style-blue.css');
 	  ?>
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+     
       
       
       
@@ -51,22 +51,22 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/datatables-tabletools/2.1.5/css/TableTools.css">
     
     
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
+   <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">-->
     
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.0/css/select.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/css/editor.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.css">
-	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/css/buttons.dataTables.min.css">   
-    -->
-     <link rel="stylesheet" href="<?php echo $baseUrl;?>/css/editor.bootstrap.min.css">
-       <link rel="stylesheet" href="<?php //echo $baseUrl;?>/css/bootstrap.min.css">
+    
+  
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.2/css/select.bootstrap.min.css">
-    
- 
-   
+    <link rel="stylesheet" href="<?php echo $baseUrl;?>/css/editor.bootstrap.min.css">
+    <link rel="stylesheet" href="<?php //echo $baseUrl;?>/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+   <link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.11/integration/font-awesome/dataTables.fontAwesome.css">
+  <!-- <link rel="stylesheet" href="<?php //echo $baseUrl;?>/css/font-awesome.min.css">-->
       
       
       
@@ -111,8 +111,8 @@
         
         
         
-  	<!--<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>-->
+  	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
     <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datatables-tabletools/2.1.5/js/TableTools.min.js"></script>
     
     
@@ -154,8 +154,8 @@
       $cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
 	  $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.foundation.min.js');
       $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.jqueryui.min.js');
-	  $cs->registerScriptFile($baseUrl.'/js/plugins/jquery.dataTables.min.js');
-      $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.bootstrap.min.js');
+	  //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.dataTables.min.js');
+      //$cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.bootstrap.min.js');
       
       $cs->registerScriptFile($baseUrl.'/js/wow.min.js');
 	  $cs->registerScriptFile($baseUrl.'/js/jquery.singlePageNav.min.js');

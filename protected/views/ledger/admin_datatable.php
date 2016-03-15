@@ -4,10 +4,54 @@
     overflow-y: visible;
 }
 
-.field-st{
-    float:right;
+#example_length{
+    float:left;
 }
+
+/*
+table.dataTable thead th.sorting:after {
+    content: "\f0dc";
+    color: #ddd;
+    font-size: 0.8em;
+    padding-top: 0.12em;
+}
+table.dataTable thead th.sorting_asc:after {
+    content: "\f0de";
+}
+table.dataTable thead th.sorting_desc:after {
+    content: "\f0dd";
+}
+
+
+table.dataTable thead th.sorting:after {
+    content: "\f0dc";
+    color: #ddd;
+    font-size: 0.8em;
+    padding-top: 0.12em;
+}
+table.dataTable thead th.sorting_asc:after {
+    content: "\f0de";
+}
+table.dataTable thead th.sorting_desc:after {
+    content: "\f0dd";
+}
+
+
+table.dataTable thead .sorting:after {
+    opacity: 0.2;
+    content: "\e150"; 
+}
+table.dataTable thead .sorting_asc:after {
+    content: "\e155"; 
+}
+table.dataTable thead .sorting_desc:after {
+    content: "\e156"; 
+}
+*/
+
 </style>
+
+
 <?php
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
 $baseUrl = Yii::app()->theme->baseUrl;
@@ -309,20 +353,23 @@ $(document).ready(function() {
          
 var table = $('#example').DataTable( {
     
-  
+        renderer: "bootstrap",
         //dom: '<"clear">&lt;<"clear">Bfrtip<"clear">',
         //"Dom": '<"H"lfr>t<"F"ip>' ,
         //sDom: 'lfrtip',
-        dom: "lBfrtip",
+        
+        dom: 'lBfrtip',
         displayLength: 10,
         filter: true,
         paginate: true,
-        sort: true,
+        sort:true,
+        //bsort: true,
+        //'bSortable' : true,
         info: false,
         //scrollX: '100%',
         //scrollCollapse: true,
         //paging:         false,
-        "bPaginate": true,
+        //"bPaginate": true,
         //"bSort": true,
         //"bFilter": false,
         bJQueryUI: false,
@@ -442,7 +489,7 @@ var table = $('#example').DataTable( {
                
 
 
-        //$(tableTools.fnContainer()).appendTo('#example_wrapper .col-sm-6:eq(0)');
+        $(tableTools.fnContainer()).appendTo('#example_wrapper .col-sm-6:eq(0)');
         
           table.buttons().container()
         .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );

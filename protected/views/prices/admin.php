@@ -70,7 +70,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     //'id'=>"example1",
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
-    'template' => "{items}\n<div class=\"row-fluid\"><div class=\"span\">{pager}</div><div class=\"span\">{summary}</div></div>",
+    'template' =>"{items}", // "{items}\n<div class=\"span\">{pager}</div><div class=\"span\">{summary}</div>",
     'enablePagination' => true,
     
 	'type' => TbHtml::GRID_TYPE_BORDERED,
@@ -110,7 +110,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                 }else{ return 'No';}
             },
             'filter'=>CHtml::listData([['id'=>'Yes', 'instrument'=>'Yes'], ['id'=>'No', 'instrument'=>'No']],'id', 'instrument'),
-            'htmlOptions'=>array('width'=>'20px'),
+            'htmlOptions'=>array('width'=>'30px'),
 			),
 		'created_at',
 		array(

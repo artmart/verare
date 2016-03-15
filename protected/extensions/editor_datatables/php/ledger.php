@@ -177,8 +177,8 @@
                     'file'=>$time
                 ) )
                 ->validator( function ( $file ) {
-                    return $file['size'] >= 500000 ?
-                        "Files must be smaller than 50K" :
+                    return $file['size'] >= 250000 ?
+                        "Files must be smaller than 250KB" :
                         null;
                 } )
                 ->allowedExtensions( [ 'png', 'jpg', 'gif', 'xlsx', 'pdf', 'doc', 'xls', 'docx' ], "Please upload document with correct format" )

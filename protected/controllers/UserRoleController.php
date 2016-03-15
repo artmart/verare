@@ -6,7 +6,7 @@ class UserRoleController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout='//layouts/main';
 
 	/**
 	 * @return array action filters
@@ -71,7 +71,8 @@ class UserRoleController extends Controller
 		if(isset($_POST['UserRole']))
 		{
 			$model->attributes=$_POST['UserRole'];
-              
+          
+          //Ledger//   
           $ledger_create = 0; 
           $ledger_edit = 0; 
           $ledger_delete = 0; 
@@ -83,6 +84,20 @@ class UserRoleController extends Controller
           
           $ledgar_access = ['create'=>$ledger_create, 'edit' =>$ledger_edit, 'delete' =>$ledger_delete, 'status_change'=>$ledger_status_change ];
 		  $model->ledger_access_level = json_encode($ledgar_access);
+            
+          //counterparties// 
+          $counterpart_create = 0; 
+          $counterpart_edit = 0; 
+          $counterpart_delete = 0; 
+          //$counterpart_status_change = 0;
+          if(isset($_REQUEST["counterpart_create"])){$counterpart_create = $_REQUEST["counterpart_create"]; }
+          if(isset($_REQUEST["counterpart_edit"])){$counterpart_edit = $_REQUEST["counterpart_edit"]; }
+          if(isset($_REQUEST["counterpart_delete"])){$counterpart_delete = $_REQUEST["counterpart_delete"]; }
+          if(isset($_REQUEST["counterpart_status_change"])){$counterpart_status_change = $_REQUEST["counterpart_status_change"]; }
+          
+          $counterpart_access = ['create'=>$counterpart_create, 'edit' =>$counterpart_edit, 'delete' =>$counterpart_delete /*,  'status_change'=>$counterpart_status_change */];
+		  $model->counterparties_access_level = json_encode($counterpart_access);   
+            
             
             
 			if($model->save())
@@ -111,6 +126,7 @@ class UserRoleController extends Controller
 		{
 		  $model->attributes=$_POST['UserRole'];
           
+          //Ledger//
           $ledger_create = 0; 
           $ledger_edit = 0; 
           $ledger_delete = 0; 
@@ -122,6 +138,20 @@ class UserRoleController extends Controller
           
           $ledgar_access = ['create'=>$ledger_create, 'edit' =>$ledger_edit, 'delete' =>$ledger_delete, 'status_change'=>$ledger_status_change ];
 		  $model->ledger_access_level = json_encode($ledgar_access);
+          
+          //counterparties// 
+          $counterpart_create = 0; 
+          $counterpart_edit = 0; 
+          $counterpart_delete = 0; 
+          //$counterpart_status_change = 0;
+          if(isset($_REQUEST["counterpart_create"])){$counterpart_create = $_REQUEST["counterpart_create"]; }
+          if(isset($_REQUEST["counterpart_edit"])){$counterpart_edit = $_REQUEST["counterpart_edit"]; }
+          if(isset($_REQUEST["counterpart_delete"])){$counterpart_delete = $_REQUEST["counterpart_delete"]; }
+          if(isset($_REQUEST["counterpart_status_change"])){$counterpart_status_change = $_REQUEST["counterpart_status_change"]; }
+          
+          $counterpart_access = ['create'=>$counterpart_create, 'edit' =>$counterpart_edit, 'delete' =>$counterpart_delete /*,  'status_change'=>$counterpart_status_change */];
+		  $model->counterparties_access_level = json_encode($counterpart_access);  
+          
 			if($model->save())
 				//$this->redirect(array('view','id'=>$model->id));
    	            $this->redirect(['admin']);

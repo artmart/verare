@@ -14,32 +14,34 @@ $baseUrl = Yii::app()->theme->baseUrl;
 
 //$access_level = 5;
 $access_buttons = '';
-$ledgar_access = '';
-/*
+$counterpart_access = '';
+
 if(isset(Yii::app()->user->user_role)){
               $user_rols = UserRole::model()->findByPk(Yii::app()->user->user_role);
               if($user_rols){
-                //$access_level = json_decode($user_rols->ledger_access_level);
+                //$access_level = json_decode($user_rols->counterparties_access_level);
                
-                  $ledger_create = 0;
-                  $ledger_edit = 0;
-                  $ledger_delete = 0;
-                  $ledger_status_change = 0;
-                  if(isset($user_rols->ledger_access_level) && $user_rols->ledger_access_level !== ''){
-                    $ledgar_access = json_decode($user_rols->ledger_access_level);
+                  $counterpart_create = 0;
+                  $counterpart_edit = 0;
+                  $counterpart_delete = 0;
+                  //$counterpart_status_change = 0;
+                  if(isset($user_rols->counterparties_access_level) && $user_rols->counterparties_access_level !== ''){
+                    $counterpart_access = json_decode($user_rols->counterparties_access_level);
                   
-                  $ledger_create = $ledgar_access->create;
-                  $ledger_edit = $ledgar_access->edit;
-                  $ledger_delete = $ledgar_access->delete;
-                  $ledger_status_change = $ledgar_access->status_change;
+                  $counterpart_create = $counterpart_access->create;
+                  $counterpart_edit = $counterpart_access->edit;
+                  $counterpart_delete = $counterpart_access->delete;
+                  //$counterpart_status_change = $counterpart_access->status_change;
                   }
                 }
 }
 $access_buttons = '';
 
-if($ledger_create == 1){$access_buttons .= '{ extend: "create", editor: editor }, ';}
-if($ledger_edit == 1){$access_buttons .= '{ extend: "edit",   editor: editor }, ';}
-if($ledger_delete == 1){$access_buttons .= '{
+if($counterpart_create == 1){$access_buttons .= '{ extend: "create", editor: editor }, ';}
+if($counterpart_edit == 1){$access_buttons .= '{ extend: "edit",   editor: editor }, ';}
+if($counterpart_delete == 1){$access_buttons .= ' { extend: "remove", editor: editor }, ';}
+/*
+if($counterpart_delete == 1){$access_buttons .= '{
                                                 extend: "selectedSingle",
                                                 text: "Delete",
                                                 action: function ( e, dt, node, config ) {
@@ -49,8 +51,9 @@ if($ledger_delete == 1){$access_buttons .= '{
                                                         .submit();
                                                 }
                                             }, '; 
-                                            }   
-*/
+                                            } 
+                                            */  
+
 ?>
 <h1>Manage Counterparties</h1>
     
@@ -193,9 +196,6 @@ $(document).ready(function() {
 		editor2.inline( this, { fieldName: 'counterparties.trade_status_id', onBlur: 'submit'});
 	});
     
-
-
-        
     <?php } */?>
         
    //editor.on( 'onInitEdit', function () {
@@ -274,10 +274,12 @@ var table = $('#example').DataTable( {
     
 
         buttons: [
+        /*
             { extend: "create", editor: editor },
             { extend: "edit",   editor: editor },
             { extend: "remove", editor: editor },
-            <?php //echo $access_buttons; ?>
+        */
+            <?php echo $access_buttons; ?>
             {
                 extend: 'copyHtml5',
                 exportOptions: {

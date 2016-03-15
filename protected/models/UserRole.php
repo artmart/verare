@@ -37,8 +37,8 @@ class UserRole extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('user_role, ledger_access_level', 'required'),
-			array('trade_role, users_access_level, user_roles_access_level, portfolios_access_level, instruments_access_level, counterparties_access_level, documents_access_level, prices_access_level, audit_trails_access_level, grouping_access_level', 'numerical', 'integerOnly'=>true),
-			array('user_role, ledger_access_level', 'length', 'max'=>255),
+			array('trade_role, users_access_level, user_roles_access_level, portfolios_access_level, instruments_access_level, documents_access_level, prices_access_level, audit_trails_access_level, grouping_access_level', 'numerical', 'integerOnly'=>true),
+			array('user_role, ledger_access_level, counterparties_access_level', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, trade_role, user_role, ledger_access_level, users_access_level, user_roles_access_level, portfolios_access_level, instruments_access_level, counterparties_access_level, documents_access_level, prices_access_level, audit_trails_access_level, grouping_access_level', 'safe', 'on'=>'search'),

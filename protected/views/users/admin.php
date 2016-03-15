@@ -40,10 +40,14 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 )); ?>
 </div><!-- search-form -->
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php 
+$this->widget('bootstrap.widgets.TbGridView', array(
+//$this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'users-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+    'template' => "{items}",
+	'type' => TbHtml::GRID_TYPE_BORDERED,
 	'columns'=>array(
 		'id',
 		'username',
@@ -60,4 +64,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 			'class'=>'CButtonColumn',
 		),
 	),
-)); ?>
+)); 
+
+
+
+//'mergeColumns' => array('Week', 'Monday'),
+	//'filter'=>$model,
+	//'template' => "{items}",
+	//'type' => TbHtml::GRID_TYPE_BORDERED,
+?>

@@ -73,10 +73,14 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 )); ?>
 </div><!-- search-form -->
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php 
+$this->widget('bootstrap.widgets.TbGridView', array(
+//$this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'user-role-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+    'template' => "{items}",
+	'type' => TbHtml::GRID_TYPE_BORDERED,
 	'columns'=>array(
 		//'id',
 		//'trade_role',
@@ -86,7 +90,8 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		//'trade_cancellation',
 		//'price_administration',
 		//'instrument_administration',
-		//'ledger_access_level',        
+		//'ledger_access_level', 
+        /*       
         array(
 			'name' => 'ledger_access_level',
             //'header' => 'Customer',
@@ -206,10 +211,11 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 			'filter'=>CHtml::listData(AccessLevels::model()->findAll(),'id', 'access_level'),
             //'htmlOptions'=>array('width'=>'170px'),
 			),
-		
+		*/
 		array(
 			'class'=>'CButtonColumn',
             'template' => $access_buttons,
+            'htmlOptions'=>array('width'=>'230px'),
 		),
 	),
 )); ?>

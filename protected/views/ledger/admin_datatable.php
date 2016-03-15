@@ -166,6 +166,7 @@ switch ($access_level) {
                 <th>Confirmed At</th>
                 <th>Trade Status</th>
                 <th>Note</th>
+                <th>Trade Code</th>
                 <th>Document</th>
                <!-- <th>Is Current</th>-->
             </tr>
@@ -404,7 +405,7 @@ var table = $('#example').DataTable( {
             { data: "trade_status.trade_status", editField: "ledger.trade_status_id", className: 'editable'    },
            // { data: "documents.file" },
             { data: "ledger.note" },
-            
+            { data: "trade_code" },
             
             {
                 data: "documents",

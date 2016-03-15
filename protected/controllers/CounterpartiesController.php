@@ -6,7 +6,7 @@ class CounterpartiesController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout='//layouts/main';
 
 	/**
 	 * @return array action filters
@@ -32,7 +32,7 @@ class CounterpartiesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'counterparties'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -160,7 +160,7 @@ class CounterpartiesController extends Controller
 
 	/**
 	 * Manages all models.
-	 */
+	 
 	public function actionAdmin()
 	{
 		$model=new Counterparties('search');
@@ -168,9 +168,17 @@ class CounterpartiesController extends Controller
 		if(isset($_GET['Counterparties']))
 			$model->attributes=$_GET['Counterparties'];
 
-		$this->render('admin',array(
-			'model'=>$model,
-		));
+		$this->render('admin',array('model'=>$model,));
+	}
+    */
+    
+    public function actionCounterparties(){
+           require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/counterparties.php');
+    }
+    
+    public function actionAdmin()
+	{
+		$this->render('admin_datatable');
 	}
 
 	/**

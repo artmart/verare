@@ -64,18 +64,54 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 <?php 
 $this->widget('bootstrap.widgets.TbGridView', array(
 //$this->widget('zii.widgets.grid.CGridView', array(
+    //'type'=>'striped bordered condensed',
+
 	'id'=>'prices-grid',
     //'id'=>"example1",
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
-    'template' => "{items}",
+    'template' => "{items}\n<div class=\"row-fluid\"><div class=\"span\">{pager}</div><div class=\"span\">{summary}</div></div>",
+    'enablePagination' => true,
+    
 	'type' => TbHtml::GRID_TYPE_BORDERED,
 	'columns'=>array(
 		'id',
 		'trade_date',
-		'instrument_id',
-		'price',
-		'is_current',
+		//'instrument_id',
+        array(
+			'name' => 'instrument_id',
+            'header' => 'Instrument',
+			'type'=>'raw',
+            'value'=>function($data){
+				$ss = Instruments::model()->findByAttributes(array("id"=>$data->instrument_id));
+                if($ss){return $ss->instrument;} else{return '-';};
+            },
+			'filter'=>CHtml::listData(Instruments::model()->findAll(),'id', 'instrument'),
+            'htmlOptions'=>array('width'=>'150px'),
+			),
+		//'price',
+        array(
+			'name' => 'price',
+            'header' => 'Price',
+			'type'=>'raw',
+            'value'=>function($data){
+			     return number_format($data->price, 2);
+            },
+            'htmlOptions'=>array('width'=>'30px'),
+			),
+		//'is_current',
+         array(
+			'name' => 'is_current',
+            'header' => 'Is Current',
+			'type'=>'raw',
+            'value'=>function($data){
+                if($data->is_current == 1){
+                    return 'Yes';
+                }else{ return 'No';}
+            },
+            'filter'=>CHtml::listData([['id'=>'Yes', 'instrument'=>'Yes'], ['id'=>'No', 'instrument'=>'No']],'id', 'instrument'),
+            'htmlOptions'=>array('width'=>'20px'),
+			),
 		'created_at',
 		array(
 			'class'=>'CButtonColumn',

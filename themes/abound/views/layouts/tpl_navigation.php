@@ -32,7 +32,7 @@ if(isset(Yii::app()->user->user_role)){
               //Admin Menu//
               if(Yii::app()->getModule('user')->isAdmin())
               {
-                $usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
+                //$usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
                 $usermenu[]=['label'=>'Portfolio UserS with Roles', 'url'=>['/portfolioUserRoles/admin']];
                 $usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
                 $usermenu[]=['label'=>'Instrument Types', 'url'=>['/instrumentTypes/admin']];

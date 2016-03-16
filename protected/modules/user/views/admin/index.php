@@ -36,16 +36,26 @@ $('.search-form form').submit(function(){
 )); ?>
 </div><!-- search-form -->
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php 
+$this->widget('bootstrap.widgets.TbGridView', array(
+//$this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'user-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+    'template' => "{items}\n{pager}{summary}",
+    'enablePagination' => true,
+    
+	'type' => TbHtml::GRID_TYPE_BORDERED,
+    //'pagerCssClass' => 'CustomPager',
+   //'rowCssClass' => 'CustomPager',
 	'columns'=>array(
-		array(
+		/*array(
 			'name' => 'id',
 			'type'=>'raw',
 			'value' => 'CHtml::link(CHtml::encode($data->id),array("admin/update","id"=>$data->id))',
+            'htmlOptions'=>array('width'=>'30px'),
 		),
+        */
 		array(
 			'name' => 'username',
 			'type'=>'raw',
@@ -65,6 +75,10 @@ $('.search-form form').submit(function(){
 		//),
         array(
 			'name'=>'user_role',
+            'value'=>function($data){
+				$ss = UserRole::model()->findByAttributes(array("id"=>$data->user_role));
+                if($ss){return $ss->user_role;} else{return '-';};
+            },
 			//'value'=>'User::itemAlias("AdminStatus",$data->superuser)',
 			//'filter'=>User::itemAlias("AdminStatus"),
 		),
@@ -75,6 +89,7 @@ $('.search-form form').submit(function(){
 		),
 		array(
 			'class'=>'CButtonColumn',
+            'htmlOptions'=>array('width'=>'200px'),
 		),
 	),
 )); ?>

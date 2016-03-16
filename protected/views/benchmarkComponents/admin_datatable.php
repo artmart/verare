@@ -15,7 +15,7 @@ $baseUrl = Yii::app()->theme->baseUrl;
 //$access_level = 5;
 $access_buttons = '';
 $counterpart_access = '';
-
+/*
 if(isset(Yii::app()->user->user_role)){
               $user_rols = UserRole::model()->findByPk(Yii::app()->user->user_role);
               if($user_rols){
@@ -40,6 +40,7 @@ $access_buttons = '';
 if($counterpart_create == 1){$access_buttons .= '{ extend: "create", editor: editor }, ';}
 if($counterpart_edit == 1){$access_buttons .= '{ extend: "edit",   editor: editor }, ';}
 if($counterpart_delete == 1){$access_buttons .= ' { extend: "remove", editor: editor }, ';}
+*/
 /*
 if($counterpart_delete == 1){$access_buttons .= '{
                                                 extend: "selectedSingle",
@@ -55,7 +56,7 @@ if($counterpart_delete == 1){$access_buttons .= '{
                                             */  
 
 ?>
-<h1>Manage Benchmarks</h1>
+<h1>Manage Benchmark Components</h1>
     
 <section class="content">
       <div class="row">
@@ -75,8 +76,9 @@ if($counterpart_delete == 1){$access_buttons .= '{
         <thead>
             <tr>
                 <th>Benchmark</th>
-                <th>Client</th>
-                <th>Portfolio</th>
+                <th>Instrument</th>
+                <!--<th>Is Instrument or Portfolio</th>-->
+                <th>Weight</th>
             </tr>
         </thead>
         <!--
@@ -108,27 +110,36 @@ var editor; // use a global for the submit and return data rendering in the exam
 $(document).ready(function() {
 
     editor = new $.fn.dataTable.Editor( {
-        ajax: 'benchmarks/benchmarks',
+        ajax: 'benchmarkcomponents/benchmarkcomponents',
         table: "#example",
         fields: [ 
             {
-                label: "Benchmark Name:",
-                name: "benchmark_name",
+                label: "Benchmark:",
+                name: "benchmark_components.benchmark_id",
+                type: "select",
+                ipOpts: benchmarksLoader(),
                 "attr": {"class": "form-control"}
             },            
             {
-                label: "Client:",
-                name: "benchmarks.client_id",
+                label: "Instrument:",
+                name: "benchmark_components.instrument_id",
                 type: "select",
-                ipOpts: clientsLoader(),
+                ipOpts: instrumentsLoader(),
                 //className: 'full'
                 "attr": {"class": "form-control"}
             },
+         
+         /*   {
+                label: "Is Instrument or Portfolio:",
+                name: "benchmark_components.is_instrument_or_portfolio",
+                //type: "select",
+                //ipOpts: portfolioLoader(),
+                "attr": {"class": "form-control"}
+            },
+          */
             {
-                label: "Portfolio:",
-                name: "portfolios.portfolio_id",
-                type: "select",
-                ipOpts: portfolioLoader(),
+                label: "Weight:",
+                name: "benchmark_components.weight",
                 "attr": {"class": "form-control"}
             },
         ]
@@ -165,19 +176,17 @@ var table = $('#example').DataTable( {
         
         //colVis: { exclude: [ 1 ] },
         //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
-        ajax: "benchmarks/benchmarks",
+        ajax: "benchmarkcomponents/benchmarkcomponents",
         columns: [
-            { data: "benchmark_name" },
-            { data: "clients.client_name" },
-            //{ data: "counterparties.portfolio" },
-            { data: "portfolios.portfolio" },
-            //{ data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
-            //{ data: "benchmarks.contact_tel" },
-            //{ data: "benchmarks.contact_mail" },
-           // { data: "trade_status.trade_status", editField: "ledger.trade_status_id", className: 'editable'    },
-            //{ data: "benchmarks.address" },
-            
-           
+            { data: "benchmarks.benchmark_name" },
+            { data: "instruments.instrument" },
+            //{ data: "benchmark_components.is_instrument_or_portfolio" },
+           /* { data: "benchmark_components.is_instrument_or_portfolio", render: function ( data, type, row ) {
+                if(data.is_instrument_or_portfolio === '0'){return 'Yes';}else{return 'No';}
+                //return data.first_name+' '+data.last_name;
+                }
+            },*/
+            { data: "benchmark_components.weight" },     
         ],
         select: true,
     
@@ -226,9 +235,9 @@ var table = $('#example').DataTable( {
     return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
   }
 
-  function clientsLoader() {
-    var instruments = [{'value': '0', 'label': '-- Select Client --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/clients/clients'; ?>';
+  function benchmarksLoader() {
+    var benchmarks = [{'value': '0', 'label': '-- Select Benchmark --'}];
+    var path1 = '<?php echo Yii::app()->baseUrl.'/benchmarks/benchmarks'; ?>';
     $.ajax({
         url: path1,
         async: false,
@@ -238,18 +247,19 @@ var table = $('#example').DataTable( {
             for(var a=0; a<data.length; a++) {
               obj = {
                 "value" : data[a]['id'],
-                "label" : data[a]['client_name']
+                "label" : data[a]['benchmark_name']
               };
-              instruments.push(obj);
+              benchmarks.push(obj);
             }
         }
     });
-    return instruments.sort(SortByName);
+    return benchmarks.sort(SortByName);
   }
   
-    function portfolioLoader() {
-    var instruments = [{'value': '0', 'label': '-- Select Portfolio --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/portfolios/portfolios'; ?>';
+  
+   function instrumentsLoader() {
+    var instruments = [{'value': '0', 'label': '-- Select instrument --'}];
+    var path1 = '<?php echo Yii::app()->baseUrl.'/instruments/instruments'; ?>';
     $.ajax({
         url: path1,
         async: false,
@@ -259,7 +269,7 @@ var table = $('#example').DataTable( {
             for(var a=0; a<data.length; a++) {
               obj = {
                 "value" : data[a]['id'],
-                "label" : data[a]['portfolio']
+                "label" : data[a]['instrument']
               };
               instruments.push(obj);
             }

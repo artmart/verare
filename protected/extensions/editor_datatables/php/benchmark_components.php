@@ -15,21 +15,23 @@
     //Build our Editor instance and process the data coming from _POST
     $time = date("fYhis");
    // $extension = end(explode('.', Upload::DB_FILE_NAME));
-    Editor::inst( $db, 'benchmarks', 'id', $time, $client_id)
+    Editor::inst( $db, 'benchmark_components', 'id', $time, $client_id)
         ->fields(
-            Field::inst( 'benchmarks.client_id' ),
-            Field::inst( 'benchmarks.id' )->validator( 'Validate::notEmpty' ),
+            Field::inst( 'benchmark_components.benchmark_id' ),
+            Field::inst( 'benchmark_components.instrument_id' )->validator( 'Validate::notEmpty' ),
             //Field::inst( 'benchmarks.name' )->validator( 'Validate::notEmpty' ),
             //Field::inst( 'benchmarks.client_id' )->validator( 'Validate::notEmpty' ),
-            Field::inst( 'benchmarks.portfolio_id' ),
-            Field::inst( 'benchmarks.benchmark_name as benchmark_name' ),
+            Field::inst( 'benchmark_components.is_instrument_or_portfolio' ),
+            Field::inst( 'benchmark_components.weight' ),
+            Field::inst( 'benchmarks.benchmark_name' ),
+            Field::inst( 'instruments.instrument' )
             //Field::inst( 'clients.id' ),
-            Field::inst( 'clients.client_name' ),
-            Field::inst( 'portfolios.portfolio' )  
+            //Field::inst( 'clients.client_name' ),
+            //Field::inst( 'portfolios.portfolio' )  
     )   
-        ->leftJoin( 'clients', 'clients.id', '=', 'benchmarks.client_id' )
-        ->leftJoin( 'portfolios', 'portfolios.id', '=', 'benchmarks.portfolio_id' )          
-        ->where( 'benchmarks.client_id', $client_id )
+        ->leftJoin( 'benchmarks', 'benchmarks.id', '=', 'benchmark_components.benchmark_id' )
+        ->leftJoin( 'instruments', 'instruments.id', '=', 'benchmark_components.instrument_id' )          
+       // ->where( 'benchmarks.client_id', $client_id )
         ->process( $_POST )
         ->json();  
 ?>

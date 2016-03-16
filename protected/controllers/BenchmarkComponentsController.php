@@ -6,7 +6,7 @@ class BenchmarkComponentsController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout='//layouts/main';
 
 	/**
 	 * @return array action filters
@@ -32,7 +32,7 @@ class BenchmarkComponentsController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'benchmarkcomponents'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -130,7 +130,6 @@ class BenchmarkComponentsController extends Controller
 
 	/**
 	 * Manages all models.
-	 */
 	public function actionAdmin()
 	{
 		$model=new BenchmarkComponents('search');
@@ -142,7 +141,17 @@ class BenchmarkComponentsController extends Controller
 			'model'=>$model,
 		));
 	}
-
+    */
+    
+    public function actionBenchmarkcomponents(){
+           require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/benchmark_components.php');
+    }
+    
+   	public function actionAdmin()
+	{
+		$this->render('admin_datatable');
+	}
+    
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.

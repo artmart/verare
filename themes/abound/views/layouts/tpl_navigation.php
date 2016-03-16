@@ -36,6 +36,8 @@ if(isset(Yii::app()->user->user_role)){
                 $usermenu[]=['label'=>'Portfolio UserS with Roles', 'url'=>['/portfolioUserRoles/admin']];
                 $usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
                 $usermenu[]=['label'=>'Instrument Types', 'url'=>['/instrumentTypes/admin']];
+                $usermenu[]=['label'=>'Benchmarks', 'url'=>['/benchmarks/admin']];
+                $usermenu[]=['label'=>'Benchmark Components', 'url'=>['/benchmarkComponents/admin']]; 
                 $usermenu[]=['label'=>'Group Item', 'url'=>['/groupItem/admin']];                
                 $usermenu[]=['label'=>'Group Benchmark', 'url'=>['/groupBenchmark/admin']];
                 $usermenu[]=['label'=>'Document Types', 'url'=>['/documentTypes/admin']];
@@ -51,8 +53,7 @@ if(isset(Yii::app()->user->user_role)){
                 $usermenu[]=['label'=>'All Stats', 'url'=>['/prices/allStats']];                            
                 $usermenu[]=['label'=>'Access Levels', 'url'=>['/accessLevels/admin']]; 
                 $usermenu[]=['label'=>'Portfolio Types', 'url'=>['/portfolioTypes/admin']];
-                $usermenu[]=['label'=>'Benchmarks', 'url'=>['/benchmarks/admin']];
-                $usermenu[]=['label'=>'Benchmark Components', 'url'=>['/benchmarkComponents/admin']];  
+                 
                 
                            
               }
@@ -135,6 +136,7 @@ if(isset(Yii::app()->user->user_role)){
                           }
                           
                           ?>
+                          <li class="divider"></li>
                           </ul>
                         </li>
                         

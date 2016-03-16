@@ -6,7 +6,7 @@ class BenchmarksController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout='//layouts/main';
 
 	/**
 	 * @return array action filters
@@ -32,7 +32,7 @@ class BenchmarksController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'benchmarks'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -130,7 +130,7 @@ class BenchmarksController extends Controller
 
 	/**
 	 * Manages all models.
-	 */
+	 
 	public function actionAdmin()
 	{
 		$model=new Benchmarks('search');
@@ -141,6 +141,16 @@ class BenchmarksController extends Controller
 		$this->render('admin',array(
 			'model'=>$model,
 		));
+	}
+    */
+    
+    public function actionBenchmarks(){
+           require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/benchmarks.php');
+    }
+    
+    public function actionAdmin()
+	{
+		$this->render('admin_datatable');
 	}
 
 	/**

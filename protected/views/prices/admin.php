@@ -70,10 +70,12 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     //'id'=>"example1",
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
-    'template' =>"{items}", // "{items}\n<div class=\"span\">{pager}</div><div class=\"span\">{summary}</div>",
+    'template' => "{items}\n<div class=\"span\">{pager}</div><div class=\"span\">{summary}</div>",
     'enablePagination' => true,
     
 	'type' => TbHtml::GRID_TYPE_BORDERED,
+    'pagerCssClass' => 'CustomPager',
+   'rowCssClass' => 'CustomPager',
 	'columns'=>array(
 		'id',
 		'trade_date',

@@ -1,3 +1,13 @@
+<style>
+.datatable-scroll {
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+#example_length{
+    float:left;
+}
+</style>
 <?php
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
 
@@ -125,46 +135,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
  $baseUrl = Yii::app()->theme->baseUrl;
 ?>
 
-    <!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui.min.css">
-    <link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.css">-->
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css">
-	<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.0/css/select.dataTables.min.css">-->
-	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/css/editor.dataTables.min.css">
-	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.css">
-	<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/css/buttons.dataTables.min.css"> -->
-
-    
-    <!-- jQuery UI 1.10.3 
-  <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui-1.10.3.min.js"></script>
-  <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.js"></script>-->
-    
-	<!--<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.1.0/js/dataTables.select.min.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.editor.min.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/demo.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/editor-demo.js"></script>
-    
-    
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.colVis.min.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.buttons.min.js"></script>
-    
-   
-   <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/jszip.min.js"></script>
-   <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/pdfmake.min.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/vfs_fonts.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.html5.min.js"></script>
-    
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.colVis.min.js"></script>
-       
-    
-	<script type="text/javascript" language="javascript" class="init">  
-       
-
+<script type="text/javascript" language="javascript" class="init">  
 var editor; // use a global for the submit and return data rendering in the examples
 
 $(document).ready(function() {
@@ -175,28 +146,33 @@ $(document).ready(function() {
             {
                 label: "Portfolio:",
                 name: "portfolio",
+                "attr": {"class": "form-control"}
             },
             {
                 label: "Description:",
                 name: "description",
-                type: "textarea"
+                type: "textarea",
+                "attr": {"class": "form-control"}
             },           
             {
                 label: "client:",
                 name: "client_name",
                 type: "select",
                 ipOpts: clientLoader(),
+                "attr": {"class": "form-control"}
             }, 
             {
                 label: "Created At:",
                 name: "created_at",
-                type: "datetime"
+                type: "datetime",
+                "attr": {"class": "form-control"}
             },
              {
                 label: "Portfolio Type:",
                 name: "portfolio_type",
                 type: "select",
                 ipOpts: portfoliotypeLoader(),
+                "attr": {"class": "form-control"}
             },            
         ]
     } );
@@ -315,8 +291,21 @@ $(document).ready(function() {
   }
 
 </script>
-<!-- page script -->
-<table id="example" class="display" cellspacing="0" width="100%">
+<section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title"></h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+<!-- page script    class="display"-->
+<table id="example"  class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
         <thead>
             <tr>
                 <th>Portfolio Id</th>
@@ -340,3 +329,14 @@ $(document).ready(function() {
             </tr>
         </tfoot>
     </table>
+</div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>

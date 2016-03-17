@@ -134,7 +134,7 @@ class ClientsController extends Controller
 
 	/**
 	 * Manages all models.
-	 */
+	 
 	public function actionAdmin()
 	{
 		$model=new Clients('search');
@@ -145,6 +145,11 @@ class ClientsController extends Controller
 		$this->render('admin',array(
 			'model'=>$model,
 		));
+	}*/
+    
+    public function actionAdmin()
+	{
+		$this->render('admin_datatable');
 	}
 
 	/**

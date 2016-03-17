@@ -49,7 +49,7 @@
 Editor::inst( $db, 'clients', 'id')
     ->fields(
         Field::inst( 'id' ),
-        Field::inst( 'client_name' )
+        Field::inst( 'client_name' )->validator( 'Validate::notEmpty' )
     )
     ->process( $_POST )
     ->json();

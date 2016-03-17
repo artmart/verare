@@ -25,7 +25,7 @@ class AdminController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','view'),
+				'actions'=>array('admin','delete','create','update','view', 'users'),
 				'users'=>UserModule::getAdmins(),
 			),
 			array('deny',  // deny all users
@@ -35,7 +35,7 @@ class AdminController extends Controller
 	}
 	/**
 	 * Manages all models.
-	 */
+	 
 	public function actionAdmin()
 	{
 		$model=new User('search');
@@ -54,8 +54,21 @@ class AdminController extends Controller
 
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
-		));//*/
+		));// */ 
+        /*
 	}
+    */
+    
+    
+   	public function actionAdmin()
+    {
+        $this->render('admin_datatable');
+	}
+    
+    public function actionUsers(){
+        require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/users.php');
+    }
+    
 
 
 	/**
@@ -90,7 +103,8 @@ class AdminController extends Controller
 					$profile->user_id=$model->id;
 					$profile->save();
 				}
-				$this->redirect(array('view','id'=>$model->id));
+				//$this->redirect(array('view','id'=>$model->id));
+                $this->redirect(array('/user/admin'));
 			} else $profile->validate();
 		}
 

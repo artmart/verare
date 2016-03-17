@@ -4,6 +4,7 @@
 	'id'=>'user-form',
 	'enableAjaxValidation'=>true,
 	'htmlOptions' => array('enctype'=>'multipart/form-data'),
+    'action' => $this->createUrl('admin/create'),
 ));
 ?>
 

@@ -74,7 +74,7 @@ if($counterpart_delete == 1){$access_buttons .= '{
 <!-- page script    class="display"-->
 
 
-	<button class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModal">Add</button>
+<!--	<button class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModal">Add</button>-->
 
 <table id="example"  class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
         <thead>
@@ -122,14 +122,14 @@ if($counterpart_delete == 1){$access_buttons .= '{
  
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h1 class="modal-title" id="myModalLabel">Velg vare</h1>
+                <h1 class="modal-title" id="myModalLabel">Create User</h1>
             </div>
             <div class="modal-body">
                 
                 <?php 
-                $model = New User();
-                //$this->renderPartial('/modules/user/views/admin/_form.php', array('model'=>$model)); 
-                //$this->renderPartial('/user/admin/create', ['model'=>$model]);
+                $model=new User;
+                $profile=new Profile;
+                 $this->renderPartial('create',array('model'=>$model, 'profile'=>$profile,));      
                 ?>
             
                 <table class="display" id="PopupTable"></table>
@@ -138,8 +138,9 @@ if($counterpart_delete == 1){$access_buttons .= '{
                 <input hidden id="Description" name="Description" readonly="readonly" style="width: 100px;" type="text" />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-lg" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button>
-                <button id="buttonSave" type="button" class="btn btn-primary btn-lg" data-dismiss="modal" disabled onclick="CloseAndSave()"><span class=" glyphicon glyphicon-ok"></span></button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <!--<button type="button" class="btn btn-default btn-lg" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button>
+                </a><button id="buttonSave" type="button" class="btn btn-primary btn-lg" data-dismiss="modal" disabled onclick="CloseAndSave()"><span class=" glyphicon glyphicon-ok"></span></button>-->
             </div>
  
         </div>
@@ -210,7 +211,7 @@ var table = $('#example').DataTable( {
         
         //colVis: { exclude: [ 1 ] },
         //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
-        ajax: "users/users",
+        ajax: "admin/users",
         columns: [
             { data: "id" },
             { data: "firstname" },
@@ -243,7 +244,19 @@ var table = $('#example').DataTable( {
             //{ extend: "create", editor: editor },
             //{ extend: "edit",   editor: editor },
             //{ extend: "remove", editor: editor },
-        
+            //{ extend: 'create', text: 'Add', editor: editor4 },
+            //{ extend: 'create', text: 'Edit', editor: editor5 },
+            //{ extend: 'create', text: 'Add', editor: editor3 },
+            
+            {
+                text: 'Add',
+                action: function ( e, dt, node, config ) {
+                    $('#addModal').modal({
+                        show: 'true'
+                    }); 
+                }
+            },
+
             <?php //echo $access_buttons; ?>
             {
                 extend: 'copyHtml5',

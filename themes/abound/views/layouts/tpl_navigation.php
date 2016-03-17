@@ -124,7 +124,7 @@ if(isset(Yii::app()->user->user_role)){
                           </li>
                           <li class="divider"></li>
                           <li>
-                            <a href="<?php echo $baseUrl1; ?>/user/admin">Users</a>
+                            <a href="<?php echo $baseUrl1; ?>/users/admin">Users</a>
                             <a href="<?php echo $baseUrl1; ?>/userRole/admin">User Roles</a>
                           </li>
                           <li class="divider"></li>

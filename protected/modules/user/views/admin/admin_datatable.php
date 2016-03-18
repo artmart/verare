@@ -114,38 +114,54 @@ if($counterpart_delete == 1){$access_buttons .= '{
       <!-- /.row -->
     </section>
     <!-- /.content -->
-  </div>
 
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
- 
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h1 class="modal-title" id="myModalLabel">Create User</h1>
-            </div>
-            <div class="modal-body">
-                
-                <?php 
-                $model=new User;
-                $profile=new Profile;
-                 $this->renderPartial('create',array('model'=>$model, 'profile'=>$profile,));      
-                ?>
-            
-                <table class="display" id="PopupTable"></table>
- 
-                <input hidden id="No_" name="No_" readonly="readonly" style="width: 50px;" type="text" />
-                <input hidden id="Description" name="Description" readonly="readonly" style="width: 100px;" type="text" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <!--<button type="button" class="btn btn-default btn-lg" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button>
-                </a><button id="buttonSave" type="button" class="btn btn-primary btn-lg" data-dismiss="modal" disabled onclick="CloseAndSave()"><span class=" glyphicon glyphicon-ok"></span></button>-->
-            </div>
- 
-        </div>
-    </div>
-</div>
+
+
+
+     <div class="modal fade large" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">Create User</h4>
+					</div>
+					<div class="modal-body">
+						<?php 
+                            $model=new User;
+                            $profile=new Profile;
+                            $this->performAjaxValidation(array($model,$profile));
+                             $this->renderPartial('create',array('model'=>$model, 'profile'=>$profile,));      
+                            ?>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+        
+        <div class="modal fade large" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">Edit User</h4>
+					</div>
+					<div class="modal-body">
+						<?php 
+                            //$id = $_POST['id'];
+                           // $model=$this->loadModel($id);
+		                    //$profile=$model->profile;
+                           // $this->performAjaxValidation(array($model,$profile));
+                           // $this->renderPartial('update',array('model'=>$model, 'profile'=>$profile,));      
+                            ?>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>  
 
 <script type="text/javascript" language="javascript" class="init">  
 var editor; // use a global for the submit and return data rendering in the examples
@@ -254,6 +270,36 @@ var table = $('#example').DataTable( {
                     $('#addModal').modal({
                         show: 'true'
                     }); 
+                }
+            },
+            
+             {
+                text: 'Edit',
+                action: function ( e, dt, node, config ) {
+                    $('#editModal').modal({
+                        show: 'true'
+                    }); 
+                    
+                    var data = table.$('input, select').serialize();
+                    
+        alert(
+            "The following data would have been submitted to the server: \n\n"+
+            data.substr( 0, 120 )+'...'
+        );
+        return false;
+
+                    
+                    var data = table.rows( indexes ).data().pluck( 'id' );
+                    alert(data);
+                }
+            },
+            
+            {
+                text: 'Delete',
+                action: function ( e, dt, node, config ) {
+                    
+                    var data = table.rows( indexes ).data().pluck( 'id' );
+                    alert(data);
                 }
             },
 

@@ -13,7 +13,7 @@
 	<?php echo $form->errorSummary(array($model,$profile)); ?>
 
 	<div class="row form-group">
-        <div class="col-md-2 control-label">
+        <div class="col-md-3 control-label">
 		<?php echo $form->labelEx($model,'username'); ?>
         </div>
         <div class="col-md-4">
@@ -23,7 +23,7 @@
 	</div>
 
 	<div class="row form-group">
-        <div class="col-md-2 control-label">
+        <div class="col-md-3 control-label">
 		<?php echo $form->labelEx($model,'password'); ?>
         </div>
         <div class="col-md-4">
@@ -33,7 +33,7 @@
 	</div>
 
 	<div class="row form-group">
-        <div class="col-md-2 control-label">
+        <div class="col-md-3 control-label">
 		<?php echo $form->labelEx($model,'email'); ?>
         </div>
         <div class="col-md-4">
@@ -53,7 +53,7 @@
 	</div>
  -->   
     <div class="row form-group">
-        <div class="col-md-2 control-label">
+        <div class="col-md-3 control-label">
 		<?php echo $form->labelEx($model,'user_role'); ?>
         </div>
         <div class="col-md-4">
@@ -65,7 +65,7 @@
 	</div>
 
 	<div class="row form-group">
-        <div class="col-md-2 control-label">
+        <div class="col-md-3 control-label">
 		<?php echo $form->labelEx($model,'status'); ?>
         </div>
         <div class="col-md-4">
@@ -79,7 +79,7 @@
 			foreach($profileFields as $field) {
 			?>
 	<div class="row form-group">
-        <div class="col-md-2 control-label">
+        <div class="col-md-3 control-label">
 		<?php echo $form->labelEx($profile,$field->varname); ?>
         </div>
         <div class="col-md-4">
@@ -102,7 +102,7 @@
 		}
 ?>
 	<div class="row form-group">
-        <div class="col-md-2 control-label"></div>
+        <div class="col-md-3 control-label"></div>
         <div class="col-md-4">
 		<?php echo CHtml::submitButton($model->isNewRecord ? UserModule::t('Create') : UserModule::t('Save'), ['class'=>"btn btn-primary form-control input-md"]); ?>
         </div>

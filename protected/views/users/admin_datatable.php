@@ -74,7 +74,7 @@ if($counterpart_delete == 1){$access_buttons .= '{
 <!-- page script    class="display"-->
 
 
-	<button class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModal">Add</button>
+<!--	<button class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModal">Add</button>-->
 
 <table id="example"  class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
         <thead>
@@ -151,24 +151,52 @@ var editor; // use a global for the submit and return data rendering in the exam
 
 $(document).ready(function() {
 
-/*
     editor = new $.fn.dataTable.Editor( {
         ajax: 'users/users',
         table: "#example",
         fields: [ 
             {
-                label: "Benchmark Name:",
-                name: "benchmark_name",
+                label: "Username:",
+                name: "username",
                 "attr": {"class": "form-control"}
-            },            
+            },  
             {
-                label: "Client:",
-                name: "benchmarks.client_id",
+                label: "Password:",
+                name: "password",
+                "attr": {"class": "form-control"}
+            }, 
+            {
+                label: "Email:",
+                name: "email",
+                "attr": {"class": "form-control"}
+            },         
+            {
+                label: "User Role:",
+                name: "user_role_id",
                 type: "select",
-                ipOpts: clientsLoader(),
-                //className: 'full'
+                ipOpts: userroleLoader(),
                 "attr": {"class": "form-control"}
             },
+            {
+                label: "Status:",
+                name: "status",
+                type: "select",
+                ipOpts: statusLoader(),
+                "attr": {"class": "form-control"}
+            },
+            {
+                label: "Firstname:",
+                name: "firstname",
+                "attr": {"class": "form-control"}
+            }, 
+            {
+                label: "Lastname:",
+                name: "lastname",
+                "attr": {"class": "form-control"}
+            }, 
+            
+            /*
+            
             {
                 label: "Portfolio:",
                 name: "portfolios.portfolio_id",
@@ -176,9 +204,10 @@ $(document).ready(function() {
                 ipOpts: portfolioLoader(),
                 "attr": {"class": "form-control"}
             },
+            */
         ]
     } );
-*/	   
+	   
          
 var table = $('#example').DataTable( {
     
@@ -240,8 +269,8 @@ var table = $('#example').DataTable( {
 
         buttons: [
         
-            //{ extend: "create", editor: editor },
-            //{ extend: "edit",   editor: editor },
+            { extend: "create", editor: editor },
+            { extend: "edit",   editor: editor },
             //{ extend: "remove", editor: editor },
         
             <?php //echo $access_buttons; ?>
@@ -303,6 +332,57 @@ Field::inst( 'users.client_id as client_id' )
     var bName = b.label.toLowerCase();
     return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
   }
+
+  function userroleLoader() {
+    var instruments = [{'value': '0', 'label': '-- Select User Role --'}];
+    var path1 = '<?php echo Yii::app()->baseUrl.'/userrole/userrole'; ?>';
+    $.ajax({
+        url: path1,
+        async: false,
+        dataType: 'json',
+        success: function (json) {
+          var data = json.data;
+            for(var a=0; a<data.length; a++) {
+              obj = {
+                "value" : data[a]['id'],
+                "label" : data[a]['user_role']
+              };
+              instruments.push(obj);
+            }
+        }
+    });
+    return instruments.sort(SortByName);
+  }
+  
+    function statusLoader() {
+    //var instruments = [{'value': '0', 'label': '-- Select User Role --'}];
+    var instruments = [{'value': '0', 'label': 'Inactive'}];
+    instruments.push({'value': '1', 'label': 'Active'});
+    //instruments.push({'value': '0', 'label': 'Inactive'});
+    instruments.push({'value': '-1', 'label': 'Banned'});
+
+    /*
+    var path1 = '<?php //echo Yii::app()->baseUrl.'/userrole/userrole'; ?>';
+    $.ajax({
+        url: path1,
+        async: false,
+        dataType: 'json',
+        success: function (json) {
+          var data = json.data;
+            for(var a=0; a<data.length; a++) {
+              obj = {
+                "value" : data[a]['id'],
+                "label" : data[a]['user_role']
+              };
+              instruments.push(obj);
+            }
+        }
+    });
+    */
+    return instruments.sort(SortByName);
+  }
+  
+
 
   function clientsLoader() {
     var instruments = [{'value': '0', 'label': '-- Select Client --'}];

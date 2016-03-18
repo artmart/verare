@@ -32,7 +32,7 @@ class UserRoleController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'userrole'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -201,6 +201,12 @@ class UserRoleController extends Controller
 			'model'=>$model,
 		));
 	}
+    
+    public function actionUserrole(){
+           require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/userrole.php');
+    }
+    
+    
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.

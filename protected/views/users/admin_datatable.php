@@ -163,6 +163,7 @@ $(document).ready(function() {
             {
                 label: "Password:",
                 name: "password",
+                "type": "password",
                 "attr": {"class": "form-control"}
             }, 
             {

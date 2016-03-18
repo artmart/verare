@@ -36,8 +36,11 @@ require_once(Yii::app()->basePath . '/modules/user/UserModule.php');
                     
                     $editor->field( 'activkey' )->setValue( $activkey );
                     $editor->field( 'password' )->setValue( $enc_password ); 
+                    
             }else{
                 $editor->field( 'password' )->setValue( $enc_password );
+                //$editor->field( 'user_role' )->setValue( $current_user->user_role );
+                //$editor->field( 'client_id' )->setValue( $current_user->client_id );
             }
     } 
        
@@ -84,7 +87,7 @@ Editor::inst( $db, 'users', 'id')
             'Username must be at least 3 characters' :
             true;
             } ),
-        Field::inst( 'users.password as password' )->validator( 'Validate::notEmpty' ),
+       // Field::inst( 'users.password as password' )->validator( 'Validate::notEmpty' ),
         
         /* 
         Field::inst( 'users.password as password' )->validator( function ( $val, $data, $opts ) {
@@ -92,12 +95,12 @@ Editor::inst( $db, 'users', 'id')
             'Password must be at least 4 characters' :
             true;
             } ),
-          
+          */ 
         Field::inst( 'users.password as password' )->validator( function ( $val, $data, $opts ) {
-            return !preg_match('/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%]{6,12}$/', $val)?
-            'Password must contain 6-12 characters of letters, numbers and at least one special character.' :
+            return !preg_match('/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%]{6,128}$/', $val)?
+            'Password must contain at least 6 characters of letters, numbers and at least one special character.' :
             true;
-            } ), */    
+            } ),    
         
  
         

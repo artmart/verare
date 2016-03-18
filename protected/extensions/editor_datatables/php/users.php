@@ -28,13 +28,16 @@ require_once(Yii::app()->basePath . '/modules/user/UserModule.php');
         $current_user =  Users::model()->findByPk($id);
         
         $old_password = $current_user->password;
+        $enc_password = UserModule::encrypting($password);
         
-        if($password !== $old_password){
+        if($enc_password !== $old_password){
             $activkey = UserModule::encrypting(microtime().$password);
-            $enc_password = UserModule::encrypting($password);
+            //$enc_password = UserModule::encrypting($password);
                     
                     $editor->field( 'activkey' )->setValue( $activkey );
                     $editor->field( 'password' )->setValue( $enc_password ); 
+            }else{
+                $editor->field( 'password' )->setValue( $enc_password );
             }
     } 
        
@@ -81,20 +84,20 @@ Editor::inst( $db, 'users', 'id')
             'Username must be at least 3 characters' :
             true;
             } ),
-        //Field::inst( 'users.password as password' )->validator( 'Validate::notEmpty' ),
+        Field::inst( 'users.password as password' )->validator( 'Validate::notEmpty' ),
         
-        /*
+        /* 
         Field::inst( 'users.password as password' )->validator( function ( $val, $data, $opts ) {
             return strlen( $val ) <4 ?
             'Password must be at least 4 characters' :
             true;
             } ),
-         */   
+          
         Field::inst( 'users.password as password' )->validator( function ( $val, $data, $opts ) {
             return !preg_match('/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%]{6,12}$/', $val)?
             'Password must contain 6-12 characters of letters, numbers and at least one special character.' :
             true;
-            } ),    
+            } ), */    
         
  
         
@@ -103,7 +106,7 @@ Editor::inst( $db, 'users', 'id')
         Field::inst( 'users.create_at as create_at' ),
         Field::inst( 'users.lastvisit_at as lastvisit_at' ),
         //Field::inst( 'users.superuser as superuser' ),
-        Field::inst( 'users.status as status' ),
+        Field::inst( 'users.status as user_status' ),
         Field::inst( 'users.user_role as user_role_id' )->validator( 'Validate::notEmpty' ),
         Field::inst( 'users.default_portfolio_id as default_portfolio_id' ),
         Field::inst( 'users.default_start_date as default_start_date' ),

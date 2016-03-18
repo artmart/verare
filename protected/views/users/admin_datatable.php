@@ -185,7 +185,7 @@ $(document).ready(function() {
             },
             {
                 label: "Status:",
-                name: "status",
+                name: "user_status",
                 type: "select",
                 ipOpts: statusLoader(),
                 "attr": {"class": "form-control"}
@@ -253,7 +253,7 @@ var table = $('#example').DataTable( {
             { data: "lastvisit_at" },
             //{ data: "superuser", editField: "ledger.trade_status_id", className: 'editable'    },
             //{ data: "superuser" },
-            { data: "status",
+            { data: "user_status",
              //   render: function(data, type, row) {
               //      return data.users.status == '1' ? 'Active' : 'Inactive';
                   //if(data.users.status == '1') {return 'Active';}
@@ -282,7 +282,7 @@ var table = $('#example').DataTable( {
                 action: function ( e, dt, node, config ) {
                     editor
                         .edit( table.row( { selected: true } ).index(), false )
-                        .set( "status", 0 )
+                        .set( "user_status", 0 )
                         .submit();
                 }
             },
@@ -319,36 +319,11 @@ var table = $('#example').DataTable( {
         .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
 } );
 
-
-/*
-Field::inst( 'profiles.user_id as user_id' ),
-Field::inst( 'profiles.firstname as firstname' ),
-Field::inst( 'profiles.lastname as lastname' ),
-Field::inst( 'users.id as id' ),
-Field::inst( 'users.username as username' ),
-Field::inst( 'users.password as password' ),
-Field::inst( 'users.email as email' ),
-Field::inst( 'users.create_at as create_at' ),
-Field::inst( 'users.lastvisit_at as lastvisit_at' ),
-Field::inst( 'users.superuser as superuser' ),
-Field::inst( 'users.status as status' ),
-Field::inst( 'users.user_role as user_role' ),
-Field::inst( 'users.default_portfolio_id as default_portfolio_id' ),
-Field::inst( 'users.default_start_date as default_start_date' ),
-Field::inst( 'users.default_end_date as default_end_date' ),
-Field::inst( 'users.client_id as client_id' )
-*/
-
-
-
   function SortByName(a, b){
     var aName = a.label.toLowerCase();
     var bName = b.label.toLowerCase();
     return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
   }
-  
-  
-  
   
     function userroleLoader() {
     var instruments = [{'value': '0', 'label': '-- Select User Role --'}];
@@ -370,29 +345,7 @@ Field::inst( 'users.client_id as client_id' )
     });
     return instruments.sort(SortByName);
   }
-  
-
-  function userroleLoader1() {
-    var instruments = [{'value': '0', 'label': '-- Select User Role --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/userrole/userrole'; ?>';
-    $.ajax({
-        url: path1,
-        async: false,
-        dataType: 'json',
-        success: function (json) {
-          var data = json.data;
-            for(var a=0; a<data.length; a++) {
-              obj = {
-                "value" : data[a]['id'],
-                "label" : data[a]['user_role']
-              };
-              instruments.push(obj);
-            }
-        }
-    });
-    return instruments.sort(SortByName);
-  }
-  
+    
     function statusLoader() {
     //var instruments = [{'value': '0', 'label': '-- Select User Role --'}];
     var instruments = [{'value': '0', 'label': 'Inactive'}];
@@ -400,24 +353,6 @@ Field::inst( 'users.client_id as client_id' )
     //instruments.push({'value': '0', 'label': 'Inactive'});
     instruments.push({'value': '-1', 'label': 'Banned'});
 
-    /*
-    var path1 = '<?php //echo Yii::app()->baseUrl.'/userrole/userrole'; ?>';
-    $.ajax({
-        url: path1,
-        async: false,
-        dataType: 'json',
-        success: function (json) {
-          var data = json.data;
-            for(var a=0; a<data.length; a++) {
-              obj = {
-                "value" : data[a]['id'],
-                "label" : data[a]['user_role']
-              };
-              instruments.push(obj);
-            }
-        }
-    });
-    */
     return instruments.sort(SortByName);
   }
   

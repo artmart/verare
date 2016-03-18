@@ -179,8 +179,8 @@ $(document).ready(function() {
             {
                 label: "User Role:",
                 name: "user_role_id",
-                //type: "select",
-                //ipOpts: userroleLoader(),
+                type: "select",
+                ipOpts: userroleLoader(),
                 "attr": {"class": "form-control"}
             },
             {
@@ -200,17 +200,14 @@ $(document).ready(function() {
                 name: "lastname",
                 "attr": {"class": "form-control"}
             }, 
-            
-            /*
-            
             {
-                label: "Portfolio:",
-                name: "portfolios.portfolio_id",
+                label: "Client:",
+                name: "client_id",
                 type: "select",
-                ipOpts: portfolioLoader(),
+                ipOpts: clientsLoader(),
                 "attr": {"class": "form-control"}
             },
-            */
+            
         ]
     } );
 	   
@@ -264,7 +261,7 @@ var table = $('#example').DataTable( {
                   //if(data.users.status == '-1') {return 'Banned';}
              //   }
              },
-            { data: "user_role" },
+            { data: "user_role_name" },
             { data: "portfolio" },
             { data: "default_start_date" },
             { data: "default_end_date" },
@@ -349,8 +346,33 @@ Field::inst( 'users.client_id as client_id' )
     var bName = b.label.toLowerCase();
     return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
   }
+  
+  
+  
+  
+    function userroleLoader() {
+    var instruments = [{'value': '0', 'label': '-- Select User Role --'}];
+    var path1 = '<?php echo Yii::app()->baseUrl.'/userrole/userrole'; ?>';
+    $.ajax({
+        url: path1,
+        async: false,
+        dataType: 'json',
+        success: function (json) {
+          var data = json.data;
+            for(var a=0; a<data.length; a++) {
+              obj = {
+                "value" : data[a]['id'],
+                "label" : data[a]['user_role_name']
+              };
+              instruments.push(obj);
+            }
+        }
+    });
+    return instruments.sort(SortByName);
+  }
+  
 
-  function userroleLoader() {
+  function userroleLoader1() {
     var instruments = [{'value': '0', 'label': '-- Select User Role --'}];
     var path1 = '<?php echo Yii::app()->baseUrl.'/userrole/userrole'; ?>';
     $.ajax({

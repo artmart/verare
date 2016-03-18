@@ -17,7 +17,7 @@
    // $extension = end(explode('.', Upload::DB_FILE_NAME));
     Editor::inst( $db, 'user_role', 'id', $time, $client_id)
         ->fields(
-            Field::inst( 'user_role.user_role' ),
+            Field::inst( 'user_role.user_role as user_role_name' ),
             Field::inst( 'user_role.id' )->validator( 'Validate::notEmpty' )
             //Field::inst( 'benchmarks.name' )->validator( 'Validate::notEmpty' ),
             //Field::inst( 'benchmarks.client_id' )->validator( 'Validate::notEmpty' ),

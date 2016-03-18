@@ -155,6 +155,11 @@ $(document).ready(function() {
         ajax: 'users/users',
         table: "#example",
         fields: [ 
+             {
+                label: "id",
+                name: "id",
+                type: "hidden"
+            },
             {
                 label: "Username:",
                 name: "username",
@@ -174,8 +179,8 @@ $(document).ready(function() {
             {
                 label: "User Role:",
                 name: "user_role_id",
-                type: "select",
-                ipOpts: userroleLoader(),
+                //type: "select",
+                //ipOpts: userroleLoader(),
                 "attr": {"class": "form-control"}
             },
             {
@@ -273,6 +278,17 @@ var table = $('#example').DataTable( {
             { extend: "create", editor: editor },
             { extend: "edit",   editor: editor },
             //{ extend: "remove", editor: editor },
+            
+            {
+                extend: "selectedSingle",
+                text: "Delete",
+                action: function ( e, dt, node, config ) {
+                    editor
+                        .edit( table.row( { selected: true } ).index(), false )
+                        .set( "status", 0 )
+                        .submit();
+                }
+            },
         
             <?php //echo $access_buttons; ?>
             {

@@ -18,7 +18,7 @@
     Editor::inst( $db, 'user_role', 'id', $time, $client_id)
         ->fields(
             Field::inst( 'user_role.user_role' ),
-            Field::inst( 'user_role.id' )->validator( 'Validate::notEmpty' ),
+            Field::inst( 'user_role.id' )->validator( 'Validate::notEmpty' )
             //Field::inst( 'benchmarks.name' )->validator( 'Validate::notEmpty' ),
             //Field::inst( 'benchmarks.client_id' )->validator( 'Validate::notEmpty' ),
             //Field::inst( 'user_role.portfolio_id' ),

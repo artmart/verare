@@ -8,6 +8,137 @@
         DataTables\Editor\Join,
         DataTables\Editor\Upload,
         DataTables\Editor\Validate;
+        
+        
+       function newProfile( $editor,  $values) {   
+        
+        $lastname = $values['lastname'];
+        $firstname = $values['firstname'];
+        
+        $profiles = New Profile;
+        
+        $profiles->lastname = $lastname;
+        $profiles->firstname = $firstname;
+        $profiles->save();
+        
+
+                    $editor
+                        ->field( 'id' )
+                        ->setValue( $profiles->user_id );
+                    
+    } 
+    
+    function editledger ( $editor, $id, $values ) {                
+
+        $existing_trades =  Ledger::model()->findByPk($id);
+        
+        if(isset($values['ledger']['trade_date'])){$trade_date = $values['ledger']['trade_date'];}else{$trade_date = $existing_trades->trade_date;}
+        if(isset($values['ledger']['instrument_id'])){$instrument_id = $values['ledger']['instrument_id'];}else{$instrument_id = $existing_trades->instrument_id;}
+        if(isset($values['ledger']['portfolio_id'])){$portfolio_id = $values['ledger']['portfolio_id'];}else{$portfolio_id = $existing_trades->portfolio_id;}
+        if(isset($values['ledger']['nominal'])){$nominal = $values['ledger']['nominal'];}else{$nominal = $existing_trades->nominal;}
+        if(isset($values['ledger']['price'])){$price = $values['ledger']['price'];}else{$price = $existing_trades->price;}
+
+        if(isset($values['ledger']['note'])){$note = $values['ledger']['note'];}else{$note = $existing_trades->note;}
+        if(isset($values['ledger']['file'])){$file = $values['ledger']['file'];}else{$file = $existing_trades->file;}        
+        
+        
+        if(isset($values['ledger']['trade_status_id'])){$trade_status_id = $values['ledger']['trade_status_id'];}else{$trade_status_id = $existing_trades->trade_status_id;}
+        if(isset($values['ledger']['is_current'])){$is_current = $values['ledger']['is_current'];}else{$is_current = $existing_trades->is_current;}
+        $trade_code = $existing_trades->trade_code;
+        
+        if( 
+            (isset($values['ledger']['trade_date']) && $existing_trades->trade_date !== $values['ledger']['trade_date']) ||
+            (isset($values['ledger']['instrument_id']) && $existing_trades->instrument_id !== $values['ledger']['instrument_id']) ||
+            (isset($values['ledger']['portfolio_id']) && $existing_trades->portfolio_id !== $values['ledger']['portfolio_id']) ||
+            (isset($values['ledger']['nominal']) && $existing_trades->nominal !== $values['ledger']['nominal']) ||
+            (isset($values['ledger']['price']) && $existing_trades->price !== $values['ledger']['price'])        
+          )
+          {    
+                $user_id = Yii::app()->user->id;
+                $user = Users::model()->findByPk($user_id);
+                $client_id = $user->client_id;
+            
+                $new_trade = New Ledger();
+                $new_trade->trade_date=$trade_date; //$values['ledger']['trade_date'];
+                $new_trade->instrument_id=$instrument_id; //$values['ledger']['instrument_id'];
+                $new_trade->portfolio_id=$portfolio_id; //$values['ledger']['portfolio_id'];
+                $new_trade->nominal=$nominal; //$values['ledger']['nominal'];
+                $new_trade->price=$price; //$values['ledger']['price'];
+                $new_trade->created_by= $user_id;
+                $new_trade->trade_status_id= $trade_status_id;// $values['ledger']['trade_status_id'];
+                //'confirmed_by' =>$values['ledger']['confirmed_by'],
+                //'confirmed_at' =>$values['ledger']['confirmed_at'], 
+                //'file'=>$values['ledger']['file'],
+                $new_trade->client_id= $client_id;
+                $new_trade->trade_code=$trade_code;
+                
+                $new_trade->note=$note;
+                $new_trade->file=$file;
+                
+                $new_trade->save();
+                //var_dump($new_trade->getErrors());
+                //exit;
+                
+                $editor->field( 'ledger.is_current' )->setValue( 0 );
+                $editor->field( 'ledger.trade_status_id' )->setValue( $existing_trades->trade_status_id );
+                $editor->field( 'ledger.trade_date' )->setValue( $existing_trades->trade_date );
+                $editor->field( 'ledger.instrument_id' )->setValue( $existing_trades->instrument_id );
+                $editor->field( 'ledger.portfolio_id' )->setValue( $existing_trades->portfolio_id );
+                $editor->field( 'ledger.nominal' )->setValue( $existing_trades->nominal );
+                $editor->field( 'ledger.price' )->setValue( $existing_trades->price ); 
+                $editor->field( 'trade_code' )->setValue( $trade_code ); 
+          }else{
+                $editor
+                    ->field( 'ledger.trade_status_id' )
+                    ->setValue( $trade_status_id );
+                $editor
+                    ->field( 'ledger.is_current' )
+                    ->setValue( $is_current );
+                $editor
+                    ->field( 'trade_code' )
+                    ->setValue( $trade_code );
+          }
+    } 
+       
+       
+       
+   function profileCreate( $db, $action, $id, $values ){
+        $user_id = $id;
+        $lastname = $values['lastname'];
+        $firstname = $values['firstname'];
+        
+        $profiles = New Profiles;
+        
+        $profiles->user_id = $id;
+        $profiles->lastname = $lastname;
+        $profiles->firstname = $firstname;
+        $profiles->save();
+        
+        /*
+        $model->activkey=UserModule::encrypting(microtime().$model->password);
+						$model->password=UserModule::encrypting($model->password);
+        
+    
+        $db->insert( 'profiles', array(
+            'user_id'   => $user_id,
+            'lastname' => $lastname,
+            'firstname' => $firstname
+        ) );*/
+    } 
+    
+   function profileUpdate( $db, $action, $id, $values ){
+        $user_id = $id;
+        $lastname = $values['lastname'];
+        $firstname = $values['firstname'];
+
+        $profiles =  Profiles::model()->findByPk($id);
+        
+        $profiles->lastname = $lastname;
+        $profiles->firstname = $firstname;
+        $profiles->save();
+    } 
+            
+        
  /*    
     //Build our Editor instance and process the data coming from _POST
     Editor::inst( $db, 'ledger' )
@@ -67,10 +198,31 @@ Editor::inst( $db, 'users', 'id')
         Field::inst( 'clients.client_name as client_name' ),
         Field::inst( 'user_role.user_role as user_role' ),
         Field::inst( 'portfolios.portfolio as portfolio' )
-        
-        
-            
+  
     )
+    
+    /*
+    ->on( 'preCreate', function ( $editor, $values ) {
+                newProfile($editor, $values );
+            } )  
+    
+     ->on( 'preCreate', function ( $editor, $values ) {
+                newledger($editor, $values );
+            } )  
+        ->on( 'preEdit', function ( $editor, $id, $values ) {
+               editledger( $editor, $id, $values );                    
+            } ) 
+   
+    
+    
+    ->on( 'postCreate', function ( $editor, $id, $values, $row ) {
+        profileCreate( $editor->db(), 'create', $id, $values );
+    } )
+    ->on( 'postEdit', function ( $editor, $id, $values, $row ) {
+        profileUpdate( $editor->db(), 'edit', $id, $values );
+    } )
+ */
+    
     ->leftJoin( 'profiles', 'profiles.user_id', '=', 'users.id' )
     ->leftJoin( 'clients', 'clients.id', '=', 'users.client_id' )  
     ->leftJoin( 'user_role', 'user_role.id', '=', 'users.user_role' )

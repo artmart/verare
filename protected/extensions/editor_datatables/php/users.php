@@ -44,37 +44,6 @@ require_once(Yii::app()->basePath . '/modules/user/UserModule.php');
             }
     } 
        
-       
-     
-     
-     
-        
- /*    
-    //Build our Editor instance and process the data coming from _POST
-    Editor::inst( $db, 'ledger' )
-        ->fields(
-            Field::inst( 'id' )->validator( 'Validate::notEmpty' ),
-            Field::inst( 'instrument_id' )->validator( 'Validate::notEmpty' ),
-            Field::inst( 'portfolio_id' )->validator( 'Validate::notEmpty' ),
-            Field::inst( 'confirmed_by' )
-                ->validator( 'Validate::numeric' )
-                ->setFormatter( 'Format::ifEmpty', null ),
-            Field::inst( 'price' )
-                ->validator( 'Validate::numeric' )
-                ->setFormatter( 'Format::ifEmpty', null ),
-            Field::inst( 'trade_date' )
-                ->validator( 'Validate::dateFormat', array(
-                    "format"  => Format::DATE_ISO_8601,
-                    "message" => "Please enter a date in the format yyyy-mm-dd"
-                ) )
-                ->getFormatter( 'Format::date_sql_to_format', Format::DATE_ISO_8601 )
-                ->setFormatter( 'Format::date_format_to_sql', Format::DATE_ISO_8601 )
-        )
-        ->process( $_POST )
-        ->json();  
-        
- */       
-
 // Build our Editor instance and process the data coming from _POST
 Editor::inst( $db, 'users', 'id')
     ->fields(
@@ -109,13 +78,13 @@ Editor::inst( $db, 'users', 'id')
         Field::inst( 'users.create_at as create_at' ),
         Field::inst( 'users.lastvisit_at as lastvisit_at' ),
         //Field::inst( 'users.superuser as superuser' ),
-        Field::inst( 'users.status as user_status' ),
-        Field::inst( 'users.user_role as user_role_id' )->validator( 'Validate::notEmpty' ),
+        Field::inst( 'users.status as status' ),
+        Field::inst( 'users.user_role' )->validator( 'Validate::notEmpty' ),
         Field::inst( 'users.default_portfolio_id as default_portfolio_id' ),
         Field::inst( 'users.default_start_date as default_start_date' ),
         Field::inst( 'users.default_end_date as default_end_date' ),
-        Field::inst( 'users.client_id as client_id' )->validator( 'Validate::notEmpty' ),
-        Field::inst( 'clients.client_name as client_name' ),
+        Field::inst( 'users.client_id' )->validator( 'Validate::notEmpty' ),
+        Field::inst( 'clients.client_name' ),
         Field::inst( 'user_role.user_role as user_role_name' ),
         Field::inst( 'portfolios.portfolio as portfolio' )
   

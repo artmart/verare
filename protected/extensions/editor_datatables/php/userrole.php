@@ -9,16 +9,18 @@
         DataTables\Editor\Upload,
         DataTables\Editor\Validate;
       
-   $user = Users::model()->findByPk(Yii::app()->user->id);
-   $client_id = $user->client_id;
+   //$user = Users::model()->findByPk(Yii::app()->user->id);
+   //$client_id = $user->client_id;
 
     //Build our Editor instance and process the data coming from _POST
     $time = date("fYhis");
    // $extension = end(explode('.', Upload::DB_FILE_NAME));
-    Editor::inst( $db, 'user_role', 'id', $time, $client_id)
+    Editor::inst( $db, 'user_role', 'id')
         ->fields(
-            Field::inst( 'user_role.user_role as user_role_name' ),
-            Field::inst( 'user_role.id' )->validator( 'Validate::notEmpty' )
+            Field::inst( 'user_role.id' )->validator( 'Validate::notEmpty' ),
+            Field::inst( 'user_role.user_role as user_role_name1' ),
+            Field::inst( 'user_role.id as user_role_id' )
+            
             //Field::inst( 'benchmarks.name' )->validator( 'Validate::notEmpty' ),
             //Field::inst( 'benchmarks.client_id' )->validator( 'Validate::notEmpty' ),
             //Field::inst( 'user_role.portfolio_id' ),

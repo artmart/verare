@@ -14,6 +14,7 @@ $baseUrl = Yii::app()->theme->baseUrl;
 $baseUrl1 = Yii::app()->baseUrl;
 
 //$access_level = 5;
+/*
 $access_buttons = '';
 $counterpart_access = '';
 
@@ -41,6 +42,7 @@ $access_buttons = '';
 if($counterpart_create == 1){$access_buttons .= '{ extend: "create", editor: editor }, ';}
 if($counterpart_edit == 1){$access_buttons .= '{ extend: "edit",   editor: editor }, ';}
 if($counterpart_delete == 1){$access_buttons .= ' { extend: "remove", editor: editor }, ';}
+*/
 /*
 if($counterpart_delete == 1){$access_buttons .= '{
                                                 extend: "selectedSingle",
@@ -116,35 +118,6 @@ if($counterpart_delete == 1){$access_buttons .= '{
     <!-- /.content -->
   </div>
 
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
- 
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h1 class="modal-title" id="myModalLabel">Velg vare</h1>
-            </div>
-            <div class="modal-body">
-                
-                <?php 
-                $model = New User();
-                //$this->renderPartial('/modules/user/views/admin/_form.php', array('model'=>$model)); 
-                //$this->renderPartial('/user/admin/create', ['model'=>$model]);
-                ?>
-            
-                <table class="display" id="PopupTable"></table>
- 
-                <input hidden id="No_" name="No_" readonly="readonly" style="width: 50px;" type="text" />
-                <input hidden id="Description" name="Description" readonly="readonly" style="width: 100px;" type="text" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-lg" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button>
-                <button id="buttonSave" type="button" class="btn btn-primary btn-lg" data-dismiss="modal" disabled onclick="CloseAndSave()"><span class=" glyphicon glyphicon-ok"></span></button>
-            </div>
- 
-        </div>
-    </div>
-</div>
 
 <script type="text/javascript" language="javascript" class="init">  
 var editor; // use a global for the submit and return data rendering in the examples
@@ -178,14 +151,14 @@ $(document).ready(function() {
             },         
             {
                 label: "User Role:",
-                name: "user_role_id",
+                name: "users.user_role",
                 type: "select",
                 ipOpts: userroleLoader(),
                 "attr": {"class": "form-control"}
             },
             {
                 label: "Status:",
-                name: "user_status",
+                name: "status",
                 type: "select",
                 ipOpts: statusLoader(),
                 "attr": {"class": "form-control"}
@@ -202,7 +175,7 @@ $(document).ready(function() {
             }, 
             {
                 label: "Client:",
-                name: "client_id",
+                name: "users.client_id",
                 type: "select",
                 ipOpts: clientsLoader(),
                 "attr": {"class": "form-control"}
@@ -253,7 +226,7 @@ var table = $('#example').DataTable( {
             { data: "lastvisit_at" },
             //{ data: "superuser", editField: "ledger.trade_status_id", className: 'editable'    },
             //{ data: "superuser" },
-            { data: "user_status",
+            { data: "status",
              //   render: function(data, type, row) {
               //      return data.users.status == '1' ? 'Active' : 'Inactive';
                   //if(data.users.status == '1') {return 'Active';}
@@ -265,7 +238,7 @@ var table = $('#example').DataTable( {
             { data: "portfolio" },
             { data: "default_start_date" },
             { data: "default_end_date" },
-            { data: "client_name" },           
+            { data: "clients.client_name" },           
         ],
         select: true,
     
@@ -282,7 +255,7 @@ var table = $('#example').DataTable( {
                 action: function ( e, dt, node, config ) {
                     editor
                         .edit( table.row( { selected: true } ).index(), false )
-                        .set( "user_status", 0 )
+                        .set( "status", 0 )
                         .submit();
                 }
             },
@@ -336,8 +309,8 @@ var table = $('#example').DataTable( {
           var data = json.data;
             for(var a=0; a<data.length; a++) {
               obj = {
-                "value" : data[a]['id'],
-                "label" : data[a]['user_role_name']
+                "value" : data[a]['user_role_id'],
+                "label" : data[a]['user_role_name1']
               };
               instruments.push(obj);
             }

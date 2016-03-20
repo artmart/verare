@@ -349,7 +349,9 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                       <div class="table">
  <?php       
         $return = 1;
-
+        $months = [];
+        $returns_portfolio_daily = 1;
+        $returns_portfolio = [];
         $sql_portfolio = " select * from portfolio_returns where portfolio_id = '$portfolio' and trade_date > '$start_date' and trade_date<'$end_date' order by trade_date asc";
         $portfolio_returns = Yii::app()->db->createCommand($sql_portfolio)->queryAll(true);
         foreach($portfolio_returns as $pr){
@@ -397,6 +399,13 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
         $sql_1 = " select * from portfolio_returns where portfolio_id = '$portfolio' and 
                     (trade_date = '$dtytd' or trade_date = '$dt3m' or trade_date = '$dt6m' or trade_date = '$dt9m' or trade_date = '$dt1y' or trade_date = '$enddate' or trade_date = '$start_date')";
         $portfolio_1 = Yii::app()->db->createCommand($sql_1)->queryAll(true);
+        
+        $return_start = 1; //???
+        $return_end = 1; //??
+        $return_ytd = 1;
+        $return_3m = 1;
+        $return_6m = 1;
+        $return_1y = 1;
         foreach($portfolio_1 as $p1){
             if($p1['trade_date'] == $dtytd){$return_ytd = $p1['return'];}
             if($p1['trade_date'] == $dt3m){$return_3m = $p1['return'];}

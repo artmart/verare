@@ -56,18 +56,25 @@ table.dataTable thead .sorting_desc:after {
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
 $baseUrl = Yii::app()->theme->baseUrl;
 
+//var_dump(Yii::app()->user->getState('user_role_id'));
+//exit;
+
+$user_role_id = Yii::app()->user->getState('user_role');
+
+
 //$access_level = 5;
 $access_buttons = '';
 $ledgar_access = '';
-if(isset(Yii::app()->user->user_role)){
-              $user_rols = UserRole::model()->findByPk(Yii::app()->user->user_role);
+if($user_role_id>0){
+              $user_rols = UserRole::model()->findByPk($user_role_id);
               if($user_rols){
                 //$access_level = json_decode($user_rols->ledger_access_level);
-               
-                  $ledger_create = 0;
-                  $ledger_edit = 0;
-                  $ledger_delete = 0;
-                  $ledger_status_change = 0;
+               $ledger_create = 0;
+                $ledger_edit = 0;
+                $ledger_delete = 0;
+                $ledger_status_change = 0;
+                  
+                  
                   if(isset($user_rols->ledger_access_level) && $user_rols->ledger_access_level !== ''){
                     $ledgar_access = json_decode($user_rols->ledger_access_level);
                   

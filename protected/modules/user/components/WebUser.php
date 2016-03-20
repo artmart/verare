@@ -34,14 +34,21 @@ class WebUser extends CWebUser
 	}
 
     public function updateSession() {
+        $user_rols1 = [];
         $user = Yii::app()->getModule('user')->user($this->id);
+        $user_rols1 = UserRole::model()->findByPk($user->user_role);
         $userAttributes = CMap::mergeArray(array(
                                                 'email'=>$user->email,
                                                 'username'=>$user->username,
                                                 'create_at'=>$user->create_at,
                                                 'lastvisit_at'=>$user->lastvisit_at,
                                                 'user_role' =>$user->user_role,
+                                                'client_id' =>$user->client_id,
                                            ),$user->profile->getAttributes());
+                                           
+                                           //, $user_rols1
+                                           
+       // $userAttributes = CMap::mergeArray($userAttributes, $user_rols);
         foreach ($userAttributes as $attrName=>$attrValue) {
             $this->setState($attrName,$attrValue);
         }

@@ -63,13 +63,13 @@ class User extends CActiveRecord
             array('create_at', 'default', 'value' => date('Y-m-d H:i:s'), 'setOnEmpty' => true, 'on' => 'insert'),
             array('lastvisit_at', 'default', 'value' => '0000-00-00 00:00:00', 'setOnEmpty' => true, 'on' => 'insert'),
 			array('username, email, superuser, status, user_role', 'required'),
-			array('superuser, status, superuser, default_portfolio_id', 'numerical', 'integerOnly'=>true),
+			array('superuser, status, client_id, default_portfolio_id', 'numerical', 'integerOnly'=>true),
             array('default_start_date, default_end_date', 'length', 'max'=>10),
-			array('id, username, password, email, activkey, create_at, lastvisit_at, superuser, status, user_role', 'safe', 'on'=>'search'),
+			array('id, username, password, email, activkey, create_at, lastvisit_at, superuser, status, user_role, client_id', 'safe', 'on'=>'search'),
 		):((Yii::app()->user->id==$this->id)?array(
 			array('username, email', 'required'),
             array('default_start_date, default_end_date', 'length', 'max'=>10),
-            array('default_portfolio_id', 'numerical', 'integerOnly'=>true),
+            array('default_portfolio_id, client_id, user_role', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>20, 'min' => 3,'message' => UserModule::t("Incorrect username (length between 3 and 20 characters).")),
 			array('email', 'email'),
 			array('username', 'unique', 'message' => UserModule::t("This user's name already exists.")),
@@ -108,6 +108,7 @@ class User extends CActiveRecord
 			'superuser' => UserModule::t("Superuser"),
 			'status' => UserModule::t("Status"),
             'user_role' => 'User Role',
+            'client_id' =>'client_id'
 		);
 	}
 	
@@ -127,7 +128,7 @@ class User extends CActiveRecord
                 'condition'=>'superuser=1',
             ),
             'notsafe'=>array(
-            	'select' => 'id, username, password, email, activkey, create_at, lastvisit_at, superuser, status, user_role',
+            	'select' => 'id, username, password, email, activkey, create_at, lastvisit_at, superuser, status, user_role, client_id',
             ),
         );
     }
@@ -136,7 +137,7 @@ class User extends CActiveRecord
     {
         return CMap::mergeArray(Yii::app()->getModule('user')->defaultScope,array(
             'alias'=>'user',
-            'select' => 'user.id, user.username, user.email, user.create_at, user.lastvisit_at, user.superuser, user.user_role, user.status',
+            'select' => 'user.id, user.username, user.email, user.create_at, user.lastvisit_at, user.superuser, user.user_role, user.status, user.client_id',
         ));
     }
 	
@@ -184,6 +185,7 @@ class User extends CActiveRecord
         $criteria->compare('lastvisit_at',$this->lastvisit_at);
         $criteria->compare('superuser',$this->superuser);
         $criteria->compare('user_role',$this->user_role);
+        $criteria->compare('client_id',$this->client_id);
         $criteria->compare('status',$this->status);
         $criteria->compare('default_portfolio_id',$this->default_portfolio_id);
         $criteria->compare('default_start_date',$this->default_start_date);

@@ -12,7 +12,7 @@
 $this->breadcrumbs=['Users'=>['admin'], 'Manage'];
 $baseUrl = Yii::app()->theme->baseUrl;
 $baseUrl1 = Yii::app()->baseUrl;
-
+$client_id = Yii::app()->user->getState('client_id');
 
 //var_dump(Yii::app()->user->getState('user_role_id'));
 //$access_level = 5;
@@ -96,7 +96,7 @@ if($counterpart_delete == 1){$access_buttons .= '{
                 <th>Default Portfolio</th>
                 <th>Default Start Date</th>
                 <th>Default End Date</th>
-                <th>Client</th>
+               <!-- <th>Client</th>-->
             </tr>
         </thead>
         <!--
@@ -127,7 +127,7 @@ var editor; // use a global for the submit and return data rendering in the exam
 $(document).ready(function() {
 
     editor = new $.fn.dataTable.Editor( {
-        ajax: 'users/users',
+        ajax: 'users/usersclients',
         table: "#example",
         fields: [ 
              {
@@ -175,13 +175,17 @@ $(document).ready(function() {
                 name: "lastname",
                 "attr": {"class": "form-control"}
             }, 
+            
             {
                 label: "Client:",
                 name: "users.client_id",
-                type: "select",
-                ipOpts: clientsLoader(),
-                "attr": {"class": "form-control"}
+                type: "hidden",
+                def: "<?php echo $client_id;?>"
+                //type: "select",
+                //ipOpts: clientsLoader(),
+                //"attr": {"class": "form-control"}
             },
+            
             
         ]
     } );
@@ -217,7 +221,7 @@ var table = $('#example').DataTable( {
         
         //colVis: { exclude: [ 1 ] },
         //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
-        ajax: "users/users",
+        ajax: "usersclients",
         columns: [
             { data: "id" },
             { data: "firstname" },
@@ -240,7 +244,7 @@ var table = $('#example').DataTable( {
             { data: "portfolio" },
             { data: "default_start_date" },
             { data: "default_end_date" },
-            { data: "clients.client_name" },           
+            //{ data: "clients.client_name" },           
         ],
         select: true,
     
@@ -310,11 +314,14 @@ var table = $('#example').DataTable( {
         success: function (json) {
           var data = json.data;
             for(var a=0; a<data.length; a++) {
+                if(data[a]['user_role_id']>1){
               obj = {
                 "value" : data[a]['user_role_id'],
                 "label" : data[a]['user_role_name1']
               };
+              
               instruments.push(obj);
+              }
             }
         }
     });

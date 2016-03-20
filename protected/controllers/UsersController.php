@@ -32,11 +32,11 @@ class UsersController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'settings', 'users'),
+				'actions'=>array('create','update', 'settings', 'admin', 'usersclients','users'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+				'actions'=>array('delete'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -78,6 +78,10 @@ class UsersController extends Controller
     
     public function actionUsers(){
         require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/users.php');
+    }
+    
+    public function actionUsersclients(){
+        require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/users_clients.php');
     }
        
 	/**
@@ -180,7 +184,14 @@ class UsersController extends Controller
     
     public function actionAdmin()
 	{
-		$this->render('admin_datatable');
+	   $user_role_id = Yii::app()->user->getState('user_role');
+       
+	   if($user_role_id == 1){
+	       $this->render('admin_datatable');
+	   }else{
+	       $this->render('admin_datatable_clients');
+       }
+		//
 	}
 
 	/**

@@ -350,7 +350,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
  <?php       
         $return = 1;
         $months = [];
-        $returns_portfolio_daily = 1;
+        $returns_portfolio_daily = [];
         $returns_portfolio = [];
         $sql_portfolio = " select * from portfolio_returns where portfolio_id = '$portfolio' and trade_date > '$start_date' and trade_date<'$end_date' order by trade_date asc";
         $portfolio_returns = Yii::app()->db->createCommand($sql_portfolio)->queryAll(true);

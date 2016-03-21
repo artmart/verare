@@ -302,7 +302,7 @@ var table = $('#example').DataTable( {
   
     function userroleLoader() {
     var instruments = [{'value': '0', 'label': '-- Select User Role --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/userrole/userrole'; ?>';
+    var path1 = '<?php echo Yii::app()->baseUrl.'/userRole/userrole'; ?>';
     $.ajax({
         url: path1,
         async: false,

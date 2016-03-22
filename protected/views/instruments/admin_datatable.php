@@ -267,7 +267,7 @@ $(document).ready(function() {
 
   function instrumenttypeLoader() {
     var instruments = [{'value': '0', 'label': '-- Select Instrument Type --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/instrumenttypes/instrumenttypes'; ?>';
+    var path1 = '<?php echo Yii::app()->baseUrl.'/instrumentTypes/instrumenttypes'; ?>';
     $.ajax({
         url: path1,
         async: false,
@@ -288,7 +288,7 @@ $(document).ready(function() {
   
   function instrumentgroupLoader() {
     var instruments = [{'value': '0', 'label': '-- Select Instrument Group --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/instrumentgroups/instrumentgroups'; ?>';
+    var path1 = '<?php echo Yii::app()->baseUrl.'/instrumentGroups/instrumentgroups'; ?>';
     $.ajax({
         url: path1,
         async: false,

@@ -265,7 +265,7 @@ $(document).ready(function() {
   
   function portfoliotypeLoader() {
     var instruments = [{'value': '0', 'label': '-- Select Portfolio Type --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/portfoliotypes/portfoliotypes'; ?>';
+    var path1 = '<?php echo Yii::app()->baseUrl.'/portfolioTypes/portfoliotypes'; ?>';
     $.ajax({
         url: path1,
         async: false,

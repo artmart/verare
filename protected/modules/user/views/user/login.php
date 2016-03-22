@@ -37,22 +37,22 @@ $this->breadcrumbs=array(
     
         <p class="note">Fields with <span class="required">*</span> are required.</p>
     
-        <div class="row">
-            <div class="span3">
+        <div class="row form-group">
+            <div class="col-md-3 control-label">
                 <?php echo $form->labelEx($model,'username'); ?>
             </div>
-            <div class="span2">
-            <?php echo $form->textField($model,'username'); ?>
+            <div class="col-md-4">
+            <?php echo $form->textField($model,'username', ['class'=>'form-control']); ?>
             <?php echo $form->error($model,'username'); ?>
             </div>
         </div>
     
-        <div class="row">
-            <div class="span3">
+        <div class="row form-group">
+            <div class="col-md-3 control-label">
                 <?php echo $form->labelEx($model,'password'); ?>
             </div>
-            <div class="span2">
-            <?php echo $form->passwordField($model,'password'); ?>
+            <div class="col-md-4">
+            <?php echo $form->passwordField($model,'password', ['class'=>'form-control']); ?>
             <?php echo $form->error($model,'password'); ?>
             </div>
            <!-- <p class="hint">
@@ -62,20 +62,20 @@ $this->breadcrumbs=array(
         </div>
     
         <div class="row rememberMe">
-            <div class="span3">
+            <div class="col-md-3 control-label">
                 <?php echo $form->label($model,'rememberMe'); ?>
                 
             </div>
-            <div class="span2">
-            <?php echo $form->checkBox($model,'rememberMe'); ?>
+            <div class="col-md-4">
+            <?php echo $form->checkBox($model,'rememberMe', ['class'=>'checkbox']); ?>
             <?php echo $form->error($model,'rememberMe'); ?>
             </div>
         </div>
     
         <div class="row buttons">
-            <div class="span3"></div>
-            <div class="span2">
-            <?php echo CHtml::submitButton('Login',array('class'=>'btn btn btn-primary', 'style' => 'width: 220px')); ?>
+            <div class="col-md-3 control-label"></div>
+            <div class="col-md-4">
+            <?php echo CHtml::submitButton('Login',array('class'=>'btn btn btn-primary', 'style' => 'width: 360px')); ?>
             </div>
         </div>
     

@@ -578,7 +578,7 @@ var table = $('#example').DataTable( {
   
   function tradestatusLoader(){
     var instruments = [{'value': '0', 'label': '-- Select Trade Status --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/tradestatus/tradestatus'; ?>';
+    var path1 = '<?php echo Yii::app()->baseUrl.'/tradeStatus/tradestatus'; ?>';
     $.ajax({
         url: path1,
         async: false,

@@ -95,6 +95,7 @@ switch ($user_role_id) {
     case 3:
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/ledger/admin">Ledger</a>
+                            <a href="'.$baseUrl1.'/documents/admin">Documents</a>
                             </li><li class="divider"></li>';
         break;
     case 4:
@@ -108,17 +109,14 @@ switch ($user_role_id) {
                             </li><li class="divider"></li>';
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/portfolios/admin">Portfolios</a>
-                            <a href="'.$baseUrl1.'/grouping/admin">Grouping</a>
+                            <a href="'.$baseUrl1.'/counterparties/admin">Counterparties</a> 
                             </li><li class="divider"></li>';
-                $usermenu1[]= '<li>
-                            <a href="'.$baseUrl1.'/counterparties/admin">Counterparties</a>  
-                            </li><li class="divider"></li>';
-    
-                $usermenu[]=['label'=>'Audit Tables', 'url'=>['/auditTables/admin']];                        
+                //$usermenu[]=['label'=>'Audit Tables', 'url'=>['/auditTables/admin']];                        
         break;
     default:
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/ledger/admin">Ledger</a>
+                            <a href="'.$baseUrl1.'/documents/admin">Documents</a>
                             </li><li class="divider"></li>';
                 //$usermenu[]=['label'=>'Audit Tables', 'url'=>['/auditTables/admin']];
                 
@@ -187,9 +185,6 @@ if(isset(Yii::app()->user->user_role)){
 
 */
 
-
-
-
 ?>
 <style>
 .navbar-default {
@@ -228,15 +223,13 @@ if(isset(Yii::app()->user->user_role)){
                         <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMIN<b class="caret"></b></a>
                           <ul class="dropdown-menu">
-                          <?php foreach($usermenu1 as $item1){
-                                echo $item1;
-                          }
-                          foreach($usermenu as $item){
-                            echo '<li>
-                                 <a href="'.$baseUrl1."/".$item['url'][0].'">'.$item['label'].'</a>
-                                 </li>';
-                          }
-                          
+                          <?php   
+                                  foreach($usermenu1 as $item1){echo $item1;}
+                                  foreach($usermenu as $item){
+                                    echo '<li>
+                                         <a href="'.$baseUrl1."/".$item['url'][0].'">'.$item['label'].'</a>
+                                         </li>';
+                                  }
                           ?>
                           <li class="divider"></li>
                           </ul>
@@ -257,10 +250,6 @@ if(isset(Yii::app()->user->user_role)){
                           <?php } ?>
                           </ul>
                         </li>
-                        
-                        
-                        
-		
                         <!--<li><a onclick="redirecttologin()" href="<?php //echo $baseUrl1;?>/user/login">Login</a></li>-->
 					</ul>
                 </div>

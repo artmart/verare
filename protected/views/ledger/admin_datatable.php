@@ -210,6 +210,10 @@ switch ($access_level) {
   </div>
 
 
+<?php 
+      $confirmed_at = date("Y-m-d h:i:sa");
+      $confirmed_by = Yii::app()->user->id;
+?>
 
 <script type="text/javascript" language="javascript" class="init">  
 var editor; // use a global for the submit and return data rendering in the examples
@@ -262,16 +266,18 @@ $(document).ready(function() {
                 type: "select",
                 ipOpts: userLoader(),
             },
+            
             {
                 label: "Confirmed At:",
                 name: "ledger.confirmed_at",
-                type: "datetime"
+                type: "hidden",
+                def: "<?php //echo $confirmed_at;?>"
             },
              {
                 label: "Confirmed By:",
                 name: "ledger.confirmed_by",
-                type: "select",
-                ipOpts: userLoader(),
+                type: "hidden",
+                def: "<?php //echo $confirmed_by;?>"
             },*/
             {
                 label: "Note:",

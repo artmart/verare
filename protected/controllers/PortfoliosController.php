@@ -138,11 +138,12 @@ class PortfoliosController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Portfolios('search');
+		/*
+        $model=new Portfolios('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Portfolios']))
 			$model->attributes=$_GET['Portfolios'];
-
+*/
 		$this->render('admin_datatable'/*,array('model'=>$model,)*/);
 	}
 

@@ -28,7 +28,7 @@
 <!-- Content Header (Page header) -->
 
 <section class="content-header">
-  <h1 class="span1">Overview
+  <h1 class="span1">Details
     <small>
         <?php
           //  echo $_SESSION["company"];
@@ -37,74 +37,7 @@
   </h1>
 
 
-<?php /* ?>          
-<div class="span2"></div>
-<div class="span1">Start Date:</div>           
-<div class="span2">
-<?php
-$this->widget('zii.widgets.jui.CJuiDatePicker',[
-        'name'=>'start_date',
-        'id'=>'start_date',
-        'value' => $start_date,
-        //'language'=>'nl',
-        //'attribute'=>'SaleDate',
-        //'model'=>$model,
-        // additional javascript options for the date picker plugin
-        //'cssFile' => 'jquery-ui-1.9.2.custom.css',
-        'options'=>[
-            'showAnim'=>'fold',
-            'dateFormat'=>'yy-mm-dd',
-            'onselect'=>'loaddata()',
-        ],
-        'htmlOptions'=>['placeholder'=>'YYYY-MM-DD', 'class'=>"form-control"],
-    ]);
-
-?>
-</div>
-<div class="span1">End Date:</div>           
-<div class="span2">
-<?php
-$this->widget('zii.widgets.jui.CJuiDatePicker',[
-        'name'=>'end_date',
-        'id'=>'end_date',
-        'value' =>$end_date,
-        //'language'=>'nl',
-        //'attribute'=>'SaleDate',
-        //'model'=>$model,
-        // additional javascript options for the date picker plugin
-        //'cssFile' => 'jquery-ui-1.9.2.custom.css',
-        'options'=>[
-            'showAnim'=>'fold',
-            'dateFormat'=>'yy-mm-dd',
-            'onselect'=>'loaddata()',
-        ],
-        'htmlOptions'=>['placeholder'=>'YYYY-MM-DD', 'class'=>"form-control"],
-    ]);
-
-?>
-</div>
-<div class="span1">Portfolio:</div>           
-<div class="span2">
-    <?php
-    $list = CHtml::listData(Portfolios::model()->findAll(['select'=>'id, portfolio', 'order'=>'portfolio']),'id','portfolio');
-    echo CHtml::dropDownList('portfolio', $portfolio,  $list, [ 'id' => 'portfolio', 'empty' => '-- Select --',  'onchange'=>'loaddata()', 'class'=>"form-control"  /*'multiple' => true, 'size'=>'10'*//*]);
- ?>
-</div>
-<?php
-*/
-    //if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
-    //if(isset($_REQUEST['end_date'])){$end_date = $_REQUEST['end_date'];}
-    //if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
-    
-    /*
-    $sql_table1 = "select pt.portfolio_type, p.portfolio, i.instrument, pt.allocation_min, pt.allocation_max, pt.allocation_normal, l.nominal*l.price nav from ledger l
-                    inner join instruments i on i.id = l.instrument_id
-                    inner join portfolios p on p.id = l.portfolio_id
-                    left join portfolio_types pt on pt.id = p.type_id
-                    where l.portfolio_id = 1 and l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
-                    group by pt.portfolio_type, p.portfolio, i.instrument, pt.allocation_min, pt.allocation_max, pt.allocation_normal";
-    */
-    
+<?php     
     $returns = Calculators::ReturnAllAndYTD($portfolio);
     $pnl = Calculators::PNL($start_date, $end_date, $portfolio);
     
@@ -195,51 +128,8 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 
         <!-- Main content -->
         <section class="content">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="box box-danger">
-			  
-                <div class="box-footer">
-                  <div class="row">
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-text">MARKET VALUE</span><p>
-                        <span class="description-percentage text-black"><b><?php echo number_format($index_value); ?></b></span>
-                      </div><!-- /.description-block -->
-                    </div><!-- /.col -->
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-text">O/N P/L</span><p>
-                              <?php
-                                  $pnl = Calculators::PNL($start_date, $end_date, $portfolio);
-                                  if($pnl >= 0)
-                                  {
-                                      echo "<span class='description-percentage text-green'><i class='fa fa-caret-up'></i> " . number_format($pnl[0]) . "</span>";
-                                  }
-                                  else
-                                  {
-                                      echo "<span class='description-percentage text-red'><i class='fa fa-caret-down'></i> " . number_format($pnl[0]) . "</span>";
-                                  } 
-                              ?>
-                      </div><!-- /.description-block -->
-                    </div><!-- /.col -->
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-text">RETURN All Time</span><p>
-                        <span class="description-percentage text-black"><?php echo number_format($returns[0], 2); ?>%</span>
-                      </div><!-- /.description-block -->
-                    </div><!-- /.col -->
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-text">RETURN YTD</span><p>
-                        <span class="description-percentage text-black"><?php echo number_format($returns[1], 2); ?>%</span>
-                      </div><!-- /.description-block -->
-                    </div><!-- /.col -->
-                  </div><!-- /.row -->
-                </div><!-- /.box-footer -->
-			  </div><!-- /.box -->
-			</div><!-- /.col -->
-		  </div><!-- /.row -->
+         
+         
 			  
 			  
           <div class="row">
@@ -247,7 +137,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
               <div class="box box">
 			  
                 <div class="box-header with-border">
-                  <h3 class="box-title">Portfolio Composition</h3>
+                  <h3 class="box-title">Portfolio</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -257,7 +147,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 				
                 <div class="box-body">
                  <!-- <div class="row">-->
-                    <div class="col-md-8">
+                    <div class="col-md-12">
 					
                       <div class="chart">
 					       <div class="scrollit">
@@ -288,65 +178,8 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                       </div><!-- /.chart-responsive -->
 					  
                     </div><!-- /.col -->
-					
-                    <div class="col-md-4">
-					  <!--<canvas id="pieChart" height="250"></canvas>-->
-                      <?php //$this->renderPartial('/site/pia_chart', []);?>                   
-                     
-<?php
-    $this->Widget('ext.highcharts.HighchartsWidget', [
-            'scripts' => [
-            'modules/drilldown', // in fact, this is mandatory :)
-            ],
-        'options'=>[
-            'colors'=>['#FF2F2F', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5', '#0563FE',  '#6AC36A', '#FFD148'],
-            'chart' => ['type' => 'pie', 'height' => 300],
-            'credits' => ['enabled' => false],
-            'title' => ['text' => null /* 'Levels 1 and 2'*/],
-            'subtitle' => ['text' => 'Click the columns to view details.'],
-            'xAxis' => ['type' => 'category'],
-            'yAxis' => ['title' => ['text' => 'Vertical legend',]],
-            'legend' => ['enabled' => false],
-            'plotOptions' => ['series' => ['borderWidth' => 0, 'dataLabels' => ['enabled' => true,],],],
-            'series' => [['name' => 'MyData', 'colorByPoint' => true, 'data' => $level1,]],
-            'drilldown' => ['series' => $level2,],
-        ],
-    ]);
-?>
-                    </div><!-- /.col -->
-					<!--
-                    <div class="col-md-4">
-                      <ul class="chart-legend clearfix">
-                        <li><i class="fa fa-circle-o text-red"></i> Equities</li>
-                        <li><i class="fa fa-circle-o text-light-blue"></i> Rates</li>
-                        <li><i class="fa fa-circle-o text-green"></i> Alternatives</li>
-                      </ul>
-                    </div> /.col -->
-					
-                  <!--</div> /.row -->
-                </div><!-- ./box-body -->
-				
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-		  
-          <div class="row">
-            <div class="col-md-12">
-              <div class="box">
-			  
-                <div class="box-header with-border">
-                  <h3 class="box-title">Portfolio Performance</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div>
-                </div><!-- /.box-header -->
-				
-                <div class="box-body">
-                  <div class="row">
-                    <div class="col-md-12">
-					
-                      <div class="table">
+                    
+                    
  <?php       
         $return = 1;
         $months = [];
@@ -418,7 +251,63 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
         $xA=$return_end/$return_start-1;
         
         //$xB=$this->GetVolatility($dateStart, $dateEnd, $iN);      
- ?>                     
+ ?> 
+
+<?php                                     
+  //$months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  $series[] = ['name' => 'Portfolio', 'data' => $returns_portfolio];
+  $series[] = ['name' => 'Benchmark', 'data' => $return_bench_daily]; 
+  $this->Widget('ext.highcharts.HighchartsWidget', [
+       'options'=>[
+    	  'title' => ['text' => ''],
+    	  'xAxis' => ['categories' => $months, 'minTickInterval' =>30, 'type' => 'datetime', 'title' => ['text'=> null], 'labels' => ['enabled' => true]],
+    	  'yAxis' => ['title' => ['text' => ''], 'min' => 0.9, 'max'=>1.35],
+    	  'chart' => ['type'=>'spline', 'plotBackgroundColor' => '#ffffff', 'plotBorderWidth' => null, 'plotShadow' => false, 'height' => 300],
+          'plotOptions'=> [
+                'spline'=> [
+                    'lineWidth'=> 2,
+                    'states'=> [
+                        'hover'=> [
+                            'lineWidth'=> 5
+                        ]
+                    ],
+                    'marker'=> [
+                        'enabled'=> false
+                    ],
+                   // 'pointInterval'=> 3600000, // one hour
+                   //'pointStart'=> Date.UTC(2015, 4, 31, 0, 0, 0)
+                ]
+            ],
+    	  'colors'=> ['#104E89', '#952C28', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
+    	  'credits' => ['enabled' => false],
+    	  'series' => $series,
+       ]
+    ]);                                
+?>
+                </div><!-- ./box-body -->
+				
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+<?php /*		  
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+			  
+                <div class="box-header with-border">
+                  <h3 class="box-title">Portfolio Performance</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div>
+                </div><!-- /.box-header -->
+				
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-md-12">
+					
+                      <div class="table">
+                    
     <table id='tablePerformance' class='table table-bordered table-hover'>
         <thead>
             <tr>
@@ -467,37 +356,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
       <div class="row">
         <div class="col-md-12">
 		  <!--<canvas id="areaChart" height="200"></canvas>-->
-<?php                                     
-  //$months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  $series[] = ['name' => 'Portfolio', 'data' => $returns_portfolio];
-  $series[] = ['name' => 'Benchmark', 'data' => $return_bench_daily]; 
-  $this->Widget('ext.highcharts.HighchartsWidget', [
-       'options'=>[
-    	  'title' => ['text' => ''],
-    	  'xAxis' => ['categories' => $months, 'minTickInterval' =>30, 'type' => 'datetime', 'title' => ['text'=> null], 'labels' => ['enabled' => true]],
-    	  'yAxis' => ['title' => ['text' => ''], 'min' => 0.9, 'max'=>1.35],
-    	  'chart' => ['type'=>'spline', 'plotBackgroundColor' => '#ffffff', 'plotBorderWidth' => null, 'plotShadow' => false, 'height' => 300],
-          'plotOptions'=> [
-                'spline'=> [
-                    'lineWidth'=> 2,
-                    'states'=> [
-                        'hover'=> [
-                            'lineWidth'=> 5
-                        ]
-                    ],
-                    'marker'=> [
-                        'enabled'=> false
-                    ],
-                   // 'pointInterval'=> 3600000, // one hour
-                   //'pointStart'=> Date.UTC(2015, 4, 31, 0, 0, 0)
-                ]
-            ],
-    	  'colors'=> ['#104E89', '#952C28', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
-    	  'credits' => ['enabled' => false],
-    	  'series' => $series,
-       ]
-    ]);                                
-?>
+
                     </div><!-- /.col -->
                   </div><!-- /.row -->
 					  
@@ -507,148 +366,14 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
               </div><!-- /.box -->
             </div><!-- /.col -->
           </div><!-- /.row -->
-		  	
-          <div class="row">
-            <div class="col-md-6">
-              <div class="box box-primary">
-		  
-                <div class="box-header with-border">
-                  <h3 class="box-title">Cash Management</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div>
-                </div><!-- /.box-header -->
-				
-                <div class="box-body">
-                  <div class="row">
-                    <div class="col-md-12">
-					
-                      <div class="table">
-					  
-						  <table id="tableCashManagement" class="table table-bordered table-hover">
-							<thead>
-							  <tr>
-								<th>Date</th>
-								<th>Instrument</th>
-								<th>Amount</th>
-							  </tr>
-							</thead>
-							<tbody>
-							  <tr>
-								<td>12-Jun-2015</td>
-								<td>BATSJ 13 06/12/17</td>
-								<td>712,589</td>
-							  </tr>
-							  <tr>
-								<td>26-Jun-2015</td>
-								<td>STERV 5 3/4 06/26/17</td>
-								<td>292,644</td>
-							  </tr>
-							  <tr>
-								<td>27-Jun-2015</td>
-								<td>SCANDA 8 1/2 06/27/18</td>
-								<td>425,000</td>
-							  </tr>
-							  <tr>
-								<td>28-Jun-2015</td>
-								<td>OPM Listed Private Equity</td>
-								<td>627,000</td>
-							  </tr>
-							<tbody>
-						  </table>
-						  
-					  </div> <!-- /.table -->
-                    </div><!-- class="col-md-6"> -->
-                  </div><!-- class="row"> -->
-                </div><!-- class="box-body"> -->
-					  
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-			
-			
-			
-            <div class="col-md-6">
-              <div class="box box-info">
-		  
-                <div class="box-header with-border">
-                  <h3 class="box-title">Winners/Losers</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div>
-                </div><!-- /.box-header -->
-				
-                <div class="box-body">
-                  <div class="row">
-                    <div class="col-md-12">
-				
-                      <div class="table">
-						  <table id="tableWinners" class="table table-bordered table-hover">
-							<thead>
-							  <tr>
-								<th>Instrument</th>
-								<th>NAV</th>
-								<th>Change</th>
-							  </tr>
-							</thead>
-							<tbody>
-							  <tr>
-								<td><span class="description-percentage text-green"><i class="fa fa-caret-up"></i> Swedbank Robur Penningmarknads</span></td>
-								<td><span class="description-percentage text-green">64,047,833</span></td>
-								<td><span class="description-percentage text-green">269,001</span></td>
-							  </tr>
-							  <tr>
-								<td><span class="description-percentage text-green"><i class="fa fa-caret-up"></i> Swedbank Robur Penningmarknads</span></td>
-								<td><span class="description-percentage text-green">16,104,449</span></td>
-								<td><span class="description-percentage text-green">144,287</span></td>
-							  </tr>
-							  <tr>
-								<td><span class="description-percentage text-red"><i class="fa fa-caret-down"></i> SEB Sverige Stiftelsefond</span></td>
-								<td><span class="description-percentage text-red">63,194,905</span></td>
-								<td><span class="description-percentage text-red">-97,952</span></td>
-							  </tr>
-							  <tr>
-								<td><span class="description-percentage text-red"><i class="fa fa-caret-down"></i> SEB Foretagsobligationsfond Fl</span></td>
-								<td><span class="description-percentage text-red">45,258,816</span></td>
-								<td><span class="description-percentage text-red">-133,514</span></td>
-							  </tr>
-							<tbody>
-						  </table>
-					  </div> <!-- /.table -->
-					  
-                    </div><!-- class="col-md-6"> -->
-                  </div><!-- class="row"> -->
-                </div><!-- class="box-body"> -->
-				
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-		  
+*/
+?>		  	
+         
         </section>
 
 		
 <script>
-/*
-$(document).ready(function ($) {loaddata();})
 
-    function loaddata(){
-    	$.ajax({
-    			type: 'post',
-    			url: '<?php //echo $baseUrl;?>/site/overviewLoad', 
-    			data: {
-                start_date: $('#start_date').val(), 
-                end_date: $('#end_date').val(),
-                portfolio: $('#portfolio').val(),
-    			},
-    			success: function (response) {
-    			// We get the element having id of display_info and put the response inside it
-    			$( '#overview' ).html(response);
-    			}
-    		   });
-              //loadtable();        
-    }
-*/
 
 
 

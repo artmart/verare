@@ -68,6 +68,8 @@
     
     function editledger ( $editor, $id, $values ) {                
 
+        $confirmed_at = date("Y-m-d h:i:sa");
+        $user_id = Yii::app()->user->id;
         $existing_trades =  Ledger::model()->findByPk($id);
         
         if(isset($values['ledger']['trade_date'])){$trade_date = $values['ledger']['trade_date'];}else{$trade_date = $existing_trades->trade_date;}
@@ -92,7 +94,7 @@
             (isset($values['ledger']['price']) && $existing_trades->price !== $values['ledger']['price'])        
           )
           {    
-                $user_id = Yii::app()->user->id;
+                
                 $user = Users::model()->findByPk($user_id);
                 $client_id = $user->client_id;
             
@@ -135,6 +137,19 @@
                 $editor
                     ->field( 'trade_code' )
                     ->setValue( $trade_code );
+                if($trade_status_id == 2){
+                    $editor
+                        ->field( 'ledger.confirmed_by' )
+                        ->setValue( $user_id ); 
+                    $editor
+                        ->field( 'ledger.confirmed_at' )
+                        ->setValue( $confirmed_at );  
+                    }  
+                
+                    
+                    
+                    
+
           }
     } 
      

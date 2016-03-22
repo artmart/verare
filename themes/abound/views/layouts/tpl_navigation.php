@@ -208,6 +208,7 @@ if(isset(Yii::app()->user->user_role)){
 					<ul class="nav navbar-nav navbar-right text-uppercase">
 						<li><a href="<?php echo $baseUrl1;?>/site/index">Home</a></li>
 						<li><a href="<?php echo $baseUrl1;?>/site/admin">Dashboard</a></li>
+                        <li><a href="<?php echo $baseUrl1;?>/site/details">Details</a></li>
                         <?php /*
                         <?php if(Yii::app()->user->isGuest){?>
                         <li><a class="login-hide" href="<?php echo $baseUrl1;?>/site/login">Login</a></li>

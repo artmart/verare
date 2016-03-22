@@ -156,7 +156,7 @@ $(document).ready(function() {
             },           
             {
                 label: "client:",
-                name: "client_name",
+                name: "client_id",
                 type: "select",
                 ipOpts: clientLoader(),
                 "attr": {"class": "form-control"}
@@ -169,7 +169,7 @@ $(document).ready(function() {
             },
              {
                 label: "Portfolio Type:",
-                name: "portfolio_type",
+                name: "type_id",
                 type: "select",
                 ipOpts: portfoliotypeLoader(),
                 "attr": {"class": "form-control"}

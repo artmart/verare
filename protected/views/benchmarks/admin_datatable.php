@@ -126,7 +126,7 @@ $(document).ready(function() {
             },
             {
                 label: "Portfolio:",
-                name: "portfolios.portfolio_id",
+                name: "benchmarks.portfolio_id",
                 type: "select",
                 ipOpts: portfolioLoader(),
                 "attr": {"class": "form-control"}

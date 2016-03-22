@@ -8,6 +8,7 @@
         DataTables\Editor\Join,
         DataTables\Editor\Upload,
         DataTables\Editor\Validate;
+    $client_id = Yii::app()->user->getState('client_id');
  /*    
     //Build our Editor instance and process the data coming from _POST
     Editor::inst( $db, 'ledger' )
@@ -46,7 +47,7 @@
  */       
 
 // Build our Editor instance and process the data coming from _POST
-Editor::inst( $db, 'portfolios')
+Editor::inst( $db, 'portfolios', 'id', $client_id )
     ->fields(
         Field::inst( 'clients.client_name as client_name' ),
         Field::inst( 'portfolio_types.portfolio_type as portfolio_type' ),
@@ -61,6 +62,7 @@ Editor::inst( $db, 'portfolios')
     )
     ->leftJoin( 'clients', 'clients.id', '=', 'portfolios.client_id' )
     ->leftJoin( 'portfolio_types', 'portfolio_types.id', '=', 'portfolios.type_id' )
+    ->where( 'portfolios.client_id', $client_id )
     ->process( $_POST )
     ->json();
 ?>

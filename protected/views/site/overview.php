@@ -126,7 +126,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                             inner join instruments i on i.id = l.instrument_id
                             inner join portfolios p on p.id = l.portfolio_id
                             left join instrument_groups ig on ig.id = i.instrument_group_id
-                            where l.portfolio_id = 1 and l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
+                            where l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
                             group by ig.group_name, i.instrument_group_id, p.portfolio, ig.allocation_min, ig.allocation_max, ig.allocation_normal";
     $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
     
@@ -134,7 +134,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
                     inner join instruments i on i.id = l.instrument_id
                     inner join portfolios p on p.id = l.portfolio_id
                     left join instrument_groups ig on ig.id = i.instrument_group_id
-                    where l.portfolio_id = 1 and l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
+                    where l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
                     group by ig.group_name, i.instrument_group_id, p.portfolio, i.instrument, ig.allocation_min, ig.allocation_max, ig.allocation_normal";
     $table1_results = Yii::app()->db->createCommand($sql_table1)->queryAll(true);
     

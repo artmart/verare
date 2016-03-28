@@ -34,6 +34,13 @@ class SiteController extends Controller
 		$this->render('index');
 	}
     
+    public function actionResultsload()
+	{
+		$this->renderPartial('details_portfolio_types');
+	}
+    
+    
+    
     /**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.

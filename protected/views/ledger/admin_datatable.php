@@ -387,7 +387,7 @@ var table = $('#example').DataTable( {
         //"bSort": true,
         //"bFilter": false,
         bJQueryUI: false,
-        bProcessing: true,
+        bProcessing: false,
         sScrollX: "100%",
         sScrollXInner: "110%",
         bScrollCollapse: true,

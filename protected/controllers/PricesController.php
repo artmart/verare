@@ -89,7 +89,7 @@ class PricesController extends Controller
     
     public function actionAllStats()
 	{
-	    $this->layout='column1';
+	    //$this->layout='column1';
 		$this->render('all_stats');
 	}
     

@@ -26,7 +26,7 @@
 	<?php  
       
 	  //$cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
-      $cs->registerCssFile($baseUrl.'/css/templatemo-style.css');
+      //$cs->registerCssFile($baseUrl.'/css/templatemo-style.css');
       $cs->registerCssFile($baseUrl.'/css/AdminLTE.min.css');
       
       $cs->registerCssFile($baseUrl.'/css/animate.min.css');
@@ -47,11 +47,12 @@
  
     
    <!-- <link rel="stylesheet" href="<?php //echo $baseUrl;?>/css/jquery-ui.min.css">-->
-    
+   
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/datatables-tabletools/2.1.5/css/TableTools.css">
+     <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables_themeroller.css">
     
-    
-   <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">-->
+   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
+   
     
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.0/css/select.dataTables.min.css">
@@ -63,11 +64,11 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.2/css/select.bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo $baseUrl;?>/css/editor.bootstrap.min.css">
-    <link rel="stylesheet" href="<?php //echo $baseUrl;?>/css/bootstrap.min.css">
+    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
    <link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.11/integration/font-awesome/dataTables.fontAwesome.css">
   <!-- <link rel="stylesheet" href="<?php //echo $baseUrl;?>/css/font-awesome.min.css">-->
-      
+    <link rel="stylesheet" href="<?php //echo $baseUrl;?>/css/bootstrap.min.css">  
       
       
       
@@ -110,10 +111,14 @@
         
         
         
-        
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>    
         
         
   	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+    <!--<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>-->
+    
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
     <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datatables-tabletools/2.1.5/js/TableTools.min.js"></script>
     
@@ -127,8 +132,8 @@
     
     
 	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/demo.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/editor-demo.js"></script>
+	<!--<script type="text/javascript" language="javascript" src="<?php //echo $baseUrl;?>/editor_datatables/examples/resources/demo.js"></script>
+	<script type="text/javascript" language="javascript" src="<?php //echo $baseUrl;?>/editor_datatables/examples/resources/editor-demo.js"></script>-->
     
     <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.colVis.min.js"></script>
     <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.buttons.min.js"></script>
@@ -141,6 +146,7 @@
     <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.colVis.min.js"></script>
         
 	  <?php
+      $cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
       $cs->registerScriptFile($baseUrl.'/js/app.min.js');
 	  $cs->registerScriptFile($baseUrl.'/js/bootstrap.min.js');
 	  //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.sparkline.js');
@@ -153,7 +159,7 @@
       //$cs->registerScriptFile($baseUrl.'/datatables/media/js/jquery.dataTables.min.js');
       
       
-      $cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
+      
 	  $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.foundation.min.js');
       $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.jqueryui.min.js');
 	  //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.dataTables.min.js');

@@ -1,7 +1,3 @@
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/data.js"></script>
-<script src="https://code.highcharts.com/modules/drilldown.js"></script>
-
 <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables_themeroller.css">
 <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
@@ -28,13 +24,7 @@
 <!-- Content Header (Page header) -->
 
 <section class="content-header">
-  <h1 class="span1">Details
-    <small>
-        <?php
-          //  echo $_SESSION["company"];
-        ?> 
-    </small>
-  </h1>
+  <h1 class="span1">Details</h1>
 
 
 <?php     
@@ -94,8 +84,7 @@
         }                            
   }
   
-   $level1 = [];
-   $level2 = [];
+
   
     $i = 2;
     foreach($portfolio_composition as $pgc){ 
@@ -109,8 +98,7 @@
 						<td>'.number_format($pgc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
 					  </tr>';
                       
-    $level1[] = array('name' => $pgc['group_name'], 'y' => $value[$pgc['instrument_group_id']]*100/$index_value, 'drilldown' => $pgc['instrument_group_id']);           
-    $level2[] = array('id' => $pgc['instrument_group_id'], 'data' => $allocation[$pgc['instrument_group_id']] /*array(array('Detail1', 1), array('Detail2', 2), array('Detail3', 4))*/);
+ 
 ?>
     
     <table id="exampleTable_<?php echo $i;?>" class="table table-bordered table-hover">
@@ -129,9 +117,7 @@
         <!-- Main content -->
         <section class="content">
          
-         
-			  
-			  
+        	  
           <div class="row">
             <div class="col-md-12">
               <div class="box box">

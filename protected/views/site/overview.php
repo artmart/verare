@@ -1,10 +1,24 @@
+<!--
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/data.js"></script>
 <script src="https://code.highcharts.com/modules/drilldown.js"></script>
 
 <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables_themeroller.css">
 <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>-->
+
+
+<style>
+.datatable-scroll {
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+#example_length{
+    float:left;
+}
+</style>
+
 
 <?php 
     $id = Yii::app()->user->id;
@@ -629,28 +643,6 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',[
 
 		
 <script>
-/*
-$(document).ready(function ($) {loaddata();})
-
-    function loaddata(){
-    	$.ajax({
-    			type: 'post',
-    			url: '<?php //echo $baseUrl;?>/site/overviewLoad', 
-    			data: {
-                start_date: $('#start_date').val(), 
-                end_date: $('#end_date').val(),
-                portfolio: $('#portfolio').val(),
-    			},
-    			success: function (response) {
-    			// We get the element having id of display_info and put the response inside it
-    			$( '#overview' ).html(response);
-    			}
-    		   });
-              //loadtable();        
-    }
-*/
-
-
 
 function fnFormatDetails(table_id, html) {
     var sOut = "<table id=\"exampleTable_" + table_id + "\">";
@@ -689,8 +681,36 @@ var iTableCounter = 1;
 
         //Initialse DataTables, with no sorting on the 'details' column
         var oTable = $('#exampleTable').dataTable({
-            "bJQueryUI": true,
-            "sPaginationType": "full_numbers",
+            
+            
+            renderer: "bootstrap",
+            //dom: '<"clear">&lt;<"clear">Bfrtip<"clear">',
+            //"Dom": '<"H"lfr>t<"F"ip>' ,
+            //sDom: 'lfrtip',
+            
+            //dom: 'lBfrtip',
+            //displayLength: 10,
+            filter: true,
+            paginate: true,
+            sort:true,
+            //bsort: true,
+            //'bSortable' : true,
+            info: true,
+            //scrollX: '100%',
+            //scrollCollapse: true,
+            //paging:         false,
+            //"bPaginate": true,
+            //"bSort": true,
+            //"bFilter": false,
+            //bJQueryUI: false,
+            //bProcessing: true,
+            sScrollX: "100%",
+            sScrollXInner: "110%",
+            bScrollCollapse: true,
+            
+            
+            "bJQueryUI": false,
+            //"sPaginationType": "full_numbers",
             "aoColumnDefs": [
             { "bSortable": false, "aTargets": [0] }
         ],
@@ -714,9 +734,10 @@ var iTableCounter = 1;
                 //alert($(this).closest("tr").index()+1);
                 this.src = "http://i.imgur.com/d4ICC.png";
                 oTable.fnOpen(nTr, fnFormatDetails(iTableCounter, $("#exampleTable_" + tab_num).html()), 'details');
+                           
                 oInnerTable = $("#exampleTable_" + iTableCounter).dataTable({
-                    "bJQueryUI": true,
-                    "sPaginationType": "full_numbers"
+                    "bJQueryUI": false,
+                    //"sPaginationType": "full_numbers"
                 });
                 //iTableCounter = iTableCounter + 1;
             }

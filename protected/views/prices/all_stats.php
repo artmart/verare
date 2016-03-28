@@ -137,7 +137,7 @@ if($inst1 & $inst2){
  <?php  
    
 //var_dump($allstats);
- $this->endWidget();   
+  
  ?>
  </div>
  <?php   
@@ -156,7 +156,7 @@ if($inst1 & $inst2){
       <strong>Error!</strong> One instrument is not selected.
     </div>
     <?php }
-
+ $this->endWidget(); 
 ?>
 
 

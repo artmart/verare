@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables_themeroller.css">
 <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
+<!--<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>-->
 
 <?php 
     $id = Yii::app()->user->id;
@@ -400,8 +400,10 @@ var iTableCounter = 1;
 
         //Initialse DataTables, with no sorting on the 'details' column
         var oTable = $('#exampleTable').dataTable({
-            "bJQueryUI": true,
-            "sPaginationType": "full_numbers",
+            
+            
+            "bJQueryUI": false,
+            //"sPaginationType": "full_numbers",
             "aoColumnDefs": [
             { "bSortable": false, "aTargets": [0] }
         ],
@@ -426,8 +428,8 @@ var iTableCounter = 1;
                 this.src = "http://i.imgur.com/d4ICC.png";
                 oTable.fnOpen(nTr, fnFormatDetails(iTableCounter, $("#exampleTable_" + tab_num).html()), 'details');
                 oInnerTable = $("#exampleTable_" + iTableCounter).dataTable({
-                    "bJQueryUI": true,
-                    "sPaginationType": "full_numbers"
+                    "bJQueryUI": false,
+                    //"sPaginationType": "full_numbers"
                 });
                 //iTableCounter = iTableCounter + 1;
             }

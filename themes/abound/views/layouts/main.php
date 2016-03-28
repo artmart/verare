@@ -26,7 +26,7 @@
 	<?php  
       
 	  //$cs->registerCssFile($baseUrl.'/css/bootstrap-responsive.min.css');
-      //$cs->registerCssFile($baseUrl.'/css/templatemo-style.css');
+      $cs->registerCssFile($baseUrl.'/css/templatemo-style.css');
       $cs->registerCssFile($baseUrl.'/css/AdminLTE.min.css');
       
       $cs->registerCssFile($baseUrl.'/css/animate.min.css');
@@ -49,9 +49,9 @@
    <!-- <link rel="stylesheet" href="<?php //echo $baseUrl;?>/css/jquery-ui.min.css">-->
    
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/datatables-tabletools/2.1.5/css/TableTools.css">
-     <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables_themeroller.css">
+    <!-- <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables_themeroller.css">
     
-   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
+   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">-->
    
     
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css">

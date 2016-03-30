@@ -48,7 +48,7 @@
 <div>
 <?php 
 ini_set('max_execution_time', 50000);
-
+$this->beginWidget('zii.widgets.CPortlet', array('title'=>"All Stats",));
 if($instrument_id1 >0 && $instrument_id2 >0){
 //Trades
 $inst1 = Yii::app()->db->createCommand("select distinct trade_date, price from prices where instrument_id = $instrument_id1 order by trade_date")->queryAll(true);      
@@ -60,7 +60,7 @@ foreach($inst2 as $i2){$returnBenchmark[] = $i2['price'];}
 <div class="span1"></div>
 <div class="span12">
 <?php
-$this->beginWidget('zii.widgets.CPortlet', array('title'=>"All Stats",));
+
 if($inst1 & $inst2){
    $allstats = Calculators::CalcAllStats1($returnTarget, $returnBenchmark);
  ?>

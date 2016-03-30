@@ -3,7 +3,89 @@
 <!--<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>-->
 
 
-<table id="example" class="table table-bordered table-hover">
+<?php
+    $id = Yii::app()->user->id;
+    $user_data = Users::model()->findByPk($id);
+    $this->pageTitle=Yii::app()->name; 
+    $baseUrl = Yii::app()->baseUrl;
+    
+    if(isset($user_data->default_portfolio_id)){$portfolio = $user_data->default_portfolio_id;}
+    //if(isset($_POST['portfolio'])){$portfolio = $_POST['portfolio'];}
+    
+   	$end_date = Date('Y-m-d');
+	$start_date = date('Y-m-d', strtotime('-1 years'));
+    if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
+    if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
+    
+    
+    /*
+    $portfolio_composition_sql = "select ig.group_name, i.instrument_group_id, p.portfolio, ig.allocation_min, ig.allocation_max, ig.allocation_normal, 
+                        sum(l.nominal*l.price) nav  from ledger l
+                        inner join instruments i on i.id = l.instrument_id
+                        inner join portfolios p on p.id = l.portfolio_id
+                        inner join instrument_groups ig on ig.id = i.instrument_group_id
+                        where l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
+                        group by ig.group_name, i.instrument_group_id, p.portfolio, ig.allocation_min, ig.allocation_max, ig.allocation_normal";
+    $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
+    */
+    
+    
+    
+    $portfolios = Yii::app()->db->createCommand("select * from portfolios where client_id = 1")->queryAll(true);
+    
+    
+    $tbl_rows = '';
+    foreach($portfolios as $portfolio){
+        $portfolio_id = $portfolio['id'];
+    
+    /*    
+    $sql_table1 = "select i.instrument_group_id, p.portfolio, i.instrument from ledger l
+                    inner join instruments i on i.id = l.instrument_id
+                    inner join portfolios p on p.id = l.portfolio_id
+                    inner join instrument_groups ig on ig.id = i.instrument_group_id
+                    where l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' and i.instrument_group_id = '$instrument_group_id'
+                    group by ig.group_name, i.instrument_group_id, p.portfolio, i.instrument, ig.allocation_min, ig.allocation_max, ig.allocation_normal";
+    $table1_results = Yii::app()->db->createCommand($sql_table1)->queryAll(true);
+    */
+    
+    $sql_table1 = "select * from portfolio_returns where portfolio_id = 1 order by trade_date";
+    $table1_results = Yii::app()->db->createCommand($sql_table1)->queryAll(true);
+    
+    
+    
+  $tbl_rows .=   
+    '<tr>
+        <td>'. $portfolio['portfolio'].'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+        <td>'. number_format(11).'</td>
+    </tr>';
+    
+}
+
+
+//class="table table-bordered table-hover"
+?>
+
+<table id="example" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
     <thead>
         <tr>
             <th>Name</th>
@@ -31,78 +113,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>aaaa</td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-        </tr>
-        <tr>
-            <td>aaaa</td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-        </tr>
-        <tr>
-            <td>aaaa</td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-            <td><?php echo number_format(11); ?></td>
-        </tr>
+        <?php echo $tbl_rows; ?>
     <tbody>
 </table>
 <div id="container1"></div>

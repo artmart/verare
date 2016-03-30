@@ -3,18 +3,7 @@
 <!--<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>-->
 
 <?php 
-    $id = Yii::app()->user->id;
-    $user_data = Users::model()->findByPk($id);
-    $this->pageTitle=Yii::app()->name; 
-    $baseUrl = Yii::app()->baseUrl;
-    
-    if(isset($user_data->default_portfolio_id)){$portfolio = $user_data->default_portfolio_id;}
-    //if(isset($_POST['portfolio'])){$portfolio = $_POST['portfolio'];}
-    
-   	$end_date = Date('Y-m-d');
-	$start_date = date('Y-m-d', strtotime('-1 years'));
-    if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
-    if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
+
     //if(isset($_POST['start_date'])){$start_date = date_format(date_create($_POST['start_date']),"Y-m-d");}
     //if(isset($_POST['end_date'])){$end_date = date_format(date_create($_POST['end_date']),"Y-m-d");}
 ?>
@@ -36,7 +25,7 @@
               <div class="box box">
 			  
                 <div class="box-header with-border">
-                  <h3 class="box-title">Portfolio</h3>
+                  <h3 class="box-title">Portfolios</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>

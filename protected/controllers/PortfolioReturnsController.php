@@ -97,14 +97,13 @@ class PortfolioReturnsController extends Controller
                                 sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id)) top,
                                 sum(p.price*bc.weight) sums
                                 from prices p
-                                inner join ledger l on l.instrument_id = p.instrument_id
-                                inner join benchmarks b on b.portfolio_id = l.portfolio_id
                                 inner join benchmark_components bc on bc.instrument_id = p.instrument_id 
                                 where p.is_current = 1 and p.instrument_id in ('$insids') and " . $where .  " 
                                 group by  p.trade_date
                                 order by p.trade_date asc";
                                 
-
+//inner join ledger l on l.instrument_id = p.instrument_id
+                                //inner join benchmarks b on b.portfolio_id = l.portfolio_id
                                 
         //echo $portfolio_return_sql;
         //exit;

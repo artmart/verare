@@ -9,6 +9,7 @@
  * @property integer $is_prtfolio_or_group
  * @property string $trade_date
  * @property double $return
+ * @property double $benchmark_return
  */
 class PortfolioReturns extends CActiveRecord
 {
@@ -40,10 +41,10 @@ class PortfolioReturns extends CActiveRecord
 		return array(
 			array('portfolio_id, is_prtfolio_or_group, trade_date, return', 'required'),
 			array('portfolio_id, is_prtfolio_or_group', 'numerical', 'integerOnly'=>true),
-			array('return', 'numerical'),
+			array('return, benchmark_return', 'numerical'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, portfolio_id, is_prtfolio_or_group, trade_date, return', 'safe', 'on'=>'search'),
+			array('id, portfolio_id, is_prtfolio_or_group, trade_date, return, benchmark_return', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,6 +70,8 @@ class PortfolioReturns extends CActiveRecord
 			'is_prtfolio_or_group' => 'Is Prtfolio Or Group',
 			'trade_date' => 'Trade Date',
 			'return' => 'Return',
+            'benchmark_return' =>'Benchmark Return',
+            
 		);
 	}
 
@@ -88,6 +91,8 @@ class PortfolioReturns extends CActiveRecord
 		$criteria->compare('is_prtfolio_or_group',$this->is_prtfolio_or_group);
 		$criteria->compare('trade_date',$this->trade_date,true);
 		$criteria->compare('return',$this->return);
+        $criteria->compare('benchmark_return',$this->benchmark_return);
+        
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

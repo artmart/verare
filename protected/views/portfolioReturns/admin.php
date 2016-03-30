@@ -32,15 +32,28 @@
         
     if(isset($_REQUEST['dt']) && !($_REQUEST['dt'] == '')){$dt = $_REQUEST['dt']; $where .= " and p.trade_date >='$dt' "; }
 
-    $this->beginWidget('zii.widgets.CPortlet', array('title'=>"Selection",));
+    
     echo CHtml::beginForm('portfolioReturns','post'); 
 ?>
-<div class="span3">
+
+
+
+
+
+
+
+<div class="row form-group">
+  <label class="col-md-3 control-label"></label>  
+  <div class="col-md-4">
     <?php
-        echo CHtml::dropDownList('portfolio', $portfolio_id,  CHtml::listData(Portfolios::model()->findAll(array('select'=>'id, portfolio', 'order'=>'portfolio')),'id','portfolio'), array('empty' => '-- Select Instrument --',  /*'onchange'=>'loaddata()', 'multiple' => true, 'size'=>'10'*/ ));
+        echo CHtml::dropDownList('portfolio', $portfolio_id,  CHtml::listData(Portfolios::model()->findAll(array('select'=>'id, portfolio', 'order'=>'portfolio')),'id','portfolio'), array('empty' => '-- Select Portfolio --', 'class' => 'form-control input-md'  /*'onchange'=>'loaddata()', 'multiple' => true, 'size'=>'10'*/ ));
     ?>
 </div>
-<div class="span3">
+</div>
+
+<div class="row form-group">
+  <label class="col-md-3 control-label"></label>  
+  <div class="col-md-4">
 <?php
 
 $this->widget('zii.widgets.jui.CJuiDatePicker',array(
@@ -54,17 +67,23 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',array(
             'dateFormat'=>'yy-mm-dd',
             //'onselect'=>'loaddata()'
         ),
-        'htmlOptions'=>array('style'=>'height:20px;', 'placeholder'=>'YYYY-MM-DD', ),
+        'htmlOptions'=>array('class' => 'form-control input-md',  'placeholder'=>'YYYY-MM-DD', ),
     ));
 
 ?>
 </div>
-<div class="span1">
+</div>
+
+
+<div class="row form-group">
+  <label class="col-md-3 control-label"></label>  
+  <div class="col-md-4">
 <?php echo CHtml::submitButton('Calculate Return', array('submit' => $baseurl.'/portfolioReturns/PortfolioReturnsCalc', 'class'=>"btn btn-primary"));?>
+</div>
 </div>
 <br />
 <?php echo CHtml::endForm(); ?>
-<?php $this->endWidget();?>	
+
 </div>
 
 <?php
@@ -111,6 +130,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'is_prtfolio_or_group',
 		'trade_date',
 		'return',
+        'benchmark_return',
 		array(
 			'class'=>'CButtonColumn',
 		),

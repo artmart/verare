@@ -228,6 +228,7 @@ $(document).ready(function() {
                 label: "Instrument:",
                 name: "ledger.instrument_id",
                 type: "select",
+                //multiple: true,
                 ipOpts: instrumentsLoader(),
                 //className: 'full'
                 "attr": {"class": "form-control"}

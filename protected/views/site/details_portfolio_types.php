@@ -81,6 +81,8 @@
         $return_1y = 1;
         
         foreach($portfolio_results as $pr){
+            
+            $months[] = $pr['trade_date'];
             $port_ret[] = $pr['return'];
             $bench_ret[] = $pr['benchmark_return'];
             
@@ -142,6 +144,7 @@
     </tr>';
     }
 }
+$months = array_unique($months);
 
 
 //class="table table-bordered table-hover"
@@ -225,12 +228,14 @@ $(function () {
         },
         xAxis: {
             type: 'datetime',
-            dateTimeLabelFormats: { // don't display the dummy year
-                month: '%e. %b',
-                year: '%b'
-            },
+            minTickInterval: 30,
+            categories: <?php echo json_encode($months);?>,
+            //dateTimeLabelFormats: { // don't display the dummy year
+                //month: '%b \'%y', //'%e. %b', '%b \'%y'
+               // year: '%b'
+           // },
             title: {
-                text: 'Date'
+                text: ''
             }
         },
         yAxis: {
@@ -240,10 +245,10 @@ $(function () {
             min: 0.9,
             max: 1.35
         },
-        tooltip: {
-            headerFormat: '<b>{series.name}</b><br>',
-            pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
-        },
+        //tooltip: {
+        //    headerFormat: '<b>{series.name}</b><br>',
+        //    pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+        //},
 
         plotOptions: {
             spline: {

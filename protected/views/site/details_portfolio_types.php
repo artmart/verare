@@ -26,49 +26,13 @@
     
     //if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
     //if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
-    
-    
-    /*
-    $portfolio_composition_sql = "select ig.group_name, i.instrument_group_id, p.portfolio, ig.allocation_min, ig.allocation_max, ig.allocation_normal, 
-                        sum(l.nominal*l.price) nav  from ledger l
-                        inner join instruments i on i.id = l.instrument_id
-                        inner join portfolios p on p.id = l.portfolio_id
-                        inner join instrument_groups ig on ig.id = i.instrument_group_id
-                        where l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
-                        group by ig.group_name, i.instrument_group_id, p.portfolio, ig.allocation_min, ig.allocation_max, ig.allocation_normal";
-    $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
-    */
-    
-    
-    
+       
     $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
-    
-    
-    //$one date( "Y-m-d", strtotime( "-1 month" ) )
-            //$datetime1 = new DateTime(date_create('2008-10-11'));
-            //$datetime2 = new DateTime(date_create('2009-10-11'));
-           // $interval = date_diff($datetime1, $datetime2);
-            //var_dump($interval);
-            //echo $interval->m;
-            
-           // exit;
-    
-    
-    
+       
     $tbl_rows = '';
     foreach($portfolios as $portfolio){
         $portfolio_id = $portfolio['id'];
-    
-    /*    
-    $sql_table1 = "select i.instrument_group_id, p.portfolio, i.instrument from ledger l
-                    inner join instruments i on i.id = l.instrument_id
-                    inner join portfolios p on p.id = l.portfolio_id
-                    inner join instrument_groups ig on ig.id = i.instrument_group_id
-                    where l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' and i.instrument_group_id = '$instrument_group_id'
-                    group by ig.group_name, i.instrument_group_id, p.portfolio, i.instrument, ig.allocation_min, ig.allocation_max, ig.allocation_normal";
-    $table1_results = Yii::app()->db->createCommand($sql_table1)->queryAll(true);
-    */
-    
+        
     $sql_returns = "select * from portfolio_returns where portfolio_id = '$portfolio_id' order by trade_date";
     $portfolio_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
     if($portfolio_results){

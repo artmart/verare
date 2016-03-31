@@ -86,6 +86,8 @@ Editor::inst( $db, 'users', 'id', $client_id)
         Field::inst( 'users.default_start_date as default_start_date' ),
         Field::inst( 'users.default_end_date as default_end_date' ),
         Field::inst( 'users.client_id' ), //->validator( 'Validate::notEmpty' ),
+        Field::inst( 'users.accessable_portfolios as accessable_portfolios' ),
+        
        // Field::inst( 'clients.client_name' ),
         Field::inst( 'user_role.user_role as user_role_name' ),
         Field::inst( 'portfolios.portfolio as portfolio' )

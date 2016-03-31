@@ -20,7 +20,9 @@
     $month9_start = date( "Y-m-d", strtotime( "-9 month" ));
     $month1y_start = date( "Y-m-d", strtotime( "-1 years" ));
     
-
+     $accessable_portfolios1 = Yii::app()->user->getState('accessable_portfolios');
+     $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
+     
     
     //if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
     //if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
@@ -39,7 +41,7 @@
     
     
     
-    $portfolios = Yii::app()->db->createCommand("select * from portfolios where client_id = 1")->queryAll(true);
+    $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
     
     
     //$one date( "Y-m-d", strtotime( "-1 month" ) )
@@ -184,37 +186,6 @@ $months = array_unique($months);
 <div id="container1"></div>
 <script>
 
-/*
-  $series[] = ['name' => 'Portfolio', 'data' => $returns_portfolio];
-  $series[] = ['name' => 'Benchmark', 'data' => $return_bench_daily]; 
-  $this->Widget('ext.highcharts.HighchartsWidget', [
-       'options'=>[
-    	  'title' => ['text' => ''],
-    	  'xAxis' => ['categories' => $months, 'minTickInterval' =>30, 'type' => 'datetime', 'title' => ['text'=> null], 'labels' => ['enabled' => true]],
-    	  'yAxis' => ['title' => ['text' => ''], 'min' => 0.9, 'max'=>1.35],
-    	  'chart' => ['type'=>'spline', 'plotBackgroundColor' => '#ffffff', 'plotBorderWidth' => null, 'plotShadow' => false, 'height' => 300],
-          'plotOptions'=> [
-                'spline'=> [
-                    'lineWidth'=> 2,
-                    'states'=> [
-                        'hover'=> [
-                            'lineWidth'=> 5
-                        ]
-                    ],
-                    'marker'=> [
-                        'enabled'=> false
-                    ],
-                   // 'pointInterval'=> 3600000, // one hour
-                   //'pointStart'=> Date.UTC(2015, 4, 31, 0, 0, 0)
-                ]
-            ],
-    	  'colors'=> ['#104E89', '#952C28', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
-    	  'credits' => ['enabled' => false],
-    	  'series' => $series,
-       ]
-    ]);
-
-*/
 $(function () {
     $('#container1').highcharts({
         chart: {

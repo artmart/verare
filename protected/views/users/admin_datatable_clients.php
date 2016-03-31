@@ -185,8 +185,14 @@ $(document).ready(function() {
                 //ipOpts: clientsLoader(),
                 //"attr": {"class": "form-control"}
             },
-            
-            
+            {
+                "label": "Portfolios",
+                "name": "accessable_portfolios",
+                "type": "checkbox",
+                "separator": ",",
+                ipOpts: portfoliosloader(),
+            },
+   
         ]
     } );
 	   
@@ -244,7 +250,7 @@ var table = $('#example').DataTable( {
             { data: "portfolio" },
             { data: "default_start_date" },
             { data: "default_end_date" },
-            //{ data: "clients.client_name" },           
+            //{ data: "accessable_portfolios" },           
         ],
         select: true,
     
@@ -381,4 +387,32 @@ var table = $('#example').DataTable( {
     });
     return instruments.sort(SortByName);
   }
+  
+  
+  function portfoliosloader() {
+    var instruments = [];// = [{'value': '0', 'label': '-- Select Portfolio --'}];
+    var path1 = '<?php echo Yii::app()->baseUrl.'/portfolios/portfolios'; ?>';
+    $.ajax({
+        url: path1,
+        async: false,
+        dataType: 'json',
+        success: function (json) {
+          var data = json.data;
+            for(var a=0; a<data.length; a++) {
+              obj = {
+                "value" : data[a]['id'],
+                "label" : data[a]['portfolio']
+              };
+              instruments.push(obj);
+            }
+        }
+    });
+    return instruments.sort(SortByName);
+  }
+  
+  
+  
+  
+  
+  
 </script>

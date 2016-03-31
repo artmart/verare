@@ -17,6 +17,7 @@
  * @property integer $default_portfolio_id
  * @property string $default_start_date
  * @property string $default_end_date
+ * accessable_portfolios
  *
  * The followings are the available model relations:
  * @property Profiles $profiles
@@ -43,12 +44,15 @@ class Users extends CActiveRecord
 			//array('superuser, status, user_role, default_portfolio_id', 'numerical', 'integerOnly'=>true),
             array('default_portfolio_id, client_id', 'numerical', 'integerOnly'=>true),
             array('default_start_date, default_end_date', 'length', 'max'=>10),
+            array('accessable_portfolios', 'length', 'max'=>255),
+            
+            
 			//array('username', 'length', 'max'=>20),
 			//array('password, email, activkey', 'length', 'max'=>128),
 			//array('lastvisit_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, username, password, email, activkey, create_at, lastvisit_at, superuser, status, user_role, default_portfolio_id, default_start_date, default_end_date', 'safe', 'on'=>'search'),
+			array('id, username, accessable_portfolios, password, email, activkey, create_at, lastvisit_at, superuser, status, user_role, default_portfolio_id, default_start_date, default_end_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,7 +87,8 @@ class Users extends CActiveRecord
 			'default_portfolio_id' => 'Default Portfolio',
 			'default_start_date' => 'Default Start Date',
 			'default_end_date' => 'Default End Date',
-            'client_id' =>'client_id'
+            'client_id' =>'client_id',
+            'accessable_portfolios' =>'accessable_portfolios'
 		);
 	}
 
@@ -119,6 +124,8 @@ class Users extends CActiveRecord
 		$criteria->compare('default_start_date',$this->default_start_date,true);
 		$criteria->compare('default_end_date',$this->default_end_date,true);
         $criteria->compare('client_id',$this->client_id);
+        $criteria->compare('accessable_portfolios',$this->accessable_portfolios);
+        
         
 
 		return new CActiveDataProvider($this, array(

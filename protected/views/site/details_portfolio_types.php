@@ -5,17 +5,25 @@
 
 <?php
     $id = Yii::app()->user->id;
-    $user_data = Users::model()->findByPk($id);
+    //$user_data = Users::model()->findByPk($id);
     $this->pageTitle=Yii::app()->name; 
     $baseUrl = Yii::app()->baseUrl;
     
-    if(isset($user_data->default_portfolio_id)){$portfolio = $user_data->default_portfolio_id;}
+    //if(isset($user_data->default_portfolio_id)){$portfolio = $user_data->default_portfolio_id;}
     //if(isset($_POST['portfolio'])){$portfolio = $_POST['portfolio'];}
     
-   	$end_date = Date('Y-m-d');
-	$start_date = date('Y-m-d', strtotime('-1 years'));
-    if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
-    if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
+   	//$end_date = Date('Y-m-d');
+	//$start_date = date('Y-m-d', strtotime('-1 years'));
+    $month_ytd_start = date('Y-01-01');
+    $month3_start = date( "Y-m-d", strtotime( "-3 month" ));
+    $month6_start = date( "Y-m-d", strtotime( "-6 month" ));
+    $month9_start = date( "Y-m-d", strtotime( "-9 month" ));
+    $month1y_start = date( "Y-m-d", strtotime( "-1 years" ));
+    
+
+    
+    //if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
+    //if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
     
     
     /*
@@ -32,6 +40,17 @@
     
     
     $portfolios = Yii::app()->db->createCommand("select * from portfolios where client_id = 1")->queryAll(true);
+    
+    
+    //$one date( "Y-m-d", strtotime( "-1 month" ) )
+            //$datetime1 = new DateTime(date_create('2008-10-11'));
+            //$datetime2 = new DateTime(date_create('2009-10-11'));
+           // $interval = date_diff($datetime1, $datetime2);
+            //var_dump($interval);
+            //echo $interval->m;
+            
+           // exit;
+    
     
     
     $tbl_rows = '';
@@ -51,28 +70,61 @@
     $sql_returns = "select * from portfolio_returns where portfolio_id = '$portfolio_id' order by trade_date";
     $portfolio_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
     if($portfolio_results){
-    foreach($portfolio_results as $pr){
-        $port_ret[] = $pr['return'];
-        $bench_ret[] = $pr['benchmark_return'];
         
-        $port_data[] = [$pr['trade_date'], floatval($pr['return'])];
-        $bench_data[] = [$pr['trade_date'], floatval($pr['benchmark_return'])];
+        $port_chart_value = 1;
+        $bench_chart_value = 1;
         
+        $return_ytd = 1;
+        $return_3m = 1;
+        $return_6m = 1;
+        $return_9m = 1;
+        $return_1y = 1;
         
-    }
+        foreach($portfolio_results as $pr){
+            $port_ret[] = $pr['return'];
+            $bench_ret[] = $pr['benchmark_return'];
+            
+            $port_chart_value = $port_chart_value * $pr['return'];
+            $bench_chart_value = $bench_chart_value * $pr['benchmark_return'];          
+            
+            if(strtotime($pr['trade_date'])>= strtotime($month_ytd_start)){$return_ytd = $return_ytd * $pr['return'];}
+            if(strtotime($pr['trade_date'])>= strtotime($month3_start)){$return_3m = $return_3m * $pr['return'];}
+            if(strtotime($pr['trade_date'])>= strtotime($month6_start)){$return_6m = $return_6m * $pr['return'];}
+            if(strtotime($pr['trade_date'])>= strtotime($month9_start)){$return_9m = $return_9m * $pr['return'];}
+            if(strtotime($pr['trade_date'])>= strtotime($month1y_start)){$return_1y = $return_1y * $pr['return'];}
+            
+            $port_data[] = [$pr['trade_date'], floatval($port_chart_value)];
+            $bench_data[] = [$pr['trade_date'], floatval($bench_chart_value)];   
+        }
+        
+        $return_all_time = $port_chart_value;
+    
+    
+    $series[] = [
+        'name'=> $portfolio['portfolio'],
+        'data'=> $port_data
+    ];
+    
+    $series[] = [
+        'name'=> $portfolio['portfolio']."-benchmark",
+        'data'=> $bench_data
+    ]; 
+    
+    
+    
     $allstats = Calculators::CalcAllStats1($port_ret, $bench_ret);
     
     
   $tbl_rows .=   
     '<tr>
         <td>'. $portfolio['portfolio'].'</td>
-        <td>'. number_format(1111).'</td>
-        <td>'. number_format(1111).'</td>
-        <td>'. number_format(1111).'</td>
-        <td>'. number_format(1111).'</td>
-        <td>'. number_format(1111).'</td>
-        <td>'. number_format(1111).'</td>
-        <td>'. number_format($allstats[0], 3).'</td>
+        <td>'. number_format(($return_all_time-1)*100, 1).'%</td>
+        <td>'. number_format(($return_ytd-1)*100, 1).'%</td>
+        <td>'. number_format(($return_3m-1)*100, 1).'%</td>
+        <td>'. number_format(($return_6m-1)*100, 1).'%</td>
+        <td>'. number_format(($return_9m-1)*100, 1).'%</td>
+        <td>'. number_format(($return_1y-1)*100, 1).'%</td>
+        <td>'. number_format($allstats[0]*100, 1).'%</td>
         <td>'. number_format($allstats[1], 3).'</td>
         <td>'. number_format($allstats[2], 3).'</td>
         <td>'. number_format($allstats[4], 3).'</td>
@@ -185,8 +237,8 @@ $(function () {
             title: {
                 text: ''// 'Snow depth (m)'
             },
-            min: 0.925,
-            max: 1.04
+            min: 0.9,
+            max: 1.35
         },
         tooltip: {
             headerFormat: '<b>{series.name}</b><br>',
@@ -208,16 +260,7 @@ $(function () {
         colors: ['#104E89', '#952C28', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
         credits: {enabled: false},
 
-        series: [{
-            name: 'Index',
-            // Define the data points. All series have a dummy year
-            // of 1970/71 in order to be compared on the same x axis. Note
-            // that in JavaScript, months start at 0 for January, 1 for February etc.
-            data: <?php echo json_encode($port_data); ?>
-        }, {
-            name: 'Swedish Equities',
-            data: <?php echo json_encode($bench_data); ?>
-        }]
+        series: <?php echo json_encode($series); ?>
     });
 });
 

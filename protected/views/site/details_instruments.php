@@ -79,11 +79,12 @@
         
         $return_all_time = $port_chart_value;
     
-    $series[] = ['name'=> $instrument['instrument'], 'data'=> $port_data];
+    
     
     if($inst_num == 0){
         $series[] = ['name'=> "Benchmark", 'data'=> $bench_data]; 
     }
+    $series[] = ['name'=> $instrument['instrument'], 'data'=> $port_data];
     
     $allstats = Calculators::CalcAllStats1($port_ret, $bench_ret);
     

@@ -1,4 +1,7 @@
 <?php
+
+    $portfolio_id = $_REQUEST['portfolio'];
+
     $id = Yii::app()->user->id;
     //$user_data = Users::model()->findByPk($id);
     $this->pageTitle=Yii::app()->name; 
@@ -15,24 +18,34 @@
     $month9_start = date( "Y-m-d", strtotime( "-9 month" ));
     $month1y_start = date( "Y-m-d", strtotime( "-1 years" ));
     
-     $accessable_portfolios1 = Yii::app()->user->getState('accessable_portfolios');
-     $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
+     //$accessable_portfolios1 = Yii::app()->user->getState('accessable_portfolios');
+     //$accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
      
     //if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
     //if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
        
-    $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
+    //$portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
+    
+    $instruments_query = "select i.id, i.instrument from instruments i inner join ledger l on l.instrument_id = i.id where l.portfolio_id = '$portfolio_id' ";
+    
+    $instruments = Yii::app()->db->createCommand($instruments_query)->queryAll(true);
        
     $tbl_rows = '';
-    foreach($portfolios as $portfolio){
-        $portfolio_id = $portfolio['id'];
+    $inst_num = 0;
+    $bench_chart_value = 1;
+    foreach($instruments as $instrument){
+        $instrument_id = $instrument['id'];
         
-    $sql_returns = "select * from portfolio_returns where portfolio_id = '$portfolio_id' order by trade_date";
-    $portfolio_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
-    if($portfolio_results){
+    $sql_returns = "select r.trade_date, r.`return`, pr.benchmark_return from `returns` r 
+                    inner join portfolio_returns pr on pr.trade_date = r.trade_date
+                    where r.instrument_id = '$instrument_id'
+                    and pr.portfolio_id = '$portfolio_id'
+                    order by r.trade_date";
+    $instrument_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
+    if($instrument_results){
         
         $port_chart_value = 1;
-        $bench_chart_value = 1;
+        
         
         $return_ytd = 1;
         $return_3m = 1;
@@ -40,36 +53,43 @@
         $return_9m = 1;
         $return_1y = 1;
         
-        foreach($portfolio_results as $pr){
+        
+        foreach($instrument_results as $ir){
             
-            $months[] = $pr['trade_date'];
-            $port_ret[] = $pr['return'];
-            $bench_ret[] = $pr['benchmark_return'];
+            $months[] = $ir['trade_date'];
+            $port_ret[] = $ir['return'];
+            $bench_ret[] = $ir['benchmark_return'];
             
-            $port_chart_value = $port_chart_value * $pr['return'];
-            $bench_chart_value = $bench_chart_value * $pr['benchmark_return'];          
+            $port_chart_value = $port_chart_value * $ir['return'];
+            if($inst_num == 0){
+                $bench_chart_value = $bench_chart_value * $ir['benchmark_return'];
+            }          
             
-            if(strtotime($pr['trade_date'])>= strtotime($month_ytd_start)){$return_ytd = $return_ytd * $pr['return'];}
-            if(strtotime($pr['trade_date'])>= strtotime($month3_start)){$return_3m = $return_3m * $pr['return'];}
-            if(strtotime($pr['trade_date'])>= strtotime($month6_start)){$return_6m = $return_6m * $pr['return'];}
-            if(strtotime($pr['trade_date'])>= strtotime($month9_start)){$return_9m = $return_9m * $pr['return'];}
-            if(strtotime($pr['trade_date'])>= strtotime($month1y_start)){$return_1y = $return_1y * $pr['return'];}
+            if(strtotime($ir['trade_date'])>= strtotime($month_ytd_start)){$return_ytd = $return_ytd * $ir['return'];}
+            if(strtotime($ir['trade_date'])>= strtotime($month3_start)){$return_3m = $return_3m * $ir['return'];}
+            if(strtotime($ir['trade_date'])>= strtotime($month6_start)){$return_6m = $return_6m * $ir['return'];}
+            if(strtotime($ir['trade_date'])>= strtotime($month9_start)){$return_9m = $return_9m * $ir['return'];}
+            if(strtotime($ir['trade_date'])>= strtotime($month1y_start)){$return_1y = $return_1y * $ir['return'];}
             
-            $port_data[] = [$pr['trade_date'], floatval($port_chart_value)];
-            $bench_data[] = [$pr['trade_date'], floatval($bench_chart_value)];   
+            $port_data[] = [$ir['trade_date'], floatval($port_chart_value)];
+            if($inst_num == 0){
+                $bench_data[] = [$ir['trade_date'], floatval($bench_chart_value)];  
+            } 
         }
         
         $return_all_time = $port_chart_value;
     
-    $series[] = ['name'=> $portfolio['portfolio'], 'data'=> $port_data];
-    $series[] = ['name'=> $portfolio['portfolio']."-benchmark", 'data'=> $bench_data]; 
+    $series[] = ['name'=> $instrument['instrument'], 'data'=> $port_data];
+    
+    if($inst_num == 0){
+        $series[] = ['name'=> "Benchmark", 'data'=> $bench_data]; 
+    }
     
     $allstats = Calculators::CalcAllStats1($port_ret, $bench_ret);
     
   $tbl_rows .=   
     '<tr>
-        <td>'. $portfolio['id'].'</td>
-        <td>'. $portfolio['portfolio'].'</td>
+        <td>'. $instrument['instrument'].'</td>
         <td>'. number_format(($return_all_time-1)*100, 1).'%</td>
         <td>'. number_format(($return_ytd-1)*100, 1).'%</td>
         <td>'. number_format(($return_3m-1)*100, 1).'%</td>
@@ -93,15 +113,16 @@
         <td>'. number_format($allstats[12], 3).'</td>
     </tr>';
     }
+    
+    $inst_num++;
 }
 $months = array_unique($months);
 
 ?>
-<div id="results-view1">
+
 <table id="example" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>AllTime</th>
             <th>YTD</th>
@@ -131,7 +152,6 @@ $months = array_unique($months);
     <tbody>
 </table>
 <div id="container1"></div>
-</div>
 <script>
 
 $(function () {
@@ -216,14 +236,6 @@ var table = $('#example').DataTable( {
         sScrollXInner: "110%",
         bScrollCollapse: true,
         
-        
-        columnDefs: [
-            {
-                "targets": [ 0 ],
-                "visible": false,
-                "searchable": false
-            }
-            ],
         
         //colVis: { exclude: [ 1 ] },
         //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
@@ -320,10 +332,7 @@ var table = $('#example').DataTable( {
 		if ( type === 'row' ) {
 			var data = table.cells(indexes,0).data(); // table.rows( indexes ).data().pluck( 'trade_status.trade_status' );
             
-            //alert(data[0]);
-            
-            
-            instrumentsresultsload(data[0]);
+         //   alert(data[0]);
             /*            
 			if( data[0] == 'Pending')
 			{             
@@ -340,23 +349,6 @@ var table = $('#example').DataTable( {
 	} );
 
 
-
-
-    function instrumentsresultsload(port){
-    	$.ajax({
-    			type: 'post',
-    			url: '<?php echo Yii::app()->baseUrl.'/site/instrumentsresultsload'; ?>',
-    			data: {
-    			 portfolio: port,
-    			//media_type:$('#media_type').val(),
-                //supermarket_bar:$('#supermarket_bar').val(),
-                //dt: n - $('#sel_Period1').val()+"-"+$('#sel_Period2').val(), 'show_queries':show_queries
-    			},
-    			success: function (response) {
-    			     $( '#results-view1' ).html(response);
-    			}
-    		   });
-    }
 </script>
 
 

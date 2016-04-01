@@ -39,6 +39,14 @@ class SiteController extends Controller
 		$this->renderPartial('details_portfolio_types');
 	}
     
+    public function actionInstrumentsresultsload()
+	{
+		$this->renderPartial('details_instruments');
+	}
+    
+    
+    
+    
     
     
     /**
@@ -52,6 +60,10 @@ class SiteController extends Controller
 		// using the default layout 'protected/views/layouts/main.php'
 		$this->render('details');
 	} 
+    
+    
+    
+    
     
     public function actionAdmin()
 	{

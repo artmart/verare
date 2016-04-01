@@ -73,6 +73,21 @@ $(document).ready(function ($) {
     }
 
 
+    function instrumentsresultsload(){
+    	$.ajax({
+    			type: 'post',
+    			url: '<?php echo Yii::app()->baseUrl.'/site/instrumentsresultsload'; ?>',
+    			data: {
+    			//media_type:$('#media_type').val(),
+                //supermarket_bar:$('#supermarket_bar').val(),
+                //dt: n - $('#sel_Period1').val()+"-"+$('#sel_Period2').val(), 'show_queries':show_queries
+    			},
+    			success: function (response) {
+    			     $( '#results-view' ).html(response);
+    			}
+    		   });
+    }
+
 
 /*
 function fnFormatDetails(table_id, html) {

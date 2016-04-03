@@ -24,6 +24,7 @@
  * @property double $total_nominal
  * @property string $file
  * @property string $trade_code
+ * currency
  */
 class Ledger extends CActiveRecord
 {
@@ -49,9 +50,10 @@ class Ledger extends CActiveRecord
 			array('custody_account, custody_comment, note', 'length', 'max'=>255),
 			array('file', 'length', 'max'=>100),
 			array('trade_code', 'length', 'max'=>50),
+            array('currency', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, trade_date, note, instrument_id, portfolio_id, nominal, price, created_by, created_at, trade_status_id, confirmed_by, confirmed_at, version_number, document_id, custody_account, custody_comment, account_number, is_current, total_nominal, file, trade_code', 'safe', 'on'=>'search'),
+			array('id, currency, trade_date, note, instrument_id, portfolio_id, nominal, price, created_by, created_at, trade_status_id, confirmed_by, confirmed_at, version_number, document_id, custody_account, custody_comment, account_number, is_current, total_nominal, file, trade_code', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -92,7 +94,8 @@ class Ledger extends CActiveRecord
 			//'total_nominal' => 'Total Nominal',
 			'file' => 'File',
 			'trade_code' => 'Trade Code',
-            'note' =>'note'
+            'note' =>'note',
+            'currency' => 'currency',
 		);
 	}
 
@@ -135,6 +138,7 @@ class Ledger extends CActiveRecord
 		$criteria->compare('file',$this->file,true);
 		$criteria->compare('trade_code',$this->trade_code,true);
         $criteria->compare('note',$this->note);
+        $criteria->compare('currency',$this->currency);
         
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

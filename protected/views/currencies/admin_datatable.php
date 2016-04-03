@@ -1,49 +1,6 @@
 <?php
-$this->breadcrumbs=['Counterparties'=>['admin'], 'Manage'];
-$baseUrl = Yii::app()->theme->baseUrl;
-
-//$access_level = 5;
-$access_buttons = '';
-$counterpart_access = '';
-
-if(isset(Yii::app()->user->user_role)){
-              $user_rols = UserRole::model()->findByPk(Yii::app()->user->user_role);
-              if($user_rols){
-                //$access_level = json_decode($user_rols->counterparties_access_level);
-               
-                  $counterpart_create = 0;
-                  $counterpart_edit = 0;
-                  $counterpart_delete = 0;
-                  //$counterpart_status_change = 0;
-                  if(isset($user_rols->counterparties_access_level) && $user_rols->counterparties_access_level !== ''){
-                    $counterpart_access = json_decode($user_rols->counterparties_access_level);
-                  
-                  $counterpart_create = $counterpart_access->create;
-                  $counterpart_edit = $counterpart_access->edit;
-                  $counterpart_delete = $counterpart_access->delete;
-                  //$counterpart_status_change = $counterpart_access->status_change;
-                  }
-                }
-}
-$access_buttons = '';
-
-if($counterpart_create == 1){$access_buttons .= '{ extend: "create", editor: editor }, ';}
-if($counterpart_edit == 1){$access_buttons .= '{ extend: "edit",   editor: editor }, ';}
-if($counterpart_delete == 1){$access_buttons .= ' { extend: "remove", editor: editor }, ';}
-/*
-if($counterpart_delete == 1){$access_buttons .= '{
-                                                extend: "selectedSingle",
-                                                text: "Delete",
-                                                action: function ( e, dt, node, config ) {
-                                                    editor
-                                                        .edit( table.row( { selected: true } ).index(), false )
-                                                        .set( "ledger.is_current", 0 )
-                                                        .submit();
-                                                }
-                                            }, '; 
-                                            } 
-                                            */  
-
+    $this->breadcrumbs=['Counterparties'=>['admin'], 'Manage'];
+    $baseUrl = Yii::app()->theme->baseUrl;
 ?>
 <h1>Manage Benchmarks</h1>
     

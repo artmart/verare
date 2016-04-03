@@ -76,7 +76,9 @@
         if(isset($values['ledger']['price'])){$price = $values['ledger']['price'];}else{$price = $existing_trades->price;}
 
         if(isset($values['ledger']['note'])){$note = $values['ledger']['note'];}else{$note = $existing_trades->note;}
-        if(isset($values['ledger']['file'])){$file = $values['ledger']['file'];}else{$file = $existing_trades->file;}        
+        if(isset($values['ledger']['file'])){$file = $values['ledger']['file'];}else{$file = $existing_trades->file;}  
+        if(isset($values['ledger']['currency'])){$currency = $values['ledger']['currency'];}else{$currency = $existing_trades->currency;}
+              
         
         
         if(isset($values['ledger']['trade_status_id'])){$trade_status_id = $values['ledger']['trade_status_id'];}else{$trade_status_id = $existing_trades->trade_status_id;}
@@ -111,6 +113,7 @@
                 
                 $new_trade->note=$note;
                 $new_trade->file=$file;
+                $new_trade->currency = $currency;
                 
                 $new_trade->save();
                 //var_dump($new_trade->getErrors());
@@ -180,6 +183,7 @@
             Field::inst( 'ledger.client_id' ),
             Field::inst( 'ledger.trade_code as trade_code' ),
             Field::inst( 'ledger.note' ),
+            Field::inst( 'ledger.currency' ),
             Field::inst( 'ledger.file' )
             ->setFormatter( 'Format::ifEmpty', null )
             ->upload( Upload::inst( 'uploads/'.$time.'.__EXTN__' )

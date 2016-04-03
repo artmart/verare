@@ -118,6 +118,7 @@ switch ($access_level) {
                 <th>Confirmed By</th>
                 <th>Confirmed At</th>
                 <th>Trade Status</th>
+                <th>Currency</th>
                 <th>Note</th>
                 <th>Trade Code</th>
                 <th>Document</th>
@@ -197,11 +198,22 @@ $(document).ready(function() {
                 label: "Nominal:",
                 name: "ledger.nominal",
                 "attr": {"class": "form-control"}
-            }, {
+            }, 
+            {
                 label: "Price:",
                 name: "ledger.price",
                 "attr": {"class": "form-control"}
-            }, 
+            },
+            {
+                label: "Currency:",
+                name: "ledger.currency",
+                type: "select",
+                ipOpts: currencyLoader(),
+                "attr": {"class": "form-control"}
+            },
+            
+            
+             
              /*{
                 label: "Created At:",
                 name: "ledger.created_at",
@@ -361,6 +373,7 @@ var table = $('#example').DataTable( {
             { data: "ledger.confirmed_at" },
             //{ data: "ledger.document_id" },
             { data: "trade_status.trade_status", editField: "ledger.trade_status_id", className: 'editable'    },
+            { data: "ledger.currency" },
            // { data: "documents.file" },
             { data: "ledger.note" },
             { data: "trade_code" },
@@ -547,4 +560,26 @@ var table = $('#example').DataTable( {
     });
     return instruments.sort(SortByName);
   }
+  
+  function currencyLoader(){
+    var instruments = [{'value': '0', 'label': '-- Select Currency --'}];
+    var path1 = '<?php echo Yii::app()->baseUrl.'/currencies/currencies'; ?>';
+    $.ajax({
+        url: path1,
+        async: false,
+        dataType: 'json',
+        success: function (json) {
+          var data = json.data;
+            for(var a=0; a<data.length; a++) {
+              obj = {
+                "value" : data[a]['currency'],
+                "label" : data[a]['currency']
+              };
+              instruments.push(obj);
+            }
+        }
+    });
+    return instruments.sort(SortByName);
+  }
+  
 </script>

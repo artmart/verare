@@ -1,57 +1,3 @@
-<style>
-.datatable-scroll {
-    overflow-x: auto;
-    overflow-y: visible;
-}
-
-#example_length{
-    float:left;
-}
-
-/*
-table.dataTable thead th.sorting:after {
-    content: "\f0dc";
-    color: #ddd;
-    font-size: 0.8em;
-    padding-top: 0.12em;
-}
-table.dataTable thead th.sorting_asc:after {
-    content: "\f0de";
-}
-table.dataTable thead th.sorting_desc:after {
-    content: "\f0dd";
-}
-
-
-table.dataTable thead th.sorting:after {
-    content: "\f0dc";
-    color: #ddd;
-    font-size: 0.8em;
-    padding-top: 0.12em;
-}
-table.dataTable thead th.sorting_asc:after {
-    content: "\f0de";
-}
-table.dataTable thead th.sorting_desc:after {
-    content: "\f0dd";
-}
-
-
-table.dataTable thead .sorting:after {
-    opacity: 0.2;
-    content: "\e150"; 
-}
-table.dataTable thead .sorting_asc:after {
-    content: "\e155"; 
-}
-table.dataTable thead .sorting_desc:after {
-    content: "\e156"; 
-}
-*/
-
-</style>
-
-
 <?php
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
 $baseUrl = Yii::app()->theme->baseUrl;
@@ -324,8 +270,6 @@ $(document).ready(function() {
             }
         ]
     } );
-	
-	
 	
     editor2 = new $.fn.dataTable.Editor( {
         ajax: 'ledger/ledger',

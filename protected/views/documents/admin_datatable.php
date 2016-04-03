@@ -2,6 +2,8 @@
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
 
 //$access_buttons = '{view} {update} {delete}';
+
+/*
 $access_level = 5;
 $access_buttons = '';
 if(isset(Yii::app()->user->user_role)){
@@ -30,54 +32,14 @@ switch ($access_level) {
         ];
         break;
 } 
+*/
 ?>
 
 <h1>Manage Documents</h1>
 
-<?php
- $baseUrl = Yii::app()->theme->baseUrl;
-?>
-
-    <!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui.min.css">
-    <link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.css">-->
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css">
-	<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.0/css/select.dataTables.min.css">-->
-	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/css/editor.dataTables.min.css">
-	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.css">
-	<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/css/buttons.dataTables.min.css"> -->
-
-    
-    <!-- jQuery UI 1.10.3 
-  <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui-1.10.3.min.js"></script>
-  <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.js"></script>-->
-    
-	<!--<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.1.0/js/dataTables.select.min.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.editor.min.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/demo.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/editor-demo.js"></script>
-    
-    
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.colVis.min.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.buttons.min.js"></script>
-    
-   
-   <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/jszip.min.js"></script>
-   <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/pdfmake.min.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/vfs_fonts.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.html5.min.js"></script>
-    
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.colVis.min.js"></script>
+<?php $baseUrl = Yii::app()->theme->baseUrl; ?>
+<script type="text/javascript" language="javascript" class="init">  
        
-    
-	<script type="text/javascript" language="javascript" class="init">  
-       
-
 var editor; // use a global for the submit and return data rendering in the examples
 
 $(document).ready(function() {
@@ -115,7 +77,15 @@ $(document).ready(function() {
                 name: "document_type_id",
                // type: "select",
               //  ipOpts: instrumentgroupLoader(),
-            },            
+            },
+            {
+                label: "client_id:",
+                name: "client_id",
+                type: "hidden",
+                //def: "<?php //echo $client_id;?>"
+              //  ipOpts: instrumentgroupLoader(),
+            },
+                      
         ]
     } );
     
@@ -142,9 +112,11 @@ $(document).ready(function() {
             { data: "document_name" },
             { data: "document_location_id" },
             { data: "is_current" },
+            
             //{ data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
             { data: "document_upload_date" },
-            { data: "document_type_id" },            
+            { data: "document_type_id" }, 
+            //{ data: "client_id" },           
         ],
         select: true,
         buttons: [
@@ -233,7 +205,7 @@ $(document).ready(function() {
 
 </script>
 <!-- page script -->
-<table id="example" class="display" cellspacing="0" width="100%">
+<table id="example" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
         <thead>
             <tr>
                 <th>ID</th>
@@ -242,6 +214,7 @@ $(document).ready(function() {
                 <th>Is Current</th>
                 <th>Upload Date</th>
                 <th>Document Type</th>
+                <!--<th>client_id</th>-->
             </tr>
         </thead>
         <tfoot>
@@ -252,6 +225,7 @@ $(document).ready(function() {
                 <th>Is Current</th>
                 <th>Upload Date</th>
                 <th>Document Type</th>
+                <!--<th>client_id</th>-->
             </tr>
         </tfoot>
     </table>

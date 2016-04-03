@@ -1,5 +1,5 @@
 <?php require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/DataTables.php');
-require_once(Yii::app()->basePath . '/modules/user/UserModule.php');
+      require_once(Yii::app()->basePath . '/modules/user/UserModule.php');
     //Alias Editor classes so they are easy to use
     use
         DataTables\Editor,
@@ -28,20 +28,20 @@ require_once(Yii::app()->basePath . '/modules/user/UserModule.php');
         $current_user =  Users::model()->findByPk($id);
         
         $old_password = $current_user->password;
-        $enc_password = UserModule::encrypting($password);
+        //$enc_password = UserModule::encrypting($password);
         
-        if($enc_password !== $old_password){
+        if($password !== $old_password){
             $activkey = UserModule::encrypting(microtime().$password);
-            //$enc_password = UserModule::encrypting($password);
+            $enc_password = UserModule::encrypting($password);
                     
                     $editor->field( 'activkey' )->setValue( $activkey );
                     $editor->field( 'password' )->setValue( $enc_password ); 
                     
-            }else{
-                $editor->field( 'password' )->setValue( $enc_password );
+            }//else{
+              //  $editor->field( 'password' )->setValue( $enc_password );
                 //$editor->field( 'user_role' )->setValue( $current_user->user_role );
                 //$editor->field( 'client_id' )->setValue( $current_user->client_id );
-            }
+            //}
     } 
        
 // Build our Editor instance and process the data coming from _POST

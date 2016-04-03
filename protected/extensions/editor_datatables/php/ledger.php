@@ -13,9 +13,6 @@
    //$user_id = Yii::app()->user->id;
    
    $user = Users::model()->findByPk(Yii::app()->user->id);
-   
-   //var_dump(Yii::app()->user);
-   //exit;
    $client_id = $user->client_id;
    
    function newledger( $editor,  $values) {    

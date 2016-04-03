@@ -37,134 +37,14 @@ $this->menu=[
 	//array('label'=>'List Ledger', 'url'=>array('index')),
 	array('label'=>'Create Ledger', 'url'=>array('create')),
 ];
-
-
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$('#ledger-grid').yiiGridView('update', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");*/
+*/
 ?>
-
 <h1>Manage Instruments</h1>
 
-<!--
-<p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
--->
-<?php
-
- //echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display:none">
-<?php //$this->renderPartial('_search',array('model'=>$model,)); ?>
-</div><!-- search-form -->
-
-<?php 
-/*
-$this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'ledger-grid',
-    //'id'=>"example1",
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
-    //'htmlOptions'=>array('class'=>"table table-bordered table-hover"),
-	'columns'=>array(
-		//'id',
-		'trade_date',
-		'instrument_id',
-		'portfolio_id',
-		'nominal',
-		'price',
-		'created_by',
-		//'created_at',
-		'trade_status_id',
-       /*
-        array(
-			'name' => 'trade_status_id',
-            //'header' => 'trade_status_id',
-			'type'=>'raw',
-            //'template'=>'',
-            'value'=>function($data){
-				if($data->trade_status_id == 2){$access_buttons = '';}
-                return $data->trade_status_id;
-            },
-			//'filter'=>CHtml::listData(Locations::model()->findAll(),'location_code', 'locations_name'),
-            //'htmlOptions'=>array('width'=>'150px'),
-			),
-            *//*
-		'confirmed_by',
-		//'confirmed_at',
-		'version_number',
-		//'document_id',
-		//'custody_account',
-		//'custody_comment',
-		//'account_number',
-		//'is_current',
-		
-		[
-			'class'=>'CButtonColumn',
-            'template' => $access_buttons,
-            'buttons'=>[
-                        'update'=>['visible'=>'!($data->trade_status_id==2)'],
-                        'delete'=>['visible'=>'!($data->trade_status_id==2)'],
-                        'view'=>['visible'=>'!($data->trade_status_id==2)'],
-                        ]  
-            //'visible'=>'$data->trade_status_id!==2', 
-		],
-	),
-)); 
-*/
- $baseUrl = Yii::app()->theme->baseUrl;
-?>
-
-    <!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui.min.css">
-    <link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.css">-->
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css">
-	<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.0/css/select.dataTables.min.css">-->
-	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/editor_datatables/css/editor.dataTables.min.css">
-	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.css">
-	<link rel="stylesheet" type="text/css" href="<?php //echo $baseUrl;?>/editor_datatables/css/buttons.dataTables.min.css"> -->
-
-    
-    <!-- jQuery UI 1.10.3 
-  <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery-ui-1.10.3.min.js"></script>
-  <script src="<?php //echo $baseUrl;?>/js/plugins/jQueryUI/jquery.ui.datepicker.min.js"></script>-->
-    
-	<!--<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
-	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.1.0/js/dataTables.select.min.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.editor.min.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/syntax/shCore.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/demo.js"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/examples/resources/editor-demo.js"></script>
-    
-    
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.colVis.min.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/dataTables.buttons.min.js"></script>
-    
-   
-   <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/jszip.min.js"></script>
-   <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/pdfmake.min.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/vfs_fonts.js"></script>
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.html5.min.js"></script>
-    
-    <script type="text/javascript" language="javascript" src="<?php echo $baseUrl;?>/editor_datatables/js/buttons.colVis.min.js"></script>
+<?php $baseUrl = Yii::app()->theme->baseUrl; ?>
+     
+<script type="text/javascript" language="javascript" class="init">  
        
-    
-	<script type="text/javascript" language="javascript" class="init">  
-       
-
 var editor; // use a global for the submit and return data rendering in the examples
 
 $(document).ready(function() {
@@ -175,17 +55,21 @@ $(document).ready(function() {
             {
                 label: "Instrument:",
                 name: "instrument",
-            }, {
+            }, 
+            {
                 label: "Is Current:",
                 name: "instruments.is_current"
-               // type: "select",
-                //ipOpts: iscurrentLoader(),
-            },  
+            },
+            {
+                label: "ISIN:",
+                name: "instruments.isin"
+            },
             {
                 label: "Instrument Type:",
                 name: "instrument_types.instrument_type",
                 type: "select",
                 ipOpts: instrumenttypeLoader(),
+                "attr": {"class": "form-control"}
             },
             {
                 label: "Created At:",
@@ -197,6 +81,7 @@ $(document).ready(function() {
                 name: "instrument_groups.group_name",
                 type: "select",
                 ipOpts: instrumentgroupLoader(),
+                "attr": {"class": "form-control"}
             },            
         ]
     } );
@@ -224,6 +109,7 @@ $(document).ready(function() {
             { data: "instrument" },
             { data: "instrument_types.instrument_type" },
             { data: "instruments.is_current" },
+            { data: "instruments.isin" },
             //{ data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
             { data: "instruments.created_at" },
             { data: "instrument_groups.group_name" },            
@@ -315,13 +201,14 @@ $(document).ready(function() {
 
 </script>
 <!-- page script -->
-<table id="example" class="display" cellspacing="0" width="100%">
+<table id="example" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
         <thead>
             <tr>
                 <th>Instrument Id</th>
                 <th>Instrument</th>
                 <th>Instrument Type</th>
                 <th>Is Current</th>
+                <th>ISIN</th>
                 <th>Created At</th>
                 <th>Instrument Group</th>
             </tr>
@@ -332,6 +219,7 @@ $(document).ready(function() {
                 <th>Instrument</th>
                 <th>Instrument Type</th>
                 <th>Is Current</th>
+                <th>ISIN</th>
                 <th>Created At</th>
                 <th>Instrument Group</th>
             </tr>

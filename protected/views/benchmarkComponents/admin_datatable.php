@@ -235,7 +235,7 @@ var table = $('#example').DataTable( {
     return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
   }
 
-  function benchmarksLoader() {
+  function benchmarksLoader1() {
     var benchmarks = [{'value': '0', 'label': '-- Select Benchmark --'}];
     var path1 = '<?php echo Yii::app()->baseUrl.'/benchmarks/benchmarks'; ?>';
     $.ajax({
@@ -254,6 +254,30 @@ var table = $('#example').DataTable( {
         }
     });
     return benchmarks.sort(SortByName);
+  }
+  
+  
+  
+  
+  function benchmarksLoader() {
+    var instruments = [{'value': '0', 'label': '-- Select Benchmark --'}];
+    var path1 = '<?php echo Yii::app()->baseUrl.'/benchmarks/benchmarks'; ?>';
+    $.ajax({
+        url: path1,
+        async: false,
+        dataType: 'json',
+        success: function (json) {
+          var data = json.data;
+            for(var a=0; a<data.length; a++) {
+              obj = {
+                "value" : data[a]['id'],
+                "label" : data[a]['benchmark_name']
+              };
+              instruments.push(obj);
+            }
+        }
+    });
+    return instruments.sort(SortByName);
   }
   
   

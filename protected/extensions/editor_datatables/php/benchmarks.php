@@ -18,7 +18,7 @@
     Editor::inst( $db, 'benchmarks', 'id', $time, $client_id)
         ->fields(
             Field::inst( 'benchmarks.client_id' ),
-            Field::inst( 'benchmarks.id' ),//->validator( 'Validate::notEmpty' ),
+            Field::inst( 'benchmarks.id as id' ),//->validator( 'Validate::notEmpty' ),
             //Field::inst( 'benchmarks.name' )->validator( 'Validate::notEmpty' ),
             //Field::inst( 'benchmarks.client_id' )->validator( 'Validate::notEmpty' ),
             Field::inst( 'benchmarks.portfolio_id' ),

@@ -2,6 +2,10 @@
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
 $baseUrl = Yii::app()->theme->baseUrl;
 
+   // foreach(Yii::app()->user->getFlashes() as $key => $message) {
+    //    echo '<div class="alert alert-info span5"><div class="flash-' . $key . '">' . $message . "</div></div>\n";
+   // }
+
 //var_dump(Yii::app()->user->getState('user_role_id'));
 //exit;
 

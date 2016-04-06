@@ -26,7 +26,7 @@
        
     //$portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
     
-    $instruments_query = "select i.id, i.instrument from instruments i inner join ledger l on l.instrument_id = i.id where l.portfolio_id = '$portfolio_id' ";
+    $instruments_query = "select i.id, i.instrument from instruments i inner join ledger l on l.instrument_id = i.id where l.is_current=1 and l.portfolio_id = '$portfolio_id' ";
     
     $instruments = Yii::app()->db->createCommand($instruments_query)->queryAll(true);
        

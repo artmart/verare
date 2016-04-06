@@ -151,6 +151,14 @@
                     
 
           }
+    }
+    
+    
+    function portfolioUpdate( $id, $values ){
+        $portfolio_id = 0;
+        if(isset($values['ledger']['portfolio_id'])){$portfolio_id = $values['ledger']['portfolio_id'];} //else{$portfolio_id = $existing_trades->portfolio_id;}
+        
+        PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id);
     } 
      
      
@@ -231,7 +239,21 @@
             } )  
         ->on( 'preEdit', function ( $editor, $id, $values ) {
                editledger( $editor, $id, $values );                    
+            } )
+            
+        ->on( 'postCreate', function ( $editor, $id, $values, $row ) {
+                portfolioUpdate( $id, $values );
+            } )
+        
+        ->on( 'postEdit', function ( $editor, $id, $values, $row ) {
+                //logChange( $editor->db(), 'edit', $id, $values );
+                portfolioUpdate( $id, $values );
+            } )
+        
+        ->on( 'postRemove', function ( $editor, $id, $values ) {
+                portfolioUpdate( $id, $values );
             } ) 
+            
                     
         ->leftJoin( 'instruments', 'instruments.id', '=', 'ledger.instrument_id' )
         ->leftJoin( 'portfolios', 'portfolios.id', '=', 'ledger.portfolio_id' )

@@ -98,4 +98,125 @@ class PortfolioReturns extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    
+    
+/////////////////////////
+    public function PortfolioReturnsUpdate($portfolio_id)
+	{
+        //$portfolio_id = '';
+        //$dt = '';
+        $where = ' 1 = 1 ';
+    
+        //if(isset($_REQUEST['portfolio']) && !($_REQUEST['portfolio'] == '')){$portfolio_id = $_REQUEST['portfolio'];}
+        //if(isset($_REQUEST['dt']) && !($_REQUEST['dt'] == '')){$dt = $_REQUEST['dt']; $where .= " and p.trade_date >='$dt' "; }
+  
+        if($portfolio_id >0){
+        ini_set('max_execution_time', 50000);
+        //Trades
+        $inst_sql = "select * from ledger l
+                     inner join instruments i on l.instrument_id = i.id
+                     where l.is_current = 1 and i.is_current = 1 and l.portfolio_id = $portfolio_id  order by trade_date asc";
+        $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
+        
+        if(count($trades)>0){
+        
+        foreach($trades as $trd){$ins_ids[] = $trd['instrument_id'];} 
+        
+        $insids = implode("','", array_unique($ins_ids));                         
+                                
+        $portfolio_return_sql = "select p.trade_date,
+                                sum((select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id)) pnl,
+                                sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id)) top,
+                                sum(p.price*bc.weight) sums
+                                from prices p
+                                inner join benchmark_components bc on bc.instrument_id = p.instrument_id 
+                                where p.is_current = 1 and p.instrument_id in ('$insids') and " . $where .  " 
+                                group by  p.trade_date
+                                order by p.trade_date asc";
+                                
+                                //inner join ledger l on l.instrument_id = p.instrument_id
+                                //inner join benchmarks b on b.portfolio_id = l.portfolio_id
+
+        $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
+        
+        if(count($portfolio_returns)>0){
+        $i = 0;
+        
+        //for benchmarks//
+        $return1[0] = 1;
+        $return_bench = 1;
+        //$return_bench_daily[] = 1;
+        ////////////////////////
+        
+        foreach($portfolio_returns as $price){
+            $rawData[$i]['id'] = $i;    
+            $rawData[$i]['trade_date'] = $price['trade_date'];
+            $rawData[$i]['top'] = $price['top'];
+            $rawData[$i]['pnl'] = $price['pnl'];
+            $rawData[$i]['return'] = 1;  
+            
+            ////For Benchmark///////
+            $sums[$i] = $price['sums'];
+            $rawData[$i]['benchmark_return'] = 1;
+            ////////////////////////
+                        
+            if($i>0){ 
+                    ////For Benchmark///////
+                    if($sums[$i-1] !== 0){
+                    $return1[$i] = $price['sums']/$sums[$i-1];
+                    }else{$return1[$i] = 1;}
+                    $return_bench = $return_bench * $return1[$i];
+                    $rawData[$i]['benchmark_return'] = $return1[$i];
+                    ////////////////////////
+           
+                    $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'];
+                    
+                    if($div>0){
+                        $rawData[$i]['return'] = $rawData[$i]['top']/$div;
+                    }//else{
+                       // $rawData[$i]['return'] = 1;
+                   // }
+               }
+         
+              //checking if the return for current instrument is not exist and inserting the calculated return.//
+               $existing_return  = PortfolioReturns::model()->findByAttributes([
+                                                                                'portfolio_id'=>$portfolio_id, 
+                                                                                'trade_date' =>$rawData[$i]['trade_date'], 
+                                                                                'is_prtfolio_or_group' =>1,
+                                                                                //'return' =>$rawData[$i]['return'],
+                                                                                //'benchmark_return' => $rawData[$i]['benchmark_return']
+                                                                                ]);
+               
+                   if(count($existing_return)==0){
+                       $return = new PortfolioReturns;
+                       $return->portfolio_id = $portfolio_id;
+                       $return->is_prtfolio_or_group = 1;
+                       $return->trade_date = $rawData[$i]['trade_date'];
+                       $return->return = $rawData[$i]['return'];
+                       $return->benchmark_return = $rawData[$i]['benchmark_return'];
+                       $return->save(); 
+                   }else{
+                           $existing_return->return = $rawData[$i]['return'];
+                           $existing_return->benchmark_return = $rawData[$i]['benchmark_return'];
+                           $existing_return->save(); 
+                        }
+               $i++;
+               }     
+          }else{
+                ///portfolio return is empty////
+                Yii::app()->user->setFlash('notice', "Prices not fount.");
+                //Yii::app()->user->setFlash('success', "Data1 saved!");
+                //Yii::app()->user->setFlash('error', "Data2 failed!");        
+              }  
+        }else{
+                ///treades are not found//
+                Yii::app()->user->setFlash('notice', "Ledgar information not found.");
+            }
+        }    
+        Yii::app()->user->setFlash('success', "Portfolio returns updated.");
+        //$this->redirect('admin');       
+    }
+    
+    
+    
 }

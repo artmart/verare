@@ -83,7 +83,7 @@ if($counterpart_delete == 1){$access_buttons .= '{
 <table id="example"  class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
         <thead>
             <tr>
-                <th>ID</th>
+                <!--<th>ID</th>-->
                 <th>Firstname</th>
                 <th>Lastname</th>
                 <th>Username</th>
@@ -229,22 +229,34 @@ var table = $('#example').DataTable( {
         //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
         ajax: "usersclients",
         columns: [
-            { data: "id" },
+            //{ data: "id" },
             { data: "firstname" },
             { data: "lastname" },
             { data: "username" },
-            { data: "email"},
+            //{ data: "email"},
+            
+            {
+                data: "email",
+                defaultContent: "",
+                render: function(data, type, row) {
+                    if(data){
+                       return "<a href='mailto:"+data+"?Subject='Hello again' target='_top'>"+data+"</a>";
+                    }else{
+                        return null;
+                    }
+                }
+              },
+            
             { data: "create_at" },
             { data: "lastvisit_at" },
             //{ data: "superuser", editField: "ledger.trade_status_id", className: 'editable'    },
             //{ data: "superuser" },
             { data: "status",
-             //   render: function(data, type, row) {
-              //      return data.users.status == '1' ? 'Active' : 'Inactive';
-                  //if(data.users.status == '1') {return 'Active';}
-                  //if(data.users.status == '0') {return 'Inactive';}
-                  //if(data.users.status == '-1') {return 'Banned';}
-             //   }
+               render: function(data, type, row) {
+                  if(data == '1') {return 'Active';}
+                  if(data == '0') {return 'Inactive';}
+                  if(data == '-1') {return 'Banned';}
+               }
              },
             { data: "user_role_name" },
             { data: "portfolio" },

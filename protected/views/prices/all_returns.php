@@ -23,15 +23,21 @@
         
     if(isset($_REQUEST['dt']) && !($_REQUEST['dt'] == '')){$dt = $_REQUEST['dt']; $where .= " and l.trade_date >='$dt' "; }
 
-    $this->beginWidget('zii.widgets.CPortlet', array('title'=>"Selection",));
+    //$this->beginWidget('zii.widgets.CPortlet', array('title'=>"Selection",));
     echo CHtml::beginForm('returnCalculation','post'); 
 ?>
-<div class="span3">
+<div class="row form-group">
+  <label class="col-md-3 control-label"></label>  
+  <div class="col-md-4">
     <?php
-        echo CHtml::dropDownList('instrument', $instrument_id,  CHtml::listData(Instruments::model()->findAll(array('select'=>'id, instrument', 'order'=>'instrument')),'id','instrument'), array('empty' => '-- Select Instrument --',  /*'onchange'=>'loaddata()', 'multiple' => true, 'size'=>'10'*/ ));
+        echo CHtml::dropDownList('instrument', $instrument_id,  CHtml::listData(Instruments::model()->findAll(array('select'=>'id, instrument', 'order'=>'instrument')),'id','instrument'), array('empty' => '-- Select Instrument --', 'class'=>'form-control'  /*'onchange'=>'loaddata()', 'multiple' => true, 'size'=>'10'*/ ));
     ?>
 </div>
-<div class="span3">
+</div>
+
+<div class="row form-group">
+  <label class="col-md-3 control-label"></label>  
+  <div class="col-md-4">
 <?php
 
 $this->widget('zii.widgets.jui.CJuiDatePicker',array(
@@ -45,20 +51,28 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',array(
             'dateFormat'=>'yy-mm-dd',
             //'onselect'=>'loaddata()'
         ),
-        'htmlOptions'=>array('style'=>'height:20px;', 'placeholder'=>'YYYY-MM-DD', ),
+        'htmlOptions'=>array('placeholder'=>'YYYY-MM-DD', 'class'=>'form-control' ),
     ));
 
 ?>
 </div>
-<div class="span1">
-<?php echo CHtml::submitButton('Calculate Return', array('submit' => $baseurl.'/prices/allReturns', 'class'=>"btn btn-primary"));?>
-</div>
-<br />
-<?php echo CHtml::endForm(); ?>
-<?php $this->endWidget();?>	
 </div>
 
-<div>
+<div class="row form-group">
+    <label class="col-md-3 control-label"></label>  
+    <div class="col-md-4">
+    <?php echo CHtml::submitButton('Calculate Return', array('submit' => $baseurl.'/prices/allReturns', 'class'=>"btn btn-primary"));?>
+    </div>
+</div>
+
+</div>
+
+<br />
+<?php echo CHtml::endForm(); ?>
+<?php //$this->endWidget();?>	
+</div>
+
+
 <?php 
 ini_set('max_execution_time', 50000);
 

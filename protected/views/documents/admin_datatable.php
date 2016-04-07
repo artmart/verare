@@ -55,29 +55,35 @@ $(document).ready(function() {
                 label: "Document Name:",
                 name: "document_name",
             },
+            /*
             {
                 label: "Is Current:",
                 name: "is_current"
                // type: "select",
                 //ipOpts: iscurrentLoader(),
-            },  
+            },
+            */
+            /*  
             {
                 label: "Document Location:",
                 name: "document_location_id",
                // type: "select",
               //  ipOpts: instrumenttypeLoader(),
             },
+            */
             {
                 label: "Upload Date:",
                 name: "document_upload_date",
                 type: "datetime"
             },
+             /*
              {
                 label: "Document Type:",
                 name: "document_type_id",
                // type: "select",
               //  ipOpts: instrumentgroupLoader(),
             },
+            */
             {
                 label: "client_id:",
                 name: "client_id",
@@ -110,12 +116,42 @@ $(document).ready(function() {
         */                     
             { data: "id" },
             { data: "document_name" },
-            { data: "document_location_id" },
-            { data: "is_current" },
+            
+            {
+                data: "documents",
+                defaultContent: "No file",
+                render: function(data, type, row) {
+                    if(data.file){
+                       return "<a href='../uploads/"+data.file +"."+data.extension+"' target='_Blank'>"+ data.file+"."+data.extension+"</a>";
+                    }else{
+                        return null;
+                    }
+                 // return data.document_name ? "<a href='../uploads/"+data.file +"."+data.extension+"' target='_Blank'>"+ data.file+"."+data.extension+"</a>": null; // data.file +"."+data.extension: null; // '<a href="/uploads/' + data.file +"."+data.extension '" onclick="window.open(this.href, \'mywin\',\'left=20,top=20,width=500,height=500,toolbar=1,resizable=1\'); return false;">' + data.document_name + '</a>' : null;
+                
+                
+                }
+              },
+              
+              /*
+              {
+                data: "image",
+                render: function ( file_id ) {
+                    return file_id ?
+                        '<img src="'+table.file( 'files', file_id ).web_path+'"/>' :
+                        null;
+                },
+                defaultContent: "No image",
+                title: "Image"
+            }
+            */
+            
+            
+            //{ data: "document_location_id" },
+            //{ data: "is_current" },
             
             //{ data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
             { data: "document_upload_date" },
-            { data: "document_type_id" }, 
+            //{ data: "document_type_id" }, 
             //{ data: "client_id" },           
         ],
         select: true,
@@ -209,23 +245,25 @@ $(document).ready(function() {
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Document Name</th>
-                <th>Document Location</th>
-                <th>Is Current</th>
+                <th>Document Original Name</th>
+                <th>File Name</th>
+                <!--<th>Document Location</th>
+                <th>Is Current</th>-->
                 <th>Upload Date</th>
-                <th>Document Type</th>
-                <!--<th>client_id</th>-->
+                <!--<th>Document Type</th>
+                <th>client_id</th>-->
             </tr>
         </thead>
         <tfoot>
             <tr>
                 <th>ID</th>
-                <th>Document Name</th>
-                <th>Document Location</th>
-                <th>Is Current</th>
+                <th>Document Original Name</th>
+                <th>File Name</th>
+                <!--<th>Document Location</th>
+                <th>Is Current</th>-->
                 <th>Upload Date</th>
-                <th>Document Type</th>
-                <!--<th>client_id</th>-->
+                <!--<th>Document Type</th>
+                <th>client_id</th>-->
             </tr>
         </tfoot>
     </table>

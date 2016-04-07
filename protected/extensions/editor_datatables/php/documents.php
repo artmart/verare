@@ -20,9 +20,11 @@
                         ->setValue( $client_id );
                     
     } 
-       
+
+
+ $time = date("fYhis");      
 // Build our Editor instance and process the data coming from _POST
-Editor::inst( $db, 'documents', 'documents.id', $client_id)
+Editor::inst( $db, 'documents', 'id', $time, $client_id)
     ->fields(
         Field::inst( 'documents.id as id' ),
         Field::inst( 'documents.document_name as document_name' ),
@@ -30,6 +32,53 @@ Editor::inst( $db, 'documents', 'documents.id', $client_id)
         Field::inst( 'documents.document_type_id as document_type_id' ),
         Field::inst( 'documents.document_upload_date as document_upload_date' ),
         Field::inst( 'documents.is_current as is_current' ),
+        
+        //Field::inst( 'documents.file as file' ),
+        
+        /*
+        Field::inst( 'documents.file' )
+            ->setFormatter( 'Format::ifEmpty', null )
+            ->upload( Upload::inst( 'uploads/'.$time.'.__EXTN__' )
+                ->db( 'documents', 'file', array(
+                    'document_name' => Upload::DB_FILE_NAME,
+                    'filesize'    => Upload::DB_FILE_SIZE,
+                    'web_path'    => Upload::DB_WEB_PATH,
+                    'system_path' => Upload::DB_SYSTEM_PATH,
+                    'extension'=>Upload::DB_EXTN,
+                    'file'=>$time
+                ) )
+                ->validator( function ( $file ) {
+                    return $file['size'] >= 250000 ?
+                        "Files must be smaller than 250KB" :
+                        null;
+                } )
+                ->allowedExtensions( [ 'png', 'jpg', 'gif', 'xlsx', 'pdf', 'doc', 'xls', 'docx' ], "Please upload document with correct format" )
+            ),
+        */
+        
+        
+         Field::inst( 'documents.file' )
+            ->setFormatter( 'Format::ifEmpty', null )
+            ->upload( Upload::inst( 'uploads/'.$time.'.__EXTN__' )
+                ->db( 'documents', 'file', array(
+                    'document_name' => Upload::DB_FILE_NAME,
+                    'filesize'    => Upload::DB_FILE_SIZE,
+                    'web_path'    => Upload::DB_WEB_PATH,
+                    'system_path' => Upload::DB_SYSTEM_PATH,
+                    'extension'=>Upload::DB_EXTN,
+                    'file'=>$time
+                ) )
+                ->validator( function ( $file ) {
+                    return$file['size'] >= 250000 ?
+                        "Files must be smaller than 250KB" :
+                        null;
+                } )
+                ->allowedExtensions( [ 'png', 'jpg', 'gif', 'xlsx', 'pdf', 'doc', 'xls', 'docx' ], "Please upload document with correct format" )
+            ),
+        
+        
+        Field::inst( 'documents.extension' ),
+        
         Field::inst( 'documents.client_id as client_id' )
         )
         

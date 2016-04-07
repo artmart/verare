@@ -190,21 +190,24 @@ class UploadsController extends Controller
                 $data = $xlsx->getSheetData('Sheet1');
                 
                 $instruments = Instruments::model()->findAll(array('select'=>'id, instrument'));
-                
+                $instruments_for_returns_update = [];
                 foreach($data as $dat){
                     $trade_date = gmdate('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($dat['0']));
                     $instrument_name = trim($dat['1']);
                     $price = $dat['2'];
                     
                     $instrument = Instruments::model()->findByAttributes(['instrument'=>$instrument_name, 'is_current' =>1]);
+                    
                     if($instrument){
                             $instrument_id = $instrument->id;
+                            $instruments_for_returns_update[] = $instrument_id; 
                         }else{
                             $new_instrument = New Instruments();
                             $new_instrument->instrument = $instrument_name;
                             $new_instrument->save();
                                                         
                             $instrument_id = $new_instrument->id;
+                            $instruments_for_returns_update[] = $instrument_id;
                         }
                     
                     $existing_record = Prices::model()->findByAttributes(['trade_date'=>$trade_date, 'instrument_id' =>$instrument_id]);
@@ -223,7 +226,12 @@ class UploadsController extends Controller
                             //$new_price->name = $instrument_name;
                             $new_price->save();
                             }
-                }    
+                }   
+                
+                $unique_instruments_for_returns_update = array_unique($instruments_for_returns_update); 
+                
+                Returns::model()->instrumnetReturnsUpdate($unique_instruments_for_returns_update);
+                
                              
                   @chmod( $tempLoc, 0777 );
                   @unlink( $tempLoc );           

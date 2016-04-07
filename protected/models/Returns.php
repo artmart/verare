@@ -90,4 +90,81 @@ class Returns extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    
+////////////////////////////////////////////////////////////////////////
+    public function instrumnetReturnsUpdate($instrument_ids){
+        
+        if(count($instrument_ids)>0){
+            ini_set('max_execution_time', 50000);
+       // $unique_instruments_for_returns_update = implode("', '", $instrument_ids); 
+        
+        
+             
+        foreach($instrument_ids as $instrument_id){
+
+        $inst_sql = "select * from ledger l
+                     inner join instruments i on l.instrument_id = i.id
+                     where l.is_current = 1 and i.is_current = 1 and i.id = $instrument_id  order by trade_date asc";
+        $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
+        
+        if(count($trades)>0){
+        
+        //Prices and returns calculations            
+            
+        $prices_sql = "select distinct p.trade_date, p.price,
+                        (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id) nominal,
+                        (select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id) pnl
+                         from prices p
+                        where p.is_current = 1 and p.instrument_id = $instrument_id   
+                        order by p.trade_date asc";
+                        
+                        //and p.trade_date >='$dt'
+        $prices = Yii::app()->db->createCommand($prices_sql)->queryAll(true);
+        
+        if(count($prices)>0){
+        $i = 0;
+        foreach($prices as $price){
+            $rawData[$i]['id'] = $i;    
+            $rawData[$i]['trade_date'] = $price['trade_date'];
+            $rawData[$i]['price'] = $price['price'];
+            $rawData[$i]['nominal'] = $price['nominal'];
+            $rawData[$i]['pnl'] = $price['pnl'];
+            $rawData[$i]['return'] = 1;                          
+            $rawData[$i]['chart'] = 1;
+             
+            if($i>0 && $rawData[0]['price'] !== 0){
+                    $rawData[$i]['chart'] = $rawData[$i]['price']/$rawData[0]['price'];      
+                
+                    $div = $rawData[$i-1]['nominal'] * $rawData[$i-1]['price']+ $rawData[$i]['pnl'];
+                    
+                    if($div>0){
+                        $rawData[$i]['return'] = ($rawData[$i]['nominal'] * $rawData[$i]['price'])/$div;
+                    }else{
+                        $rawData[$i]['return'] = 1;
+                    }
+                }
+         
+              //checking if the return for current instrument is not exist and inserting the calculated return.//
+              
+               $existing_return  = Returns::model()->findByAttributes(['instrument_id'=>$instrument_id, 'trade_date' =>$rawData[$i]['trade_date']]);
+                   if(count($existing_return)==0){
+                       $return = new Returns;
+                       $return->instrument_id = $instrument_id;
+                       $return->trade_date = $rawData[$i]['trade_date'];
+                       $return->return = $rawData[$i]['return'];
+                       $return->save(); 
+                   }else{
+                       $existing_return->return = $rawData[$i]['return'];
+                       $existing_return->save(); 
+                   }
+               
+               $i++;
+               }
+        }
+        }
+        }
+        }
+    }   
+    
+    
 }

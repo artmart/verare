@@ -22,12 +22,13 @@ $(document).ready(function() {
            //     label: "ID:",
            //     name: "id",
            // },
-           /* 
-            {
-                label: "Document Name:",
-                name: "document_name",
-            },
-            */
+           
+            //{
+            //    label: "Document Name:",
+            //    name: "document_name",
+            //    type: "hidden",
+           // },
+            
             /*
             {
                 label: "Is Current:",

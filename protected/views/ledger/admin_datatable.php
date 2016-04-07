@@ -49,49 +49,7 @@ if($ledger_delete == 1){$access_buttons .= '{
                                                         .submit();
                                                 }
                                             }, '; 
-                                            }   
-                                            
-                                                                               
-//if($ledger_edit == 1){$access_buttons .= '{ extend: "edit",   editor: editor }';}
-
-/*
-switch ($access_level) {
-    case 1:
-        $access_buttons = '{ extend: "create", editor: editor }';
-        break;
-    case 2:
-        $access_buttons = '{ extend: "edit",   editor: editor }';
-        break;
-    case 3:
-        $access_buttons = '{ extend: "remove", editor: editor }, 
-                            {
-                                extend: "selectedSingle",
-                                text: "Delete",
-                                action: function ( e, dt, node, config ) {
-                                    editor
-                                        .edit( table.row( { selected: true } ).index(), false )
-                                        .set( "ledger.is_current", 0 )
-                                        .submit();
-                                }
-                            },';
-            
-        break;
-    case 4:
-        $access_buttons = '{ extend: "create", editor: editor }, 
-                           { extend: "edit",   editor: editor },
-                           {
-                                extend: "selectedSingle",
-                                text: "Delete",
-                                action: function ( e, dt, node, config ) {
-                                    editor
-                                        .edit( table.row( { selected: true } ).index(), false )
-                                        .set( "ledger.is_current", 0 )
-                                        .submit();
-                                }
-                            }';
-        break;
-} 
-*/
+                                            }                                      
 ?>
 <h1>Manage Ledgers</h1>
     

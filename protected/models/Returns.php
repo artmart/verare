@@ -96,10 +96,7 @@ class Returns extends CActiveRecord
         
         if(count($instrument_ids)>0){
             ini_set('max_execution_time', 50000);
-       // $unique_instruments_for_returns_update = implode("', '", $instrument_ids); 
-        
-        
-             
+                         
         foreach($instrument_ids as $instrument_id){
             
             $portfolio_id = 0;
@@ -163,10 +160,9 @@ class Returns extends CActiveRecord
                
                $i++;
                }
-        }
-        }
-        
-        PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id);
+            }
+            }   
+            PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id);
         }
         }
     }   

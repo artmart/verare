@@ -7,19 +7,6 @@
 <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables.css">
 <!--<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>-->
 
-
-<style>
-.datatable-scroll {
-    overflow-x: auto;
-    overflow-y: visible;
-}
-
-#example_length{
-    float:left;
-}
-</style>
-
-
 <?php 
     $id = Yii::app()->user->id;
     $user_data = Users::model()->findByPk($id);

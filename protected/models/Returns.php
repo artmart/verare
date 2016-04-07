@@ -101,14 +101,17 @@ class Returns extends CActiveRecord
         
              
         foreach($instrument_ids as $instrument_id){
-
-        $inst_sql = "select * from ledger l
-                     inner join instruments i on l.instrument_id = i.id
-                     where l.is_current = 1 and i.is_current = 1 and i.id = $instrument_id  order by trade_date asc";
-        $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
+            
+            $portfolio_id = 0;
+            
+            $inst_sql = "select * from ledger l
+                         inner join instruments i on l.instrument_id = i.id
+                         where l.is_current = 1 and i.is_current = 1 and i.id = $instrument_id  order by trade_date asc";
+            $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
         
         if(count($trades)>0){
         
+        $portfolio_id = $trades[0]['portfolio_id'];
         //Prices and returns calculations            
             
         $prices_sql = "select distinct p.trade_date, p.price,
@@ -162,6 +165,8 @@ class Returns extends CActiveRecord
                }
         }
         }
+        
+        PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id);
         }
         }
     }   

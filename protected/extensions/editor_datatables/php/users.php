@@ -71,8 +71,6 @@ Editor::inst( $db, 'users', 'id')
             true;
             } ),    
         
- 
-        
         Field::inst( 'users.activkey as activkey' ),
         Field::inst( 'users.email as email' )->validator( 'Validate::email', array('required' => true) ),
         Field::inst( 'users.create_at as create_at' ),

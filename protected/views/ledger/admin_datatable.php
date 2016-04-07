@@ -1,5 +1,3 @@
-
-<a href="mailto:someone@example.com?Subject=Hello%20again" target="_top">Send Mail</a>
 <?php
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
 $baseUrl = Yii::app()->theme->baseUrl;

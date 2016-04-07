@@ -1,43 +1,14 @@
-<?php
-$this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
-
-//$access_buttons = '{view} {update} {delete}';
-
-/*
-$access_level = 5;
-$access_buttons = '';
-if(isset(Yii::app()->user->user_role)){
-              $user_rols = UserRole::model()->findByPk(Yii::app()->user->user_role);
-              if($user_rols){$access_level = $user_rols->ledger_access_level;}
-}
-
-switch ($access_level) {
-    case 1:
-    $this->menu=[
-        	//array('label'=>'List Ledger', 'url'=>array('index')),
-        	array('label'=>'Create Ledger', 'url'=>array('create')),
-        ];
-        break;
-    case 2:
-        $access_buttons = '{update}';
-        break;
-    case 3:
-        $access_buttons = '{delete}';
-        break;
-    case 4:
-        $access_buttons = '{view} {update} {delete}';
-        $this->menu=[
-        	//array('label'=>'List Ledger', 'url'=>array('index')),
-        	array('label'=>'Create Ledger', 'url'=>array('create')),
-        ];
-        break;
-} 
-*/
+<?php 
+    $this->breadcrumbs=['Documents'=>['admin'], 'Manage']; 
+    
+    $user = Users::model()->findByPk(Yii::app()->user->id);
+    $client_id = $user->client_id; 
+    
+    $baseUrl = Yii::app()->theme->baseUrl;
 ?>
 
 <h1>Manage Documents</h1>
 
-<?php $baseUrl = Yii::app()->theme->baseUrl; ?>
 <script type="text/javascript" language="javascript" class="init">  
        
 var editor; // use a global for the submit and return data rendering in the examples
@@ -50,11 +21,13 @@ $(document).ready(function() {
            // {
            //     label: "ID:",
            //     name: "id",
-           // }, 
+           // },
+           /* 
             {
                 label: "Document Name:",
                 name: "document_name",
             },
+            */
             /*
             {
                 label: "Is Current:",
@@ -76,6 +49,24 @@ $(document).ready(function() {
                 name: "document_upload_date",
                 type: "datetime"
             },
+            
+            {
+                label: "Document:",
+                name: "documents.file",
+                type: "upload",
+               // display: function ( file_id ) {
+               //     return table.file( 'documents', file_id ).document_name;
+              //  },
+               //display: function ( val, row ) {
+                //  return val && row.ledger.file ?
+                //      row.ledger.file :
+                //      'No confirmation';
+               // }
+              
+                clearText: "Clear",
+                noImageText: 'No Document',
+                "attr": {"class": "form-control"}
+            },
              /*
              {
                 label: "Document Type:",
@@ -83,13 +74,23 @@ $(document).ready(function() {
                // type: "select",
               //  ipOpts: instrumentgroupLoader(),
             },
-            */
+            
             {
                 label: "client_id:",
                 name: "client_id",
                 type: "hidden",
                 //def: "<?php //echo $client_id;?>"
               //  ipOpts: instrumentgroupLoader(),
+            },
+            */
+            {
+                label: "Client:",
+                name: "client_id",
+                type: "hidden",
+                def: "<?php echo $client_id;?>"
+                //type: "select",
+                //ipOpts: clientsLoader(),
+                //"attr": {"class": "form-control"}
             },
                       
         ]

@@ -253,4 +253,87 @@ class Calculators {
 		//$VaR=$averageTargetMinusBench+$volTarget*$this->inverse_ncdf(0.01);
 		return array($volTarget, $sharpe, $alpha, $beta, $treynor, $trackingError, $infoQuota, $consistency, $R2, $VaR, ($averageTarget-1), ($returnMax-1), ($returnMin-1), $sortino, $omega, $averageTargetMinusBench, $averageBenchMinusTargetOnBadDays);
     }
+    
+    
+    
+    
+   public static function CalcAllStats_bench($returnTarget, $returnBenchmark) {
+		// initialize the variables
+		$returnCount = 0;
+		$sumTarget = 0;
+		$sumBench = 0;
+		$sumTargetMinusBench = 0;
+		$sumTargetTimesBench = 0;
+		$sumBenchMinusTargetOnBadDays = 0;
+		$sumBenchMinusTargetSquaredOnBadDays = 0;
+		$sumTargetSquared = 0;
+		$sumBenchSquared = 0;
+		$returnTargetCumulative = 0;
+		$returnBenchCumulative = 0;
+		$countGoodDays = 0;
+		$returnMax = -10000;
+		$returnMin = 10000;
+		$varianceTarget = 0;
+		$varianceBench = 0;
+		$varianceTargetMinusBench = 0;
+		
+		// do the first loop
+		foreach($returnTarget as $r) {
+			
+			$sumTarget += $r;
+			$sumBench += $returnBenchmark[$returnCount];
+			$returnTargetCumulative *= $r;
+			$returnBenchCumulative *= $returnBenchmark[$returnCount];
+			$sumTargetMinusBench += $r-$returnBenchmark[$returnCount];
+			$sumTargetTimesBench += $r*$returnBenchmark[$returnCount];
+			$sumTargetSquared += pow($r,2);
+			$sumBenchSquared += pow($returnBenchmark[$returnCount],2);
+			if($r>$returnBenchmark[$returnCount]) { // A good day
+				$countGoodDays++;
+			}
+			if($r<1) { //threshold = 0
+				$sumBenchMinusTargetOnBadDays += $returnBenchmark[$returnCount]-$r;
+				$sumBenchMinusTargetSquaredOnBadDays += pow($returnBenchmark[$returnCount]-$r,2);
+			}
+			if($r>$returnMax) {
+				$returnMax=$r;
+			}
+			if($r<$returnMin) {
+				$returnMin=$r;
+			}
+            
+            $returnCount++;
+		}
+		
+		// calculate some figures
+		$returnTargetCumulative--;
+		$returnBenchCumulative--;
+		$averageTarget = $sumTarget/$returnCount;
+		$averageBench = $sumBench/$returnCount;
+		$averageTargetMinusBench = $sumTargetMinusBench/$returnCount;
+		$averageBenchMinusTargetOnBadDays = $sumBenchMinusTargetOnBadDays/$returnCount;
+		$averageBenchMinusTargetSquaredOnBadDays = $sumBenchMinusTargetSquaredOnBadDays/$returnCount;
+		$covarTargetBench = ($sumTargetTimesBench-$sumTarget*$sumBench/$returnCount)/($returnCount-1);
+		
+		// second loop
+		$i = 0;
+		foreach($returnTarget as $r) {
+			$varianceTarget += pow($r-$averageTarget, 2);
+			$varianceBench += pow($r-$averageBench, 2);
+			$varianceTargetMinusBench += pow($r-$averageBench-$averageTargetMinusBench, 2);
+			$i++;
+		}
+		
+		// calculate the output
+		$varianceTarget /= ($returnCount-1);
+		$varianceBench /= ($returnCount-1);
+		$varianceTargetMinusBench /= ($returnCount-1);
+		$volTarget = sqrt($varianceTarget)*sqrt(240);
+		$volBench = sqrt($varianceBench)*sqrt(240);
+		$volTargetMinusBench = sqrt($varianceTargetMinusBench)*sqrt(240);
+		$sharpe = $returnTargetCumulative/$volTarget;
+
+		return array($volTarget, $sharpe);
+        //, $alpha, $beta, $treynor, $trackingError, $infoQuota, $consistency, $R2, $VaR, ($averageTarget-1), ($returnMax-1), ($returnMin-1), $sortino, $omega, $averageTargetMinusBench, $averageBenchMinusTargetOnBadDays
+    }
 }

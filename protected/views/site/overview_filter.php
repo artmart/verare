@@ -284,8 +284,6 @@ $(function () {
 });
 
 </script>
-
-
                     </div><!-- /.col -->
 					<!--
                     <div class="col-md-4">
@@ -302,24 +300,9 @@ $(function () {
               </div><!-- /.box -->
             </div><!-- /.col -->
           </div><!-- /.row -->
-		  
-          <div class="row">
-            <div class="col-md-12">
-              <div class="box">
-			  
-                <div class="box-header with-border">
-                  <h3 class="box-title">Portfolio Performance</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div>
-                </div><!-- /.box-header -->
-				
-                <div class="box-body">
-                  <div class="row">
-                    <div class="col-md-12">
-					
-                      <div class="table">
+          
+          
+          
  <?php       
     $month_ytd_start = date('Y-01-01');
     $month3_start = date( "Y-m-d", strtotime( "-3 month" ));
@@ -327,13 +310,9 @@ $(function () {
     $month9_start = date( "Y-m-d", strtotime( "-9 month" ));
     $month1y_start = date( "Y-m-d", strtotime( "-1 years" ));
     
-     $accessable_portfolios1 = Yii::app()->user->getState('accessable_portfolios');
-     $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
-     
-    //if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
-    //if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
-    
-    //$portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
+     //$accessable_portfolios1 = Yii::app()->user->getState('accessable_portfolios');
+     //$accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
+     //$portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
        
     
     $months = [];
@@ -387,6 +366,9 @@ $(function () {
     $series[] = ['name'=> $port['portfolio']."-benchmark", 'data'=> $bench_data]; 
     
     $allstats = Calculators::CalcAllStats1($port_ret, $bench_ret);
+    $allstats_bench = Calculators::CalcAllStats_bench($bench_ret, $bench_ret);
+    
+    //$allstats_bench = Calculators::CalcAllStats1($bench_ret, $port_ret);
     
   $tbl_rows .=   
     '<tr>
@@ -410,17 +392,32 @@ $(function () {
         <td>'. number_format(($return_6m_bench-1)*100, 1).'%</td>
         <td>'. number_format(($return_9m_bench-1)*100, 1).'%</td>
         <td>'. number_format(($return_1y_bench-1)*100, 1).'%</td>
-        <td>??%</td>
-        <td>??</td>
+        <td>'. number_format($allstats_bench[0]*100, 1).'%</td>
+        <td>'. number_format($allstats_bench[1], 3).'</td>
     </tr>';
     }
 }
 $months = array_unique($months);  
- ?>                     
-
-
-
-
+ ?>  
+		  
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+			  
+                <div class="box-header with-border">
+                  <h3 class="box-title">Portfolio Performance</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div>
+                </div><!-- /.box-header -->
+				
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-md-12">
+					
+                      <div class="table">
+                   
 <table id="tablePerformance" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
     <thead>
         <tr>

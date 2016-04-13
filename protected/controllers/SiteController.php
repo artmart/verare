@@ -44,6 +44,13 @@ class SiteController extends Controller
 		$this->renderPartial('details_instruments');
 	}
     
+    public function actionOverviewload()
+	{
+	   //$this->layout='//layouts/column2';
+		// renders the view file 'protected/views/site/index.php'
+		// using the default layout 'protected/views/layouts/main.php'
+		$this->renderPartial('overview_filter');
+	}
     
     
     
@@ -73,13 +80,16 @@ class SiteController extends Controller
 		$this->render('overview');
 	} 
       
-    public function actionOverviewLoad()
+    public function actionOverviewLoad1()
 	{
 	   //$this->layout='//layouts/column2';
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
 		$this->render('overview_load');
 	} 
+    
+    
+    
     
     
     public function my_date_format($tradeDate,$alpha)

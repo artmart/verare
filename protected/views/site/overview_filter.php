@@ -1,12 +1,3 @@
-<!--
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/data.js"></script>
-<script src="https://code.highcharts.com/modules/drilldown.js"></script>
--->
-<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables_themeroller.css">
-<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables.css">
-<!--<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>-->
-
 <?php 
     $id = Yii::app()->user->id;
     $user_data = Users::model()->findByPk($id);
@@ -14,7 +5,6 @@
     $baseUrl = Yii::app()->baseUrl;
     
     if(isset($user_data->default_portfolio_id)){$portfolio = $user_data->default_portfolio_id;}
-    //if(isset($_POST['portfolio'])){$portfolio = $_POST['portfolio'];}
     
    	$end_date = Date('Y-m-d');
 	$start_date = date('Y-m-d', strtotime('-1 years'));
@@ -22,11 +12,7 @@
     if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
     //if(isset($_POST['start_date'])){$start_date = date_format(date_create($_POST['start_date']),"Y-m-d");}
     //if(isset($_POST['end_date'])){$end_date = date_format(date_create($_POST['end_date']),"Y-m-d");}
-    
-    //$portfolio = $_REQUEST['portfolio'];
-    //$start_date = $_REQUEST['start_date'];
-    //$end_date = $_REQUEST['end_date'];
-    
+ 
     if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
     if(isset($_REQUEST['end_date'])){$end_date = $_REQUEST['end_date'];}
     if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
@@ -300,9 +286,7 @@ $(function () {
               </div><!-- /.box -->
             </div><!-- /.col -->
           </div><!-- /.row -->
-          
-          
-          
+                
  <?php       
     $month_ytd_start = date('Y-01-01');
     $month3_start = date( "Y-m-d", strtotime( "-3 month" ));
@@ -313,8 +297,7 @@ $(function () {
      //$accessable_portfolios1 = Yii::app()->user->getState('accessable_portfolios');
      //$accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
      //$portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
-       
-    
+     
     $months = [];
     $series = [];  
     $tbl_rows = '';
@@ -398,7 +381,7 @@ $(function () {
     }
 }
 $months = array_unique($months);  
- ?>  
+?>  
 		  
           <div class="row">
             <div class="col-md-12">
@@ -418,32 +401,28 @@ $months = array_unique($months);
 					
                       <div class="table">
                    
-<table id="tablePerformance" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>AllTime</th>
-            <th>YTD</th>
-            <th>3M</th>
-            <th>6M</th>
-            <th>9M</th>
-            <th>1Y</th>
-            <th>Vol</th>
-            <th>Sharpe</th>
-            
-        </tr>
-    </thead>
-    <tbody>
-        <?php echo $tbl_rows; ?>
-    <tbody>
-</table>
+                    <table id="tablePerformance" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>AllTime</th>
+                                <th>YTD</th>
+                                <th>3M</th>
+                                <th>6M</th>
+                                <th>9M</th>
+                                <th>1Y</th>
+                                <th>Vol</th>
+                                <th>Sharpe</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php echo $tbl_rows; ?>
+                        <tbody>
+                    </table>
 
-<div id="container1"></div>
-
-
-
-    
-                                   
+        <div id="container1"></div>
+                     
           </div><!-- /.chart-responsive -->
         </div><!-- /.col -->
 		
@@ -514,40 +493,6 @@ $(function () {
 });
 </script>          
           
-          
-<?php 
-/*                                    
-  //$months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  $series[] = ['name' => 'Portfolio', 'data' => $returns_portfolio];
-  $series[] = ['name' => 'Benchmark', 'data' => $return_bench_daily]; 
-  $this->Widget('ext.highcharts.HighchartsWidget', [
-       'options'=>[
-    	  'title' => ['text' => ''],
-    	  'xAxis' => ['categories' => $months, 'minTickInterval' =>30, 'type' => 'datetime', 'title' => ['text'=> null], 'labels' => ['enabled' => true]],
-    	  'yAxis' => ['title' => ['text' => ''], 'min' => 0.9, 'max'=>1.35],
-    	  'chart' => ['type'=>'spline', 'plotBackgroundColor' => '#ffffff', 'plotBorderWidth' => null, 'plotShadow' => false, 'height' => 300],
-          'plotOptions'=> [
-                'spline'=> [
-                    'lineWidth'=> 2,
-                    'states'=> [
-                        'hover'=> [
-                            'lineWidth'=> 5
-                        ]
-                    ],
-                    'marker'=> [
-                        'enabled'=> false
-                    ],
-                   // 'pointInterval'=> 3600000, // one hour
-                   //'pointStart'=> Date.UTC(2015, 4, 31, 0, 0, 0)
-                ]
-            ],
-    	  'colors'=> ['#104E89', '#952C28', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
-    	  'credits' => ['enabled' => false],
-    	  'series' => $series,
-       ]
-    ]);
-    */                                
-?>
                     </div><!-- /.col -->
                   </div><!-- /.row -->
 					  

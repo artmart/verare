@@ -214,8 +214,14 @@ $(document).ready(function() {
                 type: "hidden",
                 "attr": {"class": "form-control"}
             },
-            
-            
+            /*
+            {
+                label: "document_type_id",
+                name: "documents.document_type_id",
+                type: "hidden",
+                def: 1
+            },
+            */
             {
                 label: "Trade Status:",
                 name: "ledger.trade_status_id",

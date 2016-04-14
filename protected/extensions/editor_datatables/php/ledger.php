@@ -195,7 +195,8 @@
                     'web_path'    => Upload::DB_WEB_PATH,
                     'system_path' => Upload::DB_SYSTEM_PATH,
                     'extension'=>Upload::DB_EXTN,
-                    'file'=>$time
+                    'file'=>$time,
+                    'document_type_id'=>1
                 ) )
                 ->validator( function ( $file ) {
                     return $file['size'] >= 250000 ?
@@ -211,6 +212,7 @@
             Field::inst( 'documents.system_path' ),
             Field::inst( 'documents.file' ),
             Field::inst( 'documents.extension' ),
+            //Field::inst( 'documents.document_type_id' ),
                     
             
             Field::inst( 'ledger.confirmed_by' )

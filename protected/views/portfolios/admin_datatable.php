@@ -1,6 +1,10 @@
 <?php
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
 
+$id = Yii::app()->user->id;
+$user_data = Users::model()->findByPk($id); 
+$client_id = $user_data->client_id;
+
 //$access_buttons = '{view} {update} {delete}';
 //$access_level = 5;
 //$access_buttons = '';
@@ -96,14 +100,28 @@ $(document).ready(function() {
                 name: "description",
                 type: "textarea",
                 "attr": {"class": "form-control"}
-            },           
+            },
+            
+            <?php if($user_data->user_role==1){ ?>       
             {
-                label: "client:",
+                label: "Client:",
                 name: "client_id",
                 type: "select",
                 ipOpts: clientLoader(),
                 "attr": {"class": "form-control"}
             }, 
+            
+            <?php }else{ ?>
+            
+            {
+                label: "Client:",
+                name: "client_id",
+                type: "hidden",
+                def: "<?php echo $client_id;?>"
+            },
+            
+            <?php } ?>
+            
             {
                 label: "Created At:",
                 name: "created_at",

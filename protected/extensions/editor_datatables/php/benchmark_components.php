@@ -17,7 +17,7 @@
    // $extension = end(explode('.', Upload::DB_FILE_NAME));
     Editor::inst( $db, 'benchmark_components', 'id', $time, $client_id)
         ->fields(
-            Field::inst( 'benchmark_components.benchmark_id' ),
+            Field::inst( 'benchmark_components.benchmark_id' )->validator( 'Validate::notEmpty' ),
             Field::inst( 'benchmark_components.instrument_id' )->validator( 'Validate::notEmpty' ),
             //Field::inst( 'benchmarks.name' )->validator( 'Validate::notEmpty' ),
             //Field::inst( 'benchmarks.client_id' )->validator( 'Validate::notEmpty' ),
@@ -31,7 +31,7 @@
     )   
         ->leftJoin( 'benchmarks', 'benchmarks.id', '=', 'benchmark_components.benchmark_id' )
         ->leftJoin( 'instruments', 'instruments.id', '=', 'benchmark_components.instrument_id' )          
-       // ->where( 'benchmarks.client_id', $client_id )
+        ->where( 'benchmarks.client_id', $client_id )
         ->process( $_POST )
         ->json();  
 ?>

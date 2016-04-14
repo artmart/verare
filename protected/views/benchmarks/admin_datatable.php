@@ -1,16 +1,9 @@
-<style>
-.datatable-scroll {
-    overflow-x: auto;
-    overflow-y: visible;
-}
-
-#example_length{
-    float:left;
-}
-</style>
 <?php
 $this->breadcrumbs=['Counterparties'=>['admin'], 'Manage'];
 $baseUrl = Yii::app()->theme->baseUrl;
+$id = Yii::app()->user->id;
+$user_data = Users::model()->findByPk($id); 
+$client_id = $user_data->client_id;
 
 //$access_level = 5;
 $access_buttons = '';
@@ -115,7 +108,8 @@ $(document).ready(function() {
                 label: "Benchmark Name:",
                 name: "benchmark_name",
                 "attr": {"class": "form-control"}
-            },            
+            },
+            /*            
             {
                 label: "Client:",
                 name: "benchmarks.client_id",
@@ -124,6 +118,31 @@ $(document).ready(function() {
                 //className: 'full'
                 "attr": {"class": "form-control"}
             },
+            */
+            
+            <?php if($user_data->user_role==1){ ?>       
+            {
+                label: "Client:",
+                name: "benchmarks.client_id",
+                type: "select",
+                ipOpts: clientsLoader(),
+                "attr": {"class": "form-control"}
+            }, 
+            
+            <?php }else{ ?>
+            
+            {
+                label: "Client:",
+                name: "benchmarks.client_id",
+                type: "hidden",
+                def: "<?php echo $client_id;?>"
+            },
+            
+            <?php } ?>
+            
+            
+            
+            
             /*
             {
                 label: "Portfolio:",

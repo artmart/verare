@@ -5,6 +5,11 @@
 <?php 
     $id = Yii::app()->user->id;
     $user_data = Users::model()->findByPk($id);
+    
+    
+    $client_id = $user_data->client_id;
+    
+    
     $this->pageTitle=Yii::app()->name; 
     $baseUrl = Yii::app()->baseUrl;
     
@@ -68,7 +73,11 @@
         <div class="col-sm-2 control-label">Portfolio:</div>
         <div class="col-sm-2">
             <?php
-            $list = CHtml::listData(Portfolios::model()->findAll(['select'=>'id, portfolio', 'order'=>'portfolio']),'id','portfolio');
+            //$ports = Portfolios::model()->findAll(['select'=>'id, portfolio', 'order'=>'portfolio']);
+        
+            $ports = Portfolios::model()->findAll(['condition' => 'client_id = :client_id', 'params' => array(':client_id' => $client_id)]);
+            
+            $list = CHtml::listData($ports,'id','portfolio');
             echo CHtml::dropDownList('portfolio', $portfolio,  $list, [ 'id' => 'portfolio', 'empty' => '-- Select --',  'onchange'=>'overviewload()', 'class'=>"form-control"  /*'multiple' => true, 'size'=>'10'*/]);
             ?>
         </div>

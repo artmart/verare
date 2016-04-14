@@ -97,10 +97,6 @@ class SiteController extends Controller
 		$this->renderPartial('overview_filter');
 	}
     
-    
-    
-    
-    
     /**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
@@ -112,10 +108,6 @@ class SiteController extends Controller
 		// using the default layout 'protected/views/layouts/main.php'
 		$this->render('details');
 	} 
-    
-    
-    
-    
     
     public function actionAdmin()
 	{

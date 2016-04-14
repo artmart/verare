@@ -88,10 +88,6 @@ class SiteController extends Controller
 		$this->render('overview_load');
 	} 
     
-    
-    
-    
-    
     public function my_date_format($tradeDate,$alpha)
     {
         $tmp=date_create($tradeDate);
@@ -99,7 +95,6 @@ class SiteController extends Controller
         return date_format($tmp, "Y-m-d");
     }
 
-    
     public function actionSparklines()
 	{
 		$this->render('sparklines');

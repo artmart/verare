@@ -48,7 +48,7 @@ class UsersController extends Controller
     
     public function actionSettings()
 	{    
-	   $this->layout='//layouts/column2';
+	   //$this->layout='//layouts/column2';
        
        //var_dump($_POST['Users']);
        //exit;

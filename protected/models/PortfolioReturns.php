@@ -125,8 +125,8 @@ class PortfolioReturns extends CActiveRecord
         $insids = implode("','", array_unique($ins_ids));                         
                                 
         $portfolio_return_sql = "select p.trade_date,
-                                sum((select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id)) pnl,
-                                sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id)) top,
+                                sum((select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1)) pnl,
+                                sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1)) top,
                                 sum(p.price*bc.weight) sums
                                 from prices p
                                 inner join benchmark_components bc on bc.instrument_id = p.instrument_id 

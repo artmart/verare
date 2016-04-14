@@ -145,15 +145,9 @@
                         ->field( 'ledger.confirmed_at' )
                         ->setValue( $confirmed_at );  
                     }  
-                
-                    
-                    
-                    
-
           }
     }
-    
-    
+        
     function portfolioUpdate( $id, $values ){
         $portfolio_id = 0;
         if(isset($values['ledger']['portfolio_id'])){$portfolio_id = $values['ledger']['portfolio_id'];} //else{$portfolio_id = $existing_trades->portfolio_id;}

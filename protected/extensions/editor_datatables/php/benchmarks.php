@@ -21,14 +21,14 @@
             Field::inst( 'benchmarks.id as id' ),//->validator( 'Validate::notEmpty' ),
             //Field::inst( 'benchmarks.name' )->validator( 'Validate::notEmpty' ),
             //Field::inst( 'benchmarks.client_id' )->validator( 'Validate::notEmpty' ),
-            Field::inst( 'benchmarks.portfolio_id' ),
+           // Field::inst( 'benchmarks.portfolio_id' ),
             Field::inst( 'benchmarks.benchmark_name as benchmark_name' ),
             //Field::inst( 'clients.id' ),
-            Field::inst( 'clients.client_name' ),
-            Field::inst( 'portfolios.portfolio' )  
+            Field::inst( 'clients.client_name' )
+            //Field::inst( 'portfolios.portfolio' )  
     )   
         ->leftJoin( 'clients', 'clients.id', '=', 'benchmarks.client_id' )
-        ->leftJoin( 'portfolios', 'portfolios.id', '=', 'benchmarks.portfolio_id' )          
+       // ->leftJoin( 'portfolios', 'portfolios.id', '=', 'benchmarks.portfolio_id' )          
         ->where( 'benchmarks.client_id', $client_id )
         ->process( $_POST )
         ->json();  

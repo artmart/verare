@@ -76,7 +76,7 @@ if($counterpart_delete == 1){$access_buttons .= '{
             <tr>
                 <th>Benchmark</th>
                 <th>Client</th>
-                <th>Portfolio</th>
+                <!--<th>Portfolio</th>-->
             </tr>
         </thead>
         <!--
@@ -124,6 +124,7 @@ $(document).ready(function() {
                 //className: 'full'
                 "attr": {"class": "form-control"}
             },
+            /*
             {
                 label: "Portfolio:",
                 name: "benchmarks.portfolio_id",
@@ -131,6 +132,7 @@ $(document).ready(function() {
                 ipOpts: portfolioLoader(),
                 "attr": {"class": "form-control"}
             },
+            */
         ]
     } );
 	   
@@ -170,7 +172,7 @@ var table = $('#example').DataTable( {
             { data: "benchmark_name" },
             { data: "clients.client_name" },
             //{ data: "counterparties.portfolio" },
-            { data: "portfolios.portfolio" },
+            //{ data: "portfolios.portfolio" },
             //{ data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
             //{ data: "benchmarks.contact_tel" },
             //{ data: "benchmarks.contact_mail" },

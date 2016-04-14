@@ -58,10 +58,13 @@ Editor::inst( $db, 'portfolios', 'id', $client_id )
         Field::inst( 'portfolios.description as description' ),
         Field::inst( 'portfolios.is_current as is_current' ),
         Field::inst( 'portfolios.created_at as created_at' ),
+        Field::inst( 'portfolios.benchmark_id as benchmark_id' ),
+        Field::inst( 'benchmarks.benchmark_name as benchmark_name' ),
         Field::inst( 'portfolios.type_id as type_id' )
     )
     ->leftJoin( 'clients', 'clients.id', '=', 'portfolios.client_id' )
     ->leftJoin( 'portfolio_types', 'portfolio_types.id', '=', 'portfolios.type_id' )
+    ->leftJoin( 'benchmarks', 'benchmarks.id', '=', 'portfolios.benchmark_id' )
     ->where( 'portfolios.client_id', $client_id )
     ->process( $_POST )
     ->json();

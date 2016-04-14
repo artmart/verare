@@ -1,18 +1,13 @@
-<style>
-.datatable-scroll {
-    overflow-x: auto;
-    overflow-y: visible;
-}
-
-#example_length{
-    float:left;
-}
-</style>
 <?php
 $this->breadcrumbs=['Users'=>['admin'], 'Manage'];
 $baseUrl = Yii::app()->theme->baseUrl;
 $baseUrl1 = Yii::app()->baseUrl;
-$client_id = Yii::app()->user->getState('client_id');
+//$client_id = Yii::app()->user->getState('client_id');
+
+
+$id = Yii::app()->user->id;
+$user_data = Users::model()->findByPk($id); 
+$client_id = $user_data->client_id;
 
 //var_dump(Yii::app()->user->getState('user_role_id'));
 //$access_level = 5;
@@ -192,6 +187,27 @@ $(document).ready(function() {
                 "separator": ",",
                 ipOpts: portfoliosloader(),
             },
+            /*
+            {
+                label: "Default Portfolio:",
+                name: "default_portfolio_id",
+                type: "select",
+                ipOpts: portfoliosloader(),
+                "attr": {"class": "form-control"}
+            },            
+            {
+                label: "Start Date:",
+                name: "default_start_date",
+                type: "datetime",
+                "attr": {"class": "form-control"}
+            },
+            {
+                label: "End Date:",
+                name: "default_end_date",
+                type: "datetime",
+                "attr": {"class": "form-control"}
+            },
+            */
    
         ]
     } );

@@ -98,7 +98,8 @@ $form=$this->beginWidget('CActiveForm', array(
 		<?php //echo $form->textField($model,'default_portfolio_id'); ?>
         <div class="col-sm-2">
             <?php
-                $list = CHtml::listData(Portfolios::model()->findAll(array('select'=>'id, portfolio', 'order'=>'portfolio')),'id','portfolio');
+                $ports = Portfolios::model()->findAll(['condition' => 'client_id = :client_id', 'params' => array(':client_id' => $model->client_id)]);
+                $list = CHtml::listData($ports,'id','portfolio');
                 echo $form->dropDownList($model, 'default_portfolio_id',   $list, [ 'id' => 'portfolio', 'empty' => '-- Select --',  'class'=>"form-control", /*'multiple' => true, 'size'=>'10'*/]);
              ?>
         </div>

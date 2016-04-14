@@ -1,21 +1,31 @@
 <?php 
-    $id = Yii::app()->user->id;
-    $user_data = Users::model()->findByPk($id);
-    $this->pageTitle=Yii::app()->name; 
+    //$id = Yii::app()->user->id;
+    //$user_data = Users::model()->findByPk($id);
+    //$this->pageTitle=Yii::app()->name; 
     $baseUrl = Yii::app()->baseUrl;
     
-    if(isset($user_data->default_portfolio_id)){$portfolio = $user_data->default_portfolio_id;}
+    //$aa = json_decode($_REQUEST['user_data']);
+    //var_dump($aa);
+    //if(isset($user_data->default_portfolio_id)){$portfolio = $user_data->default_portfolio_id;}
     
-   	$end_date = Date('Y-m-d');
-	$start_date = date('Y-m-d', strtotime('-1 years'));
-    if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
-    if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
+   	//$end_date = Date('Y-m-d');
+	//$start_date = date('Y-m-d', strtotime('-1 years'));
+    //if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
+    //if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
     //if(isset($_POST['start_date'])){$start_date = date_format(date_create($_POST['start_date']),"Y-m-d");}
     //if(isset($_POST['end_date'])){$end_date = date_format(date_create($_POST['end_date']),"Y-m-d");}
  
     if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
     if(isset($_REQUEST['end_date'])){$end_date = $_REQUEST['end_date'];}
     if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
+    
+    
+    $id = Yii::app()->user->id;
+    $user_data = Users::model()->findByPk($id);
+    $user_data->default_portfolio_id = $portfolio;
+    $user_data->default_start_date = $start_date;
+    $user_data->default_end_date = $end_date;
+    $user_data->save();
     
     $portfolios = Yii::app()->db->createCommand("select * from portfolios where id = '$portfolio'")->queryAll(true);
 ?>

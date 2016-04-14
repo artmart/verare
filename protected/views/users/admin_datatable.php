@@ -1,13 +1,3 @@
-<style>
-.datatable-scroll {
-    overflow-x: auto;
-    overflow-y: visible;
-}
-
-#example_length{
-    float:left;
-}
-</style>
 <?php
 $this->breadcrumbs=['Users'=>['admin'], 'Manage'];
 $baseUrl = Yii::app()->theme->baseUrl;
@@ -189,6 +179,27 @@ $(document).ready(function() {
                 "separator": ",",
                 ipOpts: portfoliosloader(),
             },
+            /*
+            {
+                label: "Default Portfolio:",
+                name: "default_portfolio_id",
+                type: "select",
+                ipOpts: portfoliosloader(),
+                "attr": {"class": "form-control"}
+            },            
+            {
+                label: "Start Date:",
+                name: "default_start_date",
+                type: "datetime",
+                "attr": {"class": "form-control"}
+            },
+            {
+                label: "End Date:",
+                name: "default_end_date",
+                type: "datetime",
+                "attr": {"class": "form-control"}
+            },
+            */
             
         ]
     } );

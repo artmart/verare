@@ -9,17 +9,22 @@
     
     $client_id = $user_data->client_id;
     
-    
     $this->pageTitle=Yii::app()->name; 
     $baseUrl = Yii::app()->baseUrl;
     
-    if(isset($user_data->default_portfolio_id)){$portfolio = $user_data->default_portfolio_id;}
-    //if(isset($_POST['portfolio'])){$portfolio = $_POST['portfolio'];}
+    if(isset($user_data->default_portfolio_id) && $user_data->default_portfolio_id>0)
+    {
+        $portfolio = $user_data->default_portfolio_id;
+        }else{
+            $accessable_portfolios1 = $user_data->accessable_portfolios;
+            $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
+            $portfolio = $accessable_portfolios[0];
+            }
     
    	$end_date = Date('Y-m-d');
 	$start_date = date('Y-m-d', strtotime('-1 years'));
-    if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
-    if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
+    if(isset($user_data->default_start_date) && $user_data->default_start_date!=='0000-00-00'){$start_date = $user_data->default_start_date;}
+    if(isset($user_data->default_end_date) && $user_data->default_end_date!=='0000-00-00'){$end_date = $user_data->default_end_date;}
     //if(isset($_POST['start_date'])){$start_date = date_format(date_create($_POST['start_date']),"Y-m-d");}
     //if(isset($_POST['end_date'])){$end_date = date_format(date_create($_POST['end_date']),"Y-m-d");}
 ?>

@@ -8,7 +8,30 @@
         DataTables\Editor\Join,
         DataTables\Editor\Upload,
         DataTables\Editor\Validate;
-    $client_id = Yii::app()->user->getState('client_id');
+        
+    $user = Users::model()->findByPk(Yii::app()->user->id);
+    $client_id = $user->client_id;
+    //$client_id = Yii::app()->user->getState('client_id');
+    
+    
+       function userupdate(){
+        $user_data = Users::model()->findByPk(Yii::app()->user->id);
+                        
+        $step_completed = $user_data->step_completed;
+
+        if($user_data->user_role == 2 && $step_completed < 5){
+            
+            $user_data->step_completed = 4;
+            $user_data->save();
+            //$this->redirect(Yii::app()->baseUrl.'/site/admin');
+            $baseUrl = Yii::app()->baseUrl;
+            //Yii::app()->request->redirect($baseUrl.'/site/admin');
+            //echo "<script>window.location.href ='".$baseUrl."/site/admin';</script>";
+            //return false; 
+
+        }//else{ $this->render('overview', ['user_data' => $user_data]); }
+    }
+    
  /*    
     //Build our Editor instance and process the data coming from _POST
     Editor::inst( $db, 'ledger' )
@@ -62,6 +85,11 @@ Editor::inst( $db, 'portfolios', 'id', $client_id )
         Field::inst( 'benchmarks.benchmark_name as benchmark_name' ),
         Field::inst( 'portfolios.type_id as type_id' )
     )
+    
+    ->on( 'postCreate', function () {
+                userupdate();
+            } )
+    
     ->leftJoin( 'clients', 'clients.id', '=', 'portfolios.client_id' )
     ->leftJoin( 'portfolio_types', 'portfolio_types.id', '=', 'portfolios.type_id' )
     ->leftJoin( 'benchmarks', 'benchmarks.id', '=', 'portfolios.benchmark_id' )

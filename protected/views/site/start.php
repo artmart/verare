@@ -1,74 +1,139 @@
-<?php
-/* @var $this SiteController */
+<style>
+ol.progtrckr {
+        display: table;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        table-layout: fixed;
+        width: 100%;
+    }
+    ol.progtrckr li {
+        display: table-cell;
+        text-align: center;
+        line-height: 3em;
+    }
+/*
+    ol.progtrckr[data-progtrckr-steps="2"] li { width: 35%; }
+    ol.progtrckr[data-progtrckr-steps="3"] li { width: 33%; }
+    ol.progtrckr[data-progtrckr-steps="4"] li { width: 24%; }
+    ol.progtrckr[data-progtrckr-steps="5"] li { width: 33%; }
+    ol.progtrckr[data-progtrckr-steps="6"] li { width: 16%; }
+    ol.progtrckr[data-progtrckr-steps="7"] li { width: 14%; }
+    ol.progtrckr[data-progtrckr-steps="8"] li { width: 12%; }
+    ol.progtrckr[data-progtrckr-steps="9"] li { width: 11%; }
+*/
+    ol.progtrckr li.progtrckr-done {
+        color: black;
+        border-bottom: 4px solid yellowgreen;
+    }
+    ol.progtrckr li.progtrckr-todo {
+        color: silver; 
+        border-bottom: 4px solid silver;
+    }
 
-$this->pageTitle=Yii::app()->name;
-?>
+    ol.progtrckr li:after {
+        content: "\00a0\00a0";
+    }
+    ol.progtrckr li:before {
+        position: relative;
+        bottom: -2.5em;
+        float: left;
+        left: 50%;
+        line-height: 1em;
+    }
+    ol.progtrckr li.progtrckr-done:before {
+        content: "\2713";
+        color: white;
+        background-color: yellowgreen;
+        height: 1.2em;
+        width: 1.2em;
+        line-height: 1.2em;
+        border: none;
+        border-radius: 1.2em;
+    }
+    ol.progtrckr li.progtrckr-todo:before {
+        content: "\039F";
+        color: silver;
+        background-color: white;
+        font-size: 1.5em;
+        bottom: -1.6em;
+    }
 
-<h3> <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h3>
-<!--
-<p>Congratulations! You have successfully created your Yii application.</p>
+</style>
 
-<p>You may change the content of this page by modifying the following two files:</p>
-<ul>
-	<li>View file: <code><?php // echo __FILE__; ?></code></li>
-	<li>Layout file: <code><?php // echo $this->getLayoutFile('main'); ?></code></li>
-</ul>
 
-<p>For more details on how to further develop this application, please read
-the <a href="http://www.yiiframework.com/doc/">documentation</a>.
-Feel free to ask in the <a href="http://www.yiiframework.com/forum/">forum</a>,
-should you have any questions.</p>
--->
+<?php $this->pageTitle=Yii::app()->name; ?>
+
+<h3> <i>Profile completion steps.<?php //echo CHtml::encode(Yii::app()->name); ?></i></h3>
+
 </br>
 </br>
 
-<table class='table borderless'>
-<tr>
-	<td><?php  echo CHtml::link('Տվյալների դիտում',array('/site/baseline')); ?></td>
-	<td><?php  echo CHtml::link('Ստեղծել նոր սցենար',array('/site/newscenario')); ?></td>
-	<td><?php  echo CHtml::link('Բազային և այլ առկա սցենարներ',array('/site/basescenario')); ?></td>
-    <td><?php  echo CHtml::link('Օգտագործման ցուցումներ',array('../downloads/help.pdf'), array("target"=>"_blank")); ?></td>
-</tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</table>
-<?php // echo CHtml::link('Օգտագործման ցուցումներ',array('../downloads/help.pdf'), array("target"=>"_blank")); ?>
+<ol class="progtrckr" data-progtrckr-steps="5">
+    <?php 
+    //Benchmark creation step//
+    if($step_completed == 0){ ?>
+    <li class="progtrckr-todo"><?php  echo CHtml::link('Upload Prices',array('/uploads/fullupload')); ?></li>
+    <li class="progtrckr-todo">Add Benchmark</li>
+    <li class="progtrckr-todo">Add Benchmark Components</li>
+    <li class="progtrckr-todo">Add Portfolio</li>
+    <li class="progtrckr-todo">Add Trade</li>
+    <?php } 
+    
+     
+    //Benchmark creation step//
+    if($step_completed == 1){ ?>
+    <li class="progtrckr-done"><?php  echo CHtml::link('Upload Prices',array('/uploads/fullupload')); ?></li>
+    <li class="progtrckr-todo"><?php  echo CHtml::link('Add Benchmark',array('/benchmarks/admin')); ?></li>
+    <li class="progtrckr-todo">Add Benchmark Components</li>
+    <li class="progtrckr-todo">Add Portfolio</li>
+    <li class="progtrckr-todo">Add Trade</li>
+    <?php } 
+    
+    if($step_completed == 2){ 
+        //Benchmark component creation step//
+    ?>
+    <li class="progtrckr-done"><?php  echo CHtml::link('Upload Prices',array('/uploads/fullupload')); ?></li>
+    <li class="progtrckr-done"><?php  echo CHtml::link('Add Benchmark',array('/benchmarks/admin')); ?></li>
+    <li class="progtrckr-todo"><?php  echo CHtml::link('Add Benchmark Components',array('/benchmarkComponents/admin')); ?></li>
+    <li class="progtrckr-todo">Add Portfolio</li>
+    <li class="progtrckr-todo">Add Trade</li>
+    <?php } 
+   
+   //portfolio creation step//
+    if($step_completed ==3){ 
+    ?>
+        <li class="progtrckr-done"><?php  echo CHtml::link('Upload Prices',array('/uploads/fullupload')); ?></li>
+        <li class="progtrckr-done"><?php  echo CHtml::link('Add Benchmark',array('/benchmarks/admin')); ?></li>
+        <li class="progtrckr-done"><?php  echo CHtml::link('Add Benchmark Components',array('/benchmarkComponents/admin')); ?></li>
+        <li class="progtrckr-todo"><?php  echo CHtml::link('Add Portfolio',array('/portfolios/admin')); ?></li>
+        <li class="progtrckr-todo">Add Trade</li>
+    <?php } 
+        if($step_completed == 4){ 
+    ?>
+        <li class="progtrckr-done"><?php  echo CHtml::link('Upload Prices',array('/uploads/fullupload')); ?></li>
+        <li class="progtrckr-done"><?php  echo CHtml::link('Add Benchmark',array('/benchmarks/admin')); ?></li>
+        <li class="progtrckr-done"><?php  echo CHtml::link('Add Benchmark Components',array('/benchmarkComponents/admin')); ?></li>
+        <li class="progtrckr-done"><?php  echo CHtml::link('Add Portfolio',array('/portfolios/admin')); ?></li>
+        <li class="progtrckr-todo"><?php  echo CHtml::link('Add Trade',array('/ledger/admin')); ?></li>
+    <?php } 
+        if($step_completed == 5){ 
+    ?>
+        <li class="progtrckr-done"><?php  echo CHtml::link('Upload Prices',array('/uploads/fullupload')); ?></li>
+        <li class="progtrckr-done"><?php  echo CHtml::link('Add Benchmark',array('/benchmarks/admin')); ?></li>
+        <li class="progtrckr-done"><?php  echo CHtml::link('Add Benchmark Components',array('/benchmarkComponents/admin')); ?></li>
+        <li class="progtrckr-done"><?php  echo CHtml::link('Add Portfolio',array('/portfolios/admin')); ?></li>
+        <li class="progtrckr-done"><?php  echo CHtml::link('Add Trade',array('/ledger/admin')); ?></li>
+    
+    <?php } ?>
+</ol>
 
 <?php
 
 if(Yii::app()->user->isAdmin())
             {
  ?>  
-<h3>Ադմինիստրատիվ կառավարման վահանակ</h4>             
-</br>
-<?php  echo CHtml::link('Տնտեսական տվյալներ',array('/economy/admin')); ?>
 
-</br>
-<?php  echo CHtml::link('Շրջակա միջավայր',array('/emissions/admin')); ?>
-
-</br>
-<?php  echo CHtml::link('Ոլորտներ',array('/industries')); ?>
-</br>
-<?php  echo CHtml::link('Ճյուղեր',array('/subIndustries')); ?>
-</br>
-<?php  echo CHtml::link('Ենթաճյուղեր',array('/subBranches')); ?>
-</br>
-
-<?php  echo CHtml::link('Ցուցանիշներ',array('/data')); ?>
-</br>
-<?php  echo CHtml::link('Չափման միավորները',array('/measureUnits')); ?>
-
-</br>
-<?php  echo CHtml::link('Update Economy for 2013-2024',array('/economy/ab')); ?>
-</br>
-<?php  echo CHtml::link('Update population for 2015 - 2024',array('/population/ab')); ?>
-
-</br>
-<?php  echo CHtml::link('Update emissions for 2013 - 2024',array('/emissions/ab')); ?>
- 
- 
  
                     
 <?php            }

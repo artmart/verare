@@ -109,16 +109,6 @@ $(document).ready(function() {
                 name: "benchmark_name",
                 "attr": {"class": "form-control"}
             },
-            /*            
-            {
-                label: "Client:",
-                name: "benchmarks.client_id",
-                type: "select",
-                ipOpts: clientsLoader(),
-                //className: 'full'
-                "attr": {"class": "form-control"}
-            },
-            */
             
             <?php if($user_data->user_role==1){ ?>       
             {

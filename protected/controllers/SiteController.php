@@ -104,17 +104,33 @@ class SiteController extends Controller
 	public function actionDetails()
 	{
 	    $this->layout='main';
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('details');
+	
+    
+        $user_data = Users::model()->findByPk(Yii::app()->user->id);
+        $step_completed = $user_data->step_completed;
+
+        if($user_data->user_role == 2 && $step_completed < 5){
+            $this->render('start', ['step_completed' =>$step_completed]);
+        
+        
+        }else{ $this->render('details'); }
+    
+    
+		
 	} 
     
     public function actionAdmin()
 	{
 	    $this->layout='main';
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('overview');
+
+        $user_data = Users::model()->findByPk(Yii::app()->user->id);
+        $step_completed = $user_data->step_completed;
+
+        if($user_data->user_role == 2 && $step_completed < 5){
+            $this->render('start', ['step_completed' =>$step_completed]);
+        
+        
+        }else{ $this->render('overview', ['user_data' => $user_data]); }
 	} 
       
     public function actionOverviewLoad1()

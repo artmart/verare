@@ -153,6 +153,18 @@
         if(isset($values['ledger']['portfolio_id'])){$portfolio_id = $values['ledger']['portfolio_id'];} //else{$portfolio_id = $existing_trades->portfolio_id;}
         
         PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id);
+        
+        
+        $user_data = Users::model()->findByPk(Yii::app()->user->id);
+                        
+        $step_completed = $user_data->step_completed;
+
+        if($user_data->user_role == 2 && $step_completed < 6){
+            
+            $user_data->step_completed = 5;
+            $user_data->save();
+            
+        }
     } 
      
      

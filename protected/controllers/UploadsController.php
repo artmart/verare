@@ -33,12 +33,12 @@ class UploadsController extends Controller
             'users'=>array('admin'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('update'),
-			//	'users'=>array('@'),
-                'users'=>array('admin'),
+				'actions'=>array('fullupload'),
+				'users'=>array('@'),
+                //'users'=>array('admin'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','view', 'create', 'admin','delete', 'fullupload'),
+				'actions'=>array('index','view', 'create', 'admin','delete'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -238,7 +238,21 @@ class UploadsController extends Controller
                              
                   //unlink(Yii::getPathOfAlias('webroot').'/uploads/'.$model->upload_file); 
         
-                  $this->redirect(array('view','id'=>$model->id)); 
+                  //$this->redirect(array('view','id'=>$model->id)); 
+                  
+                        $user_data = Users::model()->findByPk(Yii::app()->user->id);
+                        
+                        $step_completed = $user_data->step_completed;
+                
+                        if($user_data->user_role == 2 && $step_completed < 2){
+                            
+                            $user_data->step_completed = 1;
+                            $user_data->save();
+                            $this->redirect(Yii::app()->baseUrl.'/site/admin');
+                        
+                        
+                        
+                        }else{ $this->render('overview', ['user_data' => $user_data]); }
                   }                
                 }
             ///////////////////////////////////////////            	

@@ -3,8 +3,8 @@
 <!--<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>-->
 
 <?php 
-    $id = Yii::app()->user->id;
-    $user_data = Users::model()->findByPk($id);
+    //$id = Yii::app()->user->id;
+    //$user_data = Users::model()->findByPk($id);
     
     
     $client_id = $user_data->client_id;

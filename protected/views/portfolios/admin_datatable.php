@@ -56,9 +56,7 @@ $client_id = $user_data->client_id;
                                 <th>Allocation Min</th>
                                 <th>Allocation Max</th>
                                 <th>Allocation Normal</th>
-                                
-                                
-                                <th>Portfolio Type</th>
+                                <!--<th>Portfolio Type</th>-->
                             </tr>
                         </thead>
                     </table>
@@ -150,13 +148,15 @@ $(document).ready(function() {
                 name: "allocation_normal",
                 "attr": {"class": "form-control"}
             },
+            /*
              {
                 label: "Portfolio Type:",
                 name: "type_id",
                 type: "select",
                 ipOpts: portfoliotypeLoader(),
                 "attr": {"class": "form-control"}
-            },            
+            }, 
+            */           
         ]
     } );
         
@@ -205,7 +205,7 @@ $(document).ready(function() {
             { data: "allocation_min" },
             { data: "allocation_max" },
             { data: "allocation_normal" },
-            { data: "portfolio_type" },         
+            //{ data: "portfolio_type" },         
                        
         ],
         select: true,

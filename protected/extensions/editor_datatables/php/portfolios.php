@@ -36,7 +36,7 @@
 Editor::inst( $db, 'portfolios', 'id', $client_id )
     ->fields(
         Field::inst( 'clients.client_name as client_name' ),
-        Field::inst( 'portfolio_types.portfolio_type as portfolio_type' ),
+        //Field::inst( 'portfolio_types.portfolio_type as portfolio_type' ),
     
         Field::inst( 'portfolios.id as id' ),
         Field::inst( 'portfolios.portfolio as portfolio' ),
@@ -50,8 +50,8 @@ Editor::inst( $db, 'portfolios', 'id', $client_id )
         Field::inst( 'portfolios.allocation_normal as allocation_normal' ),
         Field::inst( 'benchmarks.benchmark_name as benchmark_name' ),
         Field::inst( 'portfolios.parrent_portfolio as parrent_portfolio' ),
-        Field::inst( 'portfolios1.portfolio as parrent_portfolio1' ),
-        Field::inst( 'portfolios.type_id as type_id' )
+        Field::inst( 'portfolios1.portfolio as parrent_portfolio1' )
+        //Field::inst( 'portfolios.type_id as type_id' )
     )
     
     ->on( 'postCreate', function () {
@@ -59,7 +59,7 @@ Editor::inst( $db, 'portfolios', 'id', $client_id )
             } )
     
     ->leftJoin( 'clients', 'clients.id', '=', 'portfolios.client_id' )
-    ->leftJoin( 'portfolio_types', 'portfolio_types.id', '=', 'portfolios.type_id' )
+   // ->leftJoin( 'portfolio_types', 'portfolio_types.id', '=', 'portfolios.type_id' )
     ->leftJoin( 'benchmarks', 'benchmarks.id', '=', 'portfolios.benchmark_id' )
     ->leftJoin( 'portfolios as portfolios1', 'portfolios.parrent_portfolio', '=', 'portfolios1.id' )
     ->where( 'portfolios.client_id', $client_id )

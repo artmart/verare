@@ -46,6 +46,7 @@ $client_id = $user_data->client_id;
                         <thead>
                             <tr>
                                 <th>Portfolio Id</th>
+                                <th>Portfolio Portfolio</th>
                                 <th>Portfolio</th>
                                 <th>Description</th>
                                 <th>Client</th>
@@ -97,7 +98,14 @@ $(document).ready(function() {
     editor = new $.fn.dataTable.Editor( {
         ajax: 'portfolios/portfolios',
         table: "#example",
-        fields: [  
+        fields: [ 
+            {
+                label: "Parrent Portfolio:",
+                name: "parrent_portfolio",
+                type: "select",
+                ipOpts: portfolioLoader(),
+                "attr": {"class": "form-control"}
+            },         
             {
                 label: "Portfolio:",
                 name: "portfolio",
@@ -203,6 +211,7 @@ $(document).ready(function() {
             } },
         */               
             { data: "id" },
+            { data: "parrent_portfolio1" },
             { data: "portfolio" },
             { data: "description" },
             { data: "client_name" },
@@ -321,5 +330,27 @@ $(document).ready(function() {
         }
     });
     return benchmarks.sort(SortByName);
+  }
+  
+  
+    function portfolioLoader() {
+    var instruments = [{'value': '0', 'label': '-- Select Portfolio --'}];
+    var path1 = '<?php echo Yii::app()->baseUrl.'/portfolios/portfolios'; ?>';
+    $.ajax({
+        url: path1,
+        async: false,
+        dataType: 'json',
+        success: function (json) {
+          var data = json.data;
+            for(var a=0; a<data.length; a++) {
+              obj = {
+                "value" : data[a]['id'],
+                "label" : data[a]['portfolio']
+              };
+              instruments.push(obj);
+            }
+        }
+    });
+    return instruments.sort(SortByName);
   }
 </script>

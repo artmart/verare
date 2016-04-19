@@ -31,33 +31,33 @@ $form=$this->beginWidget('CActiveForm', array(
     </div>  
 	</div>
     
-<br />
-<div class="row">
-	<div class="form-group">
-     <div class="col-sm-2 control-label">
-		<?php echo $form->labelEx($model,'upload_file'); ?>
-        </div>
-        <div class="col-sm-8 clearLeftPadding">
-        <?php  $this->widget('CMultiFileUpload',
-            array(
-                       'model'=>$model,
-                       //'name' => 'documents',
-                       'attribute' => 'upload_file',
-                       'accept'=>'csv|txt|xlsx',
-                       'denied'=>'Only csv file is allowed', 
-                       'max'=>1,
-                       'remove'=>'[x]',
-                       'duplicate'=>'Already Selected',
-                    )
-            );?>
-        
-        <br />
-        <!--<p>CSV or TXT file format example is here.</p>-->
-		<?php //echo $form->textField($model,'upload_file',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'upload_file'); ?>
-        </div>
-	</div>
- </div>
+    <br />
+    <div class="row">
+    	<div class="form-group">
+         <div class="col-sm-2 control-label">
+    		<?php echo $form->labelEx($model,'upload_file'); ?>
+            </div>
+            <div class="col-sm-8 clearLeftPadding">
+            <?php  $this->widget('CMultiFileUpload',
+                array(
+                           'model'=>$model,
+                           //'name' => 'documents',
+                           'attribute' => 'upload_file',
+                           'accept'=>'csv|txt|xlsx',
+                           'denied'=>'Only csv file is allowed', 
+                           'max'=>1,
+                           'remove'=>'[x]',
+                           'duplicate'=>'Already Selected',
+                        )
+                );?>
+            
+            <br />
+            <!--<p>CSV or TXT file format example is here.</p>-->
+    		<?php //echo $form->textField($model,'upload_file',array('size'=>60,'maxlength'=>255)); ?>
+    		<?php echo $form->error($model,'upload_file'); ?>
+            </div>
+    	</div>
+     </div>
 
     <br />
 	

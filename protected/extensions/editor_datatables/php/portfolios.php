@@ -32,44 +32,7 @@
         }//else{ $this->render('overview', ['user_data' => $user_data]); }
     }
     
- /*    
-    //Build our Editor instance and process the data coming from _POST
-    Editor::inst( $db, 'ledger' )
-        ->fields(
-            Field::inst( 'id' )->validator( 'Validate::notEmpty' ),
-            Field::inst( 'instrument_id' )->validator( 'Validate::notEmpty' ),
-            Field::inst( 'portfolio_id' )->validator( 'Validate::notEmpty' ),
-            Field::inst( 'nominal' ),
-            Field::inst( 'created_by' ),
-            Field::inst( 'created_at' ), 
-            Field::inst( 'trade_status_id' ),
-            Field::inst( 'version_number' ),
-            Field::inst( 'document_id' ),
-            Field::inst( 'custody_account' ),
-            Field::inst( 'custody_comment' ),
-            Field::inst( 'account_number' ),
-            Field::inst( 'is_current' ),
-            Field::inst( 'confirmed_at' ),
-            Field::inst( 'confirmed_by' )
-                ->validator( 'Validate::numeric' )
-                ->setFormatter( 'Format::ifEmpty', null ),
-            Field::inst( 'price' )
-                ->validator( 'Validate::numeric' )
-                ->setFormatter( 'Format::ifEmpty', null ),
-            Field::inst( 'trade_date' )
-                ->validator( 'Validate::dateFormat', array(
-                    "format"  => Format::DATE_ISO_8601,
-                    "message" => "Please enter a date in the format yyyy-mm-dd"
-                ) )
-                ->getFormatter( 'Format::date_sql_to_format', Format::DATE_ISO_8601 )
-                ->setFormatter( 'Format::date_format_to_sql', Format::DATE_ISO_8601 )
-        )
-        ->process( $_POST )
-        ->json();  
-        
- */       
 
-// Build our Editor instance and process the data coming from _POST
 Editor::inst( $db, 'portfolios', 'id', $client_id )
     ->fields(
         Field::inst( 'clients.client_name as client_name' ),
@@ -82,6 +45,9 @@ Editor::inst( $db, 'portfolios', 'id', $client_id )
         Field::inst( 'portfolios.is_current as is_current' ),
         Field::inst( 'portfolios.created_at as created_at' ),
         Field::inst( 'portfolios.benchmark_id as benchmark_id' ),
+        Field::inst( 'portfolios.allocation_min as allocation_min' ),
+        Field::inst( 'portfolios.allocation_max as allocation_max' ),
+        Field::inst( 'portfolios.allocation_normal as allocation_normal' ),
         Field::inst( 'benchmarks.benchmark_name as benchmark_name' ),
         Field::inst( 'portfolios.type_id as type_id' )
     )

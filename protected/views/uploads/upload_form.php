@@ -1,11 +1,5 @@
-<?php
-/* @var $this UploadsController */
-/* @var $model Uploads */
-/* @var $form CActiveForm */
-?>
-
 <div class="form">
-
+<h3>Upload Pricies</h3>
 <?php 
  $baseurl = Yii::app()->baseUrl;
  
@@ -22,10 +16,12 @@ $form=$this->beginWidget('CActiveForm', array(
     'htmlOptions' => array('enctype' => 'multipart/form-data'),
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+<!--	<p class="note">Fields with <span class="required">*</span> are required.</p>-->
 
 	<?php echo $form->errorSummary($model); ?>
-    
+<div class="col-sm-7 clearLeftPadding">  
+
+<?php /* 
 <div class="row">
 	<div class="form-group">
      <div class="span2">
@@ -39,17 +35,29 @@ $form=$this->beginWidget('CActiveForm', array(
 	</div>
  </div>
 </div>
-
+*/
+?>
 	<div class="row">
-		<?php //echo $form->labelEx($model,'upload_file'); ?>
+    
+    <div class="col-sm-12 control-label">
+    <p> The data should be an excel file, with the sheet name "Sheet1" and the data starting in cell A1. 
+        The data should be dates (dd/mm/yyyy) in column A, name of instruments in column B, and price in column C.
+        The instruments in the list will be created if they don't exist previously.
+    </p>
+    </div>  
+    
+		<?php 
+        
+        //style="width:304px;height:228px;"
+        //echo $form->labelEx($model,'upload_file'); ?>
 		<?php //echo $form->textField($model,'upload_file',array('size'=>60,'maxlength'=>255)); ?>
 		<?php //echo $form->error($model,'upload_file'); ?>
 	</div>
     
-
+<br />
 <div class="row">
 	<div class="form-group">
-     <div class="span2">
+     <div class="col-sm-2 control-label">
 		<?php echo $form->labelEx($model,'upload_file'); ?>
         </div>
         <div class="col-sm-8 clearLeftPadding">
@@ -72,8 +80,8 @@ $form=$this->beginWidget('CActiveForm', array(
 		<?php echo $form->error($model,'upload_file'); ?>
 	</div>
  </div>
-</div>
 
+<br />
 	<div class="row">
 		<?php //echo $form->labelEx($model,'upload_file_name'); ?>
 		<?php //echo $form->textField($model,'upload_file_name',array('size'=>60,'maxlength'=>255)); ?>
@@ -90,7 +98,7 @@ $form=$this->beginWidget('CActiveForm', array(
         </div>
         <div class="span6" style="margin-left: -5px;">
         <?php 
-        echo $form->textArea($model, 'upload_description', array('maxlength' => 255, 'rows' => 4, 'cols' => 150, 'class'=>'span5'));
+        echo $form->textArea($model, 'upload_description', array('maxlength' => 255, 'rows' => 3, 'cols' => 80));
         /*
         $this->widget('application.extensions.eckeditor.ECKEditor', array(
                 'model'=>$model,
@@ -125,6 +133,17 @@ $form=$this->beginWidget('CActiveForm', array(
 	</div>
  </div>
 </div>
+
+
+</div>
+
+
+
+
+    <div class="col-sm-5">
+        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/img/xlsx_upload_example.jpg" alt="xlsx upload example">
+    </div>
+
 
 <?php $this->endWidget(); ?>
 

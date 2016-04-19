@@ -52,9 +52,17 @@ $client_id = $user_data->client_id;
                                 <th>Is Current</th>
                                 <th>Created At</th>
                                 <th>Benchmark</th>
+                                
+                                
+                                <th>Allocation Min</th>
+                                <th>Allocation Max</th>
+                                <th>Allocation Normal</th>
+                                
+                                
                                 <th>Portfolio Type</th>
                             </tr>
                         </thead>
+                        
                         <!--
                         <tfoot>
                             <tr>
@@ -136,6 +144,21 @@ $(document).ready(function() {
                 ipOpts: benchmarksLoader(),
                 "attr": {"class": "form-control"}
             },
+            {
+                label: "Allocation Min:",
+                name: "allocation_min",
+                "attr": {"class": "form-control"}
+            },
+            {
+                label: "Allocation Max:",
+                name: "allocation_max",
+                "attr": {"class": "form-control"}
+            },
+            {
+                label: "Allocation Normal:",
+                name: "allocation_normal",
+                "attr": {"class": "form-control"}
+            },
              {
                 label: "Portfolio Type:",
                 name: "type_id",
@@ -145,7 +168,7 @@ $(document).ready(function() {
             },            
         ]
     } );
-    
+        
     $('#example').DataTable( {
         renderer: "bootstrap",
         //dom: '<"clear">&lt;<"clear">Bfrtip<"clear">',
@@ -187,7 +210,11 @@ $(document).ready(function() {
             //{ data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
             { data: "created_at" },
             { data: "benchmark_name" },
-            { data: "portfolio_type" },            
+            { data: "allocation_min" },
+            { data: "allocation_max" },
+            { data: "allocation_normal" },
+            { data: "portfolio_type" },         
+                       
         ],
         select: true,
         buttons: [

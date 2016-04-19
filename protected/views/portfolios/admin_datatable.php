@@ -46,15 +46,13 @@ $client_id = $user_data->client_id;
                         <thead>
                             <tr>
                                 <th>Portfolio Id</th>
-                                <th>Portfolio Portfolio</th>
+                                <th>Parrent Portfolio</th>
                                 <th>Portfolio</th>
                                 <th>Description</th>
                                 <th>Client</th>
                                 <th>Is Current</th>
                                 <th>Created At</th>
                                 <th>Benchmark</th>
-                                
-                                
                                 <th>Allocation Min</th>
                                 <th>Allocation Max</th>
                                 <th>Allocation Normal</th>
@@ -63,21 +61,6 @@ $client_id = $user_data->client_id;
                                 <th>Portfolio Type</th>
                             </tr>
                         </thead>
-                        
-                        <!--
-                        <tfoot>
-                            <tr>
-                                <th>Portfolio Id</th>
-                                <th>Portfolio</th>
-                                <th>Description</th>
-                                <th>Client</th>
-                                <th>Is Current</th>
-                                <th>Created At</th>
-                                <th>Benchmark</th>
-                                <th>Portfolio Type</th>
-                            </tr>
-                        </tfoot>
-                        -->
                     </table>
                 </div>
             <!-- /.box-body -->

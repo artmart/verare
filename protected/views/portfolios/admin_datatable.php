@@ -74,7 +74,7 @@ $client_id = $user_data->client_id;
 
 <script type="text/javascript" language="javascript" class="init">  
 var editor; // use a global for the submit and return data rendering in the examples
-
+//var parrent_ports;// = portfolioLoader();
 $(document).ready(function() {
     editor = new $.fn.dataTable.Editor( {
         ajax: 'portfolios/portfolios',
@@ -83,6 +83,7 @@ $(document).ready(function() {
             {
                 label: "Parrent Portfolio:",
                 name: "parrent_portfolio",
+                id: "parrent_portfolio",
                 type: "select",
                 ipOpts: portfolioLoader(),
                 "attr": {"class": "form-control"}
@@ -160,7 +161,7 @@ $(document).ready(function() {
         ]
     } );
         
-    $('#example').DataTable( {
+   var table =  $('#example').DataTable( {
         renderer: "bootstrap",
         //dom: '<"clear">&lt;<"clear">Bfrtip<"clear">',
         //"Dom": '<"H"lfr>t<"F"ip>' ,
@@ -314,10 +315,62 @@ $(document).ready(function() {
     });
     return benchmarks.sort(SortByName);
   }
+ 
+
+ 
+ 
+ //DTE_Field_parrent_portfolio 
   
-  
+ $('#parrent_portfolio').change(function() {
+table.ajax.reload();
+} );       
+
+
+
+//$('#parrent_portfolio').on('click', function() {
+//  var parrent_ports;  
+    $("body").on("click", "#parrent_portfolio", function(){
+    //alert('aaa');
+    /*
+    var parrent_ports = [{'value': '0', 'label': '-- Select Parrent Portfolio --'}];
+    var path1 = '<?php //echo Yii::app()->baseUrl.'/portfolios/portfolios'; ?>';
+    $.ajax({
+        url: path1,
+        async: false,
+        dataType: 'json',
+        success: function (json) {
+          var data = json.data;
+            for(var a=0; a<data.length; a++) {
+              obj = {
+                "value" : data[a]['id'],
+                "label" : data[a]['portfolio']
+              };
+              parrent_ports.push(obj);
+            }
+            
+            
+        }
+    });
+    */
+    //var aaaa  = portfolioLoader();
+   // $("#parrent_portfolio").html(aaaa);
+    //return parrent_ports.sort(SortByName);
+//return  portfolioLoader();
+      //document.getElementById("parrent_portfolio").innerHTML = parrent_ports.sort(SortByName);   
+    // portfolioLoader();   
+     table.ajax.reload();
+    });
+    
+    
+ /*   
+editor.on('onInitCreate onInitEdit', function () {
+editor.field('parrent_portfolio').update(
+portfolioLoader()
+);
+} );
+ */ 
     function portfolioLoader() {
-    var instruments = [{'value': '0', 'label': '-- Select Portfolio --'}];
+    var instruments = [{'value': '0', 'label': '-- Select Parrent Portfolio --'}];
     var path1 = '<?php echo Yii::app()->baseUrl.'/portfolios/portfolios'; ?>';
     $.ajax({
         url: path1,
@@ -336,4 +389,6 @@ $(document).ready(function() {
     });
     return instruments.sort(SortByName);
   }
+  
+
 </script>

@@ -1,24 +1,12 @@
 <?php 
     //$id = Yii::app()->user->id;
     //$user_data = Users::model()->findByPk($id);
-    //$this->pageTitle=Yii::app()->name; 
+
     $baseUrl = Yii::app()->baseUrl;
-    
-    //$aa = json_decode($_REQUEST['user_data']);
-    //var_dump($aa);
-    //if(isset($user_data->default_portfolio_id)){$portfolio = $user_data->default_portfolio_id;}
-    
-   	//$end_date = Date('Y-m-d');
-	//$start_date = date('Y-m-d', strtotime('-1 years'));
-    //if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
-    //if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
-    //if(isset($_POST['start_date'])){$start_date = date_format(date_create($_POST['start_date']),"Y-m-d");}
-    //if(isset($_POST['end_date'])){$end_date = date_format(date_create($_POST['end_date']),"Y-m-d");}
- 
+     
     if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
     if(isset($_REQUEST['end_date'])){$end_date = $_REQUEST['end_date'];}
     if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
-    
     
     $id = Yii::app()->user->id;
     $user_data = Users::model()->findByPk($id);
@@ -43,107 +31,123 @@
 
 
 <?php        
-    /*
-    $sql_table1 = "select pt.portfolio_type, p.portfolio, i.instrument, pt.allocation_min, pt.allocation_max, pt.allocation_normal, l.nominal*l.price nav from ledger l
-                    inner join instruments i on i.id = l.instrument_id
-                    inner join portfolios p on p.id = l.portfolio_id
-                    left join portfolio_types pt on pt.id = p.type_id
-                    where l.portfolio_id = 1 and l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
-                    group by pt.portfolio_type, p.portfolio, i.instrument, pt.allocation_min, pt.allocation_max, pt.allocation_normal";
-    */
-    
+   
     $returns = Calculators::ReturnAllAndYTD($portfolio);
     $pnl = Calculators::PNL($start_date, $end_date, $portfolio);
     
-    
-    //left join instrument_groups ig on ig.id = i.instrument_group_id
-    $portfolio_composition_sql = "select pt.portfolio_type group_name, pt.id instrument_group_id, p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price) nav  
-                            from ledger l
-                            inner join instruments i on i.id = l.instrument_id
-                            inner join portfolios p on p.id = l.portfolio_id
-                            left join portfolio_types pt on pt.id = p.type_id
-                            where l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
-                            group by pt.portfolio_type, pt.id, p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
+    $portfolio_composition_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price) nav from ledger l
+                                 inner join portfolios p on p.id = l.portfolio_id
+                                 where l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
+                                 group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
     $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
     
-    
-    //left join instrument_groups ig on ig.id = i.instrument_group_id
-    $sql_table1 = "select pt.portfolio_type group_name, pt.id instrument_group_id, p.portfolio, i.instrument, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price) nav from ledger l
-                    inner join instruments i on i.id = l.instrument_id
+
+
+
+
+
+
+    $sub_portfolios_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price) nav from ledger l
                     inner join portfolios p on p.id = l.portfolio_id
-                    left join portfolio_types pt on pt.id = p.type_id
-                    where l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
-                    group by pt.portfolio_type, pt.id, p.portfolio, i.instrument, p.allocation_min, p.allocation_max, p.allocation_normal";
-    $table1_results = Yii::app()->db->createCommand($sql_table1)->queryAll(true);
+                    where l.trade_date > '$start_date' and l.trade_date<'$end_date' and p.parrent_portfolio = '$portfolio' 
+                    group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
+                    
+    $sub_portfolios = Yii::app()->db->createCommand($sub_portfolios_sql)->queryAll(true);
     
-    $inst_data = '';
+    
     $index_value = 0;
+
+    $sub_port_data = ''; 
+    $port_data = ''; 
+    $level1 = [];
     
-    $table_head = "<thead><tr>
-						<th>Name</th>
-						<th>Value (SEK)</th>
-						<th>Allocation</th>
-						<th>Normal</th>
-						<th>Diff</th>
-						<th>Min-Max</th>
-				  </tr></thead>";
-        
-    foreach($portfolio_composition as $pgc){ 
-                $value[$pgc['instrument_group_id']] = 0; 
-                $inst_data1[$pgc['instrument_group_id']] = '';
-                $index_value = $index_value + $pgc['nav'];
+    
+    
+        foreach($portfolio_composition as $sp1){ 
+                $value[$sp1['portfolio']] = 0; 
+                $index_value = $index_value + $sp1['nav'];
              }
+             
+        foreach($sub_portfolios as $sp1){ 
+            $value[$sp1['portfolio']] = 0; 
+            $index_value = $index_value + $sp1['nav'];
+         }
     
-    foreach($table1_results as $pc){        
-        foreach($portfolio_composition as $pgc){ 
-             if($pc['instrument_group_id'] == $pgc['instrument_group_id']){
-                $value[$pgc['instrument_group_id']] = $value[$pgc['instrument_group_id']] + $pc['nav'];
-                $allocation[$pgc['instrument_group_id']][] = array($pc['instrument'],$pc['nav']*100/$index_value);
-                $inst_data1[$pgc['instrument_group_id']] .= 
+    foreach($portfolio_composition as $sp2){        
+        //foreach($sub_portfolios as $sp3){ 
+             //if($sp2['portfolio'] == $sp3['portfolio']){
+                //$value[$sp3['portfolio']] = $value[$sp3['portfolio']] + $sp2['nav'];
+                //$allocation[$sp2['portfolio']][] = array($sp3['portfolio'],$sp3['nav']*100/$index_value);
+                $port_data .= 
                 					  '<tr>
-                						<td>'.$pc['instrument'].'</td>
-                						<td>'.number_format($pc['nav']).'</td>
-                						<td>'.number_format($pc['nav']*100/$index_value, 1).'%</td>
-                						<td>'.number_format($pc['allocation_normal'], 1).'%</td>
-                						<td>'.number_format($pc['allocation_normal']-$pc['nav']*100/$index_value, 1).'%</td>
-                						<td>'.number_format($pc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
+                						<td>Uncategorized</td>
+                						<td>'.number_format($sp2['nav']).'</td>
+                						<td>'.number_format($sp2['nav']*100/$index_value, 1).'%</td>
+                						<td>'.number_format($sp2['allocation_normal'], 1).'%</td>
+                						<td>'.number_format($sp2['allocation_normal']-$sp2['nav']*100/$index_value, 1).'%</td>
+                						<td>'.number_format($sp2['allocation_min']).'-'.number_format($sp2['allocation_max']).'%</td>
                 					  </tr>'; 
-             }   
+           //  }   
     
-        }                            
+        //}
+        
+        $level1[] = array('name' => 'Uncategorized', 'y' => $sp2['nav']*100/$index_value);                            
   }
   
-   $level1 = [];
-  // $level2 = [];
+  ////////////////////////
+    
+    
+    
+     
+
+    
+    foreach($sub_portfolios as $sp2){        
+        //foreach($sub_portfolios as $sp3){ 
+            // if($sp2['portfolio'] == $sp3['portfolio']){
+                //$value[$sp3['portfolio']] = $value[$sp3['portfolio']] + $sp2['nav'];
+                //$allocation[$sp2['portfolio']][] = array($sp3['portfolio'],$sp3['nav']*100/$index_value);
+                //$sub_port_data[$sp2['portfolio']]
+                $sub_port_data .= 
+                					  '<tr>
+                						<td>'.$sp2['portfolio'].'</td>
+                						<td>'.number_format($sp2['nav']).'</td>
+                						<td>'.number_format($sp2['nav']*100/$index_value, 1).'%</td>
+                						<td>'.number_format($sp2['allocation_normal'], 1).'%</td>
+                						<td>'.number_format($sp2['allocation_normal']-$sp2['nav']*100/$index_value, 1).'%</td>
+                						<td>'.number_format($sp2['allocation_min']).'-'.number_format($sp2['allocation_max']).'%</td>
+                					  </tr>'; 
+             //}   
+    
+        //} 
+        
+        $level1[] = array('name' => $sp2['portfolio'], 'y' => $sp2['nav']*100/$index_value);                           
+  }
   
+  
+  
+  
+  
+  
+  // $level2 = [];
+ /* 
     $i = 2;
-    foreach($portfolio_composition as $pgc){ 
+    foreach($sub_portfolios as $pgc){ 
         $inst_data .= 
 					  '<tr>
-						<td>'.$pgc['group_name'].'</td>
-						<td>'.number_format($value[$pgc['instrument_group_id']]).'</td>
-						<td>'.number_format($value[$pgc['instrument_group_id']]*100/$index_value, 1).'%</td>
+						<td>'.$pgc['portfolio'].'</td>
+						<td>'.number_format($value[$pgc['portfolio']]).'</td>
+						<td>'.number_format($value[$pgc['portfolio']]*100/$index_value, 1).'%</td>
 						<td>'.number_format($pgc['allocation_normal'], 1).'%</td>
 						<td>'.number_format($pgc['allocation_normal']-$pc['nav']*100/$index_value, 1).'%</td>
 						<td>'.number_format($pgc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
 					  </tr>';
                       
-    $level1[] = array('name' => $pgc['group_name'], 'y' => $value[$pgc['instrument_group_id']]*100/$index_value);   
+    $level1[] = array('name' => $pgc['portfolio'], 'y' => $value[$pgc['portfolio']]*100/$index_value);   
     //$level1[] = array('name' => $pgc['group_name'], 'y' => $value[$pgc['instrument_group_id']]*100/$index_value, 'drilldown' => $pgc['instrument_group_id']);           
-    //$level2[] = array('id' => $pgc['instrument_group_id'], 'data' => $allocation[$pgc['instrument_group_id']] /*array(array('Detail1', 1), array('Detail2', 2), array('Detail3', 4))*/);
-?>
-    
-    <table id="exampleTable_<?php echo $i;?>" class="table table-bordered table-hover">
-		<?php echo $table_head; ?>
-		<tbody>
-          <?php echo $inst_data1[$pgc['instrument_group_id']]; ?>
-		<tbody>
-	  </table>  
-      <script>
-      var TableHtml1_<?php echo $i;?> = $("#exampleTable_<?php echo $i;?>").html();
-       $("#exampleTable_<?php echo $i;?>").hide();
-      </script>   
-    <?php $i++; } ?>
+  
+     } 
+     
+     */?>
 </section>
 
         <!-- Main content -->
@@ -214,7 +218,7 @@
 					
                       <div class="chart">
 					       <div class="scrollit">
-						  <table id="exampleTable" class="table table-bordered table-hover">
+						  <table id="example1" class="table table-bordered table-hover">
 							<thead>
 							  <tr>
 								<th>Name</th>
@@ -233,8 +237,15 @@
 								<td></td>
 								<td></td>
 								<td></td>
+                                
+                                
+                                
+                                
+                                
+                                
 							  </tr>
-                              <?php echo $inst_data; ?>
+
+                              <?php echo $port_data . $sub_port_data; //$inst_data; ?>
 							<tbody>
 						  </table>
 						</div>	  
@@ -444,7 +455,7 @@ $months = array_unique($months);
        
        <img style="height: 350px; margin: 0 auto; float: left; padding-left: 30%;" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/nodata.png" class="headerimg"/>
 <?php } 
-}?>       
+        }?>       
                      
           </div><!-- /.chart-responsive -->
         </div><!-- /.col -->
@@ -648,104 +659,148 @@ $(function () {
 		
 <script>
 
-function fnFormatDetails(table_id, html) {
-    var sOut = "<table id=\"exampleTable_" + table_id + "\">";
-    sOut += html;
-    sOut += "</table>";
-    return sOut;
-}
+  $(document).ready(function () {
+    
+    var table = $('#example').DataTable( {
+    
+        renderer: "bootstrap",
+        //dom: '<"clear">&lt;<"clear">Bfrtip<"clear">',
+        //"Dom": '<"H"lfr>t<"F"ip>' ,
+        //sDom: 'lfrtip',
+        
+        dom: 'lBfrtip',
+        displayLength: 10,
+        filter: true,
+        paginate: true,
+        sort:true,
+        //bsort: true,
+        //'bSortable' : true,
+        info: false,
+        //scrollX: '100%',
+        //scrollCollapse: true,
+        //paging:         false,
+        //"bPaginate": true,
+        //"bSort": true,
+        //"bFilter": false,
+        bJQueryUI: false,
+        bProcessing: false,
+        sScrollX: "100%",
+        sScrollXInner: "110%",
+        bScrollCollapse: true,
+        
+        
+        columnDefs: [
+            {
+                "targets": [ 0 ],
+                "visible": false,
+                "searchable": false
+            }
+            ],
 
+        select: true,
+    
 
-
-var iTableCounter = 1;
-    var oTable;
-    var oInnerTable;
-    var TableHtml;
-    var TableHtml1;
-
-    //Run On HTML Build
-    $(document).ready(function () {
-        TableHtml = $("#exampleTable").html();
-        //TableHtml1 = $("#exampleTable_" + iTableCounter).html();
-
-
-        //Insert a 'details' column to the table
-        var nCloneTh = document.createElement('th');
-        var nCloneTd = document.createElement('td');
-        nCloneTd.innerHTML = '<img src="http://i.imgur.com/SD7Dz.png">';
-        nCloneTd.className = "center";
-
-        $('#exampleTable thead tr').each(function () {
-            this.insertBefore(nCloneTh, this.childNodes[0]);
-        });
-
-        $('#exampleTable tbody tr').each(function () {
-            this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
-        });
-
-        //Initialse DataTables, with no sorting on the 'details' column
-        var oTable = $('#exampleTable').dataTable({
+        buttons: [
+            /*{ extend: "create", editor: editor },
+            { extend: "edit",   editor: editor },
+            { extend: "remove", editor: editor },*/
+            <?php //echo $access_buttons; ?>
+            {
+                extend: 'copyHtml5',
+                exportOptions: {
+                    columns: [ 0, ':visible' ]
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 5 ]
+                }
+            },
+            { extend: 'colvis', collectionLayout: 'fixed two-column',},
             
-            
-            renderer: "bootstrap",
-            //dom: '<"clear">&lt;<"clear">Bfrtip<"clear">',
-            //"Dom": '<"H"lfr>t<"F"ip>' ,
-            //sDom: 'lfrtip',
-            
-            //dom: 'lBfrtip',
-            //displayLength: 10,
-            filter: true,
-            paginate: true,
-            sort:true,
-            //bsort: true,
-            //'bSortable' : true,
-            info: true,
-            //scrollX: '100%',
-            //scrollCollapse: true,
-            //paging:         false,
-            //"bPaginate": true,
-            //"bSort": true,
-            //"bFilter": false,
-            //bJQueryUI: false,
-            //bProcessing: true,
-            sScrollX: "100%",
-            sScrollXInner: "110%",
-            bScrollCollapse: true,
-            
-            
-            "bJQueryUI": false,
-            //"sPaginationType": "full_numbers",
-            "aoColumnDefs": [
-            { "bSortable": false, "aTargets": [0] }
         ],
-           // "aaSorting": [[1, 'asc']]
-        });
-
-        /* Add event listener for opening and closing details
-        * Note that the indicator for showing which row is open is not controlled by DataTables,
-        * rather it is done here
+       
+                
+    } ); 
+    
+    
+        var table1 = $('#example1').DataTable( {
+    
+        renderer: "bootstrap",
+        //dom: '<"clear">&lt;<"clear">Bfrtip<"clear">',
+        //"Dom": '<"H"lfr>t<"F"ip>' ,
+        //sDom: 'lfrtip',
+        
+        dom: 'lBfrtip',
+        displayLength: 10,
+        filter: true,
+        paginate: true,
+        sort:true,
+        //bsort: true,
+        //'bSortable' : true,
+        info: false,
+        //scrollX: '100%',
+        //scrollCollapse: true,
+        //paging:         false,
+        //"bPaginate": true,
+        //"bSort": true,
+        //"bFilter": false,
+        bJQueryUI: false,
+        bProcessing: false,
+        sScrollX: "100%",
+        sScrollXInner: "110%",
+        bScrollCollapse: true,
+        
+       /* 
+        columnDefs: [
+            {
+                "targets": [ 0 ],
+                "visible": false,
+                "searchable": false
+            }
+            ],
         */
-        $('#exampleTable tbody td img').on('click', function () {
-            var nTr = $(this).parents('tr')[0];
-            if (oTable.fnIsOpen(nTr)) {
-                /* This row is already open - close it */
-                this.src = "http://i.imgur.com/SD7Dz.png";
-                oTable.fnClose(nTr);
-            }
-            else {
-                /* Open this row */
-                var tab_num = $(this).closest("tr").index()+1;
-                //alert($(this).closest("tr").index()+1);
-                this.src = "http://i.imgur.com/d4ICC.png";
-                oTable.fnOpen(nTr, fnFormatDetails(iTableCounter, $("#exampleTable_" + tab_num).html()), 'details');
-                           
-                oInnerTable = $("#exampleTable_" + iTableCounter).dataTable({
-                    "bJQueryUI": false,
-                    //"sPaginationType": "full_numbers"
-                });
-                //iTableCounter = iTableCounter + 1;
-            }
-        });
+        select: true,
+    
+
+        buttons: [
+            /*{ extend: "create", editor: editor },
+            { extend: "edit",   editor: editor },
+            { extend: "remove", editor: editor },*/
+            <?php //echo $access_buttons; ?>
+            {
+                extend: 'copyHtml5',
+                exportOptions: {
+                    columns: [ 0, ':visible' ]
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 5 ]
+                }
+            },
+            { extend: 'colvis', collectionLayout: 'fixed two-column',},
+            
+        ],
+       
+                
+    } );
+    
+    
 
     });
 </script>	

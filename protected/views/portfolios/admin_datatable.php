@@ -160,6 +160,9 @@ $(document).ready(function() {
             */           
         ]
     } );
+    
+    
+    editor.field('parrent_portfolio').update(portfolioLoader());
         
    var table =  $('#example').DataTable( {
         renderer: "bootstrap",

@@ -231,18 +231,12 @@
 							</thead>
 							<tbody>
 							  <tr>
-								<td>Portfolio</td>
+								<td><?php echo $portfolios[0]['portfolio']; ?></td>
 								<td><?php echo number_format($index_value); ?></td>
 								<td></td>
 								<td></td>
 								<td></td>
 								<td></td>
-                                
-                                
-                                
-                                
-                                
-                                
 							  </tr>
 
                               <?php echo $port_data_table . $sub_port_data; //$inst_data; ?>
@@ -742,7 +736,7 @@ $(function () {
         displayLength: 10,
         filter: true,
         paginate: true,
-        sort:true,
+        sort:false,
         //bsort: true,
         //'bSortable' : true,
         info: false,

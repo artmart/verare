@@ -58,7 +58,7 @@
     $index_value = 0;
 
     $sub_port_data = ''; 
-    $port_data = ''; 
+    $port_data_table = ''; 
     $level1 = [];
     
     
@@ -78,7 +78,7 @@
              //if($sp2['portfolio'] == $sp3['portfolio']){
                 //$value[$sp3['portfolio']] = $value[$sp3['portfolio']] + $sp2['nav'];
                 //$allocation[$sp2['portfolio']][] = array($sp3['portfolio'],$sp3['nav']*100/$index_value);
-                $port_data .= 
+                $port_data_table .= 
                 					  '<tr>
                 						<td>Uncategorized</td>
                 						<td>'.number_format($sp2['nav']).'</td>
@@ -245,7 +245,7 @@
                                 
 							  </tr>
 
-                              <?php echo $port_data . $sub_port_data; //$inst_data; ?>
+                              <?php echo $port_data_table . $sub_port_data; //$inst_data; ?>
 							<tbody>
 						  </table>
 						</div>	  

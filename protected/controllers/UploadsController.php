@@ -252,7 +252,9 @@ class UploadsController extends Controller
                         
                         
                         
-                        }else{ $this->render('overview', ['user_data' => $user_data]); }
+                        }//else{ 
+                          //   $this->redirect(Yii::app()->baseUrl.'/site/admin');
+                          //  $this->render('overview', ['user_data' => $user_data]); }
                   }                
                 }
             ///////////////////////////////////////////            	

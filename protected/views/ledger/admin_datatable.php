@@ -69,47 +69,47 @@ if($ledger_delete == 1){$access_buttons .= '{
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-<!-- page script    class="display"-->
-<table id="example"  class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-        <thead>
-            <tr>
-                <th>Trade Date</th>
-                <th>Instrument</th>
-                <th>Portfolio</th>
-                <th>Nominal</th>
-                <th>Price</th>
-                <th>Created At</th>
-                <th>Created By</th>
-                <th>Confirmed By</th>
-                <th>Confirmed At</th>
-                <th>Trade Status</th>
-                <th>Currency</th>
-                <th>Note</th>
-                <th>Trade Code</th>
-                <th>Document</th>
-               <!-- <th>Is Current</th>-->
-            </tr>
-        </thead>
-        <!--
-        <tfoot>
-            <tr>
-                <th>Trade Date</th>
-                <th>Instrument</th>
-                <th>Portfolio</th>
-                <th>Nominal</th>
-                <th>Price</th>
-                <th>Created At</th>
-                <th>Created By</th>
-                <th>Confirmed By</th>
-                <th>Confirmed At</th>
-                <th>Trade Status</th>
-                <th>Note</th>
-                <th>Document</th>
-               <th>Is Current</th>
-            </tr>
-        </tfoot>-->
-    </table>
-</div>
+            <!-- page script    class="display"-->
+            <table id="example"  class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Trade Date</th>
+                            <th>Instrument</th>
+                            <th>Portfolio</th>
+                            <th>Nominal</th>
+                            <th>Price</th>
+                            <th>Created At</th>
+                            <th>Created By</th>
+                            <th>Confirmed By</th>
+                            <th>Confirmed At</th>
+                            <th>Trade Status</th>
+                            <th>Currency</th>
+                            <th>Note</th>
+                            <th>Trade Code</th>
+                            <th>Document</th>
+                           <!-- <th>Is Current</th>-->
+                        </tr>
+                    </thead>
+                    <!--
+                    <tfoot>
+                        <tr>
+                            <th>Trade Date</th>
+                            <th>Instrument</th>
+                            <th>Portfolio</th>
+                            <th>Nominal</th>
+                            <th>Price</th>
+                            <th>Created At</th>
+                            <th>Created By</th>
+                            <th>Confirmed By</th>
+                            <th>Confirmed At</th>
+                            <th>Trade Status</th>
+                            <th>Note</th>
+                            <th>Document</th>
+                           <th>Is Current</th>
+                        </tr>
+                    </tfoot>-->
+                </table>
+            </div>
             <!-- /.box-body -->
           </div>
           <!-- /.box -->

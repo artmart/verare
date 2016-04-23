@@ -78,7 +78,7 @@ $form=$this->beginWidget('CActiveForm', array(
      <div class="span3">
      </div>
      <div class="col-sm-4 clearLeftPadding">
-	 <?php echo CHtml::submitButton('Upload', ['class'=>"btn btn-primary"]); ?>
+	 <?php echo CHtml::submitButton('Upload', ['class'=>"btn btn-primary", 'id'=>'upload']); ?>
 	</div>
  </div>
 </div>
@@ -88,7 +88,17 @@ $form=$this->beginWidget('CActiveForm', array(
         <img src="<?php echo Yii::app()->theme->baseUrl; ?>/img/xlsx_upload_example.jpg" alt="xlsx upload example">
     </div>
 
+<div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;"><img src='<?php echo Yii::app()->theme->baseUrl;?>/img/demo_wait.gif' width="64" height="64" /><br>Loading..</div>
 
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<script>
+//$("#wait").css("display", "block");
+$('#upload').click(function(){
+  //$('#wait').show(); //<----here
+   $("#wait").css("display", "block");
+
+});
+</script>

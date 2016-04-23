@@ -9,7 +9,10 @@ $baseUrl = Yii::app()->theme->baseUrl;
 //var_dump(Yii::app()->user->getState('user_role_id'));
 //exit;
 
-$user_role_id = Yii::app()->user->getState('user_role');
+$id = Yii::app()->user->id;
+$user_data = Users::model()->findByPk($id); 
+
+$user_role_id = $user_data->user_role; // Yii::app()->user->getState('user_role');
 
 
 //$access_level = 5;
@@ -271,7 +274,11 @@ $(document).ready(function() {
 		editor2.inline( this, { fieldName: 'ledger.trade_status_id', onBlur: 'submit'});
 	});
     
-
+editor.on('submitSuccess', function(e, json, data) {
+        var user_role = <?php echo $user_data->user_role; ?>;
+        var step_completed = <?php echo $user_data->step_completed; ?>;
+        if( user_role == 2 && step_completed < 5){window.location = "<?php echo Yii::app()->baseUrl;?>/site/admin";}
+        });
 
         
     <?php }?>

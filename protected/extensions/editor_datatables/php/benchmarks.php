@@ -18,7 +18,7 @@
                         
         $step_completed = $user_data->step_completed;
 
-        if($user_data->user_role == 2 && $step_completed < 3){
+        if($user_data->user_role == 2 && $step_completed < 2){
             
             $user_data->step_completed = 2;
             $user_data->save();

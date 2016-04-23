@@ -19,17 +19,19 @@
                         
         $step_completed = $user_data->step_completed;
 
-        if($user_data->user_role == 2 && $step_completed < 5){
+        if($user_data->user_role == 2 && $step_completed < 4){
             
             $user_data->step_completed = 4;
             $user_data->save();
             //$this->redirect(Yii::app()->baseUrl.'/site/admin');
             $baseUrl = Yii::app()->baseUrl;
+            //header("Location: ". $baseUrl."/site/admin");
             //Yii::app()->request->redirect($baseUrl.'/site/admin');
             //echo "<script>window.location.href ='".$baseUrl."/site/admin';</script>";
             //return false; 
 
         }//else{ $this->render('overview', ['user_data' => $user_data]); }
+        //return true;
     }
     
 

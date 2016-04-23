@@ -85,7 +85,8 @@ $(document).ready(function() {
                 name: "parrent_portfolio",
                 id: "parrent_portfolio",
                 type: "select",
-                ipOpts: portfolioLoader(),
+                options: portfolioLoader(),
+                //ipOpts: portfolioLoader(),
                 "attr": {"class": "form-control"}
             },         
             {
@@ -162,7 +163,17 @@ $(document).ready(function() {
     } );
     
     
-    editor.field('parrent_portfolio').update(portfolioLoader());
+    editor.on('submitSuccess', function(e, json, data) {
+        var user_role = <?php echo $user_data->user_role; ?>;
+        var step_completed = <?php echo $user_data->step_completed; ?>;
+        if( user_role == 2 && step_completed < 4){
+            
+        window.location = "<?php echo Yii::app()->baseUrl;?>/site/admin";
+        }else{
+            window.location = "<?php echo Yii::app()->baseUrl;?>/portfolios/admin";
+        }
+        });
+    
         
    var table =  $('#example').DataTable( {
         renderer: "bootstrap",
@@ -189,7 +200,7 @@ $(document).ready(function() {
         sScrollX: "100%",
         sScrollXInner: "110%",
         bScrollCollapse: true,
-        ajax: "portfolios/",
+        ajax: "portfolios/portfolios",
         columns: [
         /*
             { data: null, render: function ( data, type, row ) {

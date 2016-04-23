@@ -12,6 +12,8 @@
 $this->breadcrumbs=['Counterparties'=>['admin'], 'Manage'];
 $baseUrl = Yii::app()->theme->baseUrl;
 
+$id = Yii::app()->user->id;
+$user_data = Users::model()->findByPk($id); 
 //$access_level = 5;
 $access_buttons = '';
 $counterpart_access = '';
@@ -144,6 +146,12 @@ $(document).ready(function() {
             },
         ]
     } );
+    
+editor.on('submitSuccess', function(e, json, data) {
+        var user_role = <?php echo $user_data->user_role; ?>;
+        var step_completed = <?php echo $user_data->step_completed; ?>;
+        if( user_role == 2 && step_completed < 3){window.location = "<?php echo Yii::app()->baseUrl;?>/site/admin";}
+        });
 	   
          
 var table = $('#example').DataTable( {

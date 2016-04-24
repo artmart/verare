@@ -14,7 +14,7 @@
     //$client_id = Yii::app()->user->getState('client_id');
     
     
-       function userupdate(){
+       function userupdate( $editor, $id, $values, $row ){
         $user_data = Users::model()->findByPk(Yii::app()->user->id);
                         
         $step_completed = $user_data->step_completed;
@@ -22,6 +22,9 @@
         if($user_data->user_role == 2 && $step_completed < 4){
             
             $user_data->step_completed = 4;
+            $user_data->default_portfolio_id = $id;
+            $user_data->accessable_portfolios = $id;
+            
             $user_data->save();
             //$this->redirect(Yii::app()->baseUrl.'/site/admin');
             $baseUrl = Yii::app()->baseUrl;
@@ -56,8 +59,8 @@ Editor::inst( $db, 'portfolios', 'id', $client_id )
         //Field::inst( 'portfolios.type_id as type_id' )
     )
     
-    ->on( 'postCreate', function () {
-                userupdate();
+    ->on( 'postCreate', function ( $editor, $id, $values, $row ) {
+                userupdate( $editor, $id, $values, $row );
             } )
     
     ->leftJoin( 'clients', 'clients.id', '=', 'portfolios.client_id' )

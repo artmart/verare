@@ -111,7 +111,7 @@ $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
 */
 $inst_sql = "select * from ledger l
              inner join instruments i on l.instrument_id = i.id
-             where l.is_current = 1 and i.is_current = 1 and i.id = $instrument_id  order by trade_date asc";
+             where l.is_current = 1 and i.is_current = 1 and i.id = $instrument_id and l.trade_status_id = 2 order by trade_date asc";
 $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
 
 if(count($trades)>0){
@@ -150,8 +150,8 @@ $columnsArray = array('Trade Date', 'Instrument', 'Nominal', 'Price', 'Total Nom
     
     
 $prices_sql = "select distinct p.trade_date, p.price,
-                (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id) nominal,
-                (select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id) pnl
+                (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.trade_status_id = 2) nominal,
+                (select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and ledger.trade_status_id = 2) pnl
                  from prices p
                 where p.is_current = 1 and p.instrument_id = $instrument_id and p.trade_date >='$dt'  
                 order by p.trade_date asc";

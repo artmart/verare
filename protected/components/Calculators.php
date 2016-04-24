@@ -7,7 +7,7 @@ class Calculators {
      public static function PNL($start_date, $end_date, $portfolio)
      {  
         $sql1 = "select trade_date, nominal*price nav from ledger
-                where portfolio_id = '$portfolio' and trade_date > '$start_date' and trade_date<'$end_date' 
+                where portfolio_id = '$portfolio' and trade_date > '$start_date' and trade_date<'$end_date' and ledger.trade_status_id = 2 
                 order by trade_date desc";
         $results1 = Yii::app()->db->createCommand($sql1)->queryAll(true);
         $nav_today = 0;

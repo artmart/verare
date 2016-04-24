@@ -115,7 +115,7 @@ class PortfolioReturns extends CActiveRecord
         //Trades
         $inst_sql = "select * from ledger l
                      inner join instruments i on l.instrument_id = i.id
-                     where l.is_current = 1 and i.is_current = 1 and l.portfolio_id = $portfolio_id  order by trade_date asc";
+                     where l.is_current = 1 and i.is_current = 1 and l.trade_status_id = 2 and l.portfolio_id = $portfolio_id  order by trade_date asc";
         $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
         
         if(count($trades)>0){
@@ -125,8 +125,8 @@ class PortfolioReturns extends CActiveRecord
         $insids = implode("','", array_unique($ins_ids));                         
                                 
         $portfolio_return_sql = "select p.trade_date,
-                                sum((select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1)) pnl,
-                                sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1)) top,
+                                sum((select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2)) pnl,
+                                sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2)) top,
                                 sum(p.price*bc.weight) sums
                                 from prices p
                                 inner join benchmark_components bc on bc.instrument_id = p.instrument_id 

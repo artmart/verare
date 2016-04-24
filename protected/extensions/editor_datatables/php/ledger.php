@@ -24,7 +24,7 @@
         $user = Users::model()->findByPk($user_id);
         $client_id = $user->client_id;
             
-       $existing_trades = Ledger::model()->findAllByAttributes(['trade_date'=>$trade_date,'instrument_id'=>$instrument_id, 'portfolio_id' =>$portfolio_id]);
+       $existing_trades = Ledger::model()->findAllByAttributes(['trade_date'=>$trade_date,'instrument_id'=>$instrument_id, 'portfolio_id' =>$portfolio_id, 'client_id' =>$client_id ]);
        //  $editor->db()->select( 'ledger', "*", "trade_date= '$trade_date' and instrument_id = '$instrument_id' and portfolio_id = '$portfolio_id'", null );
         if($existing_trades && count($existing_trades)>0){
                     $trade_code = $existing_trades[0]->trade_code;
@@ -51,9 +51,17 @@
                         $editor
                             ->field( 'ledger.client_id' )
                             ->setValue( $client_id );
-                        $editor
+                            
+                        if($user->user_role == 2 && $user->step_completed < 5){
+                            $editor
                             ->field( 'ledger.trade_status_id' )
-                            ->setValue( 1 ); 
+                            ->setValue( 2 );
+                        }else{                        
+                            $editor
+                                ->field( 'ledger.trade_status_id' )
+                                ->setValue( 1 ); 
+                        }
+                        
                         $editor
                             ->field( 'ledger.created_by' )
                             ->setValue( $user_id ); 
@@ -159,11 +167,10 @@
                         
         $step_completed = $user_data->step_completed;
 
-        if($user_data->user_role == 2 && $step_completed < 6){
+        if($user_data->user_role == 2 && $step_completed < 5){
             
             $user_data->step_completed = 5;
             $user_data->save();
-            
         }
     } 
      

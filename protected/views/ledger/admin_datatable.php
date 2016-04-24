@@ -282,19 +282,6 @@ editor.on('submitSuccess', function(e, json, data) {
 
         
     <?php }?>
-        
-   //editor.on( 'onInitEdit', function () {
-   //editor.disable('ledger.trade_status_id');
-   //} );
-   
-//  $('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
-//        $.fn.dataTable.table( {visible: true, api: true} ).columns.adjust();
-//    } );
-    
-//$('#myTabs a').click(function (e) {
-//  e.preventDefault()
-//  $(this).tab('show')
-//});
     
          
 var table = $('#example').DataTable( {

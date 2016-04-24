@@ -127,7 +127,6 @@ $(document).ready(function() {
                 type: "datetime",
                 "attr": {"class": "form-control"}
             },
-            
             {
                 label: "Benchmark:",
                 name: "benchmark_id",
@@ -329,60 +328,8 @@ $(document).ready(function() {
     });
     return benchmarks.sort(SortByName);
   }
- 
+      
 
- 
- 
- //DTE_Field_parrent_portfolio 
-  
- $('#parrent_portfolio').change(function() {
-table.ajax.reload();
-} );       
-
-
-
-//$('#parrent_portfolio').on('click', function() {
-//  var parrent_ports;  
-    $("body").on("click", "#parrent_portfolio", function(){
-    //alert('aaa');
-    /*
-    var parrent_ports = [{'value': '0', 'label': '-- Select Parrent Portfolio --'}];
-    var path1 = '<?php //echo Yii::app()->baseUrl.'/portfolios/portfolios'; ?>';
-    $.ajax({
-        url: path1,
-        async: false,
-        dataType: 'json',
-        success: function (json) {
-          var data = json.data;
-            for(var a=0; a<data.length; a++) {
-              obj = {
-                "value" : data[a]['id'],
-                "label" : data[a]['portfolio']
-              };
-              parrent_ports.push(obj);
-            }
-            
-            
-        }
-    });
-    */
-    //var aaaa  = portfolioLoader();
-   // $("#parrent_portfolio").html(aaaa);
-    //return parrent_ports.sort(SortByName);
-//return  portfolioLoader();
-      //document.getElementById("parrent_portfolio").innerHTML = parrent_ports.sort(SortByName);   
-    // portfolioLoader();   
-     table.ajax.reload();
-    });
-    
-    
- /*   
-editor.on('onInitCreate onInitEdit', function () {
-editor.field('parrent_portfolio').update(
-portfolioLoader()
-);
-} );
- */ 
     function portfolioLoader() {
     var instruments = [{'value': '0', 'label': '-- Select Parrent Portfolio --'}];
     var path1 = '<?php echo Yii::app()->baseUrl.'/portfolios/portfolios'; ?>';

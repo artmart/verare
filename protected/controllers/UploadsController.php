@@ -231,8 +231,7 @@ class UploadsController extends Controller
                 $unique_instruments_for_returns_update = array_unique($instruments_for_returns_update); 
                 
                 Returns::model()->instrumnetReturnsUpdate($unique_instruments_for_returns_update);
-                
-                             
+           
                   @chmod( $tempLoc, 0777 );
                   @unlink( $tempLoc );           
                              

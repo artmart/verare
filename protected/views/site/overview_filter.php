@@ -30,8 +30,7 @@
   </h1>
 
 
-<?php        
-   
+<?php         
     $returns = Calculators::ReturnAllAndYTD($portfolio);
     $pnl = Calculators::PNL($start_date, $end_date, $portfolio);
     
@@ -95,8 +94,7 @@
   }
   
   ////////////////////////
-    
-    
+
     
      
 
@@ -125,7 +123,8 @@
   
   
   
-  
+      
+ 
   
   
   // $level2 = [];
@@ -363,6 +362,7 @@ $(function () {
         $return_9m_bench = 1;
         $return_1y_bench = 1;
         
+        
         foreach($portfolio_results as $pr){
             
             $months[] = $pr['trade_date'];
@@ -387,12 +387,14 @@ $(function () {
      
     $series[] = ['name'=> $port['portfolio'], 'data'=> $port_data];
     $series[] = ['name'=> $port['portfolio']."-benchmark", 'data'=> $bench_data]; 
-    
+  
     $allstats = Calculators::CalcAllStats1($port_ret, $bench_ret);
+ 
     $allstats_bench = Calculators::CalcAllStats_bench($bench_ret, $bench_ret);
-    
+//    var_dump($allstats);
+ //exit;    
     //$allstats_bench = Calculators::CalcAllStats1($bench_ret, $port_ret);
-    
+   
   $tbl_rows .=   
     '<tr>
         <td>'. $port['portfolio'].'</td>
@@ -405,7 +407,7 @@ $(function () {
         <td>'. number_format($allstats[0]*100, 1).'%</td>
         <td>'. number_format($allstats[1], 3).'</td>
     </tr>';
-    
+   
   $tbl_rows .=   
     '<tr>
         <td>'. $port['portfolio'].'-Benchmark</td>

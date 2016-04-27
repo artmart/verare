@@ -208,6 +208,9 @@ class Calculators {
             
             $returnCount++;
 		}
+        if($returnCount ==0){$returnCount = 1; }
+        $returnCount1 = $returnCount;
+        if($returnCount ==1){$returnCount1 = 2; }
 		
 		// calculate some figures
 		$returnTargetCumulative--;
@@ -217,7 +220,7 @@ class Calculators {
 		$averageTargetMinusBench = $sumTargetMinusBench/$returnCount;
 		$averageBenchMinusTargetOnBadDays = $sumBenchMinusTargetOnBadDays/$returnCount;
 		$averageBenchMinusTargetSquaredOnBadDays = $sumBenchMinusTargetSquaredOnBadDays/$returnCount;
-		$covarTargetBench = ($sumTargetTimesBench-$sumTarget*$sumBench/$returnCount)/($returnCount-1);
+		$covarTargetBench = ($sumTargetTimesBench-$sumTarget*$sumBench/$returnCount)/($returnCount1-1);
 		
 		// second loop
 		$i = 0;
@@ -229,16 +232,20 @@ class Calculators {
 		}
 		
 		// calculate the output
-		$varianceTarget /= ($returnCount-1);
-		$varianceBench /= ($returnCount-1);
-		$varianceTargetMinusBench /= ($returnCount-1);
+		$varianceTarget /= ($returnCount1-1);
+		$varianceBench /= ($returnCount1-1);
+		$varianceTargetMinusBench /= ($returnCount1-1);
 		$volTarget = sqrt($varianceTarget)*sqrt(240);
 		$volBench = sqrt($varianceBench)*sqrt(240);
 		$volTargetMinusBench = sqrt($varianceTargetMinusBench)*sqrt(240);
+        if($varianceBench ==0){$varianceBench = 1;}
 		$beta = $covarTargetBench/$varianceBench;
+        if($volTarget == 0){$volTarget = 1;}
 		$sharpe = $returnTargetCumulative/$volTarget;
 		$alpha = $averageTarget-$beta*$averageBench;
+        if($beta == 0){$beta = 1;}
 		$treynor = $returnTargetCumulative/$beta;
+        if($volTargetMinusBench == 0){$volTargetMinusBench = 1;}
 		$trackingError = $volTargetMinusBench;
 		$infoQuota = ($returnTargetCumulative-$returnBenchCumulative)/$volTargetMinusBench;
 		$consistency = $countGoodDays/$returnCount;
@@ -304,6 +311,9 @@ class Calculators {
             
             $returnCount++;
 		}
+        if($returnCount ==0){$returnCount = 1; }
+        $returnCount1 = $returnCount;
+        if($returnCount ==1){$returnCount1 = 2; }
 		
 		// calculate some figures
 		$returnTargetCumulative--;
@@ -313,7 +323,7 @@ class Calculators {
 		$averageTargetMinusBench = $sumTargetMinusBench/$returnCount;
 		$averageBenchMinusTargetOnBadDays = $sumBenchMinusTargetOnBadDays/$returnCount;
 		$averageBenchMinusTargetSquaredOnBadDays = $sumBenchMinusTargetSquaredOnBadDays/$returnCount;
-		$covarTargetBench = ($sumTargetTimesBench-$sumTarget*$sumBench/$returnCount)/($returnCount-1);
+		$covarTargetBench = ($sumTargetTimesBench-$sumTarget*$sumBench/$returnCount)/($returnCount1-1);
 		
 		// second loop
 		$i = 0;
@@ -325,12 +335,13 @@ class Calculators {
 		}
 		
 		// calculate the output
-		$varianceTarget /= ($returnCount-1);
-		$varianceBench /= ($returnCount-1);
-		$varianceTargetMinusBench /= ($returnCount-1);
+		$varianceTarget /= ($returnCount1-1);
+		$varianceBench /= ($returnCount1-1);
+		$varianceTargetMinusBench /= ($returnCount1-1);
 		$volTarget = sqrt($varianceTarget)*sqrt(240);
 		$volBench = sqrt($varianceBench)*sqrt(240);
 		$volTargetMinusBench = sqrt($varianceTargetMinusBench)*sqrt(240);
+        if($volTarget == 0){$volTarget = 1;}
 		$sharpe = $returnTargetCumulative/$volTarget;
 
 		return array($volTarget, $sharpe);

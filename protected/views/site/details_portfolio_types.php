@@ -20,9 +20,10 @@
      
     //if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
     //if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
-       
+    
     $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
-       
+    $months = [];  
+    $series = []; 
     $tbl_rows = '';
     foreach($portfolios as $portfolio){
         $portfolio_id = $portfolio['id'];
@@ -63,9 +64,9 @@
     
     $series[] = ['name'=> $portfolio['portfolio'], 'data'=> $port_data];
     $series[] = ['name'=> $portfolio['portfolio']."-benchmark", 'data'=> $bench_data]; 
-    
+ 
     $allstats = Calculators::CalcAllStats1($port_ret, $bench_ret);
-    
+   
   $tbl_rows .=   
     '<tr>
         <td>'. $portfolio['id'].'</td>

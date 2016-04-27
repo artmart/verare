@@ -93,14 +93,6 @@
         
       //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.dataTables.min.js');
       //$cs->registerScriptFile($baseUrl.'/js/plugins/drilldown.js');
-      //$cs->registerScriptFile($baseUrl.'/js/plugins/drilldown.js');
-      //$cs->registerScriptFile($baseUrl.'/js/plugins/drilldown.js');
-      //$cs->registerScriptFile($baseUrl.'/js/plugins/drilldown.js');
-        
-      //$cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
-      //$cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
-      //$cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
-      //$cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
       //$cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
       //$cs->registerScriptFile($baseUrl.'/editor_datatables/js/buttons.colVis.min.js');
       
@@ -115,8 +107,8 @@
 	  //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.masonry.min.js');
 	  //$cs->registerScriptFile($baseUrl.'/js/styleswitcher.js');
       //$cs->registerScriptFile($baseUrl.'/datatables/media/js/jquery.dataTables.min.js');
-	  $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.foundation.min.js');
-      $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.jqueryui.min.js');
+//	  $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.foundation.min.js');
+ //     $cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.jqueryui.min.js');
 	  //$cs->registerScriptFile($baseUrl.'/js/plugins/jquery.dataTables.min.js');
       //$cs->registerScriptFile($baseUrl.'/js/plugins/dataTables.bootstrap.min.js');
       $cs->registerScriptFile($baseUrl.'/js/wow.min.js');

@@ -423,7 +423,7 @@ var table = $('#example').DataTable( {
                
 
 
-        $(tableTools.fnContainer()).appendTo('#example_wrapper .col-sm-6:eq(0)');
+       // $(tableTools.fnContainer()).appendTo('#example_wrapper .col-sm-6:eq(0)');
         
           table.buttons().container()
         .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );

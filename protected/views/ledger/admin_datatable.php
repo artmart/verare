@@ -441,7 +441,7 @@ var table = $('#example').DataTable( {
 
   function instrumentsLoader() {
     var instruments = [{'value': '0', 'label': '-- Select instrument --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/instruments/instruments'; ?>';
+    var path1 = '<?php echo Yii::app()->baseUrl.'/instruments/instrumentswithprices'; ?>';
     $.ajax({
         url: path1,
         async: false,

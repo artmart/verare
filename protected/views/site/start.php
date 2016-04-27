@@ -67,6 +67,11 @@ ol.progtrckr {
 <h3> <i>Profile completion steps.<?php //echo CHtml::encode(Yii::app()->name); ?></i></h3>
 
 </br>
+<?php
+    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
+    }
+?>
 </br>
 
 <ol class="progtrckr" data-progtrckr-steps="5">

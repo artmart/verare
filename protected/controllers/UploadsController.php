@@ -204,6 +204,7 @@ class UploadsController extends Controller
                         }else{
                             $new_instrument = New Instruments();
                             $new_instrument->instrument = $instrument_name;
+                            $new_instrument->price_uploaded = 1;
                             $new_instrument->save();
                                                         
                             $instrument_id = $new_instrument->id;
@@ -231,6 +232,7 @@ class UploadsController extends Controller
                 $unique_instruments_for_returns_update = array_unique($instruments_for_returns_update); 
                 
                 Returns::model()->instrumnetReturnsUpdate($unique_instruments_for_returns_update);
+                Yii::app()->user->setFlash('success', "Prices Uploaded!");
            
                   @chmod( $tempLoc, 0777 );
                   @unlink( $tempLoc );           
@@ -242,11 +244,15 @@ class UploadsController extends Controller
                         $user_data = Users::model()->findByPk(Yii::app()->user->id);
                         
                         $step_completed = $user_data->step_completed;
+                        
                 
                         if($user_data->user_role == 2 && $step_completed < 2){
                             
                             $user_data->step_completed = 1;
                             $user_data->save();
+                            
+                            
+                                                      
                             $this->redirect(Yii::app()->baseUrl.'/site/admin');
                         
                         
@@ -259,6 +265,7 @@ class UploadsController extends Controller
             ///////////////////////////////////////////            	
 		}
 
+        
 		$this->render('upload_form',array(
 			'model'=>$model,
 		));

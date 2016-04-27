@@ -17,10 +17,19 @@ $form=$this->beginWidget('CActiveForm', array(
 )); ?>
 
 <!--	<p class="note">Fields with <span class="required">*</span> are required.</p>-->
+<?php
+    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
+    }
+?>
+
+
 
 	
 <div class="col-sm-7 clearLeftPadding">  
 <?php echo $form->errorSummary($model); ?>
+
+
 	<div class="row">
     
     <div class="col-sm-12 control-label">

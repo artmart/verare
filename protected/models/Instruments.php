@@ -15,6 +15,7 @@
  * @property InstrumentTypes $instrumentType
  * @property Ledger[] $ledgers
  * @property Prices[] $prices
+ * price_uploaded
  */
 class Instruments extends CActiveRecord
 {
@@ -45,11 +46,11 @@ class Instruments extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('instrument, instrument_type_id, fpml, created_at', 'required'),
-			array('instrument_type_id, is_current', 'numerical', 'integerOnly'=>true),
+			array('instrument_type_id, is_current, price_uploaded', 'numerical', 'integerOnly'=>true),
 			array('instrument', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, instrument, instrument_type_id, fpml, is_current, created_at', 'safe', 'on'=>'search'),
+			array('id, instrument, price_uploaded, instrument_type_id, fpml, is_current, created_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -79,6 +80,7 @@ class Instruments extends CActiveRecord
 			'fpml' => 'Fpml',
 			'is_current' => 'Is Current',
 			'created_at' => 'Created At',
+            'price_uploaded' => 'price_uploaded',
 		);
 	}
 
@@ -99,6 +101,8 @@ class Instruments extends CActiveRecord
 		$criteria->compare('fpml',$this->fpml,true);
 		$criteria->compare('is_current',$this->is_current);
 		$criteria->compare('created_at',$this->created_at,true);
+        $criteria->compare('price_uploaded',$this->price_uploaded);
+        
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -22,9 +22,6 @@ $form=$this->beginWidget('CActiveForm', array(
         echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
     }
 ?>
-
-
-
 	
 <div class="col-sm-7 clearLeftPadding">  
 <?php echo $form->errorSummary($model); ?>

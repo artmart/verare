@@ -119,6 +119,10 @@ class PortfolioReturnsController extends Controller
             PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id);
         }
         }
+        
+        $client = Clients::model()->findByPk($client_id);
+        $client->last_recalculation = new CDbExpression('NOW()');
+        $client->save();
       
         Yii::app()->user->setFlash('success', "Returns Recalculated!");
         

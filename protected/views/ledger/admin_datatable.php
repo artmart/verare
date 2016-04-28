@@ -56,7 +56,11 @@ if($ledger_delete == 1){$access_buttons .= '{
 ?>
 <h1>Manage Ledgers</h1>
   
-  <div id="recalculate_status"></div>
+  <div id="recalculate_status"><strong>Last Returns Recalculation: </strong>
+     <?php $client = Clients::model()->findByPk($user_data->client_id);
+        echo $client->last_recalculation;
+     ?>
+  </div>
    
 <section class="content">
       <div class="row">

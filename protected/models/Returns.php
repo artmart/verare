@@ -130,10 +130,10 @@ class Returns extends CActiveRecord
             $rawData[$i]['nominal'] = $price['nominal'];
             $rawData[$i]['pnl'] = $price['pnl'];
             $rawData[$i]['return'] = 1;                          
-            $rawData[$i]['chart'] = 1;
+            //$rawData[$i]['chart'] = 1;
              
             if($i>0 && $rawData[0]['price'] !== 0){
-                    $rawData[$i]['chart'] = $rawData[$i]['price']/$rawData[0]['price'];      
+                   // $rawData[$i]['chart'] = $rawData[$i]['price']/$rawData[0]['price'];      
                 
                     $div = $rawData[$i-1]['nominal'] * $rawData[$i-1]['price']+ $rawData[$i]['pnl'];
                     

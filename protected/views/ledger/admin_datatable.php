@@ -55,7 +55,9 @@ if($ledger_delete == 1){$access_buttons .= '{
                                             }                                      
 ?>
 <h1>Manage Ledgers</h1>
-    
+  
+  <div id="recalculate_status"></div>
+   
 <section class="content">
       <div class="row">
         <div class="col-xs-12">
@@ -120,7 +122,7 @@ if($ledger_delete == 1){$access_buttons .= '{
     </section>
     <!-- /.content -->
   </div>
-
+<div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;"><img src='<?php echo Yii::app()->theme->baseUrl;?>/img/demo_wait.gif' width="64" height="64" /><br />Loading..</div>
 
 <?php 
       $confirmed_at = date("Y-m-d h:i:sa");
@@ -349,26 +351,8 @@ var table = $('#example').DataTable( {
                     }else{
                         return null;
                     }
-                 // return data.document_name ? "<a href='../uploads/"+data.file +"."+data.extension+"' target='_Blank'>"+ data.file+"."+data.extension+"</a>": null; // data.file +"."+data.extension: null; // '<a href="/uploads/' + data.file +"."+data.extension '" onclick="window.open(this.href, \'mywin\',\'left=20,top=20,width=500,height=500,toolbar=1,resizable=1\'); return false;">' + data.document_name + '</a>' : null;
-                
-                
-                }
-              },
-            
-            
-            /*
-            {
-                data: "ledger.document_id",
-                render: function ( file_id ) {
-                    return file_id ?
-                        '<img src="'+table.file( 'documents', file_id ).web_path+'"/>' :
-                        null;
-                },
-                defaultContent: "No Document",
-                title: "Document"
-            },
-            */
-            
+                 }
+              },            
         ],
         select: true,
     
@@ -397,6 +381,24 @@ var table = $('#example').DataTable( {
                 }
             },
             { extend: 'colvis', collectionLayout: 'fixed two-column',},
+            {
+                text: 'Recalculate Returns',
+                action: function ( e, dt, node, config ) {
+                    //alert( dt );
+                    $("#wait").css("display", "block");
+                    $.ajax({
+            			type: 'post',
+            			url: '<?php echo Yii::app()->baseUrl;?>/portfolioReturns/recalculateReturns',
+            			data: {
+            			// app_id: '<?php //echo $app_id;?>', 
+            			},
+            			success: function (response) {
+            			     $( '#recalculate_status' ).html(response);
+                             $("#wait").css("display", "none");
+            			}
+            		   }); 
+                }
+            },
             
         ],
        
@@ -420,17 +422,8 @@ var table = $('#example').DataTable( {
 			}
 		}
 	} );
-               
 
-
-       // $(tableTools.fnContainer()).appendTo('#example_wrapper .col-sm-6:eq(0)');
-        
-          table.buttons().container()
-        .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
 } );
-
-
-
 
 
   function SortByName(a, b){

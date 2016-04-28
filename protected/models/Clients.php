@@ -9,6 +9,7 @@
  *
  * The followings are the available model relations:
  * @property Portfolios[] $portfolioses
+ * last_recalculation
  */
 class Clients extends CActiveRecord
 {
@@ -40,9 +41,12 @@ class Clients extends CActiveRecord
 		return array(
 			array('client_name', 'required'),
 			array('client_name', 'length', 'max'=>255),
+            array('last_recalculation', 'length', 'max'=>20),
+            
+            
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, client_name', 'safe', 'on'=>'search'),
+			array('id, client_name, last_recalculation', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,6 +70,7 @@ class Clients extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'client_name' => 'Client Name',
+            'last_recalculation' => 'last_recalculation',
 		);
 	}
 
@@ -82,6 +87,8 @@ class Clients extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('client_name',$this->client_name,true);
+        $criteria->compare('last_recalculation',$this->last_recalculation);
+        
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

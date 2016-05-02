@@ -1,6 +1,6 @@
 <?php
     $id = Yii::app()->user->id;
-    //$user_data = Users::model()->findByPk($id);
+    $user_data = User::model()->findByPk($id);
     $this->pageTitle=Yii::app()->name; 
     $baseUrl = Yii::app()->baseUrl;
     
@@ -15,13 +15,14 @@
     $month9_start = date( "Y-m-d", strtotime( "-9 month" ));
     $month1y_start = date( "Y-m-d", strtotime( "-1 years" ));
     
-     $accessable_portfolios1 = Yii::app()->user->getState('accessable_portfolios');
+     $accessable_portfolios1 = $user_data->accessable_portfolios;   
      $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
-     
+          
     //if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
     //if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
     
     $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
+        
     $months = [];  
     $series = []; 
     $tbl_rows = '';
@@ -30,11 +31,13 @@
         
     $sql_returns = "select * from portfolio_returns where portfolio_id = '$portfolio_id' order by trade_date";
     $portfolio_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
+       
     if($portfolio_results){
         
         $port_chart_value = 1;
         $bench_chart_value = 1;
         
+        $return_all_time = 1;
         $return_ytd = 1;
         $return_3m = 1;
         $return_6m = 1;

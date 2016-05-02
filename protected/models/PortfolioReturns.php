@@ -129,11 +129,15 @@ class PortfolioReturns extends CActiveRecord
                                 sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2)) top,
                                 sum(p.price*bc.weight) sums
                                 from prices p
-                                inner join benchmark_components bc on bc.instrument_id = p.instrument_id 
+                                inner join ledger ldg on ldg.instrument_id = p.instrument_id
+                                inner join portfolios port on port.id = ldg.portfolio_id
+                                inner join benchmark_components bc on bc.benchmark_id = port.benchmark_id
+                                
                                 where p.is_current = 1 and p.instrument_id in ('$insids') and " . $where .  " 
                                 group by  p.trade_date
                                 order by p.trade_date asc";
                                 
+                                //inner join benchmark_components bc on bc.instrument_id = p.instrument_id 
                                 //inner join ledger l on l.instrument_id = p.instrument_id
                                 //inner join benchmarks b on b.portfolio_id = l.portfolio_id
 
@@ -204,9 +208,13 @@ class PortfolioReturns extends CActiveRecord
                }     
           }else{
                 ///portfolio return is empty////
-                Yii::app()->user->setFlash('notice', "Prices not fount.");
+                //Yii::app()->user->setFlash('notice', "There are not confirmed trades available aor prices not found.");
                 //Yii::app()->user->setFlash('success', "Data1 saved!");
-                //Yii::app()->user->setFlash('error', "Data2 failed!");        
+                //Yii::app()->user->setFlash('error', "Data2 failed!"); 
+               // foreach(Yii::app()->user->getFlashes() as $key => $message) {
+                //    echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
+                //}
+                //exit;       
               }  
         }else{
                 ///treades are not found//

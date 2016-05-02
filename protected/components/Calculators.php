@@ -380,7 +380,10 @@ class Calculators {
 			if($averageBenchMinusTargetOnBadDays !== 0){
 				$omega=1+$averageTargetMinusBench/$averageBenchMinusTargetOnBadDays;
 				$sortino=$averageTargetMinusBench/pow($averageBenchMinusTargetOnBadDays, 1/2);
-			}else{$omega = "Div/Null!"; $sortino= "Div/Null!";}
+			}else{$omega = 0;
+            // "Div/Null!"; 
+            $sortino= 0; // "Div/Null!";
+            }
 			
 			$VaR=$averageTargetMinusBench+$volTarget*PHPExcel_Calculation_Statistical::NORMSINV(0.01);
 			//$VaR=$averageTargetMinusBench+$volTarget*$this->inverse_ncdf(0.01);

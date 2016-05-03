@@ -92,6 +92,7 @@ if($ledger_delete == 1){$access_buttons .= '{
                             <th>Currency</th>
                             <th>Note</th>
                             <th>Trade Code</th>
+                            <th>Amount</th>
                             <th>Document</th>
                            <!-- <th>Is Current</th>-->
                         </tr>
@@ -334,7 +335,8 @@ var table = $('#example').DataTable( {
             //{ data: "ledger.portfolio_id" },
             { data: "portfolios.portfolio" },
             { data: "ledger.nominal" },
-            { data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
+            { data: "ledger.price" },
+            //{ data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
             { data: "ledger.created_at" },
             { data: "prof1.firstname" },
             { data: "prof2.firstname" },
@@ -345,7 +347,12 @@ var table = $('#example').DataTable( {
            // { data: "documents.file" },
             { data: "ledger.note" },
             { data: "trade_code" },
-            
+            {
+                data: null,
+                render: function(data, type, row) {
+                  return data.ledger.price * data.ledger.nominal;
+                }
+            },
             {
                 data: "documents",
                 defaultContent: '',

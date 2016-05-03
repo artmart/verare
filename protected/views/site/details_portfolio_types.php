@@ -1,14 +1,9 @@
 <?php
+    //$this->pageTitle=Yii::app()->name; 
     $id = Yii::app()->user->id;
     $user_data = User::model()->findByPk($id);
-    $this->pageTitle=Yii::app()->name; 
     $baseUrl = Yii::app()->baseUrl;
-    
-    //if(isset($user_data->default_portfolio_id)){$portfolio = $user_data->default_portfolio_id;}
-    //if(isset($_POST['portfolio'])){$portfolio = $_POST['portfolio'];}
-    
-   	//$end_date = Date('Y-m-d');
-	//$start_date = date('Y-m-d', strtotime('-1 years'));
+        
     $month_ytd_start = date('Y-01-01');
     $month3_start = date( "Y-m-d", strtotime( "-3 month" ));
     $month6_start = date( "Y-m-d", strtotime( "-6 month" ));
@@ -17,9 +12,6 @@
     
      $accessable_portfolios1 = $user_data->accessable_portfolios;   
      $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
-          
-    //if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
-    //if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
     
     $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
         
@@ -319,32 +311,14 @@ var table = $('#example').DataTable( {
                 
     } ); 
 
-
       table.on( 'select', function ( e, dt, type, indexes ) {
 		if ( type === 'row' ) {
 			var data = table.cells(indexes,0).data(); // table.rows( indexes ).data().pluck( 'trade_status.trade_status' );
-            
-            //alert(data[0]);
-            
-            
+
             instrumentsresultsload(data[0]);
-            /*            
-			if( data[0] == 'Pending')
-			{             
-				table.button( '.buttons-edit' ).enable();
-				table.button( '.buttons-selected-single' ).enable();
-			}
-			else
-			{
-				table.button( '.buttons-edit' ).disable();
-				table.button( '.buttons-selected-single' ).disable();
-			}
-            */            
+           
 		}
 	} );
-
-
-
 
     function instrumentsresultsload(port){
     	$.ajax({

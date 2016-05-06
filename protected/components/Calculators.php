@@ -20,8 +20,6 @@ class Calculators {
     
         if($httpCode == 200) //is ok?
            return $output;
-    
-    
     }
     
     public static function CurrenyRatesUpdate()
@@ -31,41 +29,28 @@ class Calculators {
         //$current_date = date_create(Date('Y-m-d'));
         $start_date = date("2016-05-01"); //  date('Y-m-d', strtotime('-1 years'));
         
-        
         //"USD",
        $currencies = ['EUR', 'JPY', 'GBP', 'AUD', 'CHF', 'CAD', 'MXN', 'CNY', 'CNH', 'NZD', 'SEK', 'RUB', 'DKK', 'NOK', 'HKD', 'SGD', 'TRY', 'KRW', 'ZAR', 'BRL', 'INR'];
-        //$currencies = ['EUR'];
         
         while(strtotime($start_date)<= strtotime("now")){
             $currency_rates = New CurrencyRates;
-            
-            //$start_date = date_create($start_date);
             $currency_rates->day = $start_date;
-            //$currency_rates->USD = file_get_contents("http://currencies.apps.grandtrunk.net/getrate/".$start_date."/usd/zar");
-            
+                        
             foreach($currencies as $cur){
                 $currency_rates->{$cur} = 0;
-               // $get_rate = file_get_contents("http://currencies.apps.grandtrunk.net/getrate/".$start_date."/".$cur."/USD");
-                
+                               
                 $Url = "http://currencies.apps.grandtrunk.net/getrate/".$start_date."/".$cur."/USD";
-                
                 $get_rate = Self::url_get_contents ($Url);
                                 
                 if($get_rate>=0){$currency_rates->{$cur} = $get_rate;}
             }
-            
             $currency_rates->save();
   
-            ///+one day//
-             //date_add($start_date, date_interval_create_from_date_string("1 days"));
-             //$start_date = date_format($start_date,"Y-m-d");
-             
+            ///+one day//             
             $start_date = strtotime($start_date);
             $start_date = strtotime("+1 day", $start_date);
-            $start_date = date('Y-m-d', $start_date);
-             
+            $start_date = date('Y-m-d', $start_date); 
         }
-        
     }
     
     

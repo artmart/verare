@@ -3,7 +3,9 @@ Yii::import('ext.phpexcel.XPHPExcel');
 XPHPExcel::init();
 
 class Calculators {
-    
+
+
+////////////////////////cron functions////////////////////////////    
     public static function url_get_contents ($Url) {
         if (!function_exists('curl_init')){ 
             die('CURL is not installed!');
@@ -26,10 +28,18 @@ class Calculators {
     { 
         ini_set('max_execution_time', 150000);
         ini_set("memory_limit","128M"); 
-        //$current_date = date_create(Date('Y-m-d'));
-        $start_date = date("2016-05-01"); //  date('Y-m-d', strtotime('-1 years'));
+
+        $max_date_sql = "select MAX(day) day from currency_rates";
+        $max_date_res = Yii::app()->db->createCommand($max_date_sql)->queryAll(true);
         
-        //"USD",
+        //var_dump($max_date_res[0]["day"]);
+        //exit;
+
+        $start_date = date($max_date_res[0]["day"]); // date("2000-01-01"); //  date('Y-m-d', strtotime('-1 years'));
+        $start_date = strtotime($start_date);
+        $start_date = strtotime("+1 day", $start_date);
+        $start_date = date('Y-m-d', $start_date); 
+
        $currencies = ['EUR', 'JPY', 'GBP', 'AUD', 'CHF', 'CAD', 'MXN', 'CNY', 'CNH', 'NZD', 'SEK', 'RUB', 'DKK', 'NOK', 'HKD', 'SGD', 'TRY', 'KRW', 'ZAR', 'BRL', 'INR'];
         
         while(strtotime($start_date)<= strtotime("now")){
@@ -52,8 +62,9 @@ class Calculators {
             $start_date = date('Y-m-d', $start_date); 
         }
     }
-    
-    
+ //////////////////////////////////////////////////////////////////////////////
+ 
+ 
     
      public static function PNL($start_date, $end_date, $portfolio)
      {  

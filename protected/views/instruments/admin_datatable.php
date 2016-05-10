@@ -112,7 +112,9 @@ $(document).ready(function() {
             { data: "instruments.isin" },
             //{ data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
             { data: "instruments.created_at" },
-            { data: "instrument_groups.group_name" },            
+            { data: "instrument_groups.group_name" },
+            { data: "instruments.currency" },
+                        
         ],
         select: true,
         buttons: [
@@ -211,6 +213,7 @@ $(document).ready(function() {
                 <th>ISIN</th>
                 <th>Created At</th>
                 <th>Instrument Group</th>
+                <th>Currency</th>
             </tr>
         </thead>
         <tfoot>
@@ -222,6 +225,7 @@ $(document).ready(function() {
                 <th>ISIN</th>
                 <th>Created At</th>
                 <th>Instrument Group</th>
+                <th>Currency</th>
             </tr>
         </tfoot>
     </table>

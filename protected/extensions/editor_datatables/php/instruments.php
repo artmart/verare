@@ -20,7 +20,8 @@ Editor::inst( $db, 'instruments', 'instruments.id')
         Field::inst( 'instruments.is_current' ),
         Field::inst( 'instruments.created_at' ),
         Field::inst( 'instruments.isin' ),
-        Field::inst( 'instruments.instrument_group_id' )      
+        Field::inst( 'instruments.instrument_group_id' ),
+        Field::inst( 'instruments.currency' )     
     )
     ->leftJoin( 'instrument_types', 'instrument_types.id', '=', 'instruments.instrument_type_id' )
     ->leftJoin( 'instrument_groups', 'instrument_groups.id', '=', 'instruments.instrument_group_id' )

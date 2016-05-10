@@ -16,6 +16,7 @@
  * @property Ledger[] $ledgers
  * @property Prices[] $prices
  * price_uploaded
+ * currency
  */
 class Instruments extends CActiveRecord
 {
@@ -48,9 +49,12 @@ class Instruments extends CActiveRecord
 			//array('instrument, instrument_type_id, fpml, created_at', 'required'),
 			array('instrument_type_id, is_current, price_uploaded', 'numerical', 'integerOnly'=>true),
 			array('instrument', 'length', 'max'=>255),
+            array('currency', 'length', 'max'=>5),
+            
+            
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, instrument, price_uploaded, instrument_type_id, fpml, is_current, created_at', 'safe', 'on'=>'search'),
+			array('id, instrument, currency, price_uploaded, instrument_type_id, fpml, is_current, created_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -81,6 +85,7 @@ class Instruments extends CActiveRecord
 			'is_current' => 'Is Current',
 			'created_at' => 'Created At',
             'price_uploaded' => 'price_uploaded',
+            'currency' => 'Currency',
 		);
 	}
 
@@ -102,8 +107,8 @@ class Instruments extends CActiveRecord
 		$criteria->compare('is_current',$this->is_current);
 		$criteria->compare('created_at',$this->created_at,true);
         $criteria->compare('price_uploaded',$this->price_uploaded);
+        $criteria->compare('currency',$this->currency);
         
-
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

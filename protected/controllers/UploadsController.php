@@ -195,6 +195,7 @@ class UploadsController extends Controller
                     $trade_date = gmdate('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($dat['0']));
                     $instrument_name = trim($dat['1']);
                     $price = $dat['2'];
+                    $currency = $dat['3'];
                     
                     $instrument = Instruments::model()->findByAttributes(['instrument'=>$instrument_name, 'is_current' =>1]);
                     
@@ -205,6 +206,7 @@ class UploadsController extends Controller
                             $new_instrument = New Instruments();
                             $new_instrument->instrument = $instrument_name;
                             $new_instrument->price_uploaded = 1;
+                            $new_instrument->currency = $currency;
                             $new_instrument->save();
                                                         
                             $instrument_id = $new_instrument->id;

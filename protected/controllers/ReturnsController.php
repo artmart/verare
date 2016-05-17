@@ -122,10 +122,14 @@ class ReturnsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Returns');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+	   
+       Returns::model()->calculateIinstrumnetReturn(91, 43, 0, 0, 3, 'EUR');
+		
+        
+        //$dataProvider=new CActiveDataProvider('Returns');
+		//$this->render('index',array(
+		//	'dataProvider'=>$dataProvider,
+		//));
 	}
 
 	/**

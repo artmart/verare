@@ -165,7 +165,67 @@ class Returns extends CActiveRecord
             PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id);
         }
         }
-    }   
+    } 
+    
+//$trade_rate, $trade_currency, 
+    public function calculateIinstrumnetReturn($instrument_id, $portfolio_id = 0, $client_id, $portfolio_currency){
+        
+	   ini_set('max_execution_time', 500000);
+                       
+       $table_name = "client_".$client_id. "_inst_returns";
+                                    
+       $prices_sql = "select distinct p.trade_date, p.price*cr.{$portfolio_currency} price, 
+                        (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger 
+                        	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1) nominal,
+                        (select sum(if(trade_date=p.trade_date, nominal*price*cr.{$portfolio_currency}, 0)) from ledger 
+                        	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1) pnl
+                         from prices p
+                         inner join currency_rates cr on cr.day = p.trade_date 
+                         where p.is_current = 1 and p.instrument_id = $instrument_id
+                         order by p.trade_date asc";
+                        
+                        //and p.trade_date >='$dt'
+        $prices = Yii::app()->db->createCommand($prices_sql)->queryAll(true);
+        
+        if(count($prices)>0){
+        $i = 0;
+        foreach($prices as $price){
+            $rawData[$i]['id'] = $i;    
+            $rawData[$i]['trade_date'] = $price['trade_date'];
+            $trade_date = $price['trade_date'];
+            $rawData[$i]['price'] = $price['price'];
+            $rawData[$i]['nominal'] = $price['nominal'];
+            $rawData[$i]['pnl'] = $price['pnl'];
+            $rawData[$i]['return'] = 1;                          
+             
+            if($i>0 && $rawData[0]['price'] !== 0){                
+                    $div = $rawData[$i-1]['nominal'] * $rawData[$i-1]['price']+ $rawData[$i]['pnl'];
+                    
+                    if($div>0){$rawData[$i]['return'] = ($rawData[$i]['nominal'] * $rawData[$i]['price'])/$div;
+                                }else{$rawData[$i]['return'] = 1;}
+                }
+         
+            //checking if the return for current instrument is not exist and inserting the calculated return.//
+              
+            $raturn_sql = "select {$portfolio_currency} from {$table_name} where trade_date = '$trade_date' and instrument_id = '$instrument_id' ";
+            $existing_return = Yii::app()->db->createCommand($raturn_sql)->queryAll(true);
+
+                   if(count($existing_return)==0){
+                        $sql = "insert into {$table_name} ({$portfolio_currency}, instrument_id, trade_date) values (:return, :instrument_id, :trade_date)";
+                        $parameters = array(":return"=>$rawData[$i]['return'], ':instrument_id' => $instrument_id, ':trade_date' => $rawData[$i]['trade_date']);
+                        Yii::app()->db->createCommand($sql)->execute($parameters);  
+                   }else{ 
+                        Yii::app()->db->createCommand()->update($table_name, array("{$portfolio_currency}"=>$rawData[$i]['return']), 'trade_date=:trade_date and instrument_id =:instrument_id',array(':trade_date'=>$rawData[$i]['trade_date'], ':instrument_id' => $instrument_id));
+                   }
+               
+               $i++;
+               }
+            }
+            if($portfolio_id!==0){
+                PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id, $client_id, $portfolio_currency);
+            }
+        
+    }  
     
     
 }

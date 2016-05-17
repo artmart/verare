@@ -157,14 +157,25 @@
     }
         
     function portfolioUpdate( $id, $values ){
-        $portfolio_id = 0;
-        if(isset($values['ledger']['portfolio_id'])){$portfolio_id = $values['ledger']['portfolio_id'];} //else{$portfolio_id = $existing_trades->portfolio_id;}
-        
-        PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id);
-        
-        
         $user_data = Users::model()->findByPk(Yii::app()->user->id);
-                        
+        $client_id =  $user_data->client_id;
+        $portfolio_id = 0;
+        //if(isset($instrument_id)){$portfolio_id = $values['ledger']['portfolio_id'];} //else{$portfolio_id = $existing_trades->portfolio_id;}
+        
+        $portfolio_id = $values['ledger']['portfolio_id'];
+        
+        $instrument_id = $values['ledger']['instrument_id'];
+        $trade_currency = $values['ledger']['currency']; 
+        
+        
+        $portfolios = Portfolios::model()->findByPk($portfolio_id);
+        $portfolio_currency = $portfolios->currency;
+        
+        //Returns::model()->calculateIinstrumnetReturn($instrument_id, $portfolio_id = 0, $trade_rate, $trade_currency, $client_id, $portfolio_currency);
+        //PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id);
+        //$trade_rate, $trade_currency, 
+        Returns::model()->calculateIinstrumnetReturn($instrument_id, $portfolio_id = 0, $client_id, $portfolio_currency);
+                       
         $step_completed = $user_data->step_completed;
 
         if($user_data->user_role == 2 && $step_completed < 5){

@@ -56,7 +56,7 @@ $client_id = $user_data->client_id;
                                 <th>Allocation Min</th>
                                 <th>Allocation Max</th>
                                 <th>Allocation Normal</th>
-                                <!--<th>Portfolio Type</th>-->
+                                <th>Portfolio Currency</th>
                             </tr>
                         </thead>
                     </table>
@@ -120,7 +120,6 @@ $(document).ready(function() {
             },
             
             <?php } ?>
-            
             {
                 label: "Created At:",
                 name: "created_at",
@@ -149,6 +148,15 @@ $(document).ready(function() {
                 name: "allocation_normal",
                 "attr": {"class": "form-control"}
             },
+            {
+                label: "Portfolio Currency:",
+                name: "currency",
+                type: "select",
+                ipOpts: currencyLoader(),
+                "attr": {"class": "form-control"}
+            },
+            
+            
             /*
              {
                 label: "Portfolio Type:",
@@ -219,7 +227,7 @@ $(document).ready(function() {
             { data: "allocation_min" },
             { data: "allocation_max" },
             { data: "allocation_normal" },
-            //{ data: "portfolio_type" },         
+            { data: "currency" },         
                        
         ],
         select: true,
@@ -343,6 +351,29 @@ $(document).ready(function() {
               obj = {
                 "value" : data[a]['id'],
                 "label" : data[a]['portfolio']
+              };
+              instruments.push(obj);
+            }
+        }
+    });
+    return instruments.sort(SortByName);
+  }
+  
+  
+  
+    function currencyLoader(){
+    var instruments = [{'value': '0', 'label': '-- Select Currency --'}];
+    var path1 = '<?php echo Yii::app()->baseUrl.'/currencies/currencies'; ?>';
+    $.ajax({
+        url: path1,
+        async: false,
+        dataType: 'json',
+        success: function (json) {
+          var data = json.data;
+            for(var a=0; a<data.length; a++) {
+              obj = {
+                "value" : data[a]['currency'],
+                "label" : data[a]['currency']
               };
               instruments.push(obj);
             }

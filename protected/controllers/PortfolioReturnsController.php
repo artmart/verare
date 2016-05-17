@@ -51,7 +51,98 @@ class PortfolioReturnsController extends Controller
 	  ini_set('max_execution_time', 50000);
       $user = Users::model()->findByPk(Yii::app()->user->id);
       $client_id = $user->client_id;
+      //$table_name = "client_".$client_id. "_inst_returns";
+        $portfolio_id = 0;
+            
+        $inst_sql = "select * from ledger l
+                     inner join instruments i on l.instrument_id = i.id
+                     where l.is_current = 1 and i.is_current = 1 and l.trade_status_id = 2 and i.price_uploaded = 1 and l.client_id = $client_id order by trade_date asc";
+        $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
+    
+        if(count($trades)>0){
+            foreach($trades as $trade){
+        
+            $portfolio_id = $trade['portfolio_id'];    
+            $instrument_id = $trade['instrument_id'];
+            
+            $portfolios = Portfolios::model()->findByPk($portfolio_id);
+            $portfolio_currency = $portfolios->currency;
+            
+            Returns::model()->calculateIinstrumnetReturn($instrument_id, $portfolio_id = 0, $client_id, $portfolio_currency);
+         /*   
+        $prices_sql = "select distinct p.trade_date, p.price,
+                        (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and  is_current = 1 and trade_status_id = 2 and client_id = $client_id) nominal,
+                        (select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and  is_current = 1 and ledger.trade_status_id = 2 and client_id = $client_id) pnl
+                         from prices p
+                        where p.is_current = 1 and p.instrument_id = $instrument_id   
+                        order by p.trade_date asc";
+                        
+                        //and p.trade_date >='$dt'
+        $prices = Yii::app()->db->createCommand($prices_sql)->queryAll(true);
+        
+        if(count($prices)>0){
+        $i = 0;
+        foreach($prices as $price){
+            $rawData[$i]['id'] = $i;    
+            $rawData[$i]['trade_date'] = $price['trade_date'];
+            $rawData[$i]['price'] = $price['price'];
+            $rawData[$i]['nominal'] = $price['nominal'];
+            $rawData[$i]['pnl'] = $price['pnl'];
+            $rawData[$i]['return'] = 1;                          
+            //$rawData[$i]['chart'] = 1;
+             
+            if($i>0 && $rawData[0]['price'] !== 0){
+                   // $rawData[$i]['chart'] = $rawData[$i]['price']/$rawData[0]['price'];      
+                
+                    $div = $rawData[$i-1]['nominal'] * $rawData[$i-1]['price']+ $rawData[$i]['pnl'];
+                    
+                    if($div>0){
+                        $rawData[$i]['return'] = ($rawData[$i]['nominal'] * $rawData[$i]['price'])/$div;
+                    }else{
+                        $rawData[$i]['return'] = 1;
+                    }
+                }
+         
+              //checking if the return for current instrument is not exist and inserting the calculated return.//
+              
+               $existing_return  = Returns::model()->findByAttributes(['instrument_id'=>$instrument_id, 'trade_date' =>$rawData[$i]['trade_date']]);
+                   if(count($existing_return)==0){
+                       $return = new Returns;
+                       $return->instrument_id = $instrument_id;
+                       $return->trade_date = $rawData[$i]['trade_date'];
+                       $return->return = $rawData[$i]['return'];
+                       $return->save(); 
+                   }else{
+                       $existing_return->return = $rawData[$i]['return'];
+                       $existing_return->save(); 
+                   }
+               
+               $i++;
+               }
+            }
+            
+            PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id);
+            */
+        }
+        }
+        
+        $client = Clients::model()->findByPk($client_id);
+        $client->last_recalculation = new CDbExpression('NOW()');
+        $client->save();
       
+        Yii::app()->user->setFlash('success', "Returns Recalculated!");
+        
+        foreach(Yii::app()->user->getFlashes() as $key => $message) {
+            echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
+        }
+	}
+    
+    public function actionRecalculateReturns11()
+	{
+	  ini_set('max_execution_time', 50000);
+      $user = Users::model()->findByPk(Yii::app()->user->id);
+      $client_id = $user->client_id;
+      $table_name = "client_".$client_id. "_inst_returns";
         $portfolio_id = 0;
             
         $inst_sql = "select * from ledger l
@@ -66,8 +157,8 @@ class PortfolioReturnsController extends Controller
             $instrument_id = $trade['instrument_id'];
             
         $prices_sql = "select distinct p.trade_date, p.price,
-                        (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and  is_current = 1 and trade_status_id = 2) nominal,
-                        (select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and  is_current = 1 and ledger.trade_status_id = 2) pnl
+                        (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and  is_current = 1 and trade_status_id = 2 and client_id = $client_id) nominal,
+                        (select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and  is_current = 1 and ledger.trade_status_id = 2 and client_id = $client_id) pnl
                          from prices p
                         where p.is_current = 1 and p.instrument_id = $instrument_id   
                         order by p.trade_date asc";

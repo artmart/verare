@@ -101,21 +101,15 @@ class PortfolioReturns extends CActiveRecord
     
     
 /////////////////////////
-    public function PortfolioReturnsUpdate($portfolio_id)
-	{
-        //$portfolio_id = '';
-        //$dt = '';
-        $where = ' 1 = 1 ';
-    
-        //if(isset($_REQUEST['portfolio']) && !($_REQUEST['portfolio'] == '')){$portfolio_id = $_REQUEST['portfolio'];}
-        //if(isset($_REQUEST['dt']) && !($_REQUEST['dt'] == '')){$dt = $_REQUEST['dt']; $where .= " and p.trade_date >='$dt' "; }
-  
+    public function PortfolioReturnsUpdate($portfolio_id, $client_id, $portfolio_currency)
+	{  
         if($portfolio_id >0){
         ini_set('max_execution_time', 50000);
+        $table_name = "client_".$client_id. "_inst_returns";
         //Trades
         $inst_sql = "select * from ledger l
                      inner join instruments i on l.instrument_id = i.id
-                     where l.is_current = 1 and i.is_current = 1 and l.trade_status_id = 2 and l.portfolio_id = $portfolio_id  order by trade_date asc";
+                     where l.is_current = 1 and i.is_current = 1 and l.trade_status_id = 2 and l.portfolio_id = $portfolio_id  and l.client_id = '$client_id' order by trade_date asc";
         $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
         
         if(count($trades)>0){
@@ -125,15 +119,16 @@ class PortfolioReturns extends CActiveRecord
         $insids = implode("','", array_unique($ins_ids));                         
                                 
         $portfolio_return_sql = "select p.trade_date,
-                                sum((select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2)) pnl,
-                                sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2)) top,
-                                sum(p.price*bc.weight) sums
-                                from prices p
+                                sum((select sum(if(trade_date=p.trade_date, nominal*price*cr.{$portfolio_currency}, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = '$client_id')) pnl,
+                                sum(p.{$portfolio_currency} * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = '$client_id')) top,
+                                sum(p.{$portfolio_currency}*bc.weight) sums
+                                from {$table_name} p
                                 inner join ledger ldg on ldg.instrument_id = p.instrument_id
                                 inner join portfolios port on port.id = ldg.portfolio_id
                                 inner join benchmark_components bc on bc.benchmark_id = port.benchmark_id
+                                inner join currency_rates cr on cr.day = p.trade_date 
                                 
-                                where p.is_current = 1 and p.instrument_id in ('$insids') and " . $where .  " 
+                                where p.instrument_id in ('$insids') and ldg.client_id = '$client_id'
                                 group by  p.trade_date
                                 order by p.trade_date asc";
                                 
@@ -186,7 +181,7 @@ class PortfolioReturns extends CActiveRecord
                $existing_return  = PortfolioReturns::model()->findByAttributes([
                                                                                 'portfolio_id'=>$portfolio_id, 
                                                                                 'trade_date' =>$rawData[$i]['trade_date'], 
-                                                                                'is_prtfolio_or_group' =>1,
+                                                                                //'is_prtfolio_or_group' =>1,
                                                                                 //'return' =>$rawData[$i]['return'],
                                                                                 //'benchmark_return' => $rawData[$i]['benchmark_return']
                                                                                 ]);

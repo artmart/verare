@@ -16,6 +16,7 @@
  * @property PortfolioUserRoles[] $portfolioUserRoles
  * @property Clients $client
  * type_id
+ * currency
  */
 class Portfolios extends CActiveRecord
 {
@@ -45,12 +46,15 @@ class Portfolios extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('client_id, portfolio, description, created_at', 'required'),
+			array('client_id, portfolio, description, created_at, currency', 'required'),
 			array('client_id, is_current, type_id', 'numerical', 'integerOnly'=>true),
 			array('portfolio', 'length', 'max'=>255),
+            array('currency', 'length', 'max'=>10),
+            
+            
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, type_id, client_id, portfolio, description, is_current, created_at', 'safe', 'on'=>'search'),
+			array('id, currency, type_id, client_id, portfolio, description, is_current, created_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -81,6 +85,7 @@ class Portfolios extends CActiveRecord
 			'is_current' => 'Is Current',
 			'created_at' => 'Created At',
             'type_id' => 'Type Id',
+            'currency' => 'currency',
 		);
 	}
 
@@ -102,6 +107,8 @@ class Portfolios extends CActiveRecord
 		$criteria->compare('is_current',$this->is_current);
 		$criteria->compare('created_at',$this->created_at,true);
         $criteria->compare('type_id',$this->type_id);
+        $criteria->compare('currency',$this->currency);
+        
   
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

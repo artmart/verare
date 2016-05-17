@@ -8,6 +8,41 @@
         DataTables\Editor\Join,
         DataTables\Editor\Upload,
         DataTables\Editor\Validate;
+        
+        
+    function createReturnsTable( $id, $values ){
+        $table_name = "client_".$id. "_inst_returns";
+        Yii::app()->db->createCommand("CREATE TABLE $table_name (`id` INT(11) NOT NULL AUTO_INCREMENT, 
+                                                                      
+                                                                    	`instrument_id` INT(11) NOT NULL,
+                                                                    	`trade_date` DATE NOT NULL,                                                                       
+                                                                        `USD` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`EUR` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`JPY` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`GBP` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`AUD` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`CHF` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`CAD` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`MXN` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`CNY` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`CNH` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`NZD` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`SEK` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`RUB` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`DKK` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`NOK` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`HKD` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`SGD` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`TRY` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`KRW` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`ZAR` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`BRL` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                    	`INR` FLOAT(9,7) NOT NULL DEFAULT '1',
+                                                                                                                                    
+                                                                      PRIMARY KEY (`id`)
+                                                                    ) ENGINE=INNODB DEFAULT CHARSET=utf8;")->execute();
+    }    
+    
  /*    
     //Build our Editor instance and process the data coming from _POST
     Editor::inst( $db, 'ledger' )
@@ -41,8 +76,7 @@
                 ->setFormatter( 'Format::date_format_to_sql', Format::DATE_ISO_8601 )
         )
         ->process( $_POST )
-        ->json();  
-        
+        ->json();    
  */       
 
 // Build our Editor instance and process the data coming from _POST
@@ -51,6 +85,16 @@ Editor::inst( $db, 'clients', 'id')
         Field::inst( 'id' ),
         Field::inst( 'client_name' )->validator( 'Validate::notEmpty' )
     )
+    
+    ->on( 'postCreate', function ( $editor, $id, $values, $row ) {
+            createReturnsTable( $id, $values );
+        } )
+                
+       // ->on( 'postRemove', function ( $editor, $id, $values ) {
+       //         portfolioUpdate( $id, $values );
+       // } ) 
+    
+    
     ->process( $_POST )
     ->json();
 ?>

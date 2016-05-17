@@ -183,9 +183,7 @@ $(document).ready(function() {
                 ipOpts: currencyLoader(),
                 "attr": {"class": "form-control"}
             },
-            
-            
-             
+                 
              /*{
                 label: "Created At:",
                 name: "ledger.created_at",
@@ -216,8 +214,7 @@ $(document).ready(function() {
                 type: "textarea",
                 "attr": {"class": "form-control"}
             },
-            
-            
+              
              {
                 label: "is_current",
                 name: "ledger.is_current",
@@ -287,7 +284,6 @@ editor.on('submitSuccess', function(e, json, data) {
         if( user_role == 2 && step_completed < 5){window.location = "<?php echo Yii::app()->baseUrl;?>/site/admin";}
         });
 
-        
     <?php }?>
     
          
@@ -317,7 +313,6 @@ var table = $('#example').DataTable( {
         sScrollX: "100%",
         sScrollXInner: "110%",
         bScrollCollapse: true,
-        
         
         //colVis: { exclude: [ 1 ] },
         //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
@@ -367,7 +362,6 @@ var table = $('#example').DataTable( {
         ],
         select: true,
     
-
         buttons: [
             /*{ extend: "create", editor: editor },
             { extend: "edit",   editor: editor },
@@ -411,12 +405,9 @@ var table = $('#example').DataTable( {
                 }
             },
             
-        ],
-       
-                
+        ],        
     } ); 
-
-	
+    
       table.on( 'select', function ( e, dt, type, indexes ) {
 		if ( type === 'row' ) {
 			var data = table.cells(indexes,9).data(); // table.rows( indexes ).data().pluck( 'trade_status.trade_status' );
@@ -435,7 +426,6 @@ var table = $('#example').DataTable( {
 	} );
 
 } );
-
 
   function SortByName(a, b){
     var aName = a.label.toLowerCase();

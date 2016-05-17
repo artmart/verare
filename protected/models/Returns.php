@@ -96,6 +96,8 @@ class Returns extends CActiveRecord
         
         if(count($instrument_ids)>0){
             ini_set('max_execution_time', 50000);
+            $user = Users::model()->findByPk(Yii::app()->user->id);
+            $client_id = $user->client_id;
                          
         foreach($instrument_ids as $instrument_id){
             
@@ -103,11 +105,23 @@ class Returns extends CActiveRecord
             
             $inst_sql = "select * from ledger l
                          inner join instruments i on l.instrument_id = i.id
-                         where l.is_current = 1 and i.is_current = 1 and l.trade_status_id = 2 and i.id = $instrument_id  order by trade_date asc";
+                         where l.is_current = 1 and i.is_current = 1 and l.trade_status_id = 2 and i.id = $instrument_id and l.client_id = $client_id order by trade_date asc";
             $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
         
         if(count($trades)>0){
+            foreach($trades as $trade){
         
+            $portfolio_id = $trade['portfolio_id'];    
+            //$instrument_id = $trade['instrument_id'];
+            
+            $portfolios = Portfolios::model()->findByPk($portfolio_id);
+            $portfolio_currency = $portfolios->currency;
+            
+            Returns::model()->calculateIinstrumnetReturn($instrument_id, $portfolio_id = 0, $client_id, $portfolio_currency);
+            }
+            
+            
+        /*
         $portfolio_id = $trades[0]['portfolio_id'];
         //Prices and returns calculations            
             
@@ -160,9 +174,9 @@ class Returns extends CActiveRecord
                
                $i++;
                }
-            }
+            }*/
             }   
-            PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id);
+            //PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id);
         }
         }
     } 

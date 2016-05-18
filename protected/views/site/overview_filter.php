@@ -7,6 +7,8 @@
     if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
     if(isset($_REQUEST['end_date'])){$end_date = $_REQUEST['end_date'];}
     if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
+    if(isset($_REQUEST['client_id'])){$client_id = $_REQUEST['client_id'];}
+    
     
     $id = Yii::app()->user->id;
     $user_data = Users::model()->findByPk($id);
@@ -16,6 +18,7 @@
     $user_data->save();
     
     $portfolios = Yii::app()->db->createCommand("select * from portfolios where id = '$portfolio'")->queryAll(true);
+    $portfolio_currency = $portfolios[0]['currency'];
 ?>
 
 <h3> <i><?php //echo CHtml::encode(Yii::app()->name); ?></i></h3>
@@ -29,26 +32,24 @@
     </small>
   </h1>
 
-
 <?php         
     $returns = Calculators::ReturnAllAndYTD($portfolio);
     $pnl = Calculators::PNL($start_date, $end_date, $portfolio);
     
-    $portfolio_composition_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price) nav from ledger l
+    $portfolio_composition_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*cr.{$portfolio_currency}) nav from ledger l
                                  inner join portfolios p on p.id = l.portfolio_id
+                                 inner join currency_rates cr on cr.day = l.trade_date
                                  where l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
+                                 and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
                                  group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
     $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
     
 
-
-
-
-
-
-    $sub_portfolios_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price) nav from ledger l
+    $sub_portfolios_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*cr.{$portfolio_currency}) nav from ledger l
                     inner join portfolios p on p.id = l.portfolio_id
+                    inner join currency_rates cr on cr.day = l.trade_date
                     where l.trade_date > '$start_date' and l.trade_date<'$end_date' and p.parrent_portfolio = '$portfolio' 
+                    and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
                     group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
                     
     $sub_portfolios = Yii::app()->db->createCommand($sub_portfolios_sql)->queryAll(true);

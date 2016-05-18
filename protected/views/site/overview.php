@@ -3,22 +3,22 @@
 <!--<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>-->
 
 <?php 
-    //$id = Yii::app()->user->id;
-    //$user_data = Users::model()->findByPk($id);
-    
-    
-    $client_id = $user_data->client_id;
-    
     $this->pageTitle=Yii::app()->name; 
     $baseUrl = Yii::app()->baseUrl;
+    //$id = Yii::app()->user->id;
+    //$user_data = Users::model()->findByPk(Yii::app()->user->id);
+
+    $client_id = $user_data->client_id;
+    
+    $portfolio = 0;
     
     if(isset($user_data->default_portfolio_id) && $user_data->default_portfolio_id>0)
     {
         $portfolio = $user_data->default_portfolio_id;
         }else{
             $accessable_portfolios1 = $user_data->accessable_portfolios;
-            $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
-            $portfolio = $accessable_portfolios[0];
+                    $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
+                    $portfolio = $accessable_portfolios[0];
             }
     
    	$end_date = Date('Y-m-d');
@@ -105,7 +105,8 @@ $(document).ready(function ($) {
     			data: {
     			     portfolio:$('#portfolio').val(),
                      start_date:$('#start_date').val(),
-                     end_date:$('#end_date').val()
+                     end_date:$('#end_date').val(),
+                     client_id: '<?php echo $client_id;?>',
     			},
     			success: function (response) {
     			     $( '#overview-view' ).html(response);

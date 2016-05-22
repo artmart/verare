@@ -32,7 +32,7 @@ class CurrencyRatesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'last'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -55,6 +55,15 @@ class CurrencyRatesController extends Controller
 			'model'=>$this->loadModel($id),
 		));
 	}
+    
+    public function actionLast($id)
+	{
+        $max_date_sql = "select {$id} rate from currency_rates order by day desc limit 1";
+        $max_date_res = Yii::app()->db->createCommand($max_date_sql)->queryAll(true);
+        echo $max_date_res[0]['rate'];
+	}
+    
+    
 
 	/**
 	 * Creates a new model.

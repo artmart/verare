@@ -182,7 +182,7 @@ class Returns extends CActiveRecord
     } 
     
 //$trade_rate, $trade_currency, 
-    public function calculateIinstrumnetReturn($instrument_id, $portfolio_id = 0, $client_id, $portfolio_currency){
+    public function calculateIinstrumnetReturn($instrument_id, $portfolio_id , $client_id, $portfolio_currency){
         
 	   ini_set('max_execution_time', 500000);
                        
@@ -190,9 +190,9 @@ class Returns extends CActiveRecord
                                     
        $prices_sql = "select distinct p.trade_date, p.price*cr.{$portfolio_currency} price, 
                         (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger 
-                        	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1) nominal,
-                        (select sum(if(trade_date=p.trade_date, nominal*price*cr.{$portfolio_currency}, 0)) from ledger 
-                        	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1) pnl
+                        	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') nominal,
+                        (select sum(if(trade_date=p.trade_date, nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
+                        	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') pnl
                          from prices p
                          inner join currency_rates cr on cr.day = p.trade_date 
                          where p.is_current = 1 and p.instrument_id = $instrument_id

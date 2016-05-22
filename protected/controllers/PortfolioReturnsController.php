@@ -32,7 +32,7 @@ class PortfolioReturnsController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'admin', 'portfolioReturnsCalc', 'recalculateReturns'),
+				'actions'=>array('create','update', 'admin', 'portfolioReturnsCalc', 'recalculateReturns', 'RRR'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -44,6 +44,10 @@ class PortfolioReturnsController extends Controller
 			),
 		);
 	}
+    
+    public function actionRRR(){
+        PortfolioReturns::model()->PortfolioReturnsUpdate(1, 1, 'SEK');
+    }
     
     
     public function actionRecalculateReturns()

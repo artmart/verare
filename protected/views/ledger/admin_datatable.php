@@ -183,7 +183,11 @@ $(document).ready(function() {
                 ipOpts: currencyLoader(),
                 "attr": {"class": "form-control"}
             },
-                 
+            {
+                label: "Currency Rate:",
+                name: "ledger.currency_rate",
+                "attr": {"class": "form-control"}
+            },                 
              /*{
                 label: "Created At:",
                 name: "ledger.created_at",
@@ -257,7 +261,23 @@ $(document).ready(function() {
             }
         ]
     } );
-	
+    
+    editor.on('open', function (e, mode, action) {        
+        editor.dependent( 'ledger.currency', function ( val ) {
+             if(action === 'create'){
+            $.ajax({
+                url: '<?php echo Yii::app()->baseUrl.'/currencyRates/last?id='; ?>'+val,
+                async: false,
+                dataType: 'json',
+                success: function (json) {
+                  $("#DTE_Field_ledger-currency_rate").val(json);
+                  }
+            });
+             }else{$("#DTE_Field_ledger-currency_rate").val('1');}        
+        });
+    } );
+    
+
     editor2 = new $.fn.dataTable.Editor( {
         ajax: 'ledger/ledger',
         table: "#example",
@@ -268,7 +288,7 @@ $(document).ready(function() {
                 type: "select",
                 ipOpts: tradestatusLoader(),
                 //className: "form-control",
-            }
+            }          
         ]
     } );
 

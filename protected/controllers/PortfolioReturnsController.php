@@ -72,7 +72,7 @@ class PortfolioReturnsController extends Controller
             $portfolios = Portfolios::model()->findByPk($portfolio_id);
             $portfolio_currency = $portfolios->currency;
             
-            Returns::model()->calculateIinstrumnetReturn($instrument_id, $portfolio_id = 0, $client_id, $portfolio_currency);
+            Returns::model()->calculateIinstrumnetReturn($instrument_id, $portfolio_id, $client_id, $portfolio_currency);
          /*   
         $prices_sql = "select distinct p.trade_date, p.price,
                         (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and  is_current = 1 and trade_status_id = 2 and client_id = $client_id) nominal,

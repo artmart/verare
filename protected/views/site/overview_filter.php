@@ -496,7 +496,7 @@ $(function () {
             title: {
                 text: ''// 'Snow depth (m)'
             },
-            min: 0.9,
+            min: 0.1,
             max: 1.35
         },
         //tooltip: {

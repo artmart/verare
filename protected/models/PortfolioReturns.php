@@ -132,7 +132,7 @@ class PortfolioReturns extends CActiveRecord
                                 inner join instruments i on i.id = p.instrument_id
                                 inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
                                 
-                                where p.instrument_id in ('$insids') and ldg.client_id = '$client_id'
+                                where p.instrument_id in ('$insids') and ldg.client_id = '$client_id' and port.id = '$portfolio_id'
                                 group by  p.trade_date
                                 order by p.trade_date asc";
                                 

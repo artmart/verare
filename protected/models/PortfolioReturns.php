@@ -121,13 +121,16 @@ class PortfolioReturns extends CActiveRecord
                                 
         $portfolio_return_sql = "select p.trade_date,
                                 sum((select sum(if(trade_date=p.trade_date, nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = '$client_id')) pnl,
-                                sum(p.price*cr.{$portfolio_currency}/ldg.currency_rate * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = '$client_id')) top,
-                                sum(p.price*cr.{$portfolio_currency}/ldg.currency_rate*bc.weight) sums
+                                sum(p.price*cr.{$portfolio_currency}/curs.cur_rate * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = '$client_id')) top,
+                                sum(p.price*cr.{$portfolio_currency}/curs.cur_rate*bc.weight) sums
                                 from prices p
                                 inner join ledger ldg on ldg.instrument_id = p.instrument_id
                                 inner join portfolios port on port.id = ldg.portfolio_id
                                 inner join benchmark_components bc on bc.benchmark_id = port.benchmark_id
                                 inner join currency_rates cr on cr.day = p.trade_date 
+                                
+                                inner join instruments i on i.id = p.instrument_id
+                                inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
                                 
                                 where p.instrument_id in ('$insids') and ldg.client_id = '$client_id'
                                 group by  p.trade_date

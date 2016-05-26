@@ -186,7 +186,39 @@
             $user_data->step_completed = 5;
             $user_data->save();
         }
-    } 
+    }
+    
+    function portfolioUpdateoncreate( $id, $values ){
+        $user_data = Users::model()->findByPk(Yii::app()->user->id);
+        $client_id =  $user_data->client_id;
+        $portfolio_id = 0;
+        
+        
+        //$ledger = Ledger::model()->findByPk($id);
+        //if(isset($instrument_id)){$portfolio_id = $values['ledger']['portfolio_id'];} //else{$portfolio_id = $existing_trades->portfolio_id;}
+
+        $portfolio_id = $values['ledger']['portfolio_id'];
+        
+        $instrument_id = $values['ledger']['instrument_id'];
+        $trade_currency = $values['ledger']['currency']; 
+        
+        
+        $portfolios = Portfolios::model()->findByPk($portfolio_id);
+        $portfolio_currency = $portfolios->currency;
+        
+        //Returns::model()->calculateIinstrumnetReturn($instrument_id, $portfolio_id = 0, $trade_rate, $trade_currency, $client_id, $portfolio_currency);
+        //PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id);
+        //$trade_rate, $trade_currency, 
+        Returns::model()->calculateIinstrumnetReturn($instrument_id, $portfolio_id, $client_id, $portfolio_currency);
+                       
+        $step_completed = $user_data->step_completed;
+
+        if($user_data->user_role == 2 && $step_completed < 5){
+            
+            $user_data->step_completed = 5;
+            $user_data->save();
+        }
+    }  
      
      
     //Build our Editor instance and process the data coming from _POST
@@ -272,7 +304,7 @@
             } )
             
         ->on( 'postCreate', function ( $editor, $id, $values, $row ) {
-                portfolioUpdate( $id, $values );
+                portfolioUpdateoncreate( $id, $values );
             } )
         
         ->on( 'postEdit', function ( $editor, $id, $values, $row ) {

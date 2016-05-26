@@ -90,6 +90,7 @@ if($ledger_delete == 1){$access_buttons .= '{
                             <th>Confirmed At</th>
                             <th>Trade Status</th>
                             <th>Currency</th>
+                            <th>Currency Rate</th>
                             <th>Note</th>
                             <th>Trade Code</th>
                             <th>Amount</th>
@@ -273,7 +274,7 @@ $(document).ready(function() {
                   $("#DTE_Field_ledger-currency_rate").val(json);
                   }
             });
-             }else{$("#DTE_Field_ledger-currency_rate").val('1');}        
+             }else{$("#DTE_Field_ledger-currency_rate").val();}        
         });
     } );
     
@@ -359,13 +360,15 @@ var table = $('#example').DataTable( {
             //{ data: "ledger.document_id" },
             { data: "trade_status.trade_status", editField: "ledger.trade_status_id", className: 'editable'    },
             { data: "ledger.currency" },
+            { data: "ledger.currency_rate" },
+            
            // { data: "documents.file" },
             { data: "ledger.note" },
             { data: "trade_code" },
             {
                 data: null,
                 render: function(data, type, row) {
-                  return data.ledger.price * data.ledger.nominal;
+                  return data.ledger.price * data.ledger.nominal*data.ledger.currency_rate;
                 }
             },
             {

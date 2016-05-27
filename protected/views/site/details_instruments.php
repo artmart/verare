@@ -1,58 +1,48 @@
 <?php
-
-    $portfolio_id = $_REQUEST['portfolio'];
-
-    $id = Yii::app()->user->id;
-    //$user_data = Users::model()->findByPk($id);
     $this->pageTitle=Yii::app()->name; 
     $baseUrl = Yii::app()->baseUrl;
+    $portfolio_id = $_REQUEST['portfolio'];
+    $client_id = $_REQUEST['client_id'];
     
-    //if(isset($user_data->default_portfolio_id)){$portfolio = $user_data->default_portfolio_id;}
-    //if(isset($_POST['portfolio'])){$portfolio = $_POST['portfolio'];}
-    
-   	//$end_date = Date('Y-m-d');
-	//$start_date = date('Y-m-d', strtotime('-1 years'));
+    $table_name = "client_".$client_id. "_inst_returns";
+    $portfolios = Portfolios::model()->findByPk($portfolio_id);
+    $portfolio_currency = $portfolios->currency;
+
     $month_ytd_start = date('Y-01-01');
     $month3_start = date( "Y-m-d", strtotime( "-3 month" ));
     $month6_start = date( "Y-m-d", strtotime( "-6 month" ));
     $month9_start = date( "Y-m-d", strtotime( "-9 month" ));
     $month1y_start = date( "Y-m-d", strtotime( "-1 years" ));
-    
-     //$accessable_portfolios1 = Yii::app()->user->getState('accessable_portfolios');
-     //$accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
-     
-    //if(isset($user_data->default_start_date)){$start_date = $user_data->default_start_date;}
-    //if(isset($user_data->default_end_date)){$end_date = $user_data->default_end_date;}
-       
-    //$portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
-    
+        
     $instruments_query = "select i.id, i.instrument from instruments i inner join ledger l on l.instrument_id = i.id where l.is_current=1 and l.portfolio_id = '$portfolio_id' ";
-    
     $instruments = Yii::app()->db->createCommand($instruments_query)->queryAll(true);
        
     $tbl_rows = '';
     $inst_num = 0;
     $bench_chart_value = 1;
+    $months = [];
+    $series = [];
+    
     foreach($instruments as $instrument){
-        $instrument_id = $instrument['id'];
+            $instrument_id = $instrument['id'];
         
-    $sql_returns = "select r.trade_date, r.`return`, pr.benchmark_return from `returns` r 
-                    inner join portfolio_returns pr on pr.trade_date = r.trade_date
-                    where r.instrument_id = '$instrument_id'
-                    and pr.portfolio_id = '$portfolio_id'
-                    order by r.trade_date";
-    $instrument_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
+            $sql_returns = "select r.trade_date, r.{$portfolio_currency} `return`, pr.benchmark_return 
+                            from {$table_name} r 
+                            inner join portfolio_returns pr on pr.trade_date = r.trade_date
+                            where r.instrument_id = '$instrument_id'
+                            and pr.portfolio_id = '$portfolio_id'
+                            order by r.trade_date";
+            $instrument_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
+    
     if($instrument_results){
         
         $port_chart_value = 1;
-        
         
         $return_ytd = 1;
         $return_3m = 1;
         $return_6m = 1;
         $return_9m = 1;
         $return_1y = 1;
-        
         
         foreach($instrument_results as $ir){
             
@@ -78,8 +68,6 @@
         }
         
         $return_all_time = $port_chart_value;
-    
-    
     
     if($inst_num == 0){
         $series[] = ['name'=> "Benchmark", 'data'=> $bench_data]; 
@@ -182,8 +170,8 @@ $(function () {
             title: {
                 text: ''// 'Snow depth (m)'
             },
-            min: 0.9,
-            max: 1.35
+            min: 0.2,
+            max: 1.9
         },
         //tooltip: {
         //    headerFormat: '<b>{series.name}</b><br>',
@@ -276,10 +264,8 @@ var table = $('#example').DataTable( {
                     }
                  // return data.document_name ? "<a href='../uploads/"+data.file +"."+data.extension+"' target='_Blank'>"+ data.file+"."+data.extension+"</a>": null; // data.file +"."+data.extension: null; // '<a href="/uploads/' + data.file +"."+data.extension '" onclick="window.open(this.href, \'mywin\',\'left=20,top=20,width=500,height=500,toolbar=1,resizable=1\'); return false;">' + data.document_name + '</a>' : null;
                 
-                
                 }
               },
-            
             
             /* 
             {
@@ -297,7 +283,6 @@ var table = $('#example').DataTable( {
        // ],
         select: true,
     
-
         buttons: [
             /*{ extend: "create", editor: editor },
             { extend: "edit",   editor: editor },
@@ -328,27 +313,13 @@ var table = $('#example').DataTable( {
                 
     } ); 
 
-
+/*
       table.on( 'select', function ( e, dt, type, indexes ) {
 		if ( type === 'row' ) {
-			var data = table.cells(indexes,0).data(); // table.rows( indexes ).data().pluck( 'trade_status.trade_status' );
-            
-         //   alert(data[0]);
-            /*            
-			if( data[0] == 'Pending')
-			{             
-				table.button( '.buttons-edit' ).enable();
-				table.button( '.buttons-selected-single' ).enable();
-			}
-			else
-			{
-				table.button( '.buttons-edit' ).disable();
-				table.button( '.buttons-selected-single' ).disable();
-			}
-            */            
+			var data = table.cells(indexes,0).data(); // table.rows( indexes ).data().pluck( 'trade_status.trade_status' );            
 		}
 	} );
-
+*/
 
 </script>
 

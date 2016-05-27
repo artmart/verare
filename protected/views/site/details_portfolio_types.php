@@ -1,7 +1,9 @@
 <?php
     //$this->pageTitle=Yii::app()->name; 
     $id = Yii::app()->user->id;
-    $user_data = User::model()->findByPk($id);
+    $user_data = Users::model()->findByPk($id);
+    
+    $client_id = $user_data->client_id;
     $baseUrl = Yii::app()->baseUrl;
         
     $month_ytd_start = date('Y-01-01');
@@ -263,7 +265,6 @@ var table = $('#example').DataTable( {
                 }
               },
             
-            
             /* 
             {
                 data: "",
@@ -276,11 +277,9 @@ var table = $('#example').DataTable( {
                 title: "Document"
             },
            */
-            
        // ],
         select: true,
     
-
         buttons: [
             /*{ extend: "create", editor: editor },
             { extend: "edit",   editor: editor },
@@ -326,6 +325,7 @@ var table = $('#example').DataTable( {
     			url: '<?php echo Yii::app()->baseUrl.'/site/instrumentsresultsload'; ?>',
     			data: {
     			 portfolio: port,
+                 client_id: <?php echo $client_id;?>
     			//media_type:$('#media_type').val(),
                 //supermarket_bar:$('#supermarket_bar').val(),
                 //dt: n - $('#sel_Period1').val()+"-"+$('#sel_Period2').val(), 'show_queries':show_queries

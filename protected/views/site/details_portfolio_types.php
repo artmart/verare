@@ -15,7 +15,7 @@
      $accessable_portfolios1 = $user_data->accessable_portfolios;   
      $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
     
-    $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
+     $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
         
     $months = [];  
     $series = []; 
@@ -186,7 +186,6 @@ $(function () {
     });
 });
 
-
 var table = $('#example').DataTable( {
     
         renderer: "bootstrap",
@@ -213,7 +212,6 @@ var table = $('#example').DataTable( {
         sScrollX: "100%",
         sScrollXInner: "110%",
         bScrollCollapse: true,
-        
         
         columnDefs: [
             {

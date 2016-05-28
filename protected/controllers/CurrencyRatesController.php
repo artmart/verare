@@ -61,9 +61,7 @@ class CurrencyRatesController extends Controller
         $max_date_sql = "select {$id} rate from currency_rates order by day desc limit 1";
         $max_date_res = Yii::app()->db->createCommand($max_date_sql)->queryAll(true);
         echo $max_date_res[0]['rate'];
-	}
-    
-    
+	}  
 
 	/**
 	 * Creates a new model.

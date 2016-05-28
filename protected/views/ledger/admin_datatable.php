@@ -3,17 +3,12 @@ $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
 $baseUrl = Yii::app()->theme->baseUrl;
 
    // foreach(Yii::app()->user->getFlashes() as $key => $message) {
-    //    echo '<div class="alert alert-info span5"><div class="flash-' . $key . '">' . $message . "</div></div>\n";
+   //    echo '<div class="alert alert-info span5"><div class="flash-' . $key . '">' . $message . "</div></div>\n";
    // }
-
-//var_dump(Yii::app()->user->getState('user_role_id'));
-//exit;
 
 $id = Yii::app()->user->id;
 $user_data = Users::model()->findByPk($id); 
-
-$user_role_id = $user_data->user_role; // Yii::app()->user->getState('user_role');
-
+$user_role_id = $user_data->user_role; 
 
 //$access_level = 5;
 $access_buttons = '';
@@ -26,16 +21,15 @@ if($user_role_id>0){
                 $ledger_edit = 0;
                 $ledger_delete = 0;
                 $ledger_status_change = 0;
-                  
-                  
+                
                   if(isset($user_rols->ledger_access_level) && $user_rols->ledger_access_level !== ''){
-                    $ledgar_access = json_decode($user_rols->ledger_access_level);
-                  
-                  $ledger_create = $ledgar_access->create;
-                  $ledger_edit = $ledgar_access->edit;
-                  $ledger_delete = $ledgar_access->delete;
-                  $ledger_status_change = $ledgar_access->status_change;
-                  }
+                          $ledgar_access = json_decode($user_rols->ledger_access_level);
+                      
+                          $ledger_create = $ledgar_access->create;
+                          $ledger_edit = $ledgar_access->edit;
+                          $ledger_delete = $ledgar_access->delete;
+                          $ledger_status_change = $ledgar_access->status_change;
+                      }
                 }
 }
 $access_buttons = '';
@@ -274,10 +268,34 @@ $(document).ready(function() {
                   $("#DTE_Field_ledger-currency_rate").val(json);
                   }
             });
-             }else{$("#DTE_Field_ledger-currency_rate").val();}        
+             }else{$("#DTE_Field_ledger-currency_rate").val(json);}        
         });
     } );
+        
+    editor.field('ledger.instrument_id').input().on( 'change', function () {
     
+    editor.dependent( 'ledger.instrument_id', function ( val ) {
+            // if(action === 'create'){
+            $.ajax({
+                url: '<?php echo Yii::app()->baseUrl.'/instruments/instrumentCurrency?id='; ?>'+val,
+                type: 'post',
+                //dataType: 'json',
+                success: function (res) {
+
+                    $("#DTE_Field_ledger-currency").val(res);
+                    
+                    $.ajax({
+                        url: '<?php echo Yii::app()->baseUrl.'/currencyRates/last?id='; ?>'+res,
+                        async: false,
+                        dataType: 'json',
+                        success: function (json) {
+                          $("#DTE_Field_ledger-currency_rate").val(json);
+                          }
+                    });
+                  }
+            });      
+        });
+    });
 
     editor2 = new $.fn.dataTable.Editor( {
         ajax: 'ledger/ledger',

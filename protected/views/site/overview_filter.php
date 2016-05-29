@@ -34,20 +34,55 @@
 
 <?php         
     $returns = Calculators::ReturnAllAndYTD($portfolio);
-    $pnl = Calculators::PNL($start_date, $end_date, $portfolio);
+    //$pnl = Calculators::PNL($start_date, $end_date, $portfolio);
     
-    $portfolio_composition_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*cr.{$portfolio_currency}) nav from ledger l
+    
+    ///pnl/////////////////////////////////////////////////////////
+    $sql1 = "select trade_date, nominal*price*cr.{$portfolio_currency}/curs.cur_rate nav from ledger
+             inner join currency_rates cr on cr.day = ledger.trade_date
+             
+             inner join instruments i on i.id = ledger.instrument_id
+             inner join cur_rates curs on curs.day = ledger.trade_date and curs.cur = i.currency
+             
+                where ledger.portfolio_id = '$portfolio' and ledger.trade_date > '$start_date' and ledger.trade_date<'$end_date' and ledger.trade_status_id = 2 
+                and ledger.client_id = '$client_id' and ledger.is_current = 1
+                order by trade_date desc";
+        $results1 = Yii::app()->db->createCommand($sql1)->queryAll(true);
+        $nav_today = 0;
+        $nav_yesterday = 0;
+        $i = 0;
+        foreach($results1 as $res1){
+            $nav_today = $nav_today + $res1['nav'];
+            if($i>0){
+                $nav_yesterday = $nav_yesterday + $res1['nav'];
+            }
+            $i++;
+        }
+        $pnl = $nav_today - $nav_yesterday;
+     ///////////////////////////////////////////////////////////////////////////////////   
+        
+        
+    
+    $portfolio_composition_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*cr.{$portfolio_currency}/curs.cur_rate) nav from ledger l
                                  inner join portfolios p on p.id = l.portfolio_id
                                  inner join currency_rates cr on cr.day = l.trade_date
+                                 
+                                 inner join instruments i on i.id = l.instrument_id
+                                 inner join cur_rates curs on curs.day = l.trade_date and curs.cur = i.currency
+                                 
                                  where l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
                                  and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
                                  group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
     $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
     
 
-    $sub_portfolios_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*cr.{$portfolio_currency}) nav from ledger l
+    $sub_portfolios_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*cr.{$portfolio_currency}/curs.cur_rate) nav from ledger l
                     inner join portfolios p on p.id = l.portfolio_id
                     inner join currency_rates cr on cr.day = l.trade_date
+                    
+                    inner join instruments i on i.id = l.instrument_id
+                    inner join cur_rates curs on curs.day = l.trade_date and curs.cur = i.currency
+                    
                     where l.trade_date > '$start_date' and l.trade_date<'$end_date' and p.parrent_portfolio = '$portfolio' 
                     and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
                     group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
@@ -168,14 +203,14 @@
                       <div class="description-block border-right">
                         <span class="description-text">O/N P/L</span><p>
                               <?php
-                                  $pnl = Calculators::PNL($start_date, $end_date, $portfolio);
+                                  //$pnl = Calculators::PNL($start_date, $end_date, $portfolio);
                                   if($pnl >= 0)
                                   {
-                                      echo "<span class='description-percentage text-green'><i class='fa fa-caret-up'></i> " . number_format($pnl[0]) . "</span>";
+                                      echo "<span class='description-percentage text-green'><i class='fa fa-caret-up'></i> " . number_format($pnl) . "</span>";
                                   }
                                   else
                                   {
-                                      echo "<span class='description-percentage text-red'><i class='fa fa-caret-down'></i> " . number_format($pnl[0]) . "</span>";
+                                      echo "<span class='description-percentage text-red'><i class='fa fa-caret-down'></i> " . number_format($pnl) . "</span>";
                                   } 
                               ?>
                       </div><!-- /.description-block -->

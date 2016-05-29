@@ -102,29 +102,7 @@ class Calculators {
 
         return [($all_time_return - 1)*100, ($year_to_date_return - 1)*100];
     }
-    
-    public static function ReturnYTD($portfolio)
-     {  
-        /*
-        $sql1 = "select trade_date, nominal*price nav from ledger
-                where portfolio_id = '$portfolio' and trade_date > '$start_date' and trade_date<'$end_date' 
-                order by trade_date desc";
-        $results1 = Yii::app()->db->createCommand($sql1)->queryAll(true);
-        $nav_today = 0;
-        $nav_yesterday = 0;
-        $i = 0;
-        foreach($results1 as $res1){
-            $nav_today = $nav_today + $res1['nav'];
-            if($i>0){
-                $nav_yesterday = $nav_yesterday + $res1['nav'];
-            }
-            $i++;
-        }
-        $onpl = $nav_today - $nav_yesterday;
-        */
-        return 3.04;
-    }
-    
+        
     public static function CalcAllStats($data, $benchmark)
     {  
             $cnt=0;

@@ -268,7 +268,7 @@ $(document).ready(function() {
                   $("#DTE_Field_ledger-currency_rate").val(json);
                   }
             });
-             }else{$("#DTE_Field_ledger-currency_rate").val(json);}        
+             }else{$("#DTE_Field_ledger-currency_rate").val();}        
         });
     } );
         

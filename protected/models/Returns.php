@@ -188,13 +188,17 @@ class Returns extends CActiveRecord
                        
        $table_name = "client_".$client_id. "_inst_returns";
                                     
-       $prices_sql = "select distinct p.trade_date, p.price*cr.{$portfolio_currency} price, 
+       $prices_sql = "select distinct p.trade_date, p.price*cr.{$portfolio_currency}/curs.cur_rate price, 
                         (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger 
                         	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') nominal,
                         (select sum(if(trade_date=p.trade_date, nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
                         	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') pnl
                          from prices p
-                         inner join currency_rates cr on cr.day = p.trade_date 
+                         inner join currency_rates cr on cr.day = p.trade_date
+                         
+                         inner join instruments i on i.id = p.instrument_id
+                         inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
+                          
                          where p.is_current = 1 and p.instrument_id = $instrument_id
                          order by p.trade_date asc";
                         

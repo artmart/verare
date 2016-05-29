@@ -1,14 +1,10 @@
 <?php 
-    //$id = Yii::app()->user->id;
-    //$user_data = Users::model()->findByPk($id);
-
     $baseUrl = Yii::app()->baseUrl;
      
     if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
     if(isset($_REQUEST['end_date'])){$end_date = $_REQUEST['end_date'];}
     if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
     if(isset($_REQUEST['client_id'])){$client_id = $_REQUEST['client_id'];}
-    
     
     $id = Yii::app()->user->id;
     $user_data = Users::model()->findByPk($id);
@@ -38,7 +34,7 @@
     
     
     ///pnl/////////////////////////////////////////////////////////
-    $sql1 = "select trade_date, nominal*price*cr.{$portfolio_currency}/ledger.currency_rate nav from ledger
+    $sql1 = "select trade_date, nominal*price*ledger.currency_rate/cr.{$portfolio_currency} nav from ledger
              inner join currency_rates cr on cr.day = ledger.trade_date             
                 where ledger.portfolio_id = '$portfolio' and ledger.trade_date > '$start_date' and ledger.trade_date<'$end_date' and ledger.trade_status_id = 2 
                 and ledger.client_id = '$client_id' and ledger.is_current = 1
@@ -59,7 +55,7 @@
         
         
     
-    $portfolio_composition_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*cr.{$portfolio_currency}/l.currency_rate) nav from ledger l
+    $portfolio_composition_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
                                  inner join portfolios p on p.id = l.portfolio_id
                                  inner join currency_rates cr on cr.day = l.trade_date                                 
                                  where l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
@@ -68,7 +64,7 @@
     $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
     
 
-    $sub_portfolios_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*cr.{$portfolio_currency}/l.currency_rate) nav from ledger l
+    $sub_portfolios_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
                     inner join portfolios p on p.id = l.portfolio_id
                     inner join currency_rates cr on cr.day = l.trade_date                    
                     where l.trade_date > '$start_date' and l.trade_date<'$end_date' and p.parrent_portfolio = '$portfolio' 

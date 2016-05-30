@@ -96,21 +96,17 @@
 <div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;"><img src='<?php echo Yii::app()->theme->baseUrl;?>/img/demo_wait.gif' width="64" height="64" /><br>Loading..</div>
 
 <script>
-$(document).ready(function(){
-    $(document).ajaxStart(function(){
-        $("#wait").css("display", "block");
-    });
-    $(document).ajaxComplete(function(){
-        $("#wait").css("display", "none");
-    });
- });
-</script>
-	
-<script>
 ////////////////////////////////////////////////////
 $(document).ready(function ($) {
-          overviewload();
-          });
+        $(document).ajaxStart(function(){
+            $("#wait").css("display", "block");
+        });
+        $(document).ajaxComplete(function(){
+            $("#wait").css("display", "none");
+        });
+    
+        overviewload();
+});
 
     function overviewload(){
     	$.ajax({

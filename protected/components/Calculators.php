@@ -342,7 +342,7 @@ class Calculators {
             
             $returnCount++;
 		}
-		
+        		
 		if($returnCount>1)
 		{
 			// calculate some figures

@@ -32,7 +32,6 @@
     $returns = Calculators::ReturnAllAndYTD($portfolio);
     //$pnl = Calculators::PNL($start_date, $end_date, $portfolio);
     
-    
     ///pnl/////////////////////////////////////////////////////////
     $sql1 = "select trade_date, nominal*price*ledger.currency_rate/cr.{$portfolio_currency} nav from ledger
              inner join currency_rates cr on cr.day = ledger.trade_date             
@@ -40,6 +39,7 @@
                 and ledger.client_id = '$client_id' and ledger.is_current = 1
                 order by trade_date desc";
         $results1 = Yii::app()->db->createCommand($sql1)->queryAll(true);
+        
         $nav_today = 0;
         $nav_yesterday = 0;
         $i = 0;
@@ -53,8 +53,6 @@
         $pnl = $nav_today - $nav_yesterday;
      ///////////////////////////////////////////////////////////////////////////////////   
         
-        
-    
     $portfolio_composition_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
                                  inner join portfolios p on p.id = l.portfolio_id
                                  inner join currency_rates cr on cr.day = l.trade_date                                 
@@ -62,8 +60,7 @@
                                  and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
                                  group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
     $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
-    
-
+ 
     $sub_portfolios_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
                     inner join portfolios p on p.id = l.portfolio_id
                     inner join currency_rates cr on cr.day = l.trade_date                    
@@ -72,8 +69,7 @@
                     group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
                     
     $sub_portfolios = Yii::app()->db->createCommand($sub_portfolios_sql)->queryAll(true);
-    
-    
+     
     $index_value = 0;
 
     $sub_port_data = ''; 
@@ -91,6 +87,8 @@
             $value[$sp1['portfolio']] = 0; 
             $index_value = $index_value + $sp1['nav'];
          }
+         
+         //if($index_value == 0){$index_value = 1;}
     
     foreach($portfolio_composition as $sp2){        
         //foreach($sub_portfolios as $sp3){ 
@@ -143,7 +141,6 @@
   
   
   
-      
  
   
   
@@ -407,9 +404,12 @@ $(function () {
      
     $series[] = ['name'=> $port['portfolio'], 'data'=> $port_data];
     $series[] = ['name'=> $port['portfolio']."-benchmark", 'data'=> $bench_data]; 
+ 
+    //var_dump($bench_ret);
+    //exit;
   
     $allstats = Calculators::CalcAllStats1($port_ret, $bench_ret);
- 
+  
     $allstats_bench = Calculators::CalcAllStats_bench($bench_ret, $bench_ret);
 //    var_dump($allstats);
  //exit;    

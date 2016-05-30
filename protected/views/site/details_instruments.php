@@ -14,7 +14,7 @@
     $month9_start = date( "Y-m-d", strtotime( "-9 month" ));
     $month1y_start = date( "Y-m-d", strtotime( "-1 years" ));
         
-    $instruments_query = "select i.id, i.instrument from instruments i inner join ledger l on l.instrument_id = i.id where l.is_current=1 and l.portfolio_id = '$portfolio_id' ";
+    $instruments_query = "select distinct i.id, i.instrument from instruments i inner join ledger l on l.instrument_id = i.id where l.is_current=1 and l.trade_status_id = 2 and l.portfolio_id = '$portfolio_id' ";
     $instruments = Yii::app()->db->createCommand($instruments_query)->queryAll(true);
        
     $tbl_rows = '';
@@ -73,7 +73,8 @@
         $series[] = ['name'=> "Benchmark", 'data'=> $bench_data]; 
     }
     $series[] = ['name'=> $instrument['instrument'], 'data'=> $port_data];
-    
+ 
+ 
     $allstats = Calculators::CalcAllStats1($port_ret, $bench_ret);
     
   $tbl_rows .=   
@@ -106,7 +107,6 @@
     $inst_num++;
 }
 $months = array_unique($months);
-
 ?>
 
 <table id="example" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">

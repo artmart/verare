@@ -176,9 +176,7 @@ class PortfolioReturns extends CActiveRecord
                     
                     if($div>0){
                         $rawData[$i]['return'] = $rawData[$i]['top']/$div;
-                    }//else{
-                       // $rawData[$i]['return'] = 1;
-                   // }
+                    }
                }
          
               //checking if the return for current instrument is not exist and inserting the calculated return.//

@@ -3,6 +3,11 @@
     $baseUrl = Yii::app()->baseUrl;
     $portfolio_id = $_REQUEST['portfolio'];
     $client_id = $_REQUEST['client_id'];
+    $start_date = $_REQUEST['start_date'];
+    $end_date = $_REQUEST['end_date'];
+    
+    //var_dump($_REQUEST);
+    //exit;
     
     $table_name = "client_".$client_id. "_inst_returns";
     $portfolios = Portfolios::model()->findByPk($portfolio_id);
@@ -31,9 +36,10 @@
                             inner join portfolio_returns pr on pr.trade_date = r.trade_date
                             where r.instrument_id = '$instrument_id'
                             and pr.portfolio_id = '$portfolio_id'
+                            and r.trade_date > '$start_date' and r.trade_date<'$end_date'
                             order by r.trade_date";
             $instrument_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
-    
+   
     if($instrument_results){
         
         $port_chart_value = 1;

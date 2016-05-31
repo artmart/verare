@@ -3,6 +3,11 @@
     $id = Yii::app()->user->id;
     $user_data = Users::model()->findByPk($id);
     
+    $end_date = Date('Y-m-d');
+	$start_date = date('Y-m-d', strtotime('-1 years'));
+    if(isset($user_data->default_start_date) && $user_data->default_start_date!=='0000-00-00'){$start_date = $user_data->default_start_date;}
+    if(isset($user_data->default_end_date) && $user_data->default_end_date!=='0000-00-00'){$end_date = $user_data->default_end_date;}
+    
     $client_id = $user_data->client_id;
     $baseUrl = Yii::app()->baseUrl;
         
@@ -23,7 +28,7 @@
     foreach($portfolios as $portfolio){
         $portfolio_id = $portfolio['id'];
         
-    $sql_returns = "select * from portfolio_returns where portfolio_id = '$portfolio_id' order by trade_date";
+    $sql_returns = "select * from portfolio_returns where portfolio_id = '$portfolio_id' and trade_date > '$start_date' and trade_date<'$end_date' order by trade_date";
     $portfolio_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
        
     if($portfolio_results){
@@ -323,7 +328,9 @@ var table = $('#example').DataTable( {
     			url: '<?php echo Yii::app()->baseUrl.'/site/instrumentsresultsload'; ?>',
     			data: {
     			 portfolio: port,
-                 client_id: <?php echo $client_id;?>
+                 client_id: <?php echo $client_id;?>,
+                 start_date: <?php echo json_encode($start_date); ?>,
+                 end_date: <?php echo json_encode($end_date); ?>
     			//media_type:$('#media_type').val(),
                 //supermarket_bar:$('#supermarket_bar').val(),
                 //dt: n - $('#sel_Period1').val()+"-"+$('#sel_Period2').val(), 'show_queries':show_queries
@@ -334,7 +341,6 @@ var table = $('#example').DataTable( {
     		   });
     }
 </script>
-
 
 
 

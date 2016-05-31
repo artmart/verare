@@ -23,8 +23,9 @@
 
 <section class="content-header">
   <h1 class="span1">Overview
+    <em><?php echo $portfolios[0]['portfolio']; ?> </em>
     <small>
-        <?php echo $portfolios[0]['portfolio']; ?> 
+        <?php echo "   Currency -  " .  $portfolio_currency ; ?> 
     </small>
   </h1>
 

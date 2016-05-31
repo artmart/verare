@@ -5,10 +5,7 @@
     $client_id = $_REQUEST['client_id'];
     $start_date = $_REQUEST['start_date'];
     $end_date = $_REQUEST['end_date'];
-    
-    //var_dump($_REQUEST);
-    //exit;
-    
+        
     $table_name = "client_".$client_id. "_inst_returns";
     $portfolios = Portfolios::model()->findByPk($portfolio_id);
     $portfolio_currency = $portfolios->currency;
@@ -19,7 +16,8 @@
     $month9_start = date( "Y-m-d", strtotime( "-9 month" ));
     $month1y_start = date( "Y-m-d", strtotime( "-1 years" ));
         
-    $instruments_query = "select distinct i.id, i.instrument from instruments i inner join ledger l on l.instrument_id = i.id where l.is_current=1 and l.trade_status_id = 2 and l.portfolio_id = '$portfolio_id' ";
+    $instruments_query = "select distinct i.id, i.instrument from instruments i inner join ledger l on l.instrument_id = i.id 
+                          where l.is_current=1 and l.trade_status_id = 2 and l.portfolio_id = '$portfolio_id' and l.client_id = '$client_id'  ";
     $instruments = Yii::app()->db->createCommand($instruments_query)->queryAll(true);
        
     $tbl_rows = '';
@@ -189,7 +187,6 @@ $(function () {
                 lineWidth: 2,
                 states: { hover: {lineWidth: 5}
                     },
-                
                 marker: {
                     enabled: false
                 }
@@ -230,7 +227,6 @@ var table = $('#example').DataTable( {
         sScrollX: "100%",
         sScrollXInner: "110%",
         bScrollCollapse: true,
-        
         
         //colVis: { exclude: [ 1 ] },
         //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
@@ -290,10 +286,6 @@ var table = $('#example').DataTable( {
         select: true,
     
         buttons: [
-            /*{ extend: "create", editor: editor },
-            { extend: "edit",   editor: editor },
-            { extend: "remove", editor: editor },*/
-            <?php //echo $access_buttons; ?>
             {
                 extend: 'copyHtml5',
                 exportOptions: {
@@ -312,11 +304,8 @@ var table = $('#example').DataTable( {
                     columns: [ 0, 1, 2, 5 ]
                 }
             },
-            { extend: 'colvis', collectionLayout: 'fixed two-column',},
-            
-        ],
-       
-                
+            { extend: 'colvis', collectionLayout: 'fixed two-column',},  
+        ],      
     } ); 
 
 /*

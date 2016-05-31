@@ -17,22 +17,19 @@
     $portfolio_currency = $portfolios[0]['currency'];
 ?>
 
-<h3> <i><?php //echo CHtml::encode(Yii::app()->name); ?></i></h3>
+<h3><i><?php //echo CHtml::encode(Yii::app()->name); ?></i></h3>
 
 <!-- Content Header (Page header) -->
 
 <section class="content-header">
   <h1 class="span1">Overview
     <em><?php echo $portfolios[0]['portfolio']; ?> </em>
-    <small>
-        <?php echo "   Currency -  " .  $portfolio_currency ; ?> 
-    </small>
+    <small><?php echo "   Currency -  " .  $portfolio_currency ; ?> </small>
   </h1>
 
 <?php         
     $returns = Calculators::ReturnAllAndYTD($portfolio);
-    //$pnl = Calculators::PNL($start_date, $end_date, $portfolio);
-    
+
     ///pnl/////////////////////////////////////////////////////////
     $sql1 = "select trade_date, nominal*price*ledger.currency_rate/cr.{$portfolio_currency} nav from ledger
              inner join currency_rates cr on cr.day = ledger.trade_date             

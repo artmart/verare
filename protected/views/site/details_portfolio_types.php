@@ -176,8 +176,7 @@ $(function () {
             spline: {
                 lineWidth: 2,
                 states: { hover: {lineWidth: 5}
-                    },
-                
+                    },    
                 marker: {
                     enabled: false
                 }
@@ -284,10 +283,6 @@ var table = $('#example').DataTable( {
         select: true,
     
         buttons: [
-            /*{ extend: "create", editor: editor },
-            { extend: "edit",   editor: editor },
-            { extend: "remove", editor: editor },*/
-            <?php //echo $access_buttons; ?>
             {
                 extend: 'copyHtml5',
                 exportOptions: {
@@ -307,10 +302,7 @@ var table = $('#example').DataTable( {
                 }
             },
             { extend: 'colvis', collectionLayout: 'fixed two-column',},
-            
-        ],
-       
-                
+        ],         
     } ); 
 
       table.on( 'select', function ( e, dt, type, indexes ) {
@@ -327,13 +319,10 @@ var table = $('#example').DataTable( {
     			type: 'post',
     			url: '<?php echo Yii::app()->baseUrl.'/site/instrumentsresultsload'; ?>',
     			data: {
-    			 portfolio: port,
-                 client_id: <?php echo $client_id;?>,
-                 start_date: <?php echo json_encode($start_date); ?>,
-                 end_date: <?php echo json_encode($end_date); ?>
-    			//media_type:$('#media_type').val(),
-                //supermarket_bar:$('#supermarket_bar').val(),
-                //dt: n - $('#sel_Period1').val()+"-"+$('#sel_Period2').val(), 'show_queries':show_queries
+        			 portfolio: port,
+                     client_id: <?php echo $client_id;?>,
+                     start_date: <?php echo json_encode($start_date); ?>,
+                     end_date: <?php echo json_encode($end_date); ?>
     			},
     			success: function (response) {
     			     $( '#results-view1' ).html(response);

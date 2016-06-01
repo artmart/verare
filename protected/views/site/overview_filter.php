@@ -358,7 +358,7 @@ $(function () {
     foreach($portfolios as $port){
         $portfolio_id = $port['id'];
         
-    $sql_returns = "select * from portfolio_returns where portfolio_id = '$portfolio_id' order by trade_date";
+    $sql_returns = "select * from portfolio_returns where portfolio_id = '$portfolio_id' and trade_date > '$start_date' and trade_date<'$end_date' order by trade_date";
     $portfolio_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
     if($portfolio_results){
         
@@ -440,6 +440,9 @@ $(function () {
     </tr>';
 
 $months = array_unique($months);  
+
+//var_dump($months);
+//exit;
 ?> 
                    
                     <table id="tablePerformance" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">

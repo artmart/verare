@@ -377,9 +377,7 @@ $(function () {
         $return_9m_bench = 1;
         $return_1y_bench = 1;
         
-        
-        foreach($portfolio_results as $pr){
-            
+        foreach($portfolio_results as $pr){   
             $months[] = $pr['trade_date'];
             $port_ret[] = $pr['return'];
             $bench_ret[] = $pr['benchmark_return'];
@@ -402,15 +400,9 @@ $(function () {
      
     $series[] = ['name'=> $port['portfolio'], 'data'=> $port_data];
     $series[] = ['name'=> $port['portfolio']."-benchmark", 'data'=> $bench_data]; 
- 
-    //var_dump($bench_ret);
-    //exit;
   
     $allstats = Calculators::CalcAllStats1($port_ret, $bench_ret);
-  
-    $allstats_bench = Calculators::CalcAllStats_bench($bench_ret, $bench_ret);
-//    var_dump($allstats);
- //exit;    
+    $allstats_bench = Calculators::CalcAllStats_bench($bench_ret, $bench_ret);    
     //$allstats_bench = Calculators::CalcAllStats1($bench_ret, $port_ret);
    
   $tbl_rows .=   
@@ -440,11 +432,7 @@ $(function () {
     </tr>';
 
 $months = array_unique($months);  
-
-//var_dump($months);
-//exit;
-?> 
-                   
+?>               
                     <table id="tablePerformance" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
                         <thead>
                             <tr>

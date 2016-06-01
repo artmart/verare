@@ -139,7 +139,7 @@ class PortfolioReturns extends CActiveRecord
                                 //inner join benchmark_components bc on bc.instrument_id = p.instrument_id 
                                 //inner join ledger l on l.instrument_id = p.instrument_id
                                 //inner join benchmarks b on b.portfolio_id = l.portfolio_id
-
+         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
         
         if(count($portfolio_returns)>0){

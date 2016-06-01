@@ -203,6 +203,7 @@ class Returns extends CActiveRecord
                          order by p.trade_date asc";
                         
                         //and p.trade_date >='$dt'
+        Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $prices = Yii::app()->db->createCommand($prices_sql)->queryAll(true);
         
         if(count($prices)>0){

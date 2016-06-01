@@ -27,27 +27,27 @@ switch ($user_role_id) {
                             <a href="'.$baseUrl1.'/userRole/admin">User Roles</a>
                             </li><li class="divider"></li>';
     
-    
-                $usermenu[]=['label'=>'Portfolio UserS with Roles', 'url'=>['/portfolioUserRoles/admin']];
-                $usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
-                $usermenu[]=['label'=>'Instrument Types', 'url'=>['/instrumentTypes/admin']];
+                $usermenu[]=['label'=>'Report View', 'url'=>['site/repview']];
+                //$usermenu[]=['label'=>'Portfolio UserS with Roles', 'url'=>['/portfolioUserRoles/admin']];
+                //$usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
+                //$usermenu[]=['label'=>'Instrument Types', 'url'=>['/instrumentTypes/admin']];
                 $usermenu[]=['label'=>'Benchmarks', 'url'=>['/benchmarks/admin']];
                 $usermenu[]=['label'=>'Benchmark Components', 'url'=>['/benchmarkComponents/admin']]; 
-                $usermenu[]=['label'=>'Group Item', 'url'=>['/groupItem/admin']];                
-                $usermenu[]=['label'=>'Group Benchmark', 'url'=>['/groupBenchmark/admin']];
-                $usermenu[]=['label'=>'Document Types', 'url'=>['/documentTypes/admin']];
-                $usermenu[]=['label'=>'Document Locations', 'url'=>['/documentLocations/admin']];
+                //$usermenu[]=['label'=>'Group Item', 'url'=>['/groupItem/admin']];                
+                //$usermenu[]=['label'=>'Group Benchmark', 'url'=>['/groupBenchmark/admin']];
+                //$usermenu[]=['label'=>'Document Types', 'url'=>['/documentTypes/admin']];
+                //$usermenu[]=['label'=>'Document Locations', 'url'=>['/documentLocations/admin']];
                 $usermenu[]=['label'=>'Clients', 'url'=>['/clients/admin']];
-                $usermenu[]=['label'=>'Audit Tables', 'url'=>['/auditTables/admin']];
-                $usermenu[]=['label'=>'Upload pricies', 'url'=>['/uploads/create']];
+                //$usermenu[]=['label'=>'Audit Tables', 'url'=>['/auditTables/admin']];
+                //$usermenu[]=['label'=>'Upload pricies', 'url'=>['/uploads/create']];
                 $usermenu[]=['label'=>'New Upload pricies', 'url'=>['/uploads/fullupload']];
-                $usermenu[]=['label'=>'Return', 'url'=>['/prices/return']];
-                $usermenu[]=['label'=>'Returns', 'url'=>['/returns/admin']];
-                $usermenu[]=['label'=>'Return Calculation', 'url'=>['/prices/allReturns']];
+                //$usermenu[]=['label'=>'Return', 'url'=>['/prices/return']];
+                //$usermenu[]=['label'=>'Returns', 'url'=>['/returns/admin']];
+                //$usermenu[]=['label'=>'Return Calculation', 'url'=>['/prices/allReturns']];
                 $usermenu[]=['label'=>'Portfolio Returns', 'url'=>['/portfolioReturns/admin']];
-                $usermenu[]=['label'=>'All Stats', 'url'=>['/prices/allStats']];                             
-                $usermenu[]=['label'=>'Portfolio Types', 'url'=>['/portfolioTypes/admin']];
-                $usermenu[]=['label'=>'Access Levels', 'url'=>['/accessLevels/admin']];
+                //$usermenu[]=['label'=>'All Stats', 'url'=>['/prices/allStats']];                             
+                //$usermenu[]=['label'=>'Portfolio Types', 'url'=>['/portfolioTypes/admin']];
+                //$usermenu[]=['label'=>'Access Levels', 'url'=>['/accessLevels/admin']];
                 
         break;
     case 2:
@@ -71,25 +71,27 @@ switch ($user_role_id) {
                             
                             </li><li class="divider"></li>';
     //<a href="'.$baseUrl1.'/userRole/admin">User Roles</a>
-                $usermenu[]=['label'=>'Portfolio UserS with Roles', 'url'=>['/portfolioUserRoles/admin']];
-                $usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
-                $usermenu[]=['label'=>'Instrument Types', 'url'=>['/instrumentTypes/admin']];
+                $usermenu[]=['label'=>'Report View', 'url'=>['site/repview']];
+    
+                //$usermenu[]=['label'=>'Portfolio UserS with Roles', 'url'=>['/portfolioUserRoles/admin']];
+                //$usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
+                //$usermenu[]=['label'=>'Instrument Types', 'url'=>['/instrumentTypes/admin']];
                 $usermenu[]=['label'=>'Benchmarks', 'url'=>['/benchmarks/admin']];
                 $usermenu[]=['label'=>'Benchmark Components', 'url'=>['/benchmarkComponents/admin']]; 
-                $usermenu[]=['label'=>'Group Item', 'url'=>['/groupItem/admin']];                
-                $usermenu[]=['label'=>'Group Benchmark', 'url'=>['/groupBenchmark/admin']];
-                $usermenu[]=['label'=>'Document Types', 'url'=>['/documentTypes/admin']];
-                $usermenu[]=['label'=>'Document Locations', 'url'=>['/documentLocations/admin']];
-                $usermenu[]=['label'=>'Audit Tables', 'url'=>['/auditTables/admin']];
-                $usermenu[]=['label'=>'Upload pricies', 'url'=>['/uploads/create']];
+                //$usermenu[]=['label'=>'Group Item', 'url'=>['/groupItem/admin']];                
+                //$usermenu[]=['label'=>'Group Benchmark', 'url'=>['/groupBenchmark/admin']];
+                //$usermenu[]=['label'=>'Document Types', 'url'=>['/documentTypes/admin']];
+                //$usermenu[]=['label'=>'Document Locations', 'url'=>['/documentLocations/admin']];
+                //$usermenu[]=['label'=>'Audit Tables', 'url'=>['/auditTables/admin']];
+                //$usermenu[]=['label'=>'Upload pricies', 'url'=>['/uploads/create']];
                 $usermenu[]=['label'=>'New Upload pricies', 'url'=>['/uploads/fullupload']];
-                $usermenu[]=['label'=>'Return', 'url'=>['/prices/return']];
-                $usermenu[]=['label'=>'Returns', 'url'=>['/returns/admin']];
-                $usermenu[]=['label'=>'Return Calculation', 'url'=>['/prices/allReturns']];
+                //$usermenu[]=['label'=>'Return', 'url'=>['/prices/return']];
+                //$usermenu[]=['label'=>'Returns', 'url'=>['/returns/admin']];
+                //$usermenu[]=['label'=>'Return Calculation', 'url'=>['/prices/allReturns']];
                 $usermenu[]=['label'=>'Portfolio Returns', 'url'=>['/portfolioReturns/admin']];
-                $usermenu[]=['label'=>'All Stats', 'url'=>['/prices/allStats']];                             
-                $usermenu[]=['label'=>'Portfolio Types', 'url'=>['/portfolioTypes/admin']];
-                $usermenu[]=['label'=>'Access Levels', 'url'=>['/accessLevels/admin']];
+                //$usermenu[]=['label'=>'All Stats', 'url'=>['/prices/allStats']];                             
+                //$usermenu[]=['label'=>'Portfolio Types', 'url'=>['/portfolioTypes/admin']];
+                //$usermenu[]=['label'=>'Access Levels', 'url'=>['/accessLevels/admin']];
                 
         break;
     case 3:

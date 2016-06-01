@@ -27,7 +27,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'resultsload', 'instrumentsresultsload', 'overviewload', 'details', 'admin', ),
+				'actions'=>array('create','update', 'resultsload', 'instrumentsresultsload', 'overviewload', 'details', 'admin', 'repview', 'filteredrepview' ),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -95,6 +95,30 @@ class SiteController extends Controller
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
 		$this->renderPartial('overview_filter');
+	}
+    
+    
+    
+    public function actionRepview()
+	{
+	   $this->layout='main';
+
+        $user_data = Users::model()->findByPk(Yii::app()->user->id);
+        $step_completed = $user_data->step_completed;
+
+        if($user_data->user_role == 2 && $step_completed < 5){
+            $this->render('start', ['step_completed' =>$step_completed]);
+        
+        
+        }else{ $this->render('rep_view', ['user_data' => $user_data]); }
+       
+       
+		//$this->renderPartial('rep_view');
+	}
+    
+    public function actionFilteredrepview()
+	{
+		$this->renderPartial('rep_view_filter');
 	}
     
     /**

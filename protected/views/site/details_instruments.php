@@ -174,8 +174,8 @@ $(function () {
             title: {
                 text: ''// 'Snow depth (m)'
             },
-            min: 0.2,
-            max: 1.9
+            //min: 0.2,
+            //max: 1.9
         },
         //tooltip: {
         //    headerFormat: '<b>{series.name}</b><br>',

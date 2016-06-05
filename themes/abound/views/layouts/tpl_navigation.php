@@ -4,7 +4,7 @@ $usermenu=[];
 $usermenu1 = [];
 $user_role_id = Yii::app()->user->getState('user_role');
 
-
+//<a href="'.$baseUrl1.'/grouping/admin">Grouping</a>
 switch ($user_role_id) {
     case 1:
                 $usermenu1[]= '<li>
@@ -17,7 +17,8 @@ switch ($user_role_id) {
                             </li><li class="divider"></li>';
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/portfolios/admin">Portfolios</a>
-                            <a href="'.$baseUrl1.'/grouping/admin">Grouping</a>
+                            <a href="'.$baseUrl1.'/benchmarks/admin">Benchmarks</a>
+                            <a href="'.$baseUrl1.'/benchmarkComponents/admin">Benchmark Components</a>
                             </li><li class="divider"></li>';
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/counterparties/admin">Counterparties</a>  
@@ -26,13 +27,17 @@ switch ($user_role_id) {
                             <a href="'.$baseUrl1.'/users/admin">Users</a>
                             <a href="'.$baseUrl1.'/userRole/admin">User Roles</a>
                             </li><li class="divider"></li>';
+                //$usermenu1[]= '<li>
+                //            <a href="'.$baseUrl1.'/benchmarks/admin">Benchmarks</a>
+                 //           <a href="'.$baseUrl1.'/benchmarkComponents/admin">Benchmark Components</a>
+                 //           </li><li class="divider"></li>';
     
                 $usermenu[]=['label'=>'Report View', 'url'=>['site/repview']];
                 //$usermenu[]=['label'=>'Portfolio UserS with Roles', 'url'=>['/portfolioUserRoles/admin']];
                 //$usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
                 //$usermenu[]=['label'=>'Instrument Types', 'url'=>['/instrumentTypes/admin']];
-                $usermenu[]=['label'=>'Benchmarks', 'url'=>['/benchmarks/admin']];
-                $usermenu[]=['label'=>'Benchmark Components', 'url'=>['/benchmarkComponents/admin']]; 
+                //$usermenu[]=['label'=>'Benchmarks', 'url'=>['/benchmarks/admin']];
+                //$usermenu[]=['label'=>'Benchmark Components', 'url'=>['/benchmarkComponents/admin']]; 
                 //$usermenu[]=['label'=>'Group Item', 'url'=>['/groupItem/admin']];                
                 //$usermenu[]=['label'=>'Group Benchmark', 'url'=>['/groupBenchmark/admin']];
                 //$usermenu[]=['label'=>'Document Types', 'url'=>['/documentTypes/admin']];
@@ -44,7 +49,7 @@ switch ($user_role_id) {
                 //$usermenu[]=['label'=>'Return', 'url'=>['/prices/return']];
                 //$usermenu[]=['label'=>'Returns', 'url'=>['/returns/admin']];
                 //$usermenu[]=['label'=>'Return Calculation', 'url'=>['/prices/allReturns']];
-                $usermenu[]=['label'=>'Portfolio Returns', 'url'=>['/portfolioReturns/admin']];
+                //$usermenu[]=['label'=>'Portfolio Returns', 'url'=>['/portfolioReturns/admin']];
                 //$usermenu[]=['label'=>'All Stats', 'url'=>['/prices/allStats']];                             
                 //$usermenu[]=['label'=>'Portfolio Types', 'url'=>['/portfolioTypes/admin']];
                 //$usermenu[]=['label'=>'Access Levels', 'url'=>['/accessLevels/admin']];
@@ -61,7 +66,8 @@ switch ($user_role_id) {
                             </li><li class="divider"></li>';
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/portfolios/admin">Portfolios</a>
-                            <a href="'.$baseUrl1.'/grouping/admin">Grouping</a>
+                            <a href="'.$baseUrl1.'/benchmarks/admin">Benchmarks</a>
+                            <a href="'.$baseUrl1.'/benchmarkComponents/admin">Benchmark Components</a>
                             </li><li class="divider"></li>';
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/counterparties/admin">Counterparties</a>  
@@ -70,14 +76,18 @@ switch ($user_role_id) {
                             <a href="'.$baseUrl1.'/users/admin">Users</a>
                             
                             </li><li class="divider"></li>';
+               // $usermenu1[]= '<li>
+                //            <a href="'.$baseUrl1.'/benchmarks/admin">Benchmarks</a>
+                //            <a href="'.$baseUrl1.'/benchmarkComponents/admin">Benchmark Components</a>
+                //            </li><li class="divider"></li>';
     //<a href="'.$baseUrl1.'/userRole/admin">User Roles</a>
                 $usermenu[]=['label'=>'Report View', 'url'=>['site/repview']];
     
                 //$usermenu[]=['label'=>'Portfolio UserS with Roles', 'url'=>['/portfolioUserRoles/admin']];
                 //$usermenu[]=['label'=>'Trade Statuses', 'url'=>['/tradeStatus/admin']];
                 //$usermenu[]=['label'=>'Instrument Types', 'url'=>['/instrumentTypes/admin']];
-                $usermenu[]=['label'=>'Benchmarks', 'url'=>['/benchmarks/admin']];
-                $usermenu[]=['label'=>'Benchmark Components', 'url'=>['/benchmarkComponents/admin']]; 
+                //$usermenu[]=['label'=>'Benchmarks', 'url'=>['/benchmarks/admin']];
+                //$usermenu[]=['label'=>'Benchmark Components', 'url'=>['/benchmarkComponents/admin']]; 
                 //$usermenu[]=['label'=>'Group Item', 'url'=>['/groupItem/admin']];                
                 //$usermenu[]=['label'=>'Group Benchmark', 'url'=>['/groupBenchmark/admin']];
                 //$usermenu[]=['label'=>'Document Types', 'url'=>['/documentTypes/admin']];
@@ -88,7 +98,7 @@ switch ($user_role_id) {
                 //$usermenu[]=['label'=>'Return', 'url'=>['/prices/return']];
                 //$usermenu[]=['label'=>'Returns', 'url'=>['/returns/admin']];
                 //$usermenu[]=['label'=>'Return Calculation', 'url'=>['/prices/allReturns']];
-                $usermenu[]=['label'=>'Portfolio Returns', 'url'=>['/portfolioReturns/admin']];
+                //$usermenu[]=['label'=>'Portfolio Returns', 'url'=>['/portfolioReturns/admin']];
                 //$usermenu[]=['label'=>'All Stats', 'url'=>['/prices/allStats']];                             
                 //$usermenu[]=['label'=>'Portfolio Types', 'url'=>['/portfolioTypes/admin']];
                 //$usermenu[]=['label'=>'Access Levels', 'url'=>['/accessLevels/admin']];

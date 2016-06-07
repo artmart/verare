@@ -7,29 +7,19 @@
     if(isset($_REQUEST['client_id'])){$client_id = $_REQUEST['client_id'];}
     if(isset($_REQUEST['currency'])){$currency = $_REQUEST['currency'];}
     if(isset($_REQUEST['instrument'])){$instrument = $_REQUEST['instrument'];}
-    
-    //$id = Yii::app()->user->id;
-    //$user_data = Users::model()->findByPk($id);
-    //$user_data->default_portfolio_id = $portfolio;
-    //$user_data->default_start_date = $start_date;
-    //$user_data->default_end_date = $end_date;
-    //$user_data->save();
-    
-    //$portfolios = Yii::app()->db->createCommand("select * from portfolios where id = '$portfolio'")->queryAll(true);
-    //$portfolio_currency = $portfolios[0]['currency'];
-    
+        
     $query = "select cr.day, cr.{$currency} currency, ir.{$currency} instrument_return, pr.`return` portfolio_return from currency_rates cr
                 left join client_1_inst_returns ir on ir.trade_date = cr.day
                 left join portfolio_returns pr on pr.trade_date = cr.day
                 where cr.day >= '$start_date' and cr.day<='$end_date'
                 and pr.portfolio_id = '$portfolio'";
+    Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
     $results = Yii::app()->db->createCommand($query)->queryAll(true);
 ?>
 
 <h3><i><?php //echo CHtml::encode(Yii::app()->name); ?></i></h3>
 
 <!-- Content Header (Page header) -->
-
 <section class="content-header">
 <?php     
     $table_rows = '';  
@@ -54,13 +44,12 @@
     $series[] = ['name'=> 'Instrument Return', 'data'=> $instrument_return_data]; 
     $series[] = ['name'=> 'Portfolio Return', 'data'=> $portfolio_return_data]; 
         
-        // $level1[] = array('name' => $sp2['portfolio'], 'y' => $sp2['nav']*100/$index_value);  
+    //$level1[] = array('name' => $sp2['portfolio'], 'y' => $sp2['nav']*100/$index_value);  
 ?>
 </section>
 
         <!-- Main content -->
         <section class="content">
-         
 			  
           <div class="row">
             <div class="col-md-12">
@@ -73,8 +62,7 @@
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                   </div>
                 </div><!-- /.box-header -->
-				
-				
+
                 <div class="box-body">
                  <!-- <div class="row">-->
                     <div class="col-md-12">
@@ -99,13 +87,8 @@
 					  
                     </div><!-- /.col -->
 					
-          <!--          <div class="col-md-4">    -->
-                     
-<?php
+          <!--          <div class="col-md-4">    -->          
 
-    //style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"
-    
-?>
 <div id="container1" ></div>
 <script>
 $(function () {
@@ -142,19 +125,16 @@ $(function () {
         //    headerFormat: '<b>{series.name}</b><br>',
         //    pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
         //},
-
         plotOptions: {
             spline: {
                 lineWidth: 2,
                 states: { hover: {lineWidth: 5}
                     },
-                
                 marker: {
                     enabled: false
                 }
             }
         },   
-        
         colors: ['#104E89', '#952C28', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
         credits: {enabled: false},
 
@@ -186,18 +166,13 @@ $(function () {
 <!-------------------------->
 		  
 </section>
-
-		
+	
 <script>
   $(document).ready(function () {
     
-        var table1 = $('#example1').DataTable( {
+        var table1 = $('#example1').DataTable({
     
-        renderer: "bootstrap",
-        //dom: '<"clear">&lt;<"clear">Bfrtip<"clear">',
-        //"Dom": '<"H"lfr>t<"F"ip>' ,
-        //sDom: 'lfrtip',
-        
+        renderer: "bootstrap",        
         dom: 'lBfrtip',
         displayLength: 10,
         filter: true,
@@ -229,12 +204,7 @@ $(function () {
         */
         select: true,
     
-
         buttons: [
-            /*{ extend: "create", editor: editor },
-            { extend: "edit",   editor: editor },
-            { extend: "remove", editor: editor },*/
-            <?php //echo $access_buttons; ?>
             {
                 extend: 'copyHtml5',
                 exportOptions: {

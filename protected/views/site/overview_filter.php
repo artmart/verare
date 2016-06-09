@@ -74,8 +74,6 @@
     $port_data_table = ''; 
     $level1 = [];
     
-    
-    
         foreach($portfolio_composition as $sp1){ 
                 $value[$sp1['portfolio']] = 0; 
                 $index_value = $index_value + $sp1['nav'];
@@ -89,81 +87,34 @@
          //if($index_value == 0){$index_value = 1;}
     
     foreach($portfolio_composition as $sp2){        
-        //foreach($sub_portfolios as $sp3){ 
-             //if($sp2['portfolio'] == $sp3['portfolio']){
-                //$value[$sp3['portfolio']] = $value[$sp3['portfolio']] + $sp2['nav'];
-                //$allocation[$sp2['portfolio']][] = array($sp3['portfolio'],$sp3['nav']*100/$index_value);
-                $port_data_table .= 
-                					  '<tr>
-                						<td>Uncategorized</td>
-                						<td>'.number_format($sp2['nav']).'</td>
-                						<td>'.number_format($sp2['nav']*100/$index_value, 1).'%</td>
-                						<td>'.number_format($sp2['allocation_normal'], 1).'%</td>
-                						<td>'.number_format($sp2['allocation_normal']-$sp2['nav']*100/$index_value, 1).'%</td>
-                						<td>'.number_format($sp2['allocation_min']).'-'.number_format($sp2['allocation_max']).'%</td>
-                					  </tr>'; 
-           //  }   
-    
-        //}
+                $port_data_table .= '<tr>
+            						<td>Uncategorized</td>
+            						<td>'.number_format($sp2['nav']).'</td>
+            						<td>'.number_format($sp2['nav']*100/$index_value, 1).'%</td>
+            						<td>'.number_format($sp2['allocation_normal'], 1).'%</td>
+            						<td>'.number_format($sp2['allocation_normal']-$sp2['nav']*100/$index_value, 1).'%</td>
+            						<td>'.number_format($sp2['allocation_min']).'-'.number_format($sp2['allocation_max']).'%</td>
+            					  </tr>'; 
         
         $level1[] = array('name' => 'Uncategorized', 'y' => $sp2['nav']*100/$index_value);                            
   }
   
-  ////////////////////////
-
-    
-     
-
-    
+  ////////////////////////  
     foreach($sub_portfolios as $sp2){        
-        //foreach($sub_portfolios as $sp3){ 
-            // if($sp2['portfolio'] == $sp3['portfolio']){
-                //$value[$sp3['portfolio']] = $value[$sp3['portfolio']] + $sp2['nav'];
-                //$allocation[$sp2['portfolio']][] = array($sp3['portfolio'],$sp3['nav']*100/$index_value);
-                //$sub_port_data[$sp2['portfolio']]
-                $sub_port_data .= 
-                					  '<tr>
-                						<td>'.$sp2['portfolio'].'</td>
-                						<td>'.number_format($sp2['nav']).'</td>
-                						<td>'.number_format($sp2['nav']*100/$index_value, 1).'%</td>
-                						<td>'.number_format($sp2['allocation_normal'], 1).'%</td>
-                						<td>'.number_format($sp2['allocation_normal']-$sp2['nav']*100/$index_value, 1).'%</td>
-                						<td>'.number_format($sp2['allocation_min']).'-'.number_format($sp2['allocation_max']).'%</td>
-                					  </tr>'; 
-             //}   
-    
-        //} 
+                $sub_port_data .= '<tr>
+            						<td>'.$sp2['portfolio'].'</td>
+            						<td>'.number_format($sp2['nav']).'</td>
+            						<td>'.number_format($sp2['nav']*100/$index_value, 1).'%</td>
+            						<td>'.number_format($sp2['allocation_normal'], 1).'%</td>
+            						<td>'.number_format($sp2['allocation_normal']-$sp2['nav']*100/$index_value, 1).'%</td>
+            						<td>'.number_format($sp2['allocation_min']).'-'.number_format($sp2['allocation_max']).'%</td>
+            					  </tr>'; 
         
         $level1[] = array('name' => $sp2['portfolio'], 'y' => $sp2['nav']*100/$index_value);                           
   }
-  
-  
-  
- 
-  
-  
-  // $level2 = [];
- /* 
-    $i = 2;
-    foreach($sub_portfolios as $pgc){ 
-        $inst_data .= 
-					  '<tr>
-						<td>'.$pgc['portfolio'].'</td>
-						<td>'.number_format($value[$pgc['portfolio']]).'</td>
-						<td>'.number_format($value[$pgc['portfolio']]*100/$index_value, 1).'%</td>
-						<td>'.number_format($pgc['allocation_normal'], 1).'%</td>
-						<td>'.number_format($pgc['allocation_normal']-$pc['nav']*100/$index_value, 1).'%</td>
-						<td>'.number_format($pgc['allocation_min']).'-'.number_format($pc['allocation_max']).'%</td>
-					  </tr>';
-                      
-    $level1[] = array('name' => $pgc['portfolio'], 'y' => $value[$pgc['portfolio']]*100/$index_value);   
-    //$level1[] = array('name' => $pgc['group_name'], 'y' => $value[$pgc['instrument_group_id']]*100/$index_value, 'drilldown' => $pgc['instrument_group_id']);           
-  
-     } 
-     
-     */?>
-</section>
+?>
 
+</section>
         <!-- Main content -->
         <section class="content">
           <div class="row">
@@ -559,8 +510,7 @@ $(function () {
                     <div class="col-md-12">
 					
                       <div class="table">
-					  
-						  <table id="tableCashManagement" class="table table-bordered table-hover">
+                      <table id="tableCashManagement" class="table table-bordered table-hover">
 							<thead>
 							  <tr>
 								<th>Date</th>
@@ -569,26 +519,24 @@ $(function () {
 							  </tr>
 							</thead>
 							<tbody>
-							  <tr>
-								<td>12-Jun-2015</td>
-								<td>BATSJ 13 06/12/17</td>
-								<td>712,589</td>
-							  </tr>
-							  <tr>
-								<td>26-Jun-2015</td>
-								<td>STERV 5 3/4 06/26/17</td>
-								<td>292,644</td>
-							  </tr>
-							  <tr>
-								<td>27-Jun-2015</td>
-								<td>SCANDA 8 1/2 06/27/18</td>
-								<td>425,000</td>
-							  </tr>
-							  <tr>
-								<td>28-Jun-2015</td>
-								<td>OPM Listed Private Equity</td>
-								<td>627,000</td>
-							  </tr>
+                      
+                      <?php 
+                      
+                        $cf_sql = "select distinct cf.cash_flow_date, i.instrument, cf.cash_flow, cft.cash_flow_type from cash_flows cf
+                                inner join cash_flow_types cft on cf.`type` = cft.id
+                                inner join instruments i on i.id = cf.instrument
+                                inner join ledger l on l.instrument_id = i.id
+                                where cf.cash_flow_date>='$start_date' and l.is_current = 1 and l.trade_status_id = 2 and l.portfolio_id = '$portfolio'
+                                limit 5";
+                        $cf_results = Yii::app()->db->createCommand($cf_sql)->queryAll(true);
+                        foreach($cf_results as $cf){
+                      ?>	  
+					  <tr>
+						<td><?php echo $cf['cash_flow_date']; ?></td>
+						<td><?php echo $cf['instrument']; ?></td>
+						<td><?php echo number_format($cf['cash_flow']); ?></td>
+					  </tr>
+                      <?php } ?>
 							<tbody>
 						  </table>
 						  

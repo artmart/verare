@@ -526,7 +526,7 @@ $(function () {
                                 inner join cash_flow_types cft on cf.`type` = cft.id
                                 inner join instruments i on i.id = cf.instrument
                                 inner join ledger l on l.instrument_id = i.id
-                                where cf.cash_flow_date>='$start_date' and l.is_current = 1 and l.trade_status_id = 2 and l.portfolio_id = '$portfolio'
+                                where cf.cash_flow_date>='$end_date' and l.is_current = 1 and l.trade_status_id = 2 and l.portfolio_id = '$portfolio'
                                 limit 5";
                         $cf_results = Yii::app()->db->createCommand($cf_sql)->queryAll(true);
                         foreach($cf_results as $cf){

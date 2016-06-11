@@ -495,7 +495,7 @@ $(function () {
 		  	
           <div class="row">
             <div class="col-md-6">
-              <div class="box box-primary">
+              <div class="box box-primary" style="height: 300px;">
 		  
                 <div class="box-header with-border">
                   <h3 class="box-title">Cash Management</h3>
@@ -519,15 +519,13 @@ $(function () {
 							  </tr>
 							</thead>
 							<tbody>
-                      
-                      <?php 
-                      
+                      <?php                       
                         $cf_sql = "select distinct cf.cash_flow_date, i.instrument, cf.cash_flow, cft.cash_flow_type from cash_flows cf
                                 inner join cash_flow_types cft on cf.`type` = cft.id
                                 inner join instruments i on i.id = cf.instrument
                                 inner join ledger l on l.instrument_id = i.id
                                 where cf.cash_flow_date>='$end_date' and l.is_current = 1 and l.trade_status_id = 2 and l.portfolio_id = '$portfolio'
-                                limit 5";
+                                limit 6";
                         $cf_results = Yii::app()->db->createCommand($cf_sql)->queryAll(true);
                         foreach($cf_results as $cf){
                       ?>	  
@@ -551,7 +549,7 @@ $(function () {
 			
 			
             <div class="col-md-6">
-              <div class="box box-info">
+              <div class="box box-info" style="height: 300px;">
 		  
                 <div class="box-header with-border">
                   <h3 class="box-title">Winners/Losers</h3>
@@ -571,30 +569,55 @@ $(function () {
 							  <tr>
 								<th>Instrument</th>
 								<th>NAV</th>
-								<th>Change</th>
+								<th>Change(abs)</th>
+                                <th>Change(rel)</th>
 							  </tr>
 							</thead>
 							<tbody>
-							  <tr>
-								<td><span class="description-percentage text-green"><i class="fa fa-caret-up"></i> Swedbank Robur Penningmarknads</span></td>
-								<td><span class="description-percentage text-green">64,047,833</span></td>
-								<td><span class="description-percentage text-green">269,001</span></td>
-							  </tr>
-							  <tr>
-								<td><span class="description-percentage text-green"><i class="fa fa-caret-up"></i> Swedbank Robur Penningmarknads</span></td>
-								<td><span class="description-percentage text-green">16,104,449</span></td>
-								<td><span class="description-percentage text-green">144,287</span></td>
-							  </tr>
-							  <tr>
-								<td><span class="description-percentage text-red"><i class="fa fa-caret-down"></i> SEB Sverige Stiftelsefond</span></td>
-								<td><span class="description-percentage text-red">63,194,905</span></td>
-								<td><span class="description-percentage text-red">-97,952</span></td>
-							  </tr>
-							  <tr>
-								<td><span class="description-percentage text-red"><i class="fa fa-caret-down"></i> SEB Foretagsobligationsfond Fl</span></td>
-								<td><span class="description-percentage text-red">45,258,816</span></td>
-								<td><span class="description-percentage text-red">-133,514</span></td>
-							  </tr>
+                            
+<?php                                          
+   $navs_query = "select i.instrument, 
+                (select sum(if(trade_date<= DATE_ADD(p.trade_date, INTERVAL -1 DAY), nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
+                where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') yesterday_nav,
+                (select sum(if(trade_date<=p.trade_date, nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
+                where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') today_nav
+                from prices p
+                inner join currency_rates cr on cr.day = p.trade_date
+                inner join instruments i on i.id = p.instrument_id
+                inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
+                where p.is_current = 1 and p.trade_date='$end_date'
+                group by i.instrument
+                order by today_nav desc";
+   $navs = Yii::app()->db->createCommand($navs_query)->queryAll(true);
+ 
+   $navs_cnt = count($navs);
+   $ids = [];
+   for($i = 0; $i<$navs_cnt; $i++){
+        if($i<3 || ($i>=$navs_cnt-3 && $i>3)){
+            $ids[] = $i;
+        }
+   }
+      
+   foreach($ids as $ii){
+    if($ii <3){ ?>
+      <tr>
+		<td><span class="description-percentage text-green"><i class="fa fa-caret-up"></i><?php echo $navs[$ii]['instrument']; ?></span></td>
+		<td><span class="description-percentage text-green"><?php echo number_format($navs[$ii]['today_nav']); ?></span></td>
+		<td><span class="description-percentage text-green"><?php echo number_format($navs[$ii]['today_nav'] - $navs[$ii]['yesterday_nav']); ?></span></td>
+        <td><span class="description-percentage text-green"><?php echo number_format($navs[$ii]['today_nav']/$navs[$ii]['yesterday_nav']-1); ?></span></td>
+	  </tr>  
+   <?php }else{?>
+      <tr>
+		<td><span class="description-percentage text-red"><i class="fa fa-caret-down"></i><?php echo $navs[$ii]['instrument']; ?></span></td>
+		<td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']); ?></span></td>
+		<td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']-$navs[$ii]['yesterday_nav']); ?></span></td>
+        <td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']/$navs[$ii]['yesterday_nav']-1); ?></span></td>
+	  </tr>
+        
+  <?php  }
+    
+   }
+?>
 							<tbody>
 						  </table>
 					  </div> <!-- /.table -->

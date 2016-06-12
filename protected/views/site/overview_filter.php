@@ -510,16 +510,9 @@ $(function () {
                     <div class="col-md-12">
 					
                       <div class="table">
-                      <table id="tableCashManagement" class="table table-bordered table-hover">
-							<thead>
-							  <tr>
-								<th>Date</th>
-								<th>Instrument</th>
-								<th>Amount</th>
-							  </tr>
-							</thead>
-							<tbody>
-                      <?php                       
+                      
+                      <?php 
+                        $rows = '';                      
                         $cf_sql = "select cf.cash_flow_date, i.instrument, sum(cf.cash_flow * l.nominal*cr.{$portfolio_currency}/curs.cur_rate) cash_flow, cft.cash_flow_type from cash_flows cf
                                 inner join cash_flow_types cft on cf.`type` = cft.id
                                 inner join instruments i on i.id = cf.instrument
@@ -531,17 +524,34 @@ $(function () {
                                 group by cf.cash_flow_date, i.instrument
                                 limit 6";
                         $cf_results = Yii::app()->db->createCommand($cf_sql)->queryAll(true);
+                        if($cf_results){
                         foreach($cf_results as $cf){
-                      ?>	  
-					  <tr>
-						<td><?php echo $cf['cash_flow_date']; ?></td>
-						<td><?php echo $cf['instrument']; ?></td>
-						<td><?php echo number_format($cf['cash_flow']); ?></td>
-					  </tr>
-                      <?php } ?>
+     
+                      $rows .= 	  
+					  "<tr>
+						<td>" . $cf['cash_flow_date']. "</td>
+						<td>". $cf['instrument']. "</td>
+						<td>" .number_format($cf['cash_flow']). "</td>
+					  </tr>";
+                      } ?>
+                      
+                      
+                      <table id="tableCashManagement" class="table table-bordered table-hover">
+							<thead>
+							  <tr>
+								<th>Date</th>
+								<th>Instrument</th>
+								<th>Amount</th>
+							  </tr>
+							</thead>
+							<tbody>
+                                <?php echo $rows; ?>
 							<tbody>
 						  </table>
-						  
+					       <?php }else{ ?>
+                        <img style="height: 100%; margin: 0 auto; padding-left: 25%;" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/nodata.png" class="headerimg"/>
+                        
+                       <?php } ?>
 					  </div> <!-- /.table -->
                     </div><!-- class="col-md-6"> -->
                   </div><!-- class="row"> -->
@@ -616,12 +626,8 @@ $(function () {
 		<td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']); ?></span></td>
 		<td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']-$navs[$ii]['yesterday_nav']); ?></span></td>
         <td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']/$navs[$ii]['yesterday_nav']-1); ?></span></td>
-	  </tr>
-        
-  <?php  }
-    
-   }
-?>
+	  </tr>   
+  <?php  } } ?>
 							<tbody>
 						  </table>
 					  </div> <!-- /.table -->

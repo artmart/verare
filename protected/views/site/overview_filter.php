@@ -524,18 +524,18 @@ $(function () {
                                 group by cf.cash_flow_date, i.instrument
                                 limit 6";
                         $cf_results = Yii::app()->db->createCommand($cf_sql)->queryAll(true);
+                        
+                        $rows = ''; 
                         if($cf_results){
                         foreach($cf_results as $cf){
      
-                      $rows .= 	  
-					  "<tr>
-						<td>" . $cf['cash_flow_date']. "</td>
-						<td>". $cf['instrument']. "</td>
-						<td>" .number_format($cf['cash_flow']). "</td>
-					  </tr>";
-                      } ?>
-                      
-                      
+                              $rows .= 	  
+            					  "<tr>
+            						<td>" . $cf['cash_flow_date']. "</td>
+            						<td>". $cf['instrument']. "</td>
+            						<td>" .number_format($cf['cash_flow']). "</td>
+            					  </tr>";
+                        } ?>
                       <table id="tableCashManagement" class="table table-bordered table-hover">
 							<thead>
 							  <tr>
@@ -549,8 +549,7 @@ $(function () {
 							<tbody>
 						  </table>
 					       <?php }else{ ?>
-                        <img style="height: 100%; margin: 0 auto; padding-left: 25%;" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/nodata.png" class="headerimg"/>
-                        
+                                <img style="height: 100%; margin: 0 auto; padding-left: 25%;" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/nodata.png" class="headerimg"/>
                        <?php } ?>
 					  </div> <!-- /.table -->
                     </div><!-- class="col-md-6"> -->
@@ -576,7 +575,57 @@ $(function () {
                 <div class="box-body">
                   <div class="row">
                     <div class="col-md-12">
-				
+				    <?php 
+                        $win_los_query = "
+                                        select i.instrument,
+                                        sum( if(p.trade_date = '$end_date', p.price * l.nominal*cr.{$portfolio_currency}/curs.cur_rate, 0)) nav_today,
+                                        sum( if(p.trade_date = DATE_ADD('$end_date', INTERVAL -1 DAY), p.price * l.nominal*cr.{$portfolio_currency}/curs.cur_rate, 0)) nav_yesterday
+                                        from prices p
+                                        inner join ledger l on l.instrument_id = p.instrument_id
+                                        inner join currency_rates cr on cr.day = p.trade_date
+                                        inner join instruments i on i.id = p.instrument_id
+                                        inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
+                                        where l.trade_status_id = 2 and l.is_current = 1 and l.client_id = '$client_id' and l.portfolio_id = '$portfolio' 
+                                        and p.trade_date in(DATE_ADD('$end_date', INTERVAL -1 DAY), '$end_date')
+                                        group by i.instrument order by i.instrument, nav_today desc";
+                        $win_los = Yii::app()->db->createCommand($win_los_query)->queryAll(true);
+                            /* if($win_los){
+                            foreach($win_los as $wl){
+                                $rows_wl .= 	  
+            					  "<tr>
+            						<td>" . $cf['cash_flow_date']. "</td>
+            						<td>". $cf['instrument']. "</td>
+            						<td>" .number_format($cf['cash_flow']). "</td>
+            					  </tr>";
+                            }*/
+                           $wl_cnt = count($win_los);
+                           if($wl_cnt>0){
+                           $rows_wl = '';
+                           $wids = [];
+                           for($i = 0; $i<$wl_cnt; $i++){
+                                if($i<3 || ($i>=$wl_cnt-3 && $i>3)){
+                                    $wids[] = $i;
+                                }
+                           }   
+                           foreach($wids as $ii){
+                            if($ii <3){ 
+                                $rows_wl .=
+                                          "<tr>
+                                    		<td><span class='description-percentage text-green'><i class='fa fa-caret-up'></i>" .$win_los[$ii]['instrument']."</span></td>
+                                    		<td><span class='description-percentage text-green'>" . number_format($win_los[$ii]['nav_today'])."</span></td>
+                                    		<td><span class='description-percentage text-green'>" . number_format($win_los[$ii]['nav_today'] - $win_los[$ii]['nav_yesterday']). "</span></td>
+                                            <td><span class='description-percentage text-green'>" . number_format($win_los[$ii]['nav_today']/$win_los[$ii]['nav_yesterday']-1, 2). "</span></td>
+                                    	  </tr>";  
+                            }else{
+                                $rows_wl .=
+                                          "<tr>
+                                    		<td><span class='description-percentage text-red'><i class='fa fa-caret-down'></i>" . $win_los[$ii]['instrument']. "</span></td>
+                                    		<td><span class='description-percentage text-red'>" . number_format($win_los[$ii]['nav_today']) . "</span></td>
+                                    		<td><span class='description-percentage text-red'>" . number_format($win_los[$ii]['nav_today']-$win_los[$ii]['nav_yesterday']) . "</span></td>
+                                            <td><span class='description-percentage text-red'>" . number_format($win_los[$ii]['nav_today']/$win_los[$ii]['nav_yesterday']-1, 2) . "</span></td>
+                                    	  </tr>";   
+                           } }        
+                    ?>
                       <div class="table">
 						  <table id="tableWinners" class="table table-bordered table-hover">
 							<thead>
@@ -589,47 +638,56 @@ $(function () {
 							</thead>
 							<tbody>
                             
-<?php                                          
-   $navs_query = "select i.instrument, 
-                (select sum(if(trade_date<= DATE_ADD(p.trade_date, INTERVAL -1 DAY), nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
-                where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') yesterday_nav,
-                (select sum(if(trade_date<=p.trade_date, nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
-                where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') today_nav
-                from prices p
-                inner join currency_rates cr on cr.day = p.trade_date
-                inner join instruments i on i.id = p.instrument_id
-                inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
-                where p.is_current = 1 and p.trade_date='$end_date'
-                group by i.instrument
-                order by today_nav desc";
-   $navs = Yii::app()->db->createCommand($navs_query)->queryAll(true);
- 
-   $navs_cnt = count($navs);
-   $ids = [];
-   for($i = 0; $i<$navs_cnt; $i++){
-        if($i<3 || ($i>=$navs_cnt-3 && $i>3)){
-            $ids[] = $i;
-        }
-   }
-      
-   foreach($ids as $ii){
-    if($ii <3){ ?>
-      <tr>
-		<td><span class="description-percentage text-green"><i class="fa fa-caret-up"></i><?php echo $navs[$ii]['instrument']; ?></span></td>
-		<td><span class="description-percentage text-green"><?php echo number_format($navs[$ii]['today_nav']); ?></span></td>
-		<td><span class="description-percentage text-green"><?php echo number_format($navs[$ii]['today_nav'] - $navs[$ii]['yesterday_nav']); ?></span></td>
-        <td><span class="description-percentage text-green"><?php echo number_format($navs[$ii]['today_nav']/$navs[$ii]['yesterday_nav']-1); ?></span></td>
-	  </tr>  
-   <?php }else{?>
-      <tr>
-		<td><span class="description-percentage text-red"><i class="fa fa-caret-down"></i><?php echo $navs[$ii]['instrument']; ?></span></td>
-		<td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']); ?></span></td>
-		<td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']-$navs[$ii]['yesterday_nav']); ?></span></td>
-        <td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']/$navs[$ii]['yesterday_nav']-1); ?></span></td>
-	  </tr>   
-  <?php  } } ?>
+                            <?php echo $rows_wl; 
+                            
+                            /*                                         
+                               $navs_query = "select i.instrument, 
+                                            (select sum(if(trade_date<= DATE_ADD(p.trade_date, INTERVAL -1 DAY), nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
+                                            where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') yesterday_nav,
+                                            (select sum(if(trade_date<=p.trade_date, nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
+                                            where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') today_nav
+                                            from prices p
+                                            inner join currency_rates cr on cr.day = p.trade_date
+                                            inner join instruments i on i.id = p.instrument_id
+                                            inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
+                                            where p.is_current = 1 and p.trade_date='$end_date'
+                                            group by i.instrument
+                                            order by today_nav desc";
+                                            
+                               
+                               $navs = Yii::app()->db->createCommand($navs_query)->queryAll(true);
+                             
+                               $navs_cnt = count($navs);
+                               $ids = [];
+                               for($i = 0; $i<$navs_cnt; $i++){
+                                    if($i<3 || ($i>=$navs_cnt-3 && $i>3)){
+                                        $ids[] = $i;
+                                    }
+                               }
+                                  
+                               foreach($ids as $ii){
+                                if($ii <3){ ?>
+                                  <tr>
+                            		<td><span class="description-percentage text-green"><i class="fa fa-caret-up"></i><?php echo $navs[$ii]['instrument']; ?></span></td>
+                            		<td><span class="description-percentage text-green"><?php echo number_format($navs[$ii]['today_nav']); ?></span></td>
+                            		<td><span class="description-percentage text-green"><?php echo number_format($navs[$ii]['today_nav'] - $navs[$ii]['yesterday_nav']); ?></span></td>
+                                    <td><span class="description-percentage text-green"><?php echo number_format($navs[$ii]['today_nav']/$navs[$ii]['yesterday_nav']-1); ?></span></td>
+                            	  </tr>  
+                               <?php }else{?>
+                                  <tr>
+                            		<td><span class="description-percentage text-red"><i class="fa fa-caret-down"></i><?php echo $navs[$ii]['instrument']; ?></span></td>
+                            		<td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']); ?></span></td>
+                            		<td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']-$navs[$ii]['yesterday_nav']); ?></span></td>
+                                    <td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']/$navs[$ii]['yesterday_nav']-1); ?></span></td>
+                            	  </tr>   
+                              <?php  } }
+                              */
+                               ?>
 							<tbody>
 						  </table>
+                          <?php }else{ ?>
+                                <img style="height: 100%; margin: 0 auto; padding-left: 25%;" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/nodata.png" class="headerimg"/>
+                       <?php } ?>
 					  </div> <!-- /.table -->
 					  
                     </div><!-- class="col-md-6"> -->

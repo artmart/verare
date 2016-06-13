@@ -637,52 +637,7 @@ $(function () {
 							  </tr>
 							</thead>
 							<tbody>
-                            
-                            <?php echo $rows_wl; 
-                            
-                            /*                                         
-                               $navs_query = "select i.instrument, 
-                                            (select sum(if(trade_date<= DATE_ADD(p.trade_date, INTERVAL -1 DAY), nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
-                                            where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') yesterday_nav,
-                                            (select sum(if(trade_date<=p.trade_date, nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
-                                            where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') today_nav
-                                            from prices p
-                                            inner join currency_rates cr on cr.day = p.trade_date
-                                            inner join instruments i on i.id = p.instrument_id
-                                            inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
-                                            where p.is_current = 1 and p.trade_date='$end_date'
-                                            group by i.instrument
-                                            order by today_nav desc";
-                                            
-                               
-                               $navs = Yii::app()->db->createCommand($navs_query)->queryAll(true);
-                             
-                               $navs_cnt = count($navs);
-                               $ids = [];
-                               for($i = 0; $i<$navs_cnt; $i++){
-                                    if($i<3 || ($i>=$navs_cnt-3 && $i>3)){
-                                        $ids[] = $i;
-                                    }
-                               }
-                                  
-                               foreach($ids as $ii){
-                                if($ii <3){ ?>
-                                  <tr>
-                            		<td><span class="description-percentage text-green"><i class="fa fa-caret-up"></i><?php echo $navs[$ii]['instrument']; ?></span></td>
-                            		<td><span class="description-percentage text-green"><?php echo number_format($navs[$ii]['today_nav']); ?></span></td>
-                            		<td><span class="description-percentage text-green"><?php echo number_format($navs[$ii]['today_nav'] - $navs[$ii]['yesterday_nav']); ?></span></td>
-                                    <td><span class="description-percentage text-green"><?php echo number_format($navs[$ii]['today_nav']/$navs[$ii]['yesterday_nav']-1); ?></span></td>
-                            	  </tr>  
-                               <?php }else{?>
-                                  <tr>
-                            		<td><span class="description-percentage text-red"><i class="fa fa-caret-down"></i><?php echo $navs[$ii]['instrument']; ?></span></td>
-                            		<td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']); ?></span></td>
-                            		<td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']-$navs[$ii]['yesterday_nav']); ?></span></td>
-                                    <td><span class="description-percentage text-red"><?php echo number_format($navs[$ii]['today_nav']/$navs[$ii]['yesterday_nav']-1); ?></span></td>
-                            	  </tr>   
-                              <?php  } }
-                              */
-                               ?>
+                            <?php echo $rows_wl; ?>
 							<tbody>
 						  </table>
                           <?php }else{ ?>

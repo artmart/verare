@@ -36,7 +36,8 @@
                 where ledger.portfolio_id = '$portfolio' and ledger.trade_date > '$start_date' and ledger.trade_date<'$end_date' and ledger.trade_status_id = 2 
                 and ledger.client_id = '$client_id' and ledger.is_current = 1
                 order by trade_date desc";
-        $results1 = Yii::app()->db->createCommand($sql1)->queryAll(true);
+    Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
+    $results1 = Yii::app()->db->createCommand($sql1)->queryAll(true);
         
         $nav_today = 0;
         $nav_yesterday = 0;
@@ -57,6 +58,7 @@
                                  where l.trade_date > '$start_date' and l.trade_date<'$end_date' and l.portfolio_id = '$portfolio' 
                                  and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
                                  group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
+    Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
     $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
  
     $sub_portfolios_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
@@ -65,7 +67,7 @@
                     where l.trade_date > '$start_date' and l.trade_date<'$end_date' and p.parrent_portfolio = '$portfolio' 
                     and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
                     group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
-                    
+    Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();                
     $sub_portfolios = Yii::app()->db->createCommand($sub_portfolios_sql)->queryAll(true);
      
     $index_value = 0;
@@ -524,6 +526,7 @@ $(function () {
                                 and l.client_id ='$client_id'
                                 group by cf.cash_flow_date, i.instrument
                                 limit 6";
+                        Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
                         $cf_results = Yii::app()->db->createCommand($cf_sql)->queryAll(true);
                         
                         $rows = ''; 
@@ -589,6 +592,7 @@ $(function () {
                                         where l.trade_status_id = 2 and l.is_current = 1 and l.client_id = '$client_id' and l.portfolio_id = '$portfolio' 
                                         and p.trade_date in(DATE_ADD('$end_date', INTERVAL -1 DAY), '$end_date')
                                         group by i.instrument order by i.instrument, nav_today desc";
+                        Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
                         $win_los = Yii::app()->db->createCommand($win_los_query)->queryAll(true);
                             /* if($win_los){
                             foreach($win_los as $wl){

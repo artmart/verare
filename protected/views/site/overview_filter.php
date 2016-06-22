@@ -523,11 +523,17 @@ $(function () {
                                 inner join ledger l on l.instrument_id = i.id
                                 inner join currency_rates cr on cr.day = l.trade_date
                                 inner join cur_rates curs on curs.day = cf.cash_flow_date and curs.cur = i.currency
-                                where cf.cash_flow_date>='$end_date' and cf.cash_flow_date<=l.trade_date
-                                and l.is_current = 1 and l.trade_status_id = 2 and l.portfolio_id = '$portfolio'
+                                inner join portfolios port on port.id = l.portfolio_id
+                                where cf.cash_flow_date>='$end_date' 
+                                and l.is_current = 1 and l.trade_status_id = 2
+                                and (port.id = $portfolio or port.parrent_portfolio = $portfolio )
                                 and l.client_id ='$client_id'
                                 group by cf.cash_flow_date, i.instrument
                                 limit 6";
+                                
+                                //and l.portfolio_id = '$portfolio'
+                                //and cf.cash_flow_date<=l.trade_date
+                                
                         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
                         $cf_results = Yii::app()->db->createCommand($cf_sql)->queryAll(true);
                         

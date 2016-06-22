@@ -37,8 +37,10 @@
                             and r.trade_date > '$start_date' and r.trade_date<'$end_date'
                             order by r.trade_date";
             $instrument_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
-   
+    $i = 0;
     if($instrument_results){
+     $port_data[$i] = [];
+     $bench_data[$i] = [];
         
         $port_chart_value = 1;
         
@@ -49,7 +51,7 @@
         $return_1y = 1;
         
         foreach($instrument_results as $ir){
-            
+                        
             $months[] = $ir['trade_date'];
             $port_ret[] = $ir['return'];
             $bench_ret[] = $ir['benchmark_return'];
@@ -65,19 +67,20 @@
             if(strtotime($ir['trade_date'])>= strtotime($month9_start)){$return_9m = $return_9m * $ir['return'];}
             if(strtotime($ir['trade_date'])>= strtotime($month1y_start)){$return_1y = $return_1y * $ir['return'];}
             
-            $port_data[] = [$ir['trade_date'], floatval($port_chart_value)];
+            $port_data[$i][] = [$ir['trade_date'], floatval($port_chart_value)];
             if($inst_num == 0){
-                $bench_data[] = [$ir['trade_date'], floatval($bench_chart_value)];  
+                $bench_data[$i][] = [$ir['trade_date'], floatval($bench_chart_value)];  
             } 
         }
+        
         
         $return_all_time = $port_chart_value;
     
     if($inst_num == 0){
-        $series[] = ['name'=> "Benchmark", 'data'=> $bench_data]; 
+        $series[] = ['name'=> "Benchmark", 'data'=> $bench_data[$i]]; 
     }
-    $series[] = ['name'=> $instrument['instrument'], 'data'=> $port_data];
- 
+    $series[] = ['name'=> $instrument['instrument'], 'data'=> $port_data[$i]];
+    $i++;
  
     $allstats = Calculators::CalcAllStats1($port_ret, $bench_ret);
     

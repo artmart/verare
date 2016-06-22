@@ -21,7 +21,7 @@
      $accessable_portfolios1 = $user_data->accessable_portfolios;   
      $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
     
-     $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios') and parrent_portfolio = $default_portfolio_id")->queryAll(true);
+     $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios') and (parrent_portfolio = $default_portfolio_id or parrent_portfolio = 0)")->queryAll(true);
         
     $months = [];  
     $series = []; 

@@ -587,7 +587,7 @@ $(function () {
                 <div class="box-body">
                   <div class="row">
                     <div class="col-md-12">
-				    <?php 
+				    <?php //and l.portfolio_id = '$portfolio' 
                         $win_los_query = "select i.instrument,
                                         sum( if(p.trade_date = '$end_date', p.price * l.nominal*cr.{$portfolio_currency}/curs.cur_rate, 0)) nav_today,
                                         sum( if(p.trade_date = DATE_ADD('$end_date', INTERVAL -1 DAY), p.price * l.nominal*cr.{$portfolio_currency}/curs.cur_rate, 0)) nav_yesterday
@@ -596,7 +596,9 @@ $(function () {
                                         inner join currency_rates cr on cr.day = p.trade_date
                                         inner join instruments i on i.id = p.instrument_id
                                         inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
-                                        where l.trade_status_id = 2 and l.is_current = 1 and l.client_id = '$client_id' and l.portfolio_id = '$portfolio' 
+                                        inner join portfolios port on port.id = l.portfolio_id
+                                        where l.trade_status_id = 2 and l.is_current = 1 and l.client_id = '$client_id' 
+                                        and (port.id = $portfolio or port.parrent_portfolio = $portfolio )
                                         and p.trade_date in(DATE_ADD('$end_date', INTERVAL -1 DAY), '$end_date')
                                         group by i.instrument order by i.instrument, nav_today desc";
                         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();

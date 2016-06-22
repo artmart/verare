@@ -9,6 +9,7 @@
     if(isset($user_data->default_end_date) && $user_data->default_end_date!=='0000-00-00'){$end_date = $user_data->default_end_date;}
     
     $client_id = $user_data->client_id;
+    $default_portfolio_id = $user_data->default_portfolio_id;
     $baseUrl = Yii::app()->baseUrl;
         
     $month_ytd_start = date('Y-01-01');
@@ -20,7 +21,7 @@
      $accessable_portfolios1 = $user_data->accessable_portfolios;   
      $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
     
-     $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
+     $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios') and parrent_portfolio = $default_portfolio_id")->queryAll(true);
         
     $months = [];  
     $series = []; 

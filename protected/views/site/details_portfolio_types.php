@@ -31,8 +31,11 @@
         
     $sql_returns = "select * from portfolio_returns where portfolio_id = '$portfolio_id' and trade_date > '$start_date' and trade_date<'$end_date' order by trade_date";
     $portfolio_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
-       
+     
+     $i = 0;  
     if($portfolio_results){
+     $port_data[$i] = [];
+     $bench_data[$i] = [];
         
         $port_chart_value = 1;
         $bench_chart_value = 1;
@@ -59,15 +62,15 @@
             if(strtotime($pr['trade_date'])>= strtotime($month9_start)){$return_9m = $return_9m * $pr['return'];}
             if(strtotime($pr['trade_date'])>= strtotime($month1y_start)){$return_1y = $return_1y * $pr['return'];}
             
-            $port_data[] = [$pr['trade_date'], floatval($port_chart_value)];
-            $bench_data[] = [$pr['trade_date'], floatval($bench_chart_value)];   
+            $port_data[$i][] = [$pr['trade_date'], floatval($port_chart_value)];
+            $bench_data[$i][] = [$pr['trade_date'], floatval($bench_chart_value)];   
         }
         
         $return_all_time = $port_chart_value;
     
-    $series[] = ['name'=> $portfolio['portfolio'], 'data'=> $port_data];
-    $series[] = ['name'=> $portfolio['portfolio']."-benchmark", 'data'=> $bench_data]; 
- 
+    $series[] = ['name'=> $portfolio['portfolio'], 'data'=> $port_data[$i]];
+    $series[] = ['name'=> $portfolio['portfolio']."-benchmark", 'data'=> $bench_data[$i]]; 
+    $i++;
     $allstats = Calculators::CalcAllStats1($port_ret, $bench_ret);
    
   $tbl_rows .=   

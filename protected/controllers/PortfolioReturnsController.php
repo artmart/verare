@@ -32,7 +32,7 @@ class PortfolioReturnsController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'admin', 'portfolioReturnsCalc', 'recalculateReturns', 'RRR'),
+				'actions'=>array('create','update', 'admin', 'portfolioReturnsCalc', 'recalculateReturns', 'ReturnsRecalculate'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -45,8 +45,8 @@ class PortfolioReturnsController extends Controller
 		);
 	}
     
-    public function actionRRR(){
-        PortfolioReturns::model()->PortfolioReturnsUpdate(1, 1, 'SEK');
+    public function actionReturnsRecalculate(){
+        PortfolioReturns::model()->PortfolioReturnsUpdate(4, 2, 'SEK');
     }
     
     
@@ -73,6 +73,7 @@ class PortfolioReturnsController extends Controller
             $portfolio_currency = $portfolios->currency;
             
             Returns::model()->calculateIinstrumnetReturn($instrument_id, $portfolio_id, $client_id, $portfolio_currency);
+            //PortfolioReturns::model()->PortfolioReturnsUpdate(4, 2, 'SEK');
          /*   
         $prices_sql = "select distinct p.trade_date, p.price,
                         (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and  is_current = 1 and trade_status_id = 2 and client_id = $client_id) nominal,

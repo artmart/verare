@@ -67,6 +67,7 @@
                     where l.trade_date > '$start_date' and l.trade_date<'$end_date' and p.parrent_portfolio = '$portfolio' 
                     and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
                     group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
+    
     Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();                
     $sub_portfolios = Yii::app()->db->createCommand($sub_portfolios_sql)->queryAll(true);
      
@@ -312,6 +313,7 @@ $(function () {
         $portfolio_id = $port['id'];
         
     $sql_returns = "select * from portfolio_returns where portfolio_id = '$portfolio_id' and trade_date > '$start_date' and trade_date<'$end_date' order by trade_date";
+    
     $portfolio_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
     if($portfolio_results){
         
@@ -580,8 +582,7 @@ $(function () {
                   <div class="row">
                     <div class="col-md-12">
 				    <?php 
-                        $win_los_query = "
-                                        select i.instrument,
+                        $win_los_query = "select i.instrument,
                                         sum( if(p.trade_date = '$end_date', p.price * l.nominal*cr.{$portfolio_currency}/curs.cur_rate, 0)) nav_today,
                                         sum( if(p.trade_date = DATE_ADD('$end_date', INTERVAL -1 DAY), p.price * l.nominal*cr.{$portfolio_currency}/curs.cur_rate, 0)) nav_yesterday
                                         from prices p

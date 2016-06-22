@@ -109,7 +109,10 @@ class PortfolioReturns extends CActiveRecord
         //Trades
         $inst_sql = "select * from ledger l
                      inner join instruments i on l.instrument_id = i.id
-                     where l.is_current = 1 and i.is_current = 1 and l.trade_status_id = 2 and l.portfolio_id = $portfolio_id  and l.client_id = '$client_id' order by trade_date asc";
+                     inner join portfolios p on p.id = l.portfolio_id
+                     where l.is_current = 1 and i.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' 
+                     and (p.id = $portfolio_id or p.parrent_portfolio = $portfolio_id )
+                     order by trade_date asc";
         $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
         
         if(count($trades)>0){
@@ -132,14 +135,16 @@ class PortfolioReturns extends CActiveRecord
                                 inner join instruments i on i.id = p.instrument_id
                                 inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
                                 
-                                where p.instrument_id in ('$insids') and ldg.client_id = '$client_id' and port.id = '$portfolio_id'
+                                where p.instrument_id in ('$insids') and ldg.client_id = '$client_id' 
+                                and (port.id = $portfolio_id  or port.parrent_portfolio = $portfolio_id ) 
                                 group by  p.trade_date
                                 order by p.trade_date asc";
                                 
+                                //port.id = '$portfolio_id'
                                 //inner join benchmark_components bc on bc.instrument_id = p.instrument_id 
                                 //inner join ledger l on l.instrument_id = p.instrument_id
                                 //inner join benchmarks b on b.portfolio_id = l.portfolio_id
-         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
+        Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
         
         if(count($portfolio_returns)>0){

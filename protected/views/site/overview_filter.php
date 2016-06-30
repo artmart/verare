@@ -24,7 +24,7 @@
 <section class="content-header">
   <h1 class="span1">Overview
     <em><?php echo $portfolios[0]['portfolio']; ?> </em>
-    <small><?php echo "   Currency -  " .  $portfolio_currency ; ?> </small>
+    <small><?php echo "   (" .  $portfolio_currency . ")" ; ?> </small>
   </h1>
 
 <?php         
@@ -216,7 +216,7 @@
 							<thead>
 							  <tr>
 								<th>Name</th>
-								<th>Value (SEK)</th>
+								<th>Value (<?php echo $portfolio_currency; ?>)</th>
 								<th>Allocation</th>
 								<th>Normal</th>
 								<th>Diff</th>

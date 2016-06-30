@@ -61,10 +61,31 @@
     Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
     $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
  
-    $sub_portfolios_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
+ 
+ 
+    $p_ids = []; // $portfolio;
+        
+        $all_portfolios = Yii::app()->db->createCommand("select * from portfolios where parrent_portfolio = $portfolio")->queryAll(true);
+        
+        while(count($all_portfolios)>0){
+            $new_ids = [];
+            foreach($all_portfolios as $ap){
+                $p_ids[] = $ap['id'];
+                $new_ids[] = $ap['id'];
+            }
+            $new_p_ids = implode("','", array_unique($new_ids));
+            $all_portfolios = Yii::app()->db->createCommand("select * from portfolios where parrent_portfolio in ('$new_p_ids')")->queryAll(true);
+        }
+
+        $all_p_ids = implode("','", array_unique($p_ids));
+ 
+ 
+ //$portfolio
+ 
+    $sub_portfolios_sql = "select portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
                     inner join portfolios p on p.id = l.portfolio_id
                     inner join currency_rates cr on cr.day = l.trade_date                    
-                    where l.trade_date > '$start_date' and l.trade_date<'$end_date' and p.parrent_portfolio = '$portfolio' 
+                    where l.trade_date > '$start_date' and l.trade_date<'$end_date' and p.parrent_portfolio in ('$all_p_ids') 
                     and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
                     group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
     

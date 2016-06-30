@@ -79,16 +79,13 @@
 
         $all_p_ids = implode("','", array_unique($p_ids));
  
- 
- //$portfolio
- 
     $sub_portfolios_sql = "select portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
                     inner join portfolios p on p.id = l.portfolio_id
                     inner join currency_rates cr on cr.day = l.trade_date                    
                     where l.trade_date > '$start_date' and l.trade_date<'$end_date' and p.parrent_portfolio = $portfolio
                     and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
                     group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal
-                    Union
+                    Union 
                     select p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
                     inner join portfolios p on p.id = l.portfolio_id
                     inner join portfolios p2 on p2.id = p.parrent_portfolio

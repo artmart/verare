@@ -106,14 +106,33 @@ class PortfolioReturns extends CActiveRecord
         if($portfolio_id >0){
         ini_set('max_execution_time', 50000);
         $table_name = "client_".$client_id. "_inst_returns";
-        //Trades
+        
+        $p_ids[] = $portfolio_id;
+        
+        $all_portfolios = Yii::app()->db->createCommand("select * from portfolios where parrent_portfolio = $portfolio_id")->queryAll(true);
+        
+        while(count($all_portfolios)>0){
+            $new_ids = [];
+            foreach($all_portfolios as $ap){
+                $p_ids[] = $ap['id'];
+                $new_ids[] = $ap['id'];
+            }
+            $new_p_ids = implode("','", array_unique($new_ids));
+            $all_portfolios = Yii::app()->db->createCommand("select * from portfolios where parrent_portfolio in ('$new_p_ids')")->queryAll(true);
+        }
+
+        $all_p_ids = implode("','", array_unique($p_ids));
+        //Trades // and (p.id = $portfolio_id or p.parrent_portfolio = $portfolio_id )
         $inst_sql = "select * from ledger l
                      inner join instruments i on l.instrument_id = i.id
                      inner join portfolios p on p.id = l.portfolio_id
                      where l.is_current = 1 and i.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' 
-                     and (p.id = $portfolio_id or p.parrent_portfolio = $portfolio_id )
+                     and p.id in ('$all_p_ids')
                      order by trade_date asc";
         $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
+        
+       // var_dump($trades);
+       // exit;
         
         if(count($trades)>0){
         
@@ -121,7 +140,7 @@ class PortfolioReturns extends CActiveRecord
         
         $insids = implode("','", array_unique($ins_ids));                         
                                 
-                                
+         //(port.id = $portfolio_id  or port.parrent_portfolio = $portfolio_id )                       
         $portfolio_return_sql = "select p.trade_date,
                                 sum((select sum(if(trade_date=p.trade_date, nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = '$client_id')) pnl,
                                 sum(p.price*cr.{$portfolio_currency}/curs.cur_rate * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = '$client_id')) top,
@@ -136,7 +155,7 @@ class PortfolioReturns extends CActiveRecord
                                 inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
                                 
                                 where p.instrument_id in ('$insids') and ldg.client_id = '$client_id' 
-                                and (port.id = $portfolio_id  or port.parrent_portfolio = $portfolio_id ) 
+                                and port.id in ('$all_p_ids') 
                                 group by  p.trade_date
                                 order by p.trade_date asc";
                                 

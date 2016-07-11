@@ -48,6 +48,8 @@ if($ledger_delete == 1){$access_buttons .= '{
                                             }, '; 
                                             }                                      
 ?>
+
+<!--<script type="text/javascript" language="javascript" src="<?php //echo $baseUrl;?>/editor_datatables/js/editor.bootstrapDate.js"></script>-->
 <h1>Manage Ledgers</h1>
   
   <div id="recalculate_status"><strong>Last Returns Recalculation: </strong>
@@ -150,8 +152,10 @@ $(document).ready(function() {
             {
                 label: "Trade Date:",
                 name: "ledger.trade_date",
-                type: "datetime",
-                "attr": {"class": "form-control"}
+                type: "date",
+                dateFormat: 'yy-mm-dd',
+                "attr": {"class": "form-control", },
+                'id':'trade_date',
             },
             {
                 label: "Portfolio:",
@@ -296,7 +300,57 @@ $(document).ready(function() {
             });      
         });
     });
+    
+    editor.field('ledger.trade_date').input().on('change', function (e, d) {
+        
+        var currency =  $("#DTE_Field_ledger-currency").val();
+        var val = $("#trade_date").val();
 
+        $.ajax({
+                url: '<?php echo Yii::app()->baseUrl.'/currencyRates/last2?id='; ?>'+val+'&currency='+currency,
+                async: false,
+                dataType: 'json',
+                success: function (json) {
+                  $("#DTE_Field_ledger-currency_rate").val(json);
+                  }
+            });
+        
+    });
+    
+    /*
+    editor.field('ledger.trade_date').input().on( 'change', function () {
+        
+        alert('OK');
+    //$('#DTE_Field_ledger-trade_date').on( 'keyup click change', function (){
+    //$( editor.node('ledger.trade_date')).on( 'click', function ( val ) {   
+    editor.dependent( 'ledger.trade_date', function ( val ) {
+            // if(action === 'create'){
+                 
+                //alert(val);
+              /*  
+                var currency = document.getElementById('DTE_Field_ledger-currency').value; // $("#DTE_Field_ledger-currency").val();
+                
+            $.ajax({
+                url: '<?php //echo Yii::app()->baseUrl.'/currencyRates/last2?id='; ?>'+currency+'&trade_date='+val,
+                type: 'post',
+                dataType: 'json',
+                success: function (res) {
+                    
+                    //alert(res);
+                    $("#DTE_Field_ledger-currency_rate").val(5555);
+                  }
+            }); 
+            */  /*   
+        });
+    });
+    */
+
+
+
+
+
+
+////////////////////////////////////
     editor2 = new $.fn.dataTable.Editor( {
         ajax: 'ledger/ledger',
         table: "#example",
@@ -578,5 +632,7 @@ var table = $('#example').DataTable( {
     });
     return instruments.sort(SortByName);
   }
+  
+
   
 </script>

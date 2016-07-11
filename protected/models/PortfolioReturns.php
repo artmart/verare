@@ -170,8 +170,8 @@ class PortfolioReturns extends CActiveRecord
         $i = 0;
         
         //for benchmarks//
-        $return1[0] = 1;
-        $return_bench = 1;
+        $return1[$i] = 1;
+        //$return_bench = 1;
         //$return_bench_daily[] = 1;
         ////////////////////////
         
@@ -189,18 +189,14 @@ class PortfolioReturns extends CActiveRecord
                         
             if($i>0){ 
                     ////For Benchmark///////
-                    if($sums[$i-1] !== 0){
-                    $return1[$i] = $price['sums']/$sums[$i-1];
-                    }else{$return1[$i] = 1;}
-                    $return_bench = $return_bench * $return1[$i];
+                    if($sums[$i-1]!== 0){$return1[$i] = $price['sums']/$sums[$i-1];}
+                    //$return_bench = $return_bench * $return1[$i];
                     $rawData[$i]['benchmark_return'] = $return1[$i];
                     ////////////////////////
-           
-                    $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'];
                     
-                    if($div>0){
-                        $rawData[$i]['return'] = $rawData[$i]['top']/$div;
-                    }
+                    //Portfolio return//
+                    $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'];
+                    if($div>0){$rawData[$i]['return'] = $rawData[$i]['top']/$div;}
                }
          
               //checking if the return for current instrument is not exist and inserting the calculated return.//

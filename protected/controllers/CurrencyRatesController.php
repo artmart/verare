@@ -32,7 +32,7 @@ class CurrencyRatesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'last'),
+				'actions'=>array('create','update', 'last', 'last2'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -61,7 +61,16 @@ class CurrencyRatesController extends Controller
         $max_date_sql = "select {$id} rate from currency_rates order by day desc limit 1";
         $max_date_res = Yii::app()->db->createCommand($max_date_sql)->queryAll(true);
         echo $max_date_res[0]['rate'];
-	}  
+	}
+    
+    public function actionLast2($id, $currency)
+	{       
+       if($id && $currency){       
+              $date_sql = "select {$currency} rate from currency_rates where day = '$id'";
+              $date_res = Yii::app()->db->createCommand($date_sql)->queryAll(true);
+              echo $date_res[0]['rate'];
+        }
+	}   
 
 	/**
 	 * Creates a new model.

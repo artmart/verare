@@ -154,7 +154,8 @@ $(document).ready(function() {
                 name: "ledger.trade_date",
                 type: "date",
                 dateFormat: 'yy-mm-dd',
-                "attr": {"class": "form-control", },
+                "dateImage": "<?php echo $baseUrl?>/editor_datatables/images/calender.png",
+                "attr": {"class": "form-control", 'style': 'float:left' },
                 'id':'trade_date',
             },
             {

@@ -8,7 +8,7 @@
     if(isset($_REQUEST['currency'])){$currency = $_REQUEST['currency'];}
     if(isset($_REQUEST['instrument'])){$instrument = $_REQUEST['instrument'];}
         
-    $query = "select cr.day, cr.{$currency} currency, ir.{$currency} instrument_return, pr.`return` portfolio_return from currency_rates cr
+    $query = "select cr.day, cr.{$currency} currency, ir.{$currency} instrument_return, pr.`return` portfolio_return, pr.benchmark_return  from currency_rates cr
                 left join client_1_inst_returns ir on ir.trade_date = cr.day
                 left join portfolio_returns pr on pr.trade_date = cr.day
                 where cr.day >= '$start_date' and cr.day<='$end_date'
@@ -32,6 +32,7 @@
     						<td>'.number_format($res['currency'], 15).'</td>
     						<td>'.number_format($res['instrument_return'], 7).'</td>
     						<td>'.number_format($res['portfolio_return'], 7).'</td>
+                            <td>'.number_format($res['benchmark_return'], 7).'</td>
     					  </tr>';
                            
            $months[] = $res['day'];               
@@ -76,6 +77,7 @@
 								<th>Currency rate</th>
 								<th>Instrument Return</th>
 								<th>Portfolio Return</th>
+                                <th>Benchmark Return</th>
 							  </tr>
 							</thead>
 							<tbody>

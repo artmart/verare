@@ -15,9 +15,32 @@
     $month6_start = date( "Y-m-d", strtotime( "-6 month" ));
     $month9_start = date( "Y-m-d", strtotime( "-9 month" ));
     $month1y_start = date( "Y-m-d", strtotime( "-1 years" ));
+    
+    
+    /////////////////////////////////////////////////////////////////
+     $p_ids[] = $portfolio_id;
         
-    $instruments_query = "select distinct i.id, i.instrument from instruments i inner join ledger l on l.instrument_id = i.id 
-                          where l.is_current=1 and l.trade_status_id = 2 and l.portfolio_id = '$portfolio_id' and l.client_id = '$client_id'  ";
+        $all_portfolios = Yii::app()->db->createCommand("select * from portfolios where parrent_portfolio = $portfolio_id")->queryAll(true);
+        
+        while(count($all_portfolios)>0){
+            $new_ids = [];
+            foreach($all_portfolios as $ap){
+                $p_ids[] = $ap['id'];
+                $new_ids[] = $ap['id'];
+            }
+            $new_p_ids = implode("','", array_unique($new_ids));
+            $all_portfolios = Yii::app()->db->createCommand("select * from portfolios where parrent_portfolio in ('$new_p_ids')")->queryAll(true);
+        }
+
+        $all_p_ids = implode("','", array_unique($p_ids));
+    ////////////////////////////////////////////////////////////////
+    
+    
+      //and l.portfolio_id = '$portfolio_id'  
+    $instruments_query = "select distinct i.id, i.instrument, l.portfolio_id from instruments i inner join ledger l on l.instrument_id = i.id 
+                          where l.is_current=1 and l.trade_status_id = 2 
+                          and l.portfolio_id in ('$all_p_ids')
+                          and l.client_id = '$client_id'  ";
     $instruments = Yii::app()->db->createCommand($instruments_query)->queryAll(true);
        
     $tbl_rows = '';
@@ -28,12 +51,13 @@
     
     foreach($instruments as $instrument){
             $instrument_id = $instrument['id'];
+            $p_id = $instrument['portfolio_id'];
         
             $sql_returns = "select r.trade_date, r.{$portfolio_currency} `return`, pr.benchmark_return 
                             from {$table_name} r 
                             inner join portfolio_returns pr on pr.trade_date = r.trade_date
                             where r.instrument_id = '$instrument_id'
-                            and pr.portfolio_id = '$portfolio_id'
+                            and pr.portfolio_id = '$p_id'
                             and r.trade_date > '$start_date' and r.trade_date<'$end_date'
                             order by r.trade_date";
             $instrument_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);

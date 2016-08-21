@@ -8,8 +8,10 @@
     if(isset($_REQUEST['currency'])){$currency = $_REQUEST['currency'];}
     if(isset($_REQUEST['instrument'])){$instrument = $_REQUEST['instrument'];}
         
+    $table_name = "client_".$client_id. "_inst_returns";
+    
     $query = "select cr.day, cr.{$currency} currency, ir.{$currency} instrument_return, pr.`return` portfolio_return, pr.benchmark_return  from currency_rates cr
-                left join client_1_inst_returns ir on ir.trade_date = cr.day
+                left join {$table_name} ir on ir.trade_date = cr.day
                 left join portfolio_returns pr on pr.trade_date = cr.day
                 where cr.day >= '$start_date' and cr.day<='$end_date'
                 and pr.portfolio_id = '$portfolio'";

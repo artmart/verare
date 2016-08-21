@@ -36,7 +36,7 @@
     ////////////////////////////////////////////////////////////////
     
     
-      //and l.portfolio_id = '$portfolio_id'  
+    //and l.portfolio_id = '$portfolio_id'  
     $instruments_query = "select distinct i.id, i.instrument, l.portfolio_id from instruments i inner join ledger l on l.instrument_id = i.id 
                           where l.is_current=1 and l.trade_status_id = 2 
                           and l.portfolio_id in ('$all_p_ids')

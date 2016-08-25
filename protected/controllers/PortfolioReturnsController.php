@@ -46,7 +46,8 @@ class PortfolioReturnsController extends Controller
 	}
     
     public function actionReturnsRecalculate(){
-        PortfolioReturns::model()->PortfolioReturnsUpdate(7, 2, 'SEK');
+        PortfolioReturns::model()->PortfolioReturnsUpdate(5, 2, 'SEK');
+        //PortfolioReturns::model()->PortfolioReturnsUpdate($default_portfolio_id, $client_id, $default_portfolio_currency);
     }
     
     

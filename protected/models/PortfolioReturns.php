@@ -162,13 +162,17 @@ class PortfolioReturns extends CActiveRecord
                                 and port.id in ('$all_p_ids') 
                                 group by  p.trade_date
                                 order by p.trade_date asc";
-                                
+         // echo $portfolio_return_sql;
+        //  exit;                      
                                 //port.id = '$portfolio_id'
                                 //inner join benchmark_components bc on bc.instrument_id = p.instrument_id 
                                 //inner join ledger l on l.instrument_id = p.instrument_id
                                 //inner join benchmarks b on b.portfolio_id = l.portfolio_id
         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
+        
+        //var_dump($portfolio_returns);
+       // exit;
         
         if(count($portfolio_returns)>0){
         $i = 0;
@@ -190,10 +194,11 @@ class PortfolioReturns extends CActiveRecord
             $sums[$i] = $price['sums'];
             $rawData[$i]['benchmark_return'] = 1;
             ////////////////////////
+            $return1[$i] = 1;
                         
             if($i>0){ 
                     ////For Benchmark///////
-                    if($sums[$i-1]!== 0){$return1[$i] = $price['sums']/$sums[$i-1];}
+                    if($sums[$i-1]> 0){$return1[$i] = $price['sums']/$sums[$i-1];}
                     //$return_bench = $return_bench * $return1[$i];
                     $rawData[$i]['benchmark_return'] = $return1[$i];
                     ////////////////////////

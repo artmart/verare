@@ -26,12 +26,9 @@ $baseUrl1 = Yii::app()->baseUrl;
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav navbar-right text-uppercase">
 						<li><a href="#home">Home</a></li>
-						<li><a href="#feature">Features</a></li>
-						<li><a href="#pricing">Pricing</a></li>
-                        <li><a href="#contact">Contact</a></li>
+						<li><a href="#feature">Services</a></li>
 						<li><a href="#download">Login</a></li>
-						
-                        <!--<li><a onclick="redirecttologin()" href="<?php //echo $baseUrl1;?>/user/login">Login</a></li>-->
+						<li><a href="#contact">Contact</a></li>
 					</ul>
 				</div>
 			</div>
@@ -44,14 +41,14 @@ $baseUrl1 = Yii::app()->baseUrl;
 					<div class="row">
 						<div class="col-md-1"></div>
 						<div class="col-md-10 wow fadeIn" data-wow-delay="0.3s">
-							<h1 class="text-upper">Software Landing Page</h1>
-							<p class="tm-white">Boxer is a fully Responsive, Clean Design, Modern, and Flexible Software Landing Page for startups, businesses and agencies. It is built with HTML5 &amp; CSS3, Bootstrap 3.3.4, Font Awesome 4.3.0, and much more. Designed by <a rel="nofollow" href="http://www.facebook.com/templatemo" target="_parent">templatemo</a>. Images by <a rel="nofollow" href="http://pixabay.com" target="_blank">Pixabay</a></p>
-							<img src="<?php echo $baseUrl;?>/images/software-img.png" class="img-responsive" alt="home img">
+							<h1 class="text-upper">Treasury Management System</h1>
+							<p class="tm-white">Verare provides a wide range of services and tools to the finance industry. Our areas of expertise include valuation, performance tracking, risk managament, reporting and much more. The name of our main tool is Treasury Management System.</p>
+							<img src="<?php echo $baseUrl;?>/images/computer_overview.png" class="img-responsive" alt="home img">
 						</div>
 						<div class="col-md-1"></div>
 					</div>
 				</div>
-			</div>
+			</div> 
 		</section>
 		<!-- end home -->
 		<!-- start divider -->
@@ -59,19 +56,19 @@ $baseUrl1 = Yii::app()->baseUrl;
 			<div class="container">
 				<div class="row">
 					<div class="col-md-4 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
-						<i class="fa fa-laptop"></i>
-						<h3 class="text-uppercase">RESPONSIVE LAYOUT</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation. </p>
+						<i class="fa fa-calculator"></i>
+						<h3 class="text-uppercase">VALUATIONS</h3>
+						<p>TMS valuation tools exists as standard versions depending on investment focus and portfolio complexity or can be customized to the exact needs of an investment manager providing a cost efficient system solution. All TMS tools are available as window or mac applications and via Internet. TMS also have an android app available in the play store, and an apple app in development.</p>
 					</div>
 					<div class="col-md-4 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
-						<i class="fa fa-twitter"></i>
-						<h3 class="text-uppercase">BOOTSTRAP 3.3.4</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation. </p>
+						<i class="fa fa-calendar"></i>
+						<h3 class="text-uppercase">CASH MANAGEMENT</h3>
+						<p>Through TMS portals you will have up-to-date and accurate valuation of your portfolio and trades on demand.  By using TMS online platform you can add value added services like in depth analysis, efficiency calculations for portfolios and for due diligence. TMS provide basic risk analysis as standard and additional analysis on demand.</p>
 					</div>
 					<div class="col-md-4 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
-						<i class="fa fa-font"></i>
-						<h3 class="text-uppercase">GOOGLE FONT</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation. </p>
+						<i class="fa fa-bar-chart"></i>
+						<h3 class="text-uppercase">REPORTING</h3>
+						<p>TMS provide standard reporting formats and possibilities to customize report functions to daily, monthly or ad hoc reports. TMS provide on demand services for longer and more in depth reporting, providing analysis for auditing and tax reporting.</p>
 					</div>
 				</div>
 			</div>
@@ -83,13 +80,13 @@ $baseUrl1 = Yii::app()->baseUrl;
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6 wow fadeInLeft" data-wow-delay="0.6s">
-						<h2 class="text-uppercase">Our Software Features</h2>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-						<p><span><i class="fa fa-mobile"></i></span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-						<p><i class="fa fa-code"></i>Quis autem velis reprehenderit et quis voluptate velit esse quam.</p>
+						<h2 class="text-uppercase">Valuations, Performance Tracking, and Risk</h2>
+						<p>TMS provides a platform with state of the art calculators using the latest market standards to provide correct evaluations.</p>
+						<p><span><i class="fa fa-mobile"></i></span>Using the most frequent market data available allows for immediate and speedy observations on valuation and risk.</p>
+						<p><i class="fa fa-code"></i>TMS trade logs and trade history database allows for various ways of monitoring cash flows and portfolio events and provides tools to plan future events to ensure an efficient portfolio management.</p>
 					</div>
 					<div class="col-md-6 wow fadeInRight" data-wow-delay="0.6s">
-						<img src="<?php echo $baseUrl;?>/images/software-img.png" class="img-responsive" alt="feature img">
+					    <img src="<?php echo $baseUrl;?>/images/computer_piechart.png" class="img-responsive" alt="feature img">
 					</div>
 				</div>
 			</div>
@@ -101,102 +98,41 @@ $baseUrl1 = Yii::app()->baseUrl;
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
-						<img src="<?php echo $baseUrl;?>/images/software-img.png" class="img-responsive" alt="feature img">
+					    <img src="<?php echo $baseUrl;?>/images/computer_frontier.png" class="img-responsive" alt="feature img">
 					</div>
 					<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
-						<h2 class="text-uppercase">More of Your Software</h2>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-						<p><span><i class="fa fa-mobile"></i></span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-						<p><i class="fa fa-code"></i>Quis autem velis reprehenderit et quis voluptate velit esse quam.</p>
+						<h2 class="text-uppercase">Reporting, Cash Management, Case Analysis</h2>
+						<p>TMS has standard reporting formats but allows for customization to meet the demand and requirements depending on investment focus.</p>
+						<p><span><i class="fa fa-mobile"></i></span>Reporting analysis can be provided on a demand basis with market reports, in depth evaluation, event driven portfolio risks.</p>
+						<p><i class="fa fa-code"></i>TMS can provide tools for measuring portfolio efficiency, allocation decisions, audit preparations and specialized reports for tax purposes.</p>
+				        <p></p><a href="<?php echo $baseUrl;?>/images/Verare.pdf" target="_blank"><b>Mer om VERARE’s riskrapportering</b></a></p>
 					</div>
 				</div>
 			</div>
 		</section>
 		<!-- end feature1 -->
 
-		<!-- start pricing -->
-		<section id="pricing">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12 wow bounceIn">
-						<h2 class="text-uppercase">Our Pricing</h2>
-					</div>
-					<div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
-						<div class="pricing text-uppercase">
-							<div class="pricing-title">
-								<h4>Basic Plan</h4>
-								<p>$11</p>
-								<small class="text-lowercase">monthly</small>
-							</div>
-							<ul>
-								<li>6 GB Space</li>
-								<li>600 GB Bandwidth</li>
-								<li>60 More Themes</li>
-								<li>Lifetime Support</li>
-							</ul>
-							<button class="btn btn-primary text-uppercase">Sign up</button>
-						</div>
-					</div>
-					<div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
-						<div class="pricing active text-uppercase">
-							<div class="pricing-title">
-								<h4>Business Plan</h4>
-								<p>$22</p>
-								<small class="text-lowercase">monthly</small>
-							</div>
-							<ul>
-								<li>15 GB space</li>
-								<li>1,500 GB Bandwidth</li>
-								<li>150 More Themes</li>
-								<li>Lifetime Support</li>
-							</ul>
-							<button class="btn btn-primary text-uppercase">Sign up</button>
-						</div>
-					</div>
-					<div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
-						<div class="pricing text-uppercase">
-							<div class="pricing-title">
-								<h4>Pro Plan</h4>
-								<p>$33</p>
-								<small class="text-lowercase">monthly</small>
-							</div>
-							<ul>
-								<li>35 GB space</li>
-								<li>3,500 GB bandwidth</li>
-								<li>350 more themes</li>
-								<li>Lifetime Support</li>
-							</ul>
-							<button class="btn btn-primary text-uppercase">Sign Up</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<!-- end pricing -->
-
-		<!-- start download -->
+		<!-- start login -->
 		<section id="download">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6 wow fadeInLeft" data-wow-delay="0.6s">
-						<h2 class="text-uppercase">LOGIN</h2>
+						<h2 class="text-uppercase">Login</h2>
+						
                         <?php
                         $model=new LoginForm;
                         $this->renderPartial('login', ['model'=>$model]);
-                        /*
                         ?>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation. </p>
-						<button class="btn btn-primary text-uppercase"><i class="fa fa-download"></i> Download</button>
-                        <?php */?>
+                        
 					</div>
 					<div class="col-md-6 wow fadeInRight" data-wow-delay="0.6s">
-						<img src="<?php echo $baseUrl;?>/images/software-img.png" class="img-responsive" alt="feature img">
+					    <img src="<?php echo $baseUrl;?>/images/login4.jpg" class="img-responsive" alt="login img">
 					</div>
 				</div>
 			</div>
 		</section>
-		<!-- end download -->
-
+		<!-- end login -->
+		
 		<!-- start contact -->
 		<section id="contact">
 			<div class="overlay">
@@ -204,29 +140,36 @@ $baseUrl1 = Yii::app()->baseUrl;
 					<div class="row">
 						<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
 							<h2 class="text-uppercase">Contact Us</h2>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation. </p>
+							<p>Our office is in Sweden. Please, send us a message if you want to be contacted by a representative.</p>
 							<address>
-								<p><i class="fa fa-map-marker"></i>36 Street Name, City Name, United States</p>
-								<p><i class="fa fa-phone"></i> 010-010-0110 or 020-020-0220</p>
-								<p><i class="fa fa-envelope-o"></i> info@company.com</p>
+								<p><i class="fa fa-map-marker"></i>Riddargatan 30, 114 57 Stockholm, Sweden</p>
+								<p><i class="fa fa-phone"></i> +46 730 489 756</p>
+								<p><i class="fa fa-envelope-o"></i> info@verare.se</p>
 							</address>
 						</div>
 						<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
 							<div class="contact-form">
-								<form action="/user/login" method="post">
+							    <form method="post" action="http://www.verare.se/cgi-bin/FormMail.pl" 
+accept-charset="ISO-8859-1" onsubmit="var originalCharset = document.charset; 
+document.charset = 'ISO-8859-1'; 
+window.onbeforeunload = function () {document.charset=originalCharset;};">
 									<div class="col-md-6">
-										<input type="text" class="form-control" placeholder="Name">
+										<input type="text" class="form-control" placeholder="Name" name="realname">
 									</div>
 									<div class="col-md-6">
-										<input type="email" class="form-control" placeholder="Email">
+										<input type="email" class="form-control" placeholder="Email" name="email">
 									</div>
 									<div class="col-md-12">
-										<input type="text" class="form-control" placeholder="Subject">
+										<input type="text" class="form-control" placeholder="Subject" name="subject">
 									</div>
 									<div class="col-md-12">
-										<textarea class="form-control" placeholder="Message" rows="4"></textarea>
+										<textarea class="form-control" placeholder="Message" rows="4" name="Message"></textarea>
 									</div>
-									<div class="col-md-8">
+									<input type="hidden" name="recipient" value="info@verare.se" />
+									<input type="hidden" name="redirect" value="http://www.verare.se" />
+                                    <input type="hidden" name="missing_fields_redirect" value="http://www.verare.se" />
+                                    <input type="hidden" name="required" value="realname,email,Message" />
+									<div class="col-md-12">
 										<input type="submit" class="form-control text-uppercase" value="Send">
 									</div>
 								</form>
@@ -237,3 +180,13 @@ $baseUrl1 = Yii::app()->baseUrl;
 			</div>
 		</section>
 		<!-- end contact -->
+
+		<!-- start footer -->
+		<footer>
+			<div class="container">
+				<div class="row">
+					<p>Copyright © 2015 Verare AB</p>
+				</div>
+			</div>
+		</footer>
+		<!-- end footer -->

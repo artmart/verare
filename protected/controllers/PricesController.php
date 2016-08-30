@@ -28,7 +28,7 @@ class PricesController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view', 'api'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -79,6 +79,25 @@ class PricesController extends Controller
 			'model'=>$model,
 		));
 	}
+    
+    
+    public function actionApi()
+    {
+        $start_date = $_GET['start_date'];
+        $end_date = $_GET['end_date'];
+        $instrument_id = $_GET['instrument_id'];
+        
+        $sql = "select trade_date, price from prices 
+                where instrument_id = $instrument_id and trade_date>=$start_date and trade_date<=$end_date
+                order by trade_date asc";
+        $query = Yii::app()->db->createCommand($sql)->queryAll(true);
+        
+        if(count($query)>0){foreach($query as $q){$res[] = ['trade_date'=>$q['trade_date'], 'price'=> $q['price']];}
+        }else{$res[] = ['No Results found.'];}
+        
+        echo json_encode($res);
+    }
+    
     
    	public function actionReturn()
 	{
@@ -205,10 +224,6 @@ class PricesController extends Controller
 	//	$this->render('portfolio_returns', ['portfolio' => $portfolio, 'dt' => $dt]);
        
     }
-    
-    
-    
-    
     
     
     public function actionInstrumentReturnUpdate($id)

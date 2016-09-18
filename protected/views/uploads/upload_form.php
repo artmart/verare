@@ -31,7 +31,7 @@ $form=$this->beginWidget('CActiveForm', array(
     
     <div class="col-sm-12 control-label">
     <p> The data should be an excel file, with the sheet name "Sheet1" and the data starting in cell A1. 
-        The data should be dates (dd/mm/yyyy) in column A, name of instruments in column B, and price in column C.
+        The data should be dates (dd/mm/yyyy) in column A, name of instruments in column B, price in column C, and currency in column D.
         The instruments in the list will be created if they don't exist previously.
     </p>
     </div>  

@@ -237,7 +237,7 @@ class UploadsController extends Controller
                 Yii::app()->user->setFlash('success', "Prices Uploaded!");
            
                   @chmod( $tempLoc, 0777 );
-                  unlink( $tempLoc );           
+                  @unlink( $tempLoc );           
                              
                   //unlink(Yii::getPathOfAlias('webroot').'/uploads/'.$model->upload_file); 
         

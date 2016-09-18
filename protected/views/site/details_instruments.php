@@ -60,6 +60,7 @@
                             and pr.portfolio_id = '$p_id'
                             and r.trade_date > '$start_date' and r.trade_date<'$end_date'
                             order by r.trade_date";
+            Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
             $instrument_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
     $i = 0;
     if($instrument_results){

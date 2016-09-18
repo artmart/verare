@@ -163,7 +163,7 @@ class PortfolioReturns extends CActiveRecord
                                 group by  p.trade_date
                                 order by p.trade_date asc";
          // echo $portfolio_return_sql;
-        //  exit;                      
+         // exit;                      
                                 //port.id = '$portfolio_id'
                                 //inner join benchmark_components bc on bc.instrument_id = p.instrument_id 
                                 //inner join ledger l on l.instrument_id = p.instrument_id

@@ -33,12 +33,12 @@ class UploadsController extends Controller
             'users'=>array('admin'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('fullupload'),
+				'actions'=>array('fullupload','admin', 'delete'),
 				'users'=>array('@'),
                 //'users'=>array('admin'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','view', 'create', 'admin','delete'),
+				'actions'=>array('index','view', 'create'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -237,7 +237,7 @@ class UploadsController extends Controller
                 Yii::app()->user->setFlash('success', "Prices Uploaded!");
            
                   @chmod( $tempLoc, 0777 );
-                  @unlink( $tempLoc );           
+                  unlink( $tempLoc );           
                              
                   //unlink(Yii::getPathOfAlias('webroot').'/uploads/'.$model->upload_file); 
         
@@ -332,7 +332,7 @@ class UploadsController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-	    $model=$this->loadModel($id);
+	    //$model=$this->loadModel($id);
         
             Prices::model()->deleteAll('upload_file_id =:upload_file_id', array('upload_file_id' => $id));
                 

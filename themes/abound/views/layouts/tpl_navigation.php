@@ -52,7 +52,8 @@ switch ($user_role_id) {
                 $usermenu[]=['label'=>'Clients', 'url'=>['/clients/admin']];
                 //$usermenu[]=['label'=>'Audit Tables', 'url'=>['/auditTables/admin']];
                 //$usermenu[]=['label'=>'Upload pricies', 'url'=>['/uploads/create']];
-                $usermenu[]=['label'=>'New Upload pricies', 'url'=>['/uploads/fullupload']];
+                $usermenu[]=['label'=>'Upload pricies', 'url'=>['/uploads/fullupload']];
+                $usermenu[]=['label'=>'Manage Uploads', 'url'=>['/uploads/admin']];
                 //$usermenu[]=['label'=>'Return', 'url'=>['/prices/return']];
                 //$usermenu[]=['label'=>'Returns', 'url'=>['/returns/admin']];
                 //$usermenu[]=['label'=>'Return Calculation', 'url'=>['/prices/allReturns']];
@@ -102,7 +103,8 @@ switch ($user_role_id) {
                 //$usermenu[]=['label'=>'Document Locations', 'url'=>['/documentLocations/admin']];
                 //$usermenu[]=['label'=>'Audit Tables', 'url'=>['/auditTables/admin']];
                 //$usermenu[]=['label'=>'Upload pricies', 'url'=>['/uploads/create']];
-                $usermenu[]=['label'=>'New Upload pricies', 'url'=>['/uploads/fullupload']];
+                $usermenu[]=['label'=>'Upload pricies', 'url'=>['/uploads/fullupload']];
+                //$usermenu[]=['label'=>'Manage Uploads', 'url'=>['/uploads/admin']];
                 //$usermenu[]=['label'=>'Return', 'url'=>['/prices/return']];
                 //$usermenu[]=['label'=>'Returns', 'url'=>['/returns/admin']];
                 //$usermenu[]=['label'=>'Return Calculation', 'url'=>['/prices/allReturns']];

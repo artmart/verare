@@ -28,7 +28,7 @@ class InstrumentsController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view', 'api'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -45,6 +45,17 @@ class InstrumentsController extends Controller
 			),
 		);
 	}
+    
+    public function actionApi()
+    {        
+        $sql = "select * from instruments";
+        $query = Yii::app()->db->createCommand($sql)->queryAll(true);
+        
+        if(count($query)>0){foreach($query as $q){$res[] = ['id'=> $q['id'], 'instrument'=>$q['instrument'], 'currency'=> $q['currency']];}
+        }else{$res[] = ['No Results found.'];}
+        
+        echo json_encode($res);
+    }
 
 	/**
 	 * Displays a particular model.

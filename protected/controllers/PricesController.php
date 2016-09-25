@@ -83,21 +83,58 @@ class PricesController extends Controller
     
     public function actionApi()
     {
-        $start_date = $_GET['start_date'];
-        $end_date = $_GET['end_date'];
-        $instrument_id = $_GET['instrument_id'];
-        
-        $sql = "select trade_date, price from prices 
-                where instrument_id = $instrument_id and trade_date>=$start_date and trade_date<=$end_date
-                order by trade_date asc";
-        $query = Yii::app()->db->createCommand($sql)->queryAll(true);
-        
-        if(count($query)>0){foreach($query as $q){$res[] = ['trade_date'=>$q['trade_date'], 'price'=> $q['price']];}
-        }else{$res[] = ['No Results found.'];}
-        
-        echo json_encode($res);
+        $view = $_GET['view'];
+        if (strcasecmp($view, 'prices') == 0) {
+            $start_date = $_GET['start_date'];
+            $end_date = $_GET['end_date'];
+            $instrument_id = $_GET['instrument_id'];
+            
+            $sql = "select trade_date, price from prices 
+                    where instrument_id = $instrument_id and trade_date>=$start_date and trade_date<=$end_date
+                    order by trade_date asc";
+            $query = Yii::app()->db->createCommand($sql)->queryAll(true);
+            
+            if(count($query)>0){foreach($query as $q){$res[] = ['trade_date'=>$q['trade_date'], 'price'=> $q['price']];}
+            }else{$res[] = ['No Results found.'];}
+            
+            echo json_encode($res);
+        }
+        if (strcasecmp($view, 'instruments') == 0) {
+            $sql = "select * from instruments";
+            $query = Yii::app()->db->createCommand($sql)->queryAll(true);
+            
+            if(count($query)>0){foreach($query as $q){$res[] = ['id'=> $q['id'], 'instrument'=>$q['instrument'], 'currency'=> $q['currency']];}
+            }else{$res[] = ['No Results found.'];}
+            
+            echo json_encode($res);
+        }
+        if (strcasecmp($view, 'currencies') == 0) {
+            $start_date = $_GET['start_date'];
+            $end_date = $_GET['end_date'];
+            //$currency_code = $_GET['currency'];
+            $sql = "select * from currency_rates 
+                    where day>=$start_date and day<=$end_date
+                    order by day asc";
+            $query = Yii::app()->db->createCommand($sql)->queryAll(true);
+            
+            if(count($query)>0){foreach($query as $q){$res[] = ['trade_date'=> $q['day'], 'currency'=>$q['SEK']];}
+            }else{$res[] = ['No Results found.'];}
+            
+            echo json_encode($res);
+        }
+        if (strcasecmp($view, 'returns') == 0) {
+            $start_date = $_GET['start_date'];
+            $end_date = $_GET['end_date'];
+            $portfolio_name = $_GET['portfolio_name'];
+            $sql = "select portfolio_returns.trade_date, portfolio_returns.return, portfolio_returns.benchmark_return from portfolio_returns, portfolios where portfolio_returns.portfolio_id=portfolios.id and trade_date>=$start_date and trade_date<=$end_date and portfolios.portfolio=$portfolio_name";
+            $query = Yii::app()->db->createCommand($sql)->queryAll(true);
+            
+            if(count($query)>0){foreach($query as $q){$res[] = ['trade_date'=> $q['trade_date'], 'portfolio'=>$q['return'], 'benchmark'=> $q['benchmark_return']];}
+            }else{$res[] = ['No Results found.'];}
+            
+            echo json_encode($res);
+        }
     }
-    
     
    	public function actionReturn()
 	{

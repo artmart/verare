@@ -20,6 +20,9 @@ switch ($user_role_id) {
                             <a href="'.$baseUrl1.'/benchmarks/admin">Benchmarks</a>
                             <a href="'.$baseUrl1.'/benchmarkComponents/admin">Benchmark Components</a>
                             <a href="'.$baseUrl1.'/portfolioReturns/recalculateReturns">Recalculate Returns</a>
+                            
+                            <a href="'.$baseUrl1.'/portfolioReturns/admin">Portfolio Returns</a>
+                            
                             </li><li class="divider"></li>';
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/counterparties/admin">Counterparties</a>  
@@ -77,6 +80,9 @@ switch ($user_role_id) {
                             <a href="'.$baseUrl1.'/benchmarks/admin">Benchmarks</a>
                             <a href="'.$baseUrl1.'/benchmarkComponents/admin">Benchmark Components</a>
                             <a href="'.$baseUrl1.'/portfolioReturns/recalculateReturns">Recalculate Returns</a>
+                            
+                            <a href="'.$baseUrl1.'/portfolioReturns/admin">Portfolio Returns</a>
+                            
                             </li><li class="divider"></li>';
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/counterparties/admin">Counterparties</a>  

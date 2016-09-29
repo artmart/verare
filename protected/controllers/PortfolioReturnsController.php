@@ -416,13 +416,13 @@ class PortfolioReturnsController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new PortfolioReturns('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['PortfolioReturns']))
-			$model->attributes=$_GET['PortfolioReturns'];
+		//$model=new PortfolioReturns('search');
+		//$model->unsetAttributes();  // clear any default values
+	//	if(isset($_GET['PortfolioReturns']))
+	//		$model->attributes=$_GET['PortfolioReturns'];
 
 		$this->render('admin',array(
-			'model'=>$model,
+		///	'model'=>$model,
 		));
 	}
 

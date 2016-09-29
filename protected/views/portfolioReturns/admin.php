@@ -140,6 +140,9 @@ $client_id = $user_data->client_id;
          //(port.id = $portfolio_id  or port.parrent_portfolio = $portfolio_id ) 
          //sum(p.price*cr.{$portfolio_currency}/curs.cur_rate*bc.weight) sums   
          //sum((select  sum(p1.price*cr.SEK/curs.cur_rate*bc.weight) from prices p1 where p1.instrument_id = bc.instrument_id and p1.trade_date = p.trade_date)) sums                   
+
+
+/*  //with currencies//
 $portfolio_return_sql = "select p.trade_date,
     sum((select sum(if(trade_date=p.trade_date, nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id )) pnl,
     sum(p.price*cr.{$portfolio_currency}/curs.cur_rate * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id )) top, 
@@ -159,7 +162,40 @@ $portfolio_return_sql = "select p.trade_date,
     and port.id in ('$all_p_ids') 
     group by  p.trade_date
     order by p.trade_date asc";
-         // echo $portfolio_return_sql;
+*/
+
+ /*
+$portfolio_return_sql = "select p.trade_date,
+    (select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id ) pnl,
+    sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id )) top, 
+    sum((select sum(p1.price*bc.weight) from prices p1 where p1.instrument_id = bc.instrument_id and p1.trade_date = p.trade_date and bc.benchmark_id = port.benchmark_id))/sum(bc.weight) sums
+    from prices p
+    inner join ledger ldg on ldg.instrument_id = p.instrument_id
+    inner join portfolios port on port.id = ldg.portfolio_id
+    inner join benchmark_components bc on bc.benchmark_id = port.benchmark_id
+    inner join benchmarks bench on bench.id = port.benchmark_id and bench.client_id = ldg.client_id 
+    inner join instruments i on i.id = p.instrument_id
+    where p.instrument_id in ('$insids') and ldg.client_id = '$client_id' 
+    and port.id in ('$all_p_ids') 
+    group by  p.trade_date
+    order by p.trade_date asc";
+*/
+
+$portfolio_return_sql = "select p.trade_date,
+    (select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id ) pnl,
+    sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id )) top, 
+    sum((select sum(p1.price*bc.weight) from prices p1 where p1.instrument_id = bc.instrument_id and p1.trade_date = p.trade_date and bc.benchmark_id = port.benchmark_id))/sum(bc.weight) sums
+    from prices p
+    inner join ledger ldg on ldg.instrument_id = p.instrument_id
+    inner join portfolios port on port.id = ldg.portfolio_id
+    inner join benchmark_components bc on bc.benchmark_id = port.benchmark_id
+    inner join benchmarks bench on bench.id = port.benchmark_id and bench.client_id = ldg.client_id 
+    inner join instruments i on i.id = p.instrument_id
+    where p.instrument_id in ('$insids') and ldg.client_id = '$client_id' 
+    and port.id in ('$all_p_ids') 
+    group by  p.trade_date
+    order by p.trade_date asc";
+   //       echo $portfolio_return_sql;
          // exit;                      
                                 //port.id = '$portfolio_id'
                                 //inner join benchmark_components bc on bc.instrument_id = p.instrument_id 

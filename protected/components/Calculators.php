@@ -43,11 +43,17 @@ class Calculators {
        $currencies = ['EUR', 'JPY', 'GBP', 'AUD', 'CHF', 'CAD', 'MXN', 'CNY', 'CNH', 'NZD', 'SEK', 'RUB', 'DKK', 'NOK', 'HKD', 'SGD', 'TRY', 'KRW', 'ZAR', 'BRL', 'INR'];
         
         while(strtotime($start_date)<= strtotime("now")){
+            
+            
+             $existing_rate  = CurrencyRates::model()->findByAttributes(['day' =>$start_date]);
+            
+            if(count($existing_rate)==0){
+            
             $currency_rates = New CurrencyRates;
             $currency_rates->day = $start_date;
                         
             foreach($currencies as $cur){
-                $currency_rates->{$cur} = 0;
+                $currency_rates->{$cur} = 1;
                                
                 $Url = "http://currencies.apps.grandtrunk.net/getrate/".$start_date."/".$cur."/USD";
                 $get_rate = Self::url_get_contents ($Url);
@@ -55,6 +61,7 @@ class Calculators {
                 if($get_rate>=0){$currency_rates->{$cur} = $get_rate;}
             }
             $currency_rates->save();
+            }
   
             ///+one day//             
             $start_date = strtotime($start_date);

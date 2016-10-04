@@ -120,8 +120,13 @@ class PortfolioReturns extends CActiveRecord
             $new_p_ids = implode("','", array_unique($new_ids));
             $all_portfolios = Yii::app()->db->createCommand("select * from portfolios where parrent_portfolio in ('$new_p_ids')")->queryAll(true);
         }
-
+        
         $all_p_ids = implode("','", array_unique($p_ids));
+        
+        //Yii::app()->db->createCommand("delete from portfolio_returns where portfolio_id in ('$all_p_ids')")->queryAll(true);
+        Yii::app()->db->createCommand("delete from portfolio_returns where portfolio_id in ('$all_p_ids')");
+        
+
         //Trades // and (p.id = $portfolio_id or p.parrent_portfolio = $portfolio_id )
         $inst_sql = "select * from ledger l
                      inner join instruments i on l.instrument_id = i.id
@@ -209,6 +214,7 @@ class PortfolioReturns extends CActiveRecord
                }
          
               //checking if the return for current instrument is not exist and inserting the calculated return.//
+              /*
                $existing_return  = PortfolioReturns::model()->findByAttributes([
                                                                                 'portfolio_id'=>$portfolio_id, 
                                                                                 'trade_date' =>$rawData[$i]['trade_date'], 
@@ -218,6 +224,7 @@ class PortfolioReturns extends CActiveRecord
                                                                                 ]);
                
                    if(count($existing_return)==0){
+               */
                        $return = new PortfolioReturns;
                        $return->portfolio_id = $portfolio_id;
                        $return->is_prtfolio_or_group = 1;
@@ -225,11 +232,13 @@ class PortfolioReturns extends CActiveRecord
                        $return->return = $rawData[$i]['return'];
                        $return->benchmark_return = $rawData[$i]['benchmark_return'];
                        $return->save(); 
+                       /*
                    }else{
                            $existing_return->return = $rawData[$i]['return'];
                            $existing_return->benchmark_return = $rawData[$i]['benchmark_return'];
                            $existing_return->save(); 
                         }
+                        */
                $i++;
                }     
           }else{

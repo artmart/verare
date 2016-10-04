@@ -182,7 +182,7 @@ $portfolio_return_sql = "select p.trade_date,
 */
 
 $portfolio_return_sql = "select p.trade_date,
-    (select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id ) pnl,
+    sum((select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id )) pnl,
     sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id )) top, 
     sum((select sum(p1.price*bc.weight) from prices p1 where p1.instrument_id = bc.instrument_id and p1.trade_date = p.trade_date and bc.benchmark_id = port.benchmark_id))/sum(bc.weight) sums
     from prices p

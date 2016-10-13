@@ -191,12 +191,13 @@ class UploadsController extends Controller
                 
                 $instruments = Instruments::model()->findAll(array('select'=>'id, instrument'));
                 $instruments_for_returns_update = [];
+                               
                 foreach($data as $dat){
                     $trade_date = gmdate('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($dat['0']));
                     $instrument_name = trim($dat['1']);
                     $price = $dat['2'];
                     $currency = $dat['3'];
-                    
+                     
                     $instrument = Instruments::model()->findByAttributes(['instrument'=>$instrument_name, 'is_current' =>1]);
                     
                     if($instrument){

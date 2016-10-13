@@ -93,8 +93,6 @@ $id = Yii::app()->user->id;
 $user_data = Users::model()->findByPk($id);
 $client_id = $user_data->client_id;
 
-
-
 //var_dump($portfolio_id);
 
 //PortfolioReturnsUpdate($portfolio_id, $client_id, $portfolio_currency){  
@@ -128,9 +126,9 @@ $client_id = $user_data->client_id;
                      order by trade_date asc";
         $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
         
-       // var_dump($trades);
+        //var_dump($trades);
        // exit;
-        
+  
         if(count($trades)>0){
         
         foreach($trades as $trd){$ins_ids[] = $trd['instrument_id'];} 
@@ -183,18 +181,21 @@ $portfolio_return_sql = "select p.trade_date,
 
 $portfolio_return_sql = "select p.trade_date,
     sum((select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id )) pnl,
-    sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id )) top, 
-    sum((select sum(p1.price*bc.weight) from prices p1 where p1.instrument_id = bc.instrument_id and p1.trade_date = p.trade_date and bc.benchmark_id = port.benchmark_id))/sum(bc.weight) sums
-    from prices p
+    sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id )) top
+     from prices p
     inner join ledger ldg on ldg.instrument_id = p.instrument_id
     inner join portfolios port on port.id = ldg.portfolio_id
-    inner join benchmark_components bc on bc.benchmark_id = port.benchmark_id
-    inner join benchmarks bench on bench.id = port.benchmark_id and bench.client_id = ldg.client_id 
+    
     inner join instruments i on i.id = p.instrument_id
     where p.instrument_id in ('$insids') and ldg.client_id = '$client_id' 
     and port.id in ('$all_p_ids') 
     group by  p.trade_date
     order by p.trade_date asc";
+    
+    //sum((select sum(p1.price*bc.weight) from prices p1 where p1.instrument_id = bc.instrument_id and p1.trade_date = p.trade_date and bc.benchmark_id = port.benchmark_id))/sum(bc.weight) sums
+   
+    //inner join benchmark_components bc on bc.benchmark_id = port.benchmark_id
+    //inner join benchmarks bench on bench.id = port.benchmark_id and bench.client_id = ldg.client_id 
         //  echo $portfolio_return_sql;
          // exit;                      
                                 //port.id = '$portfolio_id'
@@ -204,8 +205,8 @@ $portfolio_return_sql = "select p.trade_date,
         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
         
-        //var_dump($portfolio_returns);
-       // exit;
+        //var_dump($portfolio_return_sql);
+        //exit;
         
         if(count($portfolio_returns)>0){
         $i = 0;
@@ -224,16 +225,16 @@ $portfolio_return_sql = "select p.trade_date,
             $rawData[$i]['return'] = 1;  
             
             ////For Benchmark///////
-            $sums[$i] = $price['sums'];
-            $rawData[$i]['benchmark_return'] = 1;
+           // $sums[$i] = $price['sums'];
+           // $rawData[$i]['benchmark_return'] = 1;
             ////////////////////////
             $return1[$i] = 1;
                         
             if($i>0){ 
                     ////For Benchmark///////
-                    if($sums[$i-1]> 0){$return1[$i] = $price['sums']/$sums[$i-1];}
+              //      if($sums[$i-1]> 0){$return1[$i] = $price['sums']/$sums[$i-1];}
                     //$return_bench = $return_bench * $return1[$i];
-                    $rawData[$i]['benchmark_return'] = $return1[$i];
+                //    $rawData[$i]['benchmark_return'] = $return1[$i];
                     ////////////////////////
                     
                     //Portfolio return//
@@ -244,11 +245,10 @@ $portfolio_return_sql = "select p.trade_date,
          
          $table_boady .= '<tr>
                             	<td>'.$rawData[$i]['trade_date']. '</td>
-                            	<td>'.$rawData[$i]['return'].'</td>
-                            	<td>'.$rawData[$i]['benchmark_return'].'</td>
+                            	<td>'.$rawData[$i]['return'].'</td>	
                             </tr>'; 
          
-         
+         //<td>'.$rawData[$i]['benchmark_return'].'</td>
               //checking if the return for current instrument is not exist and inserting the calculated return.//
               /*
                $existing_return  = PortfolioReturns::model()->findByAttributes([
@@ -375,7 +375,10 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-            <!-- page script    class="display"-->
+            <!-- page script    class="display"
+            
+            <th>benchmark_return</th>
+            -->
          
                 
                 
@@ -387,7 +390,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
             <tr>
                 <th>trade_date</th>
                 <th>return</th>
-                <th>benchmark_return</th>
+                
             </tr>
         </thead>
 

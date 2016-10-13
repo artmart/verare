@@ -180,8 +180,8 @@ $portfolio_return_sql = "select p.trade_date,
 */
 
 $portfolio_return_sql = "select p.trade_date,
-    sum((select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id )) pnl,
-    sum(p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id )) top
+    (select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id ) pnl,
+    p.price * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id ) top
      from prices p
     inner join ledger ldg on ldg.instrument_id = p.instrument_id
     inner join portfolios port on port.id = ldg.portfolio_id
@@ -205,7 +205,7 @@ $portfolio_return_sql = "select p.trade_date,
         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
         
-        //var_dump($portfolio_return_sql);
+        //var_dump($portfolio_returns);
         //exit;
         
         if(count($portfolio_returns)>0){

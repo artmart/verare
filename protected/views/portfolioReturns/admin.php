@@ -177,7 +177,7 @@ $portfolio_return_sql = "select p.trade_date,
     and port.id in ('$all_p_ids') 
     group by  p.trade_date
     order by p.trade_date asc";
-*/
+
 
 $portfolio_return_sql = "select p.trade_date,
     (select sum(if(trade_date=p.trade_date, nominal*price, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id ) pnl,
@@ -191,6 +191,38 @@ $portfolio_return_sql = "select p.trade_date,
     and port.id in ('$all_p_ids') 
     group by  p.trade_date
     order by p.trade_date asc";
+ */   
+  
+  
+  $portfolio_return_sql = "select p.trade_date, if(c.trd is not NULL, c.trd, 0) pnl,  if(sum(p.price * m.port_val) is not NULL, sum(p.price * m.port_val), 0) top
+                            from prices p 
+                            
+                            left join
+                            (select trade_date, sum(nominal*price) trd 
+                        		from ledger 
+                        		where is_current = 1 and trade_status_id = 2 
+                        		and instrument_id in ('$insids') and client_id = '$client_id' and portfolio_id in ('$all_p_ids') 
+                        		group by trade_date
+                            ) c on c.trade_date = p.trade_date  
+                            
+                            left join
+                            (
+                                select  trade_date, instrument_id, sum(nominal) port_val 
+                                from ledger 
+                                where  is_current = 1 and trade_status_id = 2 
+                                and instrument_id in ('$insids') and client_id = '$client_id' and portfolio_id in ('$all_p_ids') 
+                                group by trade_date, instrument_id
+                            ) m on m.trade_date <= p.trade_date and m.instrument_id = p.instrument_id
+                            
+                            where p.instrument_id in ('$insids') 
+                            group by p.trade_date order by p.trade_date asc";  
+    
+    
+    
+    
+    
+    
+    
     
     //sum((select sum(p1.price*bc.weight) from prices p1 where p1.instrument_id = bc.instrument_id and p1.trade_date = p.trade_date and bc.benchmark_id = port.benchmark_id))/sum(bc.weight) sums
    

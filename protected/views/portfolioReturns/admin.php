@@ -194,7 +194,11 @@ $portfolio_return_sql = "select p.trade_date,
  */   
   
   
-  $portfolio_return_sql = "select p.trade_date, if(c.trd is not NULL, c.trd, 0) pnl,  if(sum(p.price * m.port_val) is not NULL, sum(p.price * m.port_val), 0) top
+  $portfolio_return_sql = "select p.trade_date, 
+                            if(c.trd is not NULL, c.trd, 0) pnl,  
+                            if(sum(p.price * m.port_val) is not NULL, sum(p.price * m.port_val), 0) top,
+                            if(bc.weight is not NULL, sum(bc.ww)/sum(bc.weight), 0) sums
+                            
                             from prices p 
                             
                             left join
@@ -213,6 +217,17 @@ $portfolio_return_sql = "select p.trade_date,
                                 and instrument_id in ('$insids') and client_id = '$client_id' and portfolio_id in ('$all_p_ids') 
                                 group by trade_date, instrument_id
                             ) m on m.trade_date <= p.trade_date and m.instrument_id = p.instrument_id
+                            
+                            left join
+                            (
+                                select ldg.instrument_id, p.trade_date, p.price* bc.weight ww, bc.weight
+                                from benchmark_components bc 
+                                inner join benchmarks bench on bench.id = bc.benchmark_id 
+                                inner join portfolios port on port.benchmark_id = bench.id
+                                inner join ledger ldg on ldg.portfolio_id = port.id
+                                inner join prices p on p.instrument_id = bc.instrument_id
+                                where ldg.instrument_id in ('$insids') and ldg.client_id = '$client_id' and port.id in ('$all_p_ids')
+                            ) bc on bc.instrument_id = p.instrument_id and bc.trade_date = p.trade_date
                             
                             where p.instrument_id in ('$insids') 
                             group by p.trade_date order by p.trade_date asc";  
@@ -248,6 +263,7 @@ $portfolio_return_sql = "select p.trade_date,
         //$return_bench = 1;
         //$return_bench_daily[] = 1;
         ////////////////////////
+        $return2[$i] = 1;
         
         foreach($portfolio_returns as $price){
             $rawData[$i]['id'] = $i;    
@@ -257,30 +273,33 @@ $portfolio_return_sql = "select p.trade_date,
             $rawData[$i]['return'] = 1;  
             
             ////For Benchmark///////
-           // $sums[$i] = $price['sums'];
-           // $rawData[$i]['benchmark_return'] = 1;
+            $sums[$i] = $price['sums'];
+            $rawData[$i]['benchmark_return'] = 1;
             ////////////////////////
             $return1[$i] = 1;
+            $return2[$i] = 1;
                         
             if($i>0){ 
                     ////For Benchmark///////
-              //      if($sums[$i-1]> 0){$return1[$i] = $price['sums']/$sums[$i-1];}
+                   if($sums[$i-1]> 0){$return1[$i] = $price['sums']/$sums[$i-1];}
                     //$return_bench = $return_bench * $return1[$i];
-                //    $rawData[$i]['benchmark_return'] = $return1[$i];
+                    $rawData[$i]['benchmark_return'] = $return1[$i];
                     ////////////////////////
                     
                     //Portfolio return//
                     $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'];
                     if($div>0){$rawData[$i]['return'] = $rawData[$i]['top']/$div;}
+                    //$return2[$i] = $return1[$i-1]* $rawData[$i]['return'];
                }
          
          
          $table_boady .= '<tr>
                             	<td>'.$rawData[$i]['trade_date']. '</td>
                             	<td>'.$rawData[$i]['return'].'</td>	
+                                <td>'.$rawData[$i]['benchmark_return'].'</td>
                             </tr>'; 
          
-         //<td>'.$rawData[$i]['benchmark_return'].'</td>
+        
               //checking if the return for current instrument is not exist and inserting the calculated return.//
               /*
                $existing_return  = PortfolioReturns::model()->findByAttributes([
@@ -409,7 +428,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
             <div class="box-body">
             <!-- page script    class="display"
             
-            <th>benchmark_return</th>
+            
             -->
          
                 
@@ -422,7 +441,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
             <tr>
                 <th>trade_date</th>
                 <th>return</th>
-                
+                <th>benchmark_return</th>
             </tr>
         </thead>
 

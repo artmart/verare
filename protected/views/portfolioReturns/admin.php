@@ -192,7 +192,7 @@ $portfolio_return_sql = "select p.trade_date,
     group by  p.trade_date
     order by p.trade_date asc";
  */   
-  $portfolio_currency = 'SEK';
+  $portfolio_currency = 'EUR';
   
   $portfolio_return_sql = "select p.trade_date, 
                             if(c.trd is not NULL, c.trd, 0) pnl,  
@@ -238,7 +238,7 @@ $portfolio_return_sql = "select p.trade_date,
                         	inner join instruments i on i.id = p.instrument_id
                         	inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
                             
-                            where port.id =$portfolio_id
+                            where port.id ='$portfolio_id'
                             ) bc on  bc.trade_date = p.trade_date
                             
                             where p.instrument_id in ('$insids') 

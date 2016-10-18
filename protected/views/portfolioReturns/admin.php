@@ -227,7 +227,17 @@ $portfolio_return_sql = "select p.trade_date,
                                 inner join ledger ldg on ldg.portfolio_id = port.id
                                 inner join prices p on p.instrument_id = bc.instrument_id
                                 where ldg.instrument_id in ('$insids') and ldg.client_id = '$client_id' and port.id in ('$all_p_ids')
-                            ) bc on bc.instrument_id = p.instrument_id and bc.trade_date = p.trade_date
+                            ) bc1 on bc1.instrument_id = p.instrument_id and bc1.trade_date = p.trade_date
+                            
+                            left join
+                            (
+                            select bc.instrument_id, p.trade_date,  p.price* bc.weight ww, bc.weight
+                            from benchmark_components bc 
+                            inner join benchmarks bench on bench.id = bc.benchmark_id 
+                            inner join portfolios port on port.benchmark_id = bench.id
+                            inner join prices p on p.instrument_id = bc.instrument_id
+                            where port.id =$portfolio_id
+                            ) bc on  bc.trade_date = p.trade_date
                             
                             where p.instrument_id in ('$insids') 
                             group by p.trade_date order by p.trade_date asc";  

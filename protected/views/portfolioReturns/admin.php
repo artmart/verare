@@ -192,21 +192,29 @@ $portfolio_return_sql = "select p.trade_date,
     group by  p.trade_date
     order by p.trade_date asc";
  */   
-  
+  $portfolio_currency = 'SEK';
   
   $portfolio_return_sql = "select p.trade_date, 
                             if(c.trd is not NULL, c.trd, 0) pnl,  
-                            if(sum(p.price * m.port_val) is not NULL, sum(p.price * m.port_val), 0) top,
+                            if(sum(p.price * m.port_val) is not NULL, sum(p.price * m.port_val* cr.{$portfolio_currency}/curs.cur_rate), 0) top,
                             if(bc.weight is not NULL, sum(bc.ww)/sum(bc.weight), 0) sums
                             
                             from prices p 
-                            
+                            inner join currency_rates cr on cr.day = p.trade_date
+                            inner join instruments i on i.id = p.instrument_id
+                            inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
+                                                        
                             left join
-                            (select trade_date, sum(nominal*price) trd 
-                        		from ledger 
-                        		where is_current = 1 and trade_status_id = 2 
-                        		and instrument_id in ('$insids') and client_id = '$client_id' and portfolio_id in ('$all_p_ids') 
-                        		group by trade_date
+                            (select l.trade_date, sum(l.nominal*l.price * cr.{$portfolio_currency}/curs.cur_rate) trd 
+                        		from ledger l
+                                
+                                inner join currency_rates cr on cr.day = l.trade_date
+                            	inner join instruments i on i.id = l.instrument_id
+                            	inner join cur_rates curs on curs.day = l.trade_date and curs.cur = i.currency
+                                
+                        		where l.is_current = 1 and l.trade_status_id = 2 
+                        		and l.instrument_id in ('$insids') and l.client_id = '$client_id' and l.portfolio_id in ('$all_p_ids') 
+                        		group by l.trade_date
                             ) c on c.trade_date = p.trade_date  
                             
                             left join
@@ -217,25 +225,19 @@ $portfolio_return_sql = "select p.trade_date,
                                 and instrument_id in ('$insids') and client_id = '$client_id' and portfolio_id in ('$all_p_ids') 
                                 group by trade_date, instrument_id
                             ) m on m.trade_date <= p.trade_date and m.instrument_id = p.instrument_id
-                            
+                                                        
                             left join
                             (
-                                select ldg.instrument_id, p.trade_date, p.price* bc.weight ww, bc.weight
-                                from benchmark_components bc 
-                                inner join benchmarks bench on bench.id = bc.benchmark_id 
-                                inner join portfolios port on port.benchmark_id = bench.id
-                                inner join ledger ldg on ldg.portfolio_id = port.id
-                                inner join prices p on p.instrument_id = bc.instrument_id
-                                where ldg.instrument_id in ('$insids') and ldg.client_id = '$client_id' and port.id in ('$all_p_ids')
-                            ) bc1 on bc1.instrument_id = p.instrument_id and bc1.trade_date = p.trade_date
-                            
-                            left join
-                            (
-                            select bc.instrument_id, p.trade_date,  p.price* bc.weight ww, bc.weight
+                            select bc.instrument_id, p.trade_date,  p.price* bc.weight * cr.{$portfolio_currency}/curs.cur_rate ww, bc.weight
                             from benchmark_components bc 
                             inner join benchmarks bench on bench.id = bc.benchmark_id 
                             inner join portfolios port on port.benchmark_id = bench.id
                             inner join prices p on p.instrument_id = bc.instrument_id
+                            
+                            inner join currency_rates cr on cr.day = p.trade_date
+                        	inner join instruments i on i.id = p.instrument_id
+                        	inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
+                            
                             where port.id =$portfolio_id
                             ) bc on  bc.trade_date = p.trade_date
                             

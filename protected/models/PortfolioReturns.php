@@ -105,7 +105,7 @@ class PortfolioReturns extends CActiveRecord
 	{  
         if($portfolio_id >0){
         ini_set('max_execution_time', 50000);
-        $table_name = "client_".$client_id. "_inst_returns";
+        //$table_name = "client_".$client_id. "_inst_returns";
         
         $p_ids[] = $portfolio_id;
         
@@ -124,8 +124,8 @@ class PortfolioReturns extends CActiveRecord
         $all_p_ids = implode("','", array_unique($p_ids));
         
         //Yii::app()->db->createCommand("delete from portfolio_returns where portfolio_id in ('$all_p_ids')")->queryAll(true);
-        Yii::app()->db->createCommand("delete from portfolio_returns where portfolio_id in ('$all_p_ids')");
-        
+        //Yii::app()->db->createCommand("delete from portfolio_returns where portfolio_id in ('$all_p_ids')");
+        Yii::app()->db->createCommand("delete from portfolio_returns where portfolio_id = '$portfolio_id'")->execute();
 
         //Trades // and (p.id = $portfolio_id or p.parrent_portfolio = $portfolio_id )
         $inst_sql = "select * from ledger l
@@ -135,9 +135,6 @@ class PortfolioReturns extends CActiveRecord
                      and p.id in ('$all_p_ids')
                      order by trade_date asc";
         $trades = Yii::app()->db->createCommand($inst_sql)->queryAll(true);
-        
-       // var_dump($trades);
-       // exit;
         
         if(count($trades)>0){
         
@@ -168,7 +165,7 @@ class PortfolioReturns extends CActiveRecord
                                 and port.id in ('$all_p_ids') 
                                 group by  p.trade_date
                                 order by p.trade_date asc";
-          */                      
+                               
                                 
                                 
        $portfolio_return_sql = "select p.trade_date,
@@ -190,19 +187,64 @@ class PortfolioReturns extends CActiveRecord
                                 and port.id in ('$all_p_ids') 
                                 group by  p.trade_date
                                 order by p.trade_date asc";
-         // echo $portfolio_return_sql;
-         // exit;                      
-                                //port.id = '$portfolio_id'
-                                //inner join benchmark_components bc on bc.instrument_id = p.instrument_id 
-                                //inner join ledger l on l.instrument_id = p.instrument_id
-                                //inner join benchmarks b on b.portfolio_id = l.portfolio_id
+       */ 
+                                
+$portfolio_return_sql = "select p.trade_date, 
+                            if(c.trd is not NULL, c.trd, 0) pnl,  
+                            if(sum(p.price * m.port_val) is not NULL, sum(p.price * m.port_val* cr.{$portfolio_currency}/curs.cur_rate), 0) top,
+                            if(bc.weight is not NULL, sum(bc.ww)/sum(bc.weight), 0) sums
+                            
+                            from prices p 
+                            inner join currency_rates cr on cr.day = p.trade_date
+                            inner join instruments i on i.id = p.instrument_id
+                            inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
+                                                        
+                            left join
+                            (select l.trade_date, sum(l.nominal*l.price * cr.{$portfolio_currency}/curs.cur_rate) trd 
+                        		from ledger l
+                                
+                                inner join currency_rates cr on cr.day = l.trade_date
+                            	inner join instruments i on i.id = l.instrument_id
+                            	inner join cur_rates curs on curs.day = l.trade_date and curs.cur = i.currency
+                                
+                        		where l.is_current = 1 and l.trade_status_id = 2 
+                        		and l.instrument_id in ('$insids') and l.client_id = '$client_id' and l.portfolio_id in ('$all_p_ids') 
+                        		group by l.trade_date
+                            ) c on c.trade_date = p.trade_date  
+                            
+                            left join
+                            (
+                                select  trade_date, instrument_id, sum(nominal) port_val 
+                                from ledger 
+                                where  is_current = 1 and trade_status_id = 2 
+                                and instrument_id in ('$insids') and client_id = '$client_id' and portfolio_id in ('$all_p_ids') 
+                                group by trade_date, instrument_id
+                            ) m on m.trade_date <= p.trade_date and m.instrument_id = p.instrument_id
+                                                        
+                            left join
+                            (
+                            select bc.instrument_id, p.trade_date,  p.price* bc.weight * cr.{$portfolio_currency}/curs.cur_rate ww, bc.weight
+                            from benchmark_components bc 
+                            inner join benchmarks bench on bench.id = bc.benchmark_id 
+                            inner join portfolios port on port.benchmark_id = bench.id
+                            inner join prices p on p.instrument_id = bc.instrument_id
+                            
+                            inner join currency_rates cr on cr.day = p.trade_date
+                        	inner join instruments i on i.id = p.instrument_id
+                        	inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
+                            
+                            where port.id ='$portfolio_id'
+                            ) bc on  bc.trade_date = p.trade_date
+                            
+                            where p.instrument_id in ('$insids') 
+                            group by p.trade_date order by p.trade_date asc";  
+                   
         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
         
-        //var_dump($portfolio_returns);
-       // exit;
-        
         if(count($portfolio_returns)>0){
+            
+            //Yii::app()->db->createCommand("delete from portfolio_returns where portfolio_id = '$portfolio_id'")->execute();
         $i = 0;
         
         //for benchmarks//

@@ -46,7 +46,7 @@ class PortfolioReturnsController extends Controller
 	}
     
     public function actionReturnsRecalculate(){
-        PortfolioReturns::model()->PortfolioReturnsUpdate(5, 2, 'SEK');
+        PortfolioReturns::model()->PortfolioReturnsUpdate(17, 4, 'SEK');
         //PortfolioReturns::model()->PortfolioReturnsUpdate($default_portfolio_id, $client_id, $default_portfolio_currency);
     }
     
@@ -64,7 +64,7 @@ class PortfolioReturnsController extends Controller
         $portfolios = Portfolios::model()->findByPk($default_portfolio_id);
         $default_portfolio_currency = $portfolios->currency;
             
-        $inst_sql = "select * from ledger l
+        $inst_sql = "select distinct portfolio_id, instrument_id from ledger l
                      inner join instruments i on l.instrument_id = i.id
                      inner join portfolios port on port.id = l.portfolio_id
                      where l.is_current = 1 and i.is_current = 1 and l.trade_status_id = 2 and i.price_uploaded = 1 and l.client_id = $client_id 

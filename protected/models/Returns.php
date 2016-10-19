@@ -207,6 +207,8 @@ class Returns extends CActiveRecord
         $prices = Yii::app()->db->createCommand($prices_sql)->queryAll(true);
         
         if(count($prices)>0){
+            Yii::app()->db->createCommand("delete from {$table_name} where instrument_id = '$instrument_id'")->execute();
+            
         $i = 0;
         foreach($prices as $price){
             $rawData[$i]['id'] = $i;    
@@ -225,9 +227,13 @@ class Returns extends CActiveRecord
                     if($div>0){$rawData[$i]['return'] = ($rawData[$i]['nominal'] * $rawData[$i]['price'])/$div;
                                 }else{$rawData[$i]['return'] = 1;}
                 }
+                
+                $sql = "insert into {$table_name} ({$portfolio_currency}, instrument_id, trade_date) values (:return, :instrument_id, :trade_date)";
+                        $parameters = array(":return"=>$rawData[$i]['return'], ':instrument_id' => $instrument_id, ':trade_date' => $rawData[$i]['trade_date']);
+                        Yii::app()->db->createCommand($sql)->execute($parameters);
          
             //checking if the return for current instrument is not exist and inserting the calculated return.//
-              
+            /*  
             $raturn_sql = "select {$portfolio_currency} from {$table_name} where trade_date = '$trade_date' and instrument_id = '$instrument_id' ";
             $existing_return = Yii::app()->db->createCommand($raturn_sql)->queryAll(true);
 
@@ -238,13 +244,14 @@ class Returns extends CActiveRecord
                    }else{ 
                         Yii::app()->db->createCommand()->update($table_name, array("{$portfolio_currency}"=>$rawData[$i]['return']), 'trade_date=:trade_date and instrument_id =:instrument_id',array(':trade_date'=>$rawData[$i]['trade_date'], ':instrument_id' => $instrument_id));
                    }
-               
+               */
                $i++;
                }
+               //PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id, $client_id, $portfolio_currency);
             }
-            if($portfolio_id!==0){
-                PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id, $client_id, $portfolio_currency);
-            }
+            //if($portfolio_id!==0){
+            //    PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id, $client_id, $portfolio_currency);
+           // }
         
     }  
     

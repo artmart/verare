@@ -123,8 +123,6 @@ class PortfolioReturns extends CActiveRecord
         
         $all_p_ids = implode("','", array_unique($p_ids));
         
-        //Yii::app()->db->createCommand("delete from portfolio_returns where portfolio_id in ('$all_p_ids')")->queryAll(true);
-        //Yii::app()->db->createCommand("delete from portfolio_returns where portfolio_id in ('$all_p_ids')");
         Yii::app()->db->createCommand("delete from portfolio_returns where portfolio_id = '$portfolio_id'")->execute();
 
         //Trades // and (p.id = $portfolio_id or p.parrent_portfolio = $portfolio_id )

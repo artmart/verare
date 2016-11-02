@@ -100,7 +100,7 @@ $client_id = $user_data->client_id;
             $portfolios = Portfolios::model()->findByPk($portfolio_id);
             $portfolio_currency = $portfolios->currency;
         ini_set('max_execution_time', 50000);
-        $table_name = "client_".$client_id. "_inst_returns";
+        //$table_name = "client_".$client_id. "_inst_returns";
         
         $p_ids[] = $portfolio_id;
         
@@ -192,7 +192,7 @@ $portfolio_return_sql = "select p.trade_date,
     group by  p.trade_date
     order by p.trade_date asc";
  */   
-  $portfolio_currency = 'EUR';
+  $portfolio_currency = 'SEK';
   
   $portfolio_return_sql = "select p.trade_date, 
                             if(c.trd is not NULL, c.trd, 0) pnl,  

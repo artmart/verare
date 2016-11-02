@@ -389,26 +389,26 @@ $(function () {
   $tbl_rows .=   
     '<tr>
         <td>'. $port['portfolio'].'</td>
-        <td>'. number_format(($return_all_time-1)*100, 1).'%</td>
-        <td>'. number_format(($return_ytd-1)*100, 1).'%</td>
-        <td>'. number_format(($return_3m-1)*100, 1).'%</td>
-        <td>'. number_format(($return_6m-1)*100, 1).'%</td>
-        <td>'. number_format(($return_9m-1)*100, 1).'%</td>
-        <td>'. number_format(($return_1y-1)*100, 1).'%</td>
-        <td>'. number_format($allstats[0]*100, 1).'%</td>
+        <td>'. number_format(($return_all_time-1)*100, 2).'%</td>
+        <td>'. number_format(($return_ytd-1)*100, 2).'%</td>
+        <td>'. number_format(($return_3m-1)*100, 2).'%</td>
+        <td>'. number_format(($return_6m-1)*100, 2).'%</td>
+        <td>'. number_format(($return_9m-1)*100, 2).'%</td>
+        <td>'. number_format(($return_1y-1)*100, 2).'%</td>
+        <td>'. number_format($allstats[0]*100, 2).'%</td>
         <td>'. number_format($allstats[1], 3).'</td>
     </tr>';
    
   $tbl_rows .=   
     '<tr>
         <td>'. $port['portfolio'].'-Benchmark</td>
-        <td>'. number_format(($return_all_time_bench-1)*100, 1).'%</td>
-        <td>'. number_format(($return_ytd_bench-1)*100, 1).'%</td>
-        <td>'. number_format(($return_3m_bench-1)*100, 1).'%</td>
-        <td>'. number_format(($return_6m_bench-1)*100, 1).'%</td>
-        <td>'. number_format(($return_9m_bench-1)*100, 1).'%</td>
-        <td>'. number_format(($return_1y_bench-1)*100, 1).'%</td>
-        <td>'. number_format($allstats_bench[0]*100, 1).'%</td>
+        <td>'. number_format(($return_all_time_bench-1)*100, 2).'%</td>
+        <td>'. number_format(($return_ytd_bench-1)*100, 2).'%</td>
+        <td>'. number_format(($return_3m_bench-1)*100, 2).'%</td>
+        <td>'. number_format(($return_6m_bench-1)*100, 2).'%</td>
+        <td>'. number_format(($return_9m_bench-1)*100, 2).'%</td>
+        <td>'. number_format(($return_1y_bench-1)*100, 2).'%</td>
+        <td>'. number_format($allstats_bench[0]*100, 2).'%</td>
         <td>'. number_format($allstats_bench[1], 3).'</td>
     </tr>';
 

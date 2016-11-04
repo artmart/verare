@@ -5,6 +5,7 @@ $usermenu1 = [];
 $user_role_id = Yii::app()->user->getState('user_role');
 
 //<a href="'.$baseUrl1.'/grouping/admin">Grouping</a>
+//<a href="'.$baseUrl1.'/portfolioReturns/recalculateReturns">Recalculate Returns</a>
 switch ($user_role_id) {
     case 1:
                 $usermenu1[]= '<li>
@@ -18,9 +19,7 @@ switch ($user_role_id) {
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/portfolios/admin">Portfolios</a>
                             <a href="'.$baseUrl1.'/benchmarks/admin">Benchmarks</a>
-                            <a href="'.$baseUrl1.'/benchmarkComponents/admin">Benchmark Components</a>
-                            <a href="'.$baseUrl1.'/portfolioReturns/recalculateReturns">Recalculate Returns</a>
-                            
+                            <a href="'.$baseUrl1.'/benchmarkComponents/admin">Benchmark Components</a>                            
                             <a href="'.$baseUrl1.'/portfolioReturns/admin">Portfolio Returns</a>
                             
                             </li><li class="divider"></li>';
@@ -78,9 +77,7 @@ switch ($user_role_id) {
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/portfolios/admin">Portfolios</a>
                             <a href="'.$baseUrl1.'/benchmarks/admin">Benchmarks</a>
-                            <a href="'.$baseUrl1.'/benchmarkComponents/admin">Benchmark Components</a>
-                            <a href="'.$baseUrl1.'/portfolioReturns/recalculateReturns">Recalculate Returns</a>
-                            
+                            <a href="'.$baseUrl1.'/benchmarkComponents/admin">Benchmark Components</a>                            
                             <a href="'.$baseUrl1.'/portfolioReturns/admin">Portfolio Returns</a>
                             
                             </li><li class="divider"></li>';

@@ -31,29 +31,28 @@
     $returns = Calculators::ReturnAllAndYTD($portfolio);
 
     ///pnl/////////////////////////////////////////////////////////
-    $p_ids[] = $portfolio;
-        
+    $p_ids = []; // $portfolio;
+    $p_ids1[] = $portfolio;
     $all_portfolios = Yii::app()->db->createCommand("select * from portfolios where parrent_portfolio = $portfolio")->queryAll(true);
     
     while(count($all_portfolios)>0){
         $new_ids = [];
         foreach($all_portfolios as $ap){
             $p_ids[] = $ap['id'];
+            $p_ids1[] = $ap['id'];
             $new_ids[] = $ap['id'];
         }
         $new_p_ids = implode("','", array_unique($new_ids));
         $all_portfolios = Yii::app()->db->createCommand("select * from portfolios where parrent_portfolio in ('$new_p_ids')")->queryAll(true);
     }
-    
+
     $all_p_ids = implode("','", array_unique($p_ids));
+    $all_p_ids1 = implode("','", array_unique($p_ids1));
     
-    
-    
-    
-    
+
     $sql1 = "select trade_date, nominal*price*ledger.currency_rate/cr.{$portfolio_currency} nav from ledger
              inner join currency_rates cr on cr.day = ledger.trade_date             
-                where ledger.portfolio_id in ('$all_p_ids') and ledger.trade_date >= '$start_date' and ledger.trade_date<='$end_date' and ledger.trade_status_id = 2 
+                where ledger.portfolio_id in ('$all_p_ids1') and ledger.trade_date >= '$start_date' and ledger.trade_date<='$end_date' and ledger.trade_status_id = 2 
                 and ledger.client_id = '$client_id' and ledger.is_current = 1
                 order by trade_date desc";
     Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
@@ -80,24 +79,7 @@
                                  group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
     Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
     $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
- 
- 
- 
-    $p_ids = []; // $portfolio;
-        
-        $all_portfolios = Yii::app()->db->createCommand("select * from portfolios where parrent_portfolio = $portfolio")->queryAll(true);
-        
-        while(count($all_portfolios)>0){
-            $new_ids = [];
-            foreach($all_portfolios as $ap){
-                $p_ids[] = $ap['id'];
-                $new_ids[] = $ap['id'];
-            }
-            $new_p_ids = implode("','", array_unique($new_ids));
-            $all_portfolios = Yii::app()->db->createCommand("select * from portfolios where parrent_portfolio in ('$new_p_ids')")->queryAll(true);
-        }
 
-        $all_p_ids = implode("','", array_unique($p_ids));
  
     $sub_portfolios_sql = "select portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
                     inner join portfolios p on p.id = l.portfolio_id

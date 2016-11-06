@@ -97,18 +97,22 @@
                     group by p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal";
 */
  
-    $sub_portfolios_sql = "select portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
+    $sub_portfolios_sql = "select portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*pr.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
                     inner join portfolios p on p.id = l.portfolio_id
-                    inner join currency_rates cr on cr.day = l.trade_date                    
+                    inner join currency_rates cr on cr.day = l.trade_date 
+                    inner join prices pr on pr.instrument_id = l.instrument_id                   
                     where p.parrent_portfolio = $portfolio
+                    and pr.trade_date = '$end_date'
                     and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
                     group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal
                     Union 
-                    select p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
+                    select p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal, sum(l.nominal*pr.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
                     inner join portfolios p on p.id = l.portfolio_id
                     inner join portfolios p2 on p2.id = p.parrent_portfolio
-                    inner join currency_rates cr on cr.day = l.trade_date                    
-                    where p.parrent_portfolio in ('$all_p_ids') 
+                    inner join currency_rates cr on cr.day = l.trade_date
+                    inner join prices pr on pr.instrument_id = l.instrument_id                    
+                    where p.parrent_portfolio in ('$all_p_ids')
+                    and pr.trade_date = '$end_date' 
                     and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' 
                     group by p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal";
     
@@ -130,9 +134,7 @@
             $value[$sp1['portfolio']] = 0; 
             $index_value = $index_value + $sp1['nav'];
          }
-         
-         //if($index_value == 0){$index_value = 1;}
-    
+            
     foreach($portfolio_composition as $sp2){        
                 $port_data_table .= '<tr>
             						<td>Uncategorized</td>

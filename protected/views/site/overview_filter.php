@@ -6,6 +6,12 @@
     if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
     if(isset($_REQUEST['client_id'])){$client_id = $_REQUEST['client_id'];}
     
+    
+     
+    $date = strtotime($end_date);
+    $yesterday =  date('Y-m-d', strtotime("-1 day", $date));
+  //echo $yesterday;
+    
     $id = Yii::app()->user->id;
     $user_data = Users::model()->findByPk($id);
     $user_data->default_portfolio_id = $portfolio;
@@ -75,15 +81,20 @@
      ///////////////////////////////////////////////////////////////////////////////////   
         
     $portfolio_composition_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, 
-                                 sum(l.nominal*pr.price*l.currency_rate/cr.{$portfolio_currency}) nav, 
-                                 sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) trade
+                                 sum(l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}) nav, 
+                                 sum(if( l.trade_date < '$end_date' and pr.trade_date = '$yesterday', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav_yest,
+                                 sum(if( l.trade_date='$end_date' and pr.trade_date <> '$yesterday', l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}, 0)) trade
                                  from ledger l
                                  inner join portfolios p on p.id = l.portfolio_id
                                  inner join currency_rates cr on cr.day = l.trade_date 
-                                 inner join prices pr on pr.instrument_id = l.instrument_id                                
+                                 inner join prices pr on pr.instrument_id = l.instrument_id  
+                                 inner join instruments i on i.id = l.instrument_id
+                                 inner join cur_rates curs on curs.day = l.trade_date and curs.cur = i.currency                              
                                  where l.trade_date >= '$start_date' and l.trade_date<='$end_date' and l.portfolio_id = '$portfolio' 
                                  and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' and pr.trade_date = '$end_date'
                                  group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
+                                 
+  
     Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
     $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
 
@@ -102,38 +113,46 @@
                     where l.trade_date >= '$start_date' and l.trade_date<='$end_date' and p.parrent_portfolio in ('$all_p_ids') 
                     and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' 
                     group by p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal";
+                    
 */
  
     $sub_portfolios_sql = "select portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, 
-                    sum(l.nominal*pr.price*l.currency_rate/cr.{$portfolio_currency}) nav, 
-                    sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) trade
+                    sum(if(pr.trade_date = '$end_date', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav, 
+                    sum(if( l.trade_date < '$end_date' and pr.trade_date = '$yesterday', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav_yest,
+                    sum(if( l.trade_date='$end_date' and pr.trade_date <> '$yesterday', l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}, 0)) trade
                     from ledger l
                     inner join portfolios p on p.id = l.portfolio_id
                     inner join currency_rates cr on cr.day = l.trade_date 
-                    inner join prices pr on pr.instrument_id = l.instrument_id                   
-                    where p.parrent_portfolio = $portfolio
-                    and pr.trade_date = '$end_date'
+                    inner join prices pr on pr.instrument_id = l.instrument_id
+                    inner join instruments i on i.id = l.instrument_id
+                    inner join cur_rates curs on curs.day = l.trade_date and curs.cur = i.currency                   
+                    where p.parrent_portfolio = $portfolio and (pr.trade_date = '$end_date' or pr.trade_date = '$yesterday' )
                     and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
                     group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal
                     Union 
                     select p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal, 
-                    sum(l.nominal*pr.price*l.currency_rate/cr.{$portfolio_currency}) nav,
-                    sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) trade 
+                    sum(if(pr.trade_date = '$end_date', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav,
+                    sum(if( l.trade_date < '$end_date' and pr.trade_date = '$yesterday', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav_yest,
+                    sum(if( l.trade_date='$end_date' and pr.trade_date <> '$yesterday', l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}, 0)) trade 
                     from ledger l
                     inner join portfolios p on p.id = l.portfolio_id
                     inner join portfolios p2 on p2.id = p.parrent_portfolio
                     inner join currency_rates cr on cr.day = l.trade_date
-                    inner join prices pr on pr.instrument_id = l.instrument_id                    
-                    where p.parrent_portfolio in ('$all_p_ids')
-                    and pr.trade_date = '$end_date' 
+                    inner join prices pr on pr.instrument_id = l.instrument_id  
+                    inner join instruments i on i.id = l.instrument_id
+                    inner join cur_rates curs on curs.day = l.trade_date and curs.cur = i.currency                   
+                    where p.parrent_portfolio in ('$all_p_ids') and (pr.trade_date = '$end_date' or pr.trade_date = '$yesterday' )
                     and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' 
                     group by p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal";
+                    
+      //echo $sub_portfolios_sql;
     
     Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();                
     $sub_portfolios = Yii::app()->db->createCommand($sub_portfolios_sql)->queryAll(true);
      
     $index_value = 0;
-    $yesterday_value = 0;
+    $yesterday_value1 = 0;
+    $yesterday_value2 = 0;
     $trade = 0;
 
     $sub_port_data = ''; 
@@ -144,17 +163,17 @@
         foreach($portfolio_composition as $sp1){ 
                 $value[$sp1['portfolio']] = 0; 
                 $index_value = $index_value + $sp1['nav'];
-                //$yesterday_value = $index_value - $sp1['nav'];
+                $yesterday_value1 = $yesterday_value1 + $sp1['nav_yest'];
                 $trade = $trade + $sp1['trade'];
              }
              
         foreach($sub_portfolios as $sp1){ 
             $value[$sp1['portfolio']] = 0;
             $index_value = $index_value + $sp1['nav'];
-            $yesterday_value = $index_value - $sp1['nav']; 
+            $yesterday_value2 = $yesterday_value2 + $sp1['nav_yest']; 
             $trade = $trade + $sp1['trade'];
          }
-    $pnl = $index_value - $yesterday_value - $trade;
+    $pnl =  $index_value - $yesterday_value1 - $yesterday_value2 - $trade;
             
     foreach($portfolio_composition as $sp2){        
                 $port_data_table .= '<tr>

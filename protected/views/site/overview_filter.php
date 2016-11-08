@@ -34,7 +34,7 @@
   </h1>
 
 <?php         
-    $returns = Calculators::ReturnAllAndYTD($portfolio);
+    //$returns = Calculators::ReturnAllAndYTD($portfolio);
 
     ///pnl/////////////////////////////////////////////////////////
     $p_ids = []; // $portfolio;
@@ -231,19 +231,40 @@
                                   {
                                       echo "<span class='description-percentage text-red'><i class='fa fa-caret-down'></i> " . number_format($pnl) . "</span>";
                                   } 
+                                  
+                                  
+                                  
+                                $sql_ret = "select pr.trade_date, 
+                                        if(pr.trade_date >= '$start_date' and pr.trade_date<='$end_date', pr.return, 1) `return`, 
+                                        if(pr.trade_date >= GREATEST(MAKEDATE(year(now()),1), '$start_date') and pr.trade_date<='$end_date', pr.return, 1) ytd  
+                                        from portfolio_returns pr where pr.portfolio_id = '$portfolio'";
+                                $results_ret = Yii::app()->db->createCommand($sql_ret)->queryAll(true);
+                                
+                                $product = 1;
+                                $all_time_return = 1;
+                                $year_to_date_return = 1;
+                                foreach($results_ret as $res){
+                                    $all_time_return = $all_time_return * $res['return'];
+                                    $year_to_date_return = $year_to_date_return * $res['ytd'];            
+                                }
+                        
+                                //return [($all_time_return - 1)*100, ($year_to_date_return - 1)*100];
+                                  
+                                  
+                                  
                               ?>
                       </div><!-- /.description-block -->
                     </div><!-- /.col -->
                     <div class="col-sm-3 col-xs-6">
                       <div class="description-block border-right">
                         <span class="description-text">RETURN All Time</span><p>
-                        <span class="description-percentage text-black"><?php echo number_format($returns[0], 2); ?>%</span>
+                        <span class="description-percentage text-black"><?php echo number_format(($all_time_return - 1)*100, 2); ?>%</span>
                       </div><!-- /.description-block -->
                     </div><!-- /.col -->
                     <div class="col-sm-3 col-xs-6">
                       <div class="description-block border-right">
                         <span class="description-text">RETURN YTD</span><p>
-                        <span class="description-percentage text-black"><?php echo number_format($returns[1], 2); ?>%</span>
+                        <span class="description-percentage text-black"><?php echo number_format(($year_to_date_return - 1)*100, 2); ?>%</span>
                       </div><!-- /.description-block -->
                     </div><!-- /.col -->
                   </div><!-- /.row -->

@@ -404,15 +404,16 @@ $(function () {
                       
 <?php       
     $month_ytd_start = date('Y-01-01');
-    $month3_start = date( "Y-m-d", strtotime( "-3 month" ));
-    $month6_start = date( "Y-m-d", strtotime( "-6 month" ));
-    $month9_start = date( "Y-m-d", strtotime( "-9 month" ));
-    $month1y_start = date( "Y-m-d", strtotime( "-1 years" ));
+    $month3_start = date( "Y-m-d", strtotime( "-3 month", strtotime($end_date) ));
+    $month6_start = date( "Y-m-d", strtotime( "-6 month", strtotime($end_date) ));
+    $month9_start = date( "Y-m-d", strtotime( "-9 month", strtotime($end_date) ));
+    $month1y_start = date( "Y-m-d", strtotime( "-1 years", strtotime($end_date) ));
     
      //$accessable_portfolios1 = Yii::app()->user->getState('accessable_portfolios');
      //$accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
      //$portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
-     
+     //echo $month3_start;
+    
     $months = [];
     $series = [];  
     $tbl_rows = '';
@@ -446,7 +447,7 @@ $(function () {
             
             $port_chart_value = $port_chart_value * $pr['return'];
             $bench_chart_value = $bench_chart_value * $pr['benchmark_return'];          
-            
+           
             if(strtotime($pr['trade_date'])>= strtotime($month_ytd_start)){$return_ytd = $return_ytd * $pr['return']; $return_ytd_bench = $return_ytd_bench * $pr['benchmark_return'];}
             if(strtotime($pr['trade_date'])>= strtotime($month3_start)){$return_3m = $return_3m * $pr['return']; $return_3m_bench = $return_3m_bench * $pr['benchmark_return'];}
             if(strtotime($pr['trade_date'])>= strtotime($month6_start)){$return_6m = $return_6m * $pr['return']; $return_6m_bench = $return_6m_bench * $pr['benchmark_return'];}

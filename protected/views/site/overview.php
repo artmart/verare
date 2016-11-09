@@ -34,7 +34,7 @@
 <!-- Content Header (Page header) -->
 
 <?php  ?>          
-<form class="form-horizontal">
+<form class="form-horizontal" id="form_id">
     <div class="row form-group">
     
         <div class="col-sm-2 control-label">Start Date:</div>
@@ -88,12 +88,16 @@
         </div>
 
 </div>
+
+
 </form>
 
-<div id="overview-view"></div>
 <div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;">
-    <img src='<?php echo Yii::app()->theme->baseUrl;?>/img/demo_wait.gif' width="64" height="64" /><br>Loading..
+    <img src='<?php echo Yii::app()->theme->baseUrl;?>/img/demo_wait.gif' width="64" height="64" /></br>Loading..
 </div>
+
+<div id="overview-view"></div>
+
 
 <script>
 ////////////////////////////////////////////////////
@@ -104,7 +108,11 @@ $(document).ready(function ($) {
         $(document).ajaxComplete(function(){
             $("#wait").css("display", "none");
         });
-    
+
+ $("#form_id").submit(function(){
+  return false;
+});
+
         overviewload();
 });
 

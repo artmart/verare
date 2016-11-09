@@ -6,12 +6,9 @@
     if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
     if(isset($_REQUEST['client_id'])){$client_id = $_REQUEST['client_id'];}
     
-    
-     
     $date = strtotime($end_date);
     $yesterday =  date('Y-m-d', strtotime("-1 day", $date));
-  //echo $yesterday;
-    
+     
     $id = Yii::app()->user->id;
     $user_data = Users::model()->findByPk($id);
     $user_data->default_portfolio_id = $portfolio;
@@ -26,7 +23,6 @@
 <h3><i><?php //echo CHtml::encode(Yii::app()->name); ?></i></h3>
 
 <!-- Content Header (Page header) -->
-
 <section class="content-header">
   <h1 class="span1">Overview
     <em><?php echo $portfolios[0]['portfolio']; ?> </em>
@@ -144,9 +140,7 @@
                     where p.parrent_portfolio in ('$all_p_ids') and (pr.trade_date = '$end_date' or pr.trade_date = '$yesterday' )
                     and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' 
                     group by p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal";
-                    
-      //echo $sub_portfolios_sql;
-    
+                        
     Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();                
     $sub_portfolios = Yii::app()->db->createCommand($sub_portfolios_sql)->queryAll(true);
      
@@ -158,8 +152,7 @@
     $sub_port_data = ''; 
     $port_data_table = ''; 
     $level1 = [];
-    
-    
+
         foreach($portfolio_composition as $sp1){ 
                 $value[$sp1['portfolio']] = 0; 
                 $index_value = $index_value + $sp1['nav'];
@@ -221,38 +214,26 @@
                     <div class="col-sm-3 col-xs-6">
                       <div class="description-block border-right">
                         <span class="description-text">O/N P/L</span><p>
-                              <?php
-                                  //$pnl = Calculators::PNL($start_date, $end_date, $portfolio);
-                                  if($pnl >= 0)
-                                  {
-                                      echo "<span class='description-percentage text-green'><i class='fa fa-caret-up'></i> " . number_format($pnl) . "</span>";
-                                  }
-                                  else
-                                  {
-                                      echo "<span class='description-percentage text-red'><i class='fa fa-caret-down'></i> " . number_format($pnl) . "</span>";
-                                  } 
-                                  
-                                  
-                                  
-                                $sql_ret = "select pr.trade_date, 
-                                        if(pr.trade_date >= '$start_date' and pr.trade_date<='$end_date', pr.return, 1) `return`, 
-                                        if(pr.trade_date >= GREATEST(MAKEDATE(year(now()),1), '$start_date') and pr.trade_date<='$end_date', pr.return, 1) ytd  
-                                        from portfolio_returns pr where pr.portfolio_id = '$portfolio'";
-                                $results_ret = Yii::app()->db->createCommand($sql_ret)->queryAll(true);
-                                
-                                $product = 1;
-                                $all_time_return = 1;
-                                $year_to_date_return = 1;
-                                foreach($results_ret as $res){
-                                    $all_time_return = $all_time_return * $res['return'];
-                                    $year_to_date_return = $year_to_date_return * $res['ytd'];            
-                                }
+                      <?php
+                          if($pnl >= 0){echo "<span class='description-percentage text-green'><i class='fa fa-caret-up'></i> " . number_format($pnl) . "</span>";
+                          }else{echo "<span class='description-percentage text-red'><i class='fa fa-caret-down'></i> " . number_format($pnl) . "</span>";} 
+                          
+                          
+                          
+                        $sql_ret = "select pr.trade_date, 
+                                if(pr.trade_date >= '$start_date' and pr.trade_date<='$end_date', pr.return, 1) `return`, 
+                                if(pr.trade_date >= GREATEST(MAKEDATE(year(now()),1), '$start_date') and pr.trade_date<='$end_date', pr.return, 1) ytd  
+                                from portfolio_returns pr where pr.portfolio_id = '$portfolio'";
+                        $results_ret = Yii::app()->db->createCommand($sql_ret)->queryAll(true);
                         
-                                //return [($all_time_return - 1)*100, ($year_to_date_return - 1)*100];
-                                  
-                                  
-                                  
-                              ?>
+                        $product = 1;
+                        $all_time_return = 1;
+                        $year_to_date_return = 1;
+                        foreach($results_ret as $res){
+                            $all_time_return = $all_time_return * $res['return'];
+                            $year_to_date_return = $year_to_date_return * $res['ytd'];            
+                        }
+                      ?>
                       </div><!-- /.description-block -->
                     </div><!-- /.col -->
                     <div class="col-sm-3 col-xs-6">
@@ -408,12 +389,7 @@ $(function () {
     $month6_start = date( "Y-m-d", strtotime( "-6 month", strtotime($end_date) ));
     $month9_start = date( "Y-m-d", strtotime( "-9 month", strtotime($end_date) ));
     $month1y_start = date( "Y-m-d", strtotime( "-1 years", strtotime($end_date) ));
-    
-     //$accessable_portfolios1 = Yii::app()->user->getState('accessable_portfolios');
-     //$accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
-     //$portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios')")->queryAll(true);
-     //echo $month3_start;
-    
+         
     $months = [];
     $series = [];  
     $tbl_rows = '';
@@ -466,7 +442,6 @@ $(function () {
   
     $allstats = Calculators::CalcAllStats1($port_ret, $bench_ret);
     $allstats_bench = Calculators::CalcAllStats_bench($bench_ret, $bench_ret);    
-    //$allstats_bench = Calculators::CalcAllStats1($bench_ret, $port_ret);
    
   $tbl_rows .=   
     '<tr>

@@ -11,8 +11,8 @@
     $month9_start = date( "Y-m-d", strtotime( "-9 month", strtotime($end_date) ));
     $month1y_start = date( "Y-m-d", strtotime( "-1 years", strtotime($end_date) ));
     
-    $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios2));    
-    $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios') and (parrent_portfolio = $default_portfolio_id or parrent_portfolio = 0)")->queryAll(true);
+    $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios2));    //parrent_portfolio   //or parrent_portfolio = 0
+    $portfolios = Yii::app()->db->createCommand("select * from portfolios where id in ('$accessable_portfolios') and (id = $default_portfolio_id) and client_id = '$client_id'")->queryAll(true);
         
     $months = [];  
     $series = []; 

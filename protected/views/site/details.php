@@ -5,6 +5,9 @@
     
     $portfolio = 0;
     
+    $portfolio = $user_data->default_portfolio_id;
+    
+    /*
     if(isset($user_data->default_portfolio_id) && $user_data->default_portfolio_id>0)
     {
         $portfolio = $user_data->default_portfolio_id;
@@ -13,6 +16,7 @@
                     $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
                     $portfolio = $accessable_portfolios[0];
             }
+    */
     $accessable_portfolios2 = $user_data->accessable_portfolios;   
             
     $end_date = Date('Y-m-d');

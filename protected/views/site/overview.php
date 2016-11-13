@@ -1,13 +1,7 @@
 <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables_themeroller.css">
 <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables.css">
-<!--<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>-->
-
 <?php 
-    $this->pageTitle=Yii::app()->name; 
-    $baseUrl = Yii::app()->baseUrl;
-    //$id = Yii::app()->user->id;
-    //$user_data = Users::model()->findByPk(Yii::app()->user->id);
-
+    //$this->pageTitle=Yii::app()->name; 
     $client_id = $user_data->client_id;
     
     $portfolio = 0;
@@ -25,19 +19,15 @@
 	$start_date = date('Y-m-d', strtotime('-1 years'));
     if(isset($user_data->default_start_date) && $user_data->default_start_date!=='0000-00-00'){$start_date = $user_data->default_start_date;}
     if(isset($user_data->default_end_date) && $user_data->default_end_date!=='0000-00-00'){$end_date = $user_data->default_end_date;}
-    //if(isset($_POST['start_date'])){$start_date = date_format(date_create($_POST['start_date']),"Y-m-d");}
-    //if(isset($_POST['end_date'])){$end_date = date_format(date_create($_POST['end_date']),"Y-m-d");}
 ?>
 
 <h3> <i><?php //echo CHtml::encode(Yii::app()->name); ?></i></h3>
 
-<!-- Content Header (Page header) -->
-
-<?php  ?>          
+<!-- Content Header (Page header) -->        
 <form class="form-horizontal" id="form_id">
     <div class="row form-group">
     
-        <div class="col-sm-2 control-label">Start Date:</div>
+        <div class="col-sm-2 control-label" style="margin-left: -70px;">Start Date:</div>
         <div class="col-sm-2">
         <?php
         $this->widget('zii.widgets.jui.CJuiDatePicker',[
@@ -47,8 +37,6 @@
                 //'language'=>'nl',
                 //'attribute'=>'SaleDate',
                 //'model'=>$model,
-                // additional javascript options for the date picker plugin
-                //'cssFile' => 'jquery-ui-1.9.2.custom.css',
                 'options'=>['showAnim'=>'fold', 'dateFormat'=>'yy-mm-dd'],
                 'htmlOptions'=>['placeholder'=>'YYYY-MM-DD', 'class'=>"form-control", 'onChange'=>'overviewload()'],
             ]);
@@ -56,7 +44,7 @@
         ?>
         </div>
          
-        <div class="col-sm-2 control-label">End Date:</div>
+        <div class="col-sm-2 control-label" style="margin-left: -70px;">End Date:</div>
         <div class="col-sm-2">
         <?php
         $this->widget('zii.widgets.jui.CJuiDatePicker',[
@@ -66,8 +54,6 @@
                 //'language'=>'nl',
                 //'attribute'=>'SaleDate',
                 //'model'=>$model,
-                // additional javascript options for the date picker plugin
-                //'cssFile' => 'jquery-ui-1.9.2.custom.css',
                 'options'=>['showAnim'=>'fold', 'dateFormat'=>'yy-mm-dd'],
                 'htmlOptions'=>['placeholder'=>'YYYY-MM-DD', 'class'=>"form-control", 'onChange'=>'overviewload()'],
             ]);
@@ -75,13 +61,10 @@
         ?>
         </div>
         
-        <div class="col-sm-2 control-label">Portfolio:</div>
-        <div class="col-sm-2">
-            <?php
-            //$ports = Portfolios::model()->findAll(['select'=>'id, portfolio', 'order'=>'portfolio']);
-        
+        <div class="col-sm-2 control-label" style="margin-left: -70px;">Portfolio:</div>
+        <div class="col-sm-3">
+            <?php       
             $ports = Portfolios::model()->findAll(['condition' => 'client_id = :client_id', 'params' => array(':client_id' => $client_id)]);
-            
             $list = CHtml::listData($ports,'id','portfolio');
             echo CHtml::dropDownList('portfolio', $portfolio,  $list, [ 'id' => 'portfolio', 'empty' => '-- Select --',  'onchange'=>'overviewload()', 'class'=>"form-control"  /*'multiple' => true, 'size'=>'10'*/]);
             ?>
@@ -89,18 +72,14 @@
 
 </div>
 
-
 </form>
 
 <div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;">
-    <img src='<?php echo Yii::app()->theme->baseUrl;?>/img/demo_wait.gif' width="64" height="64" /></br>Loading..
+    <img src='<?php echo Yii::app()->theme->baseUrl;?>/img/demo_wait.gif' width="64" height="64" /><br/>Loading..
 </div>
 
 <div id="overview-view"></div>
-
-
 <script>
-////////////////////////////////////////////////////
 $(document).ready(function ($) {
         $(document).ajaxStart(function(){
             $("#wait").css("display", "block");
@@ -113,7 +92,7 @@ $(document).ready(function ($) {
   return false;
 });
 
-        overviewload();
+    overviewload();
 });
 
     function overviewload(){
@@ -131,6 +110,4 @@ $(document).ready(function ($) {
     			}
     		   });
     }
-////////////////////////////////////////////////////
-</script>	
-
+</script>

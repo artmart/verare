@@ -182,6 +182,7 @@ window.onbeforeunload = function () {document.charset=originalCharset;};">
 		<!-- end contact -->
 
 		<!-- start footer -->
+        <!--
 		<footer>
 			<div class="container">
 				<div class="row">
@@ -189,4 +190,5 @@ window.onbeforeunload = function () {document.charset=originalCharset;};">
 				</div>
 			</div>
 		</footer>
+        -->
 		<!-- end footer -->

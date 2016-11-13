@@ -1,6 +1,4 @@
 <?php
-    $this->pageTitle=Yii::app()->name; 
-    $baseUrl = Yii::app()->baseUrl;
     $portfolio_id = $_REQUEST['portfolio'];
     $client_id = $_REQUEST['client_id'];
     $start_date = $_REQUEST['start_date'];
@@ -9,14 +7,13 @@
     $table_name = "client_".$client_id. "_inst_returns";
     $portfolios = Portfolios::model()->findByPk($portfolio_id);
     $portfolio_currency = $portfolios->currency;
-
+    
     $month_ytd_start = date('Y-01-01');
-    $month3_start = date( "Y-m-d", strtotime( "-3 month" ));
-    $month6_start = date( "Y-m-d", strtotime( "-6 month" ));
-    $month9_start = date( "Y-m-d", strtotime( "-9 month" ));
-    $month1y_start = date( "Y-m-d", strtotime( "-1 years" ));
-    
-    
+    $month3_start = date( "Y-m-d", strtotime( "-3 month", strtotime($end_date) ));
+    $month6_start = date( "Y-m-d", strtotime( "-6 month", strtotime($end_date) ));
+    $month9_start = date( "Y-m-d", strtotime( "-9 month", strtotime($end_date) ));
+    $month1y_start = date( "Y-m-d", strtotime( "-1 years", strtotime($end_date) ));
+        
     /////////////////////////////////////////////////////////////////
      $p_ids[] = $portfolio_id;
         
@@ -33,10 +30,7 @@
         }
 
         $all_p_ids = implode("','", array_unique($p_ids));
-    ////////////////////////////////////////////////////////////////
-    
-    
-    //and l.portfolio_id = '$portfolio_id'  
+    ////////////////////////////////////////////////////////////////  
     $instruments_query = "select distinct i.id, i.instrument, l.portfolio_id from instruments i inner join ledger l on l.instrument_id = i.id 
                           where l.is_current=1 and l.trade_status_id = 2 
                           and l.portfolio_id in ('$all_p_ids')
@@ -58,7 +52,7 @@
                             inner join portfolio_returns pr on pr.trade_date = r.trade_date
                             where r.instrument_id = '$instrument_id'
                             and pr.portfolio_id = '$p_id'
-                            and r.trade_date > '$start_date' and r.trade_date<'$end_date'
+                            and r.trade_date > LEAST('$start_date','$month1y_start') and r.trade_date<'$end_date'
                             order by r.trade_date";
             Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
             $instrument_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
@@ -82,9 +76,11 @@
             $bench_ret[] = $ir['benchmark_return'];
             
             $port_chart_value = $port_chart_value * $ir['return'];
+            if(strtotime($ir['trade_date'])>= strtotime($start_date)){$port_chart_value = $port_chart_value * $ir['return'];
             if($inst_num == 0){
                 $bench_chart_value = $bench_chart_value * $ir['benchmark_return'];
-            }          
+                }   
+            }       
             
             if(strtotime($ir['trade_date'])>= strtotime($month_ytd_start)){$return_ytd = $return_ytd * $ir['return'];}
             if(strtotime($ir['trade_date'])>= strtotime($month3_start)){$return_3m = $return_3m * $ir['return'];}
@@ -97,7 +93,6 @@
                 $bench_data[$i][] = [$ir['trade_date'], floatval($bench_chart_value)];  
             } 
         }
-        
         
         $return_all_time = $port_chart_value;
     
@@ -177,15 +172,9 @@ $months = array_unique($months);
 
 $(function () {
     $('#container1').highcharts({
-        chart: {
-            type: 'spline'
-        },
-        title: {
-            text: '' // 'Snow depth at Vikjafjellet, Norway'
-        },
-        subtitle: {
-            text: '' // 'Irregular time data in Highcharts JS'
-        },
+        chart: {type: 'spline'},
+        title: { text: ''},
+        subtitle: { text: '' },
         xAxis: {
             type: 'datetime',
             minTickInterval: 30,
@@ -194,9 +183,7 @@ $(function () {
                 //month: '%b \'%y', //'%e. %b', '%b \'%y'
                // year: '%b'
            // },
-            title: {
-                text: ''
-            }
+            title: {text: ''}
         },
         yAxis: {
             title: {
@@ -205,19 +192,13 @@ $(function () {
             //min: 0.2,
             //max: 1.9
         },
-        //tooltip: {
-        //    headerFormat: '<b>{series.name}</b><br>',
-        //    pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
-        //},
 
         plotOptions: {
             spline: {
                 lineWidth: 2,
                 states: { hover: {lineWidth: 5}
                     },
-                marker: {
-                    enabled: false
-                }
+                marker: {enabled: false}
             }
         },   
         
@@ -227,7 +208,6 @@ $(function () {
         series: <?php echo json_encode($series); ?>
     });
 });
-
 
 var table = $('#example').DataTable( {
     
@@ -255,62 +235,7 @@ var table = $('#example').DataTable( {
         sScrollX: "100%",
         sScrollXInner: "110%",
         bScrollCollapse: true,
-        
-        //colVis: { exclude: [ 1 ] },
-        //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
-        //ajax: "ledger/ledger",
-       // columns: [
-        /*
-            { data: null, render: function ( data, type, row ) {
-                // Combine the first and last names into a single table field
-                return data.first_name+' '+data.last_name;
-            } },
-        *//*
-            { data: "ledger.trade_date" },
-            //{ data: "ledger.instrument_id" },
-            { data: "instruments.instrument" },
-            //{ data: "ledger.portfolio_id" },
-            { data: "portfolios.portfolio" },
-            { data: "ledger.nominal" },
-            { data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
-            { data: "ledger.created_at" },
-            { data: "prof1.firstname" },
-            { data: "prof2.firstname" },
-            { data: "ledger.confirmed_at" },
-            //{ data: "ledger.document_id" },
-            { data: "trade_status.trade_status", editField: "ledger.trade_status_id", className: 'editable'    },
-           // { data: "documents.file" },
-            { data: "ledger.note" },
-            { data: "trade_code" },
-            
-            {
-                data: "documents",
-                defaultContent: '',
-                render: function(data, type, row) {
-                    if(data.document_name){
-                       return "<a href='../uploads/"+data.file +"."+data.extension+"' target='_Blank'>"+ data.file+"."+data.extension+"</a>";
-                    }else{
-                        return null;
-                    }
-                 // return data.document_name ? "<a href='../uploads/"+data.file +"."+data.extension+"' target='_Blank'>"+ data.file+"."+data.extension+"</a>": null; // data.file +"."+data.extension: null; // '<a href="/uploads/' + data.file +"."+data.extension '" onclick="window.open(this.href, \'mywin\',\'left=20,top=20,width=500,height=500,toolbar=1,resizable=1\'); return false;">' + data.document_name + '</a>' : null;
-                
-                }
-              },
-            
-            /* 
-            {
-                data: "",
-                render: function ( file_id ) {
-                    return file_id ?
-                        '<img src="'+table.file( 'documents', file_id ).web_path+'"/>' :
-                        null;
-                },
-                defaultContent: "No Document",
-                title: "Document"
-            },
-           */
-            
-       // ],
+    
         select: true,
     
         buttons: [
@@ -335,19 +260,4 @@ var table = $('#example').DataTable( {
             { extend: 'colvis', collectionLayout: 'fixed two-column',},  
         ],      
     } ); 
-
-/*
-      table.on( 'select', function ( e, dt, type, indexes ) {
-		if ( type === 'row' ) {
-			var data = table.cells(indexes,0).data(); // table.rows( indexes ).data().pluck( 'trade_status.trade_status' );            
-		}
-	} );
-*/
-
 </script>
-
-
-
-
-
-

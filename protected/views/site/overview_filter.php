@@ -1,6 +1,4 @@
-<?php 
-    $baseUrl = Yii::app()->baseUrl;
-     
+<?php      
     if(isset($_REQUEST['start_date'])){$start_date = $_REQUEST['start_date'];}
     if(isset($_REQUEST['end_date'])){$end_date = $_REQUEST['end_date'];}
     if(isset($_REQUEST['portfolio'])){$portfolio = $_REQUEST['portfolio'];}
@@ -21,7 +19,6 @@
 ?>
 
 <h3><i><?php //echo CHtml::encode(Yii::app()->name); ?></i></h3>
-
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1 class="span1">Overview
@@ -30,18 +27,14 @@
   </h1>
 
 <?php         
-    //$returns = Calculators::ReturnAllAndYTD($portfolio);
-
-    ///pnl/////////////////////////////////////////////////////////
-    $p_ids = []; // $portfolio;
-    //$p_ids1[] = $portfolio;
+    //////////////////////////////////////////
+    $p_ids = []; 
     $all_portfolios = Yii::app()->db->createCommand("select * from portfolios where parrent_portfolio = $portfolio")->queryAll(true);
     
     while(count($all_portfolios)>0){
         $new_ids = [];
         foreach($all_portfolios as $ap){
             $p_ids[] = $ap['id'];
-            //$p_ids1[] = $ap['id'];
             $new_ids[] = $ap['id'];
         }
         $new_p_ids = implode("','", array_unique($new_ids));
@@ -49,32 +42,7 @@
     }
 
     $all_p_ids = implode("','", array_unique($p_ids));
-    
-    /*
-    $all_p_ids1 = implode("','", array_unique($p_ids1));
-    
-
-    $sql1 = "select trade_date, nominal*price*ledger.currency_rate/cr.{$portfolio_currency} nav from ledger
-             inner join currency_rates cr on cr.day = ledger.trade_date             
-                where ledger.portfolio_id in ('$all_p_ids1') and ledger.trade_date >= '$start_date' and ledger.trade_date<='$end_date' and ledger.trade_status_id = 2 
-                and ledger.client_id = '$client_id' and ledger.is_current = 1
-                order by trade_date desc";
-    Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
-    $results1 = Yii::app()->db->createCommand($sql1)->queryAll(true);
-        
-        $nav_today = 0;
-        $nav_yesterday = 0;
-        $i = 0;
-        foreach($results1 as $res1){
-            $nav_today = $nav_today + $res1['nav'];
-            if($i>0){
-                $nav_yesterday = $nav_yesterday + $res1['nav'];
-            }
-            $i++;
-        }
-        $pnl = $nav_today - $nav_yesterday;
-        */
-     ///////////////////////////////////////////////////////////////////////////////////   
+    ///////////////////////////////////////////////////////////////////////////////////   
         
     $portfolio_composition_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, 
                                  sum(l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}) nav, 
@@ -93,24 +61,6 @@
   
     Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
     $portfolio_composition = Yii::app()->db->createCommand($portfolio_composition_sql)->queryAll(true);
-
-/*
-    $sub_portfolios_sql = "select portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
-                    inner join portfolios p on p.id = l.portfolio_id
-                    inner join currency_rates cr on cr.day = l.trade_date                    
-                    where l.trade_date >= '$start_date' and l.trade_date<='$end_date' and p.parrent_portfolio = $portfolio
-                    and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
-                    group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal
-                    Union 
-                    select p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal, sum(l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}) nav from ledger l
-                    inner join portfolios p on p.id = l.portfolio_id
-                    inner join portfolios p2 on p2.id = p.parrent_portfolio
-                    inner join currency_rates cr on cr.day = l.trade_date                    
-                    where l.trade_date >= '$start_date' and l.trade_date<='$end_date' and p.parrent_portfolio in ('$all_p_ids') 
-                    and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' 
-                    group by p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal";
-                    
-*/
  
     $sub_portfolios_sql = "select portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, 
                     sum(if(pr.trade_date = '$end_date', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav, 
@@ -197,118 +147,110 @@
 ?>
 
 </section>
-        <!-- Main content -->
-        <section class="content">
+<!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-danger">
+	  
+        <div class="box-footer">
           <div class="row">
-            <div class="col-md-12">
-              <div class="box box-danger">
+            <div class="col-sm-3 col-xs-6">
+              <div class="description-block border-right">
+                <span class="description-text">MARKET VALUE</span><p>
+                <span class="description-percentage text-black"><b><?php echo number_format($index_value); ?></b></span>
+              </div><!-- /.description-block -->
+            </div><!-- /.col -->
+            <div class="col-sm-3 col-xs-6">
+              <div class="description-block border-right">
+                <span class="description-text">O/N P/L</span><p>
+              <?php
+                  if($pnl >= 0){echo "<span class='description-percentage text-green'><i class='fa fa-caret-up'></i> " . number_format($pnl) . "</span>";
+                  }else{echo "<span class='description-percentage text-red'><i class='fa fa-caret-down'></i> " . number_format($pnl) . "</span>";} 
+                  
+                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                $sql_ret = "select pr.trade_date, 
+                        if(pr.trade_date >= '$start_date' and pr.trade_date<='$end_date', pr.return, 1) `return`, 
+                        if(pr.trade_date >= GREATEST(MAKEDATE(year(now()),1), '$start_date') and pr.trade_date<='$end_date', pr.return, 1) ytd  
+                        from portfolio_returns pr where pr.portfolio_id = '$portfolio'";
+                $results_ret = Yii::app()->db->createCommand($sql_ret)->queryAll(true);
+                
+                $product = 1;
+                $all_time_return = 1;
+                $year_to_date_return = 1;
+                foreach($results_ret as $res){
+                    $all_time_return = $all_time_return * $res['return'];
+                    $year_to_date_return = $year_to_date_return * $res['ytd'];            
+                }
+              ?>
+              </div><!-- /.description-block -->
+            </div><!-- /.col -->
+            <div class="col-sm-3 col-xs-6">
+              <div class="description-block border-right">
+                <span class="description-text">RETURN All Time</span><p>
+                <span class="description-percentage text-black"><?php echo number_format(($all_time_return - 1)*100, 2); ?>%</span>
+              </div><!-- /.description-block -->
+            </div><!-- /.col -->
+            <div class="col-sm-3 col-xs-6">
+              <div class="description-block border-right">
+                <span class="description-text">RETURN YTD</span><p>
+                <span class="description-percentage text-black"><?php echo number_format(($year_to_date_return - 1)*100, 2); ?>%</span>
+              </div><!-- /.description-block -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.box-footer -->
+	  </div><!-- /.box -->
+	</div><!-- /.col -->
+  </div><!-- /.row -->
+	  
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box">
+	  
+        <div class="box-header with-border">
+          <h3 class="box-title">Portfolio Composition</h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+          </div>
+        </div><!-- /.box-header -->
+		
+        <div class="box-body">
+         <!-- <div class="row">-->
+            <div class="col-md-8">
+			
+              <div class="chart">
+			       <div class="scrollit">
+				  <table id="example1" class="table table-bordered table-hover">
+					<thead>
+					  <tr>
+						<th>Name</th>
+						<th>Value (<?php echo $portfolio_currency; ?>)</th>
+						<th>Allocation</th>
+						<th>Normal</th>
+						<th>Diff</th>
+						<th>Min-Max</th>
+					  </tr>
+					</thead>
+					<tbody>
+					  <tr>
+						<td><?php echo $portfolios[0]['portfolio']; ?></td>
+						<td><?php echo number_format($index_value); ?></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					  </tr>
+                      <?php echo $port_data_table . $sub_port_data; //$inst_data; ?>
+					<tbody>
+				  </table>
+				</div>	  
+              </div><!-- /.chart-responsive -->
 			  
-                <div class="box-footer">
-                  <div class="row">
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-text">MARKET VALUE</span><p>
-                        <span class="description-percentage text-black"><b><?php echo number_format($index_value); ?></b></span>
-                      </div><!-- /.description-block -->
-                    </div><!-- /.col -->
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-text">O/N P/L</span><p>
-                      <?php
-                          if($pnl >= 0){echo "<span class='description-percentage text-green'><i class='fa fa-caret-up'></i> " . number_format($pnl) . "</span>";
-                          }else{echo "<span class='description-percentage text-red'><i class='fa fa-caret-down'></i> " . number_format($pnl) . "</span>";} 
-                          
-                          
-                          
-                        $sql_ret = "select pr.trade_date, 
-                                if(pr.trade_date >= '$start_date' and pr.trade_date<='$end_date', pr.return, 1) `return`, 
-                                if(pr.trade_date >= GREATEST(MAKEDATE(year(now()),1), '$start_date') and pr.trade_date<='$end_date', pr.return, 1) ytd  
-                                from portfolio_returns pr where pr.portfolio_id = '$portfolio'";
-                        $results_ret = Yii::app()->db->createCommand($sql_ret)->queryAll(true);
-                        
-                        $product = 1;
-                        $all_time_return = 1;
-                        $year_to_date_return = 1;
-                        foreach($results_ret as $res){
-                            $all_time_return = $all_time_return * $res['return'];
-                            $year_to_date_return = $year_to_date_return * $res['ytd'];            
-                        }
-                      ?>
-                      </div><!-- /.description-block -->
-                    </div><!-- /.col -->
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-text">RETURN All Time</span><p>
-                        <span class="description-percentage text-black"><?php echo number_format(($all_time_return - 1)*100, 2); ?>%</span>
-                      </div><!-- /.description-block -->
-                    </div><!-- /.col -->
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-text">RETURN YTD</span><p>
-                        <span class="description-percentage text-black"><?php echo number_format(($year_to_date_return - 1)*100, 2); ?>%</span>
-                      </div><!-- /.description-block -->
-                    </div><!-- /.col -->
-                  </div><!-- /.row -->
-                </div><!-- /.box-footer -->
-			  </div><!-- /.box -->
-			</div><!-- /.col -->
-		  </div><!-- /.row -->
-			  
-			  
-          <div class="row">
-            <div class="col-md-12">
-              <div class="box box">
-			  
-                <div class="box-header with-border">
-                  <h3 class="box-title">Portfolio Composition</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div>
-                </div><!-- /.box-header -->
-				
-				
-                <div class="box-body">
-                 <!-- <div class="row">-->
-                    <div class="col-md-8">
-					
-                      <div class="chart">
-					       <div class="scrollit">
-						  <table id="example1" class="table table-bordered table-hover">
-							<thead>
-							  <tr>
-								<th>Name</th>
-								<th>Value (<?php echo $portfolio_currency; ?>)</th>
-								<th>Allocation</th>
-								<th>Normal</th>
-								<th>Diff</th>
-								<th>Min-Max</th>
-							  </tr>
-							</thead>
-							<tbody>
-							  <tr>
-								<td><?php echo $portfolios[0]['portfolio']; ?></td>
-								<td><?php echo number_format($index_value); ?></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							  </tr>
+            </div><!-- /.col -->
+			
+            <div class="col-md-4">              
 
-                              <?php echo $port_data_table . $sub_port_data; //$inst_data; ?>
-							<tbody>
-						  </table>
-						</div>	  
-                      </div><!-- /.chart-responsive -->
-					  
-                    </div><!-- /.col -->
-					
-                    <div class="col-md-4">    
-                     
-<?php
-
-    //style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"
-?>
 <div id="container2" ></div>
 <script>
 $(function () {
@@ -322,9 +264,7 @@ $(function () {
             height: 300,
         },
         credits: {enabled: false},
-        title: {
-            text: ''
-        },
+        title: {text: ''},
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
         },
@@ -344,17 +284,8 @@ $(function () {
         series: [{name: '', colorByPoint: true, data: <?php echo json_encode($level1); ?>}],
     });
 });
-
 </script>
                     </div><!-- /.col -->
-					<!--
-                    <div class="col-md-4">
-                      <ul class="chart-legend clearfix">
-                        <li><i class="fa fa-circle-o text-red"></i> Equities</li>
-                        <li><i class="fa fa-circle-o text-light-blue"></i> Rates</li>
-                        <li><i class="fa fa-circle-o text-green"></i> Alternatives</li>
-                      </ul>
-                    </div> /.col -->
 					
                   <!--</div> /.row -->
                 </div><!-- ./box-body -->
@@ -381,8 +312,7 @@ $(function () {
                   <div class="row">
                     <div class="col-md-12">
 					
-                      <div class="table">
-                      
+                      <div class="table">        
 <?php       
     $month_ytd_start = date('Y-01-01');
     $month3_start = date( "Y-m-d", strtotime( "-3 month", strtotime($end_date) ));
@@ -396,7 +326,7 @@ $(function () {
     foreach($portfolios as $port){
         $portfolio_id = $port['id'];
         
-    $sql_returns = "select * from portfolio_returns where portfolio_id = '$portfolio_id' and trade_date >= '$start_date' and trade_date<='$end_date' order by trade_date";
+    $sql_returns = "select * from portfolio_returns where portfolio_id = '$portfolio_id' and trade_date >= LEAST('$start_date','$month1y_start')  and trade_date<='$end_date' order by trade_date";
     
     $portfolio_results = Yii::app()->db->createCommand($sql_returns)->queryAll(true);
     if($portfolio_results){
@@ -420,9 +350,8 @@ $(function () {
             $months[] = $pr['trade_date'];
             $port_ret[] = $pr['return'];
             $bench_ret[] = $pr['benchmark_return'];
-            
-            $port_chart_value = $port_chart_value * $pr['return'];
-            $bench_chart_value = $bench_chart_value * $pr['benchmark_return'];          
+                     
+            if(strtotime($pr['trade_date'])>= strtotime($start_date)){$port_chart_value = $port_chart_value * $pr['return']; $bench_chart_value = $bench_chart_value * $pr['benchmark_return'];}
            
             if(strtotime($pr['trade_date'])>= strtotime($month_ytd_start)){$return_ytd = $return_ytd * $pr['return']; $return_ytd_bench = $return_ytd_bench * $pr['benchmark_return'];}
             if(strtotime($pr['trade_date'])>= strtotime($month3_start)){$return_3m = $return_3m * $pr['return']; $return_3m_bench = $return_3m_bench * $pr['benchmark_return'];}
@@ -471,31 +400,28 @@ $(function () {
 
 $months = array_unique($months);  
 ?>               
-                    <table id="tablePerformance" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>AllTime</th>
-                                <th>YTD</th>
-                                <th>3M</th>
-                                <th>6M</th>
-                                <th>9M</th>
-                                <th>1Y</th>
-                                <th>Vol</th>
-                                <th>Sharpe</th>
-                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php echo $tbl_rows; ?>
-                        <tbody>
-                    </table>
+        <table id="tablePerformance" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>AllTime</th>
+                    <th>YTD</th>
+                    <th>3M</th>
+                    <th>6M</th>
+                    <th>9M</th>
+                    <th>1Y</th>
+                    <th>Vol</th>
+                    <th>Sharpe</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php echo $tbl_rows; ?>
+            <tbody>
+        </table>
 
         <div id="container1"></div>
 <?php
-
 }else{ ?>       
-       
        <img style="height: 350px; margin: 0 auto; float: left; padding-left: 30%;" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/nodata.png" class="headerimg"/>
 <?php } 
         }?>       
@@ -508,24 +434,13 @@ $months = array_unique($months);
         <div class="col-md-12">
 		  <!--<canvas id="areaChart" height="200"></canvas>-->
 
-
-
-
-
-
 <script>
 
 $(function () {
     $('#container1').highcharts({
-        chart: {
-            type: 'spline'
-        },
-        title: {
-            text: '' // 'Snow depth at Vikjafjellet, Norway'
-        },
-        subtitle: {
-            text: '' // 'Irregular time data in Highcharts JS'
-        },
+        chart: {type: 'spline'},
+        title: { text: '' },
+        subtitle: {  text: '' },
         xAxis: {
             type: 'datetime',
             minTickInterval: 30,
@@ -534,225 +449,196 @@ $(function () {
                 //month: '%b \'%y', //'%e. %b', '%b \'%y'
                // year: '%b'
            // },
-            title: {
-                text: ''
-            }
+            title: { text: '' }
         },
         yAxis: {
-            title: {
-                text: ''// 'Snow depth (m)'
-            },
+            title: { text: '' },
             //min: 0.1,
             //max: 1.35
         },
-        //tooltip: {
-        //    headerFormat: '<b>{series.name}</b><br>',
-        //    pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
-        //},
-
+        
         plotOptions: {
             spline: {
                 lineWidth: 2,
                 states: { hover: {lineWidth: 5}
                     },
                 
-                marker: {
-                    enabled: false
-                }
+                marker: { enabled: false }
             }
         },   
         
         colors: ['#104E89', '#952C28', '#00FF00', '#0000FF', '#D13CD9', '#D93C78', '#AD3CD9', '#3CD9A5', '#90D93C', '#CED93C', '#D9AA3C', '#D97E3C', '#D95E3C', '#000BD5'],
         credits: {enabled: false},
-
         series: <?php echo json_encode($series); ?>
     });
 });
 </script>          
-          
-                    </div><!-- /.col -->
-                  </div><!-- /.row -->
-					  
-                </div><!-- ./box-body -->
-				
-				
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-		  	
-          <div class="row">
-            <div class="col-md-6">
-              <div class="box box-primary" style="height: 300px;">
+        </div><!-- /.col -->
+      </div><!-- /.row -->
 		  
-                <div class="box-header with-border">
-                  <h3 class="box-title">Cash Management</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div>
-                </div><!-- /.box-header -->
-				
-                <div class="box-body">
-                  <div class="row">
-                    <div class="col-md-12">
-					
-                      <div class="table">
-                      
-                      <?php 
-                        $rows = '';                      
-                        $cf_sql = "select cf.cash_flow_date, i.instrument, sum(cf.cash_flow * l.nominal*cr.{$portfolio_currency}/curs.cur_rate) cash_flow, cft.cash_flow_type from cash_flows cf
-                                inner join cash_flow_types cft on cf.`type` = cft.id
-                                inner join instruments i on i.id = cf.instrument
-                                inner join ledger l on l.instrument_id = i.id
-                                inner join currency_rates cr on cr.day = l.trade_date
-                                inner join cur_rates curs on curs.day = cf.cash_flow_date and curs.cur = i.currency
-                                inner join portfolios port on port.id = l.portfolio_id
-                                where cf.cash_flow_date>='$end_date' 
-                                and l.is_current = 1 and l.trade_status_id = 2
-                                and (port.id = $portfolio or port.parrent_portfolio = $portfolio )
-                                and l.client_id ='$client_id'
-                                group by cf.cash_flow_date, i.instrument
-                                limit 6";
-                                
-                                //and l.portfolio_id = '$portfolio'
-                                //and cf.cash_flow_date<=l.trade_date
-                                
-                        Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
-                        $cf_results = Yii::app()->db->createCommand($cf_sql)->queryAll(true);
-                        
-                        $rows = ''; 
-                        if($cf_results){
-                        foreach($cf_results as $cf){
-     
-                              $rows .= 	  
-            					  "<tr>
-            						<td>" . $cf['cash_flow_date']. "</td>
-            						<td>". $cf['instrument']. "</td>
-            						<td>" .number_format($cf['cash_flow']). "</td>
-            					  </tr>";
-                        } ?>
-                      <table id="tableCashManagement" class="table table-bordered table-hover">
-							<thead>
-							  <tr>
-								<th>Date</th>
-								<th>Instrument</th>
-								<th>Amount</th>
-							  </tr>
-							</thead>
-							<tbody>
-                                <?php echo $rows; ?>
-							<tbody>
-						  </table>
-					       <?php }else{ ?>
-                                <img style="height: 100%; margin: 0 auto; padding-left: 25%;" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/nodata.png" class="headerimg"/>
-                       <?php } ?>
-					  </div> <!-- /.table -->
-                    </div><!-- class="col-md-6"> -->
-                  </div><!-- class="row"> -->
-                </div><!-- class="box-body"> -->
-					  
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-			
-			
-			
-            <div class="col-md-6">
-              <div class="box box-info" style="height: 300px;">
-		  
-                <div class="box-header with-border">
-                  <h3 class="box-title">Winners/Losers</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div>
-                </div><!-- /.box-header -->
-				
-                <div class="box-body">
-                  <div class="row">
-                    <div class="col-md-12">
-				    <?php //and l.portfolio_id = '$portfolio' 
-                        $win_los_query = "select i.instrument,
-                                        sum( if(p.trade_date = '$end_date', p.price * l.nominal*cr.{$portfolio_currency}/curs.cur_rate, 0)) nav_today,
-                                        sum( if(p.trade_date = DATE_ADD('$end_date', INTERVAL -1 DAY), p.price * l.nominal*cr.{$portfolio_currency}/curs.cur_rate, 0)) nav_yesterday
-                                        from prices p
-                                        inner join ledger l on l.instrument_id = p.instrument_id
-                                        inner join currency_rates cr on cr.day = p.trade_date
-                                        inner join instruments i on i.id = p.instrument_id
-                                        inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
-                                        inner join portfolios port on port.id = l.portfolio_id
-                                        where l.trade_status_id = 2 and l.is_current = 1 and l.client_id = '$client_id' 
-                                        and (port.id = $portfolio or port.parrent_portfolio = $portfolio )
-                                        and p.trade_date in(DATE_ADD('$end_date', INTERVAL -1 DAY), '$end_date')
-                                        group by i.instrument order by i.instrument, nav_today desc";
-                        Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
-                        $win_los = Yii::app()->db->createCommand($win_los_query)->queryAll(true);
-                            /* if($win_los){
-                            foreach($win_los as $wl){
-                                $rows_wl .= 	  
-            					  "<tr>
-            						<td>" . $cf['cash_flow_date']. "</td>
-            						<td>". $cf['instrument']. "</td>
-            						<td>" .number_format($cf['cash_flow']). "</td>
-            					  </tr>";
-                            }*/
-                           $wl_cnt = count($win_los);
-                           if($wl_cnt>0){
-                           $rows_wl = '';
-                           $wids = [];
-                           for($i = 0; $i<$wl_cnt; $i++){
-                                if($i<3 || ($i>=$wl_cnt-3 && $i>3)){
-                                    $wids[] = $i;
-                                }
-                           }   
-                           foreach($wids as $ii){
-                            if($ii <3){ 
-                                $rows_wl .=
-                                          "<tr>
-                                    		<td><span class='description-percentage text-green'><i class='fa fa-caret-up'></i>" .$win_los[$ii]['instrument']."</span></td>
-                                    		<td><span class='description-percentage text-green'>" . number_format($win_los[$ii]['nav_today'])."</span></td>
-                                    		<td><span class='description-percentage text-green'>" . number_format($win_los[$ii]['nav_today'] - $win_los[$ii]['nav_yesterday']). "</span></td>
-                                            <td><span class='description-percentage text-green'>" . number_format($win_los[$ii]['nav_today']/$win_los[$ii]['nav_yesterday']-1, 2). "</span></td>
-                                    	  </tr>";  
-                            }else{
-                                $rows_wl .=
-                                          "<tr>
-                                    		<td><span class='description-percentage text-red'><i class='fa fa-caret-down'></i>" . $win_los[$ii]['instrument']. "</span></td>
-                                    		<td><span class='description-percentage text-red'>" . number_format($win_los[$ii]['nav_today']) . "</span></td>
-                                    		<td><span class='description-percentage text-red'>" . number_format($win_los[$ii]['nav_today']-$win_los[$ii]['nav_yesterday']) . "</span></td>
-                                            <td><span class='description-percentage text-red'>" . number_format($win_los[$ii]['nav_today']/$win_los[$ii]['nav_yesterday']-1, 2) . "</span></td>
-                                    	  </tr>";   
-                           } }        
-                    ?>
-                      <div class="table">
-						  <table id="tableWinners" class="table table-bordered table-hover">
-							<thead>
-							  <tr>
-								<th>Instrument</th>
-								<th>NAV</th>
-								<th>Change(abs)</th>
-                                <th>Change(rel)</th>
-							  </tr>
-							</thead>
-							<tbody>
-                            <?php echo $rows_wl; ?>
-							<tbody>
-						  </table>
-                          <?php }else{ ?>
-                                <img style="height: 100%; margin: 0 auto; padding-left: 25%;" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/nodata.png" class="headerimg"/>
-                       <?php } ?>
-					  </div> <!-- /.table -->
-					  
-                    </div><!-- class="col-md-6"> -->
-                  </div><!-- class="row"> -->
-                </div><!-- class="box-body"> -->
-				
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-		  
-        </section>
+    </div><!-- ./box-body -->
+	
+	
+  </div><!-- /.box -->
+</div><!-- /.col -->
+</div><!-- /.row -->
 
+<div class="row">
+<div class="col-md-6">
+  <div class="box box-primary" style="height: 300px;">
+
+    <div class="box-header with-border">
+      <h3 class="box-title">Cash Management</h3>
+      <div class="box-tools pull-right">
+        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+      </div>
+    </div><!-- /.box-header -->
+	
+    <div class="box-body">
+      <div class="row">
+        <div class="col-md-12">
 		
+          <div class="table">              
+      <?php 
+        $rows = '';                      
+        $cf_sql = "select cf.cash_flow_date, i.instrument, sum(cf.cash_flow * l.nominal*cr.{$portfolio_currency}/curs.cur_rate) cash_flow, cft.cash_flow_type from cash_flows cf
+                inner join cash_flow_types cft on cf.`type` = cft.id
+                inner join instruments i on i.id = cf.instrument
+                inner join ledger l on l.instrument_id = i.id
+                inner join currency_rates cr on cr.day = l.trade_date
+                inner join cur_rates curs on curs.day = cf.cash_flow_date and curs.cur = i.currency
+                inner join portfolios port on port.id = l.portfolio_id
+                where cf.cash_flow_date>='$end_date' 
+                and l.is_current = 1 and l.trade_status_id = 2
+                and (port.id = $portfolio or port.parrent_portfolio = $portfolio )
+                and l.client_id ='$client_id'
+                group by cf.cash_flow_date, i.instrument
+                limit 6";
+                                               
+        Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
+        $cf_results = Yii::app()->db->createCommand($cf_sql)->queryAll(true);
+        
+        $rows = ''; 
+        if($cf_results){
+        foreach($cf_results as $cf){
+
+              $rows .= 	  
+				  "<tr>
+					<td>" . $cf['cash_flow_date']. "</td>
+					<td>". $cf['instrument']. "</td>
+					<td>" .number_format($cf['cash_flow']). "</td>
+				  </tr>";
+        } ?>
+          <table id="tableCashManagement" class="table table-bordered table-hover">
+				<thead>
+				  <tr>
+					<th>Date</th>
+					<th>Instrument</th>
+					<th>Amount</th>
+				  </tr>
+				</thead>
+				<tbody>
+                    <?php echo $rows; ?>
+				<tbody>
+			  </table>
+		       <?php }else{ ?>
+                    <img style="height: 100%; margin: 0 auto; padding-left: 25%;" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/nodata.png" class="headerimg"/>
+           <?php } ?>
+		  </div> <!-- /.table -->
+        </div><!-- class="col-md-6"> -->
+      </div><!-- class="row"> -->
+    </div><!-- class="box-body"> -->
+		  
+  </div><!-- /.box -->
+</div><!-- /.col -->
+					
+<div class="col-md-6">
+  <div class="box box-info" style="height: 300px;">
+
+    <div class="box-header with-border">
+      <h3 class="box-title">Winners/Losers</h3>
+      <div class="box-tools pull-right">
+        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+      </div>
+    </div><!-- /.box-header -->
+	
+    <div class="box-body">
+      <div class="row">
+        <div class="col-md-12">
+	    <?php  
+            $win_los_query = "select i.instrument,
+                            sum( if(p.trade_date = '$end_date', p.price * l.nominal*cr.{$portfolio_currency}/curs.cur_rate, 0)) nav_today,
+                            sum( if(p.trade_date = DATE_ADD('$end_date', INTERVAL -1 DAY), p.price * l.nominal*cr.{$portfolio_currency}/curs.cur_rate, 0)) nav_yesterday
+                            from prices p
+                            inner join ledger l on l.instrument_id = p.instrument_id
+                            inner join currency_rates cr on cr.day = p.trade_date
+                            inner join instruments i on i.id = p.instrument_id
+                            inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
+                            inner join portfolios port on port.id = l.portfolio_id
+                            where l.trade_status_id = 2 and l.is_current = 1 and l.client_id = '$client_id' 
+                            and (port.id = $portfolio or port.parrent_portfolio = $portfolio )
+                            and p.trade_date in(DATE_ADD('$end_date', INTERVAL -1 DAY), '$end_date')
+                            group by i.instrument order by i.instrument, nav_today desc";
+            Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
+            $win_los = Yii::app()->db->createCommand($win_los_query)->queryAll(true);
+               $wl_cnt = count($win_los);
+               if($wl_cnt>0){
+               $rows_wl = '';
+               $wids = [];
+               for($i = 0; $i<$wl_cnt; $i++){
+                    if($i<3 || ($i>=$wl_cnt-3 && $i>3)){
+                        $wids[] = $i;
+                    }
+               }   
+               foreach($wids as $ii){
+                if($ii <3){ 
+                    $rows_wl .=
+                              "<tr>
+                        		<td><span class='description-percentage text-green'><i class='fa fa-caret-up'></i>" .$win_los[$ii]['instrument']."</span></td>
+                        		<td><span class='description-percentage text-green'>" . number_format($win_los[$ii]['nav_today'])."</span></td>
+                        		<td><span class='description-percentage text-green'>" . number_format($win_los[$ii]['nav_today'] - $win_los[$ii]['nav_yesterday']). "</span></td>
+                                <td><span class='description-percentage text-green'>" . number_format($win_los[$ii]['nav_today']/$win_los[$ii]['nav_yesterday']-1, 2). "</span></td>
+                        	  </tr>";  
+                }else{
+                    $rows_wl .=
+                              "<tr>
+                        		<td><span class='description-percentage text-red'><i class='fa fa-caret-down'></i>" . $win_los[$ii]['instrument']. "</span></td>
+                        		<td><span class='description-percentage text-red'>" . number_format($win_los[$ii]['nav_today']) . "</span></td>
+                        		<td><span class='description-percentage text-red'>" . number_format($win_los[$ii]['nav_today']-$win_los[$ii]['nav_yesterday']) . "</span></td>
+                                <td><span class='description-percentage text-red'>" . number_format($win_los[$ii]['nav_today']/$win_los[$ii]['nav_yesterday']-1, 2) . "</span></td>
+                        	  </tr>";   
+               } }        
+        ?>
+          <div class="table">
+			  <table id="tableWinners" class="table table-bordered table-hover">
+				<thead>
+				  <tr>
+					<th>Instrument</th>
+					<th>NAV</th>
+					<th>Change(abs)</th>
+                    <th>Change(rel)</th>
+				  </tr>
+				</thead>
+				<tbody>
+                <?php echo $rows_wl; ?>
+				<tbody>
+			  </table>
+              <?php }else{ ?>
+                    <img style="height: 100%; margin: 0 auto; padding-left: 25%;" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/nodata.png" class="headerimg"/>
+           <?php } ?>
+		  </div> <!-- /.table -->
+		  
+        </div><!-- class="col-md-6"> -->
+      </div><!-- class="row"> -->
+    </div><!-- class="box-body"> -->
+	
+  </div><!-- /.box -->
+</div><!-- /.col -->
+</div><!-- /.row -->
+
+</section>		
 <script>
 
   $(document).ready(function () {
@@ -774,7 +660,7 @@ $(function () {
         info: false,
         //scrollX: '100%',
         //scrollCollapse: true,
-        //paging:         false,
+        //paging: false,
         //"bPaginate": true,
         //"bSort": true,
         //"bFilter": false,
@@ -783,7 +669,6 @@ $(function () {
         sScrollX: "100%",
         sScrollXInner: "110%",
         bScrollCollapse: true,
-        
         
         columnDefs: [
             {
@@ -795,10 +680,9 @@ $(function () {
 
         select: true,
     
-
         buttons: [
             /*{ extend: "create", editor: editor },
-            { extend: "edit",   editor: editor },
+            { extend: "edit", editor: editor },
             { extend: "remove", editor: editor },*/
             <?php //echo $access_buttons; ?>
             {
@@ -819,14 +703,10 @@ $(function () {
                     columns: [ 0, 1, 2, 5 ]
                 }
             },
-            { extend: 'colvis', collectionLayout: 'fixed two-column',},
-            
-        ],
-       
-                
+            { extend: 'colvis', collectionLayout: 'fixed two-column',},  
+        ],    
     } ); 
-    
-    
+
         var table1 = $('#example1').DataTable( {
     
         renderer: "bootstrap",
@@ -854,17 +734,7 @@ $(function () {
         sScrollXInner: "110%",
         bScrollCollapse: true,
         
-       /* 
-        columnDefs: [
-            {
-                "targets": [ 0 ],
-                "visible": false,
-                "searchable": false
-            }
-            ],
-        */
         select: true,
-    
 
         buttons: [
             /*{ extend: "create", editor: editor },
@@ -890,14 +760,7 @@ $(function () {
                 }
             },
             { extend: 'colvis', collectionLayout: 'fixed two-column',},
-            
-        ],
-       
-                
+        ],         
     } );
-    
-    
-
     });
-</script>	
-
+</script>

@@ -192,7 +192,7 @@
               </div><!-- /.description-block -->
             </div><!-- /.col -->
             <div class="col-sm-3 col-xs-6">
-              <div class="description-block border-right">
+              <div class="description-block">
                 <span class="description-text">RETURN YTD</span><p>
                 <span class="description-percentage text-black"><?php echo number_format(($year_to_date_return - 1)*100, 2); ?>%</span>
               </div><!-- /.description-block -->

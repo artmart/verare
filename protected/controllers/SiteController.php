@@ -1,8 +1,6 @@
 <?php
-
 class SiteController extends Controller
 {
-    //////////////////////////////////////////////////
     /**
 	 * @return array action filters
 	 */
@@ -40,13 +38,6 @@ class SiteController extends Controller
 		);
 	}
     //////////////////////////////////////////////////
-    
-    
-    
-    
-    
-    
-    
 	/**
 	 * Declares class-based actions.
 	 */
@@ -74,8 +65,6 @@ class SiteController extends Controller
 	{
 	    Yii::app()->theme = 'boxer';
 	    $this->layout='boxer-main';
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
 		$this->render('index');
 	}
     
@@ -91,13 +80,8 @@ class SiteController extends Controller
     
     public function actionOverviewload()
 	{
-	   //$this->layout='//layouts/column2';
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
 		$this->renderPartial('overview_filter');
 	}
-    
-    
     
     public function actionRepview()
 	{
@@ -128,19 +112,13 @@ class SiteController extends Controller
 	public function actionDetails()
 	{
 	    $this->layout='main';
-	
-    
+	    
         $user_data = Users::model()->findByPk(Yii::app()->user->id);
         $step_completed = $user_data->step_completed;
 
         if($user_data->user_role == 2 && $step_completed < 5){
             $this->render('start', ['step_completed' =>$step_completed]);
-        
-        
-        }else{ $this->render('details'); }
-    
-    
-		
+        }else{ $this->render('details'); }	
 	} 
     
     public function actionAdmin()
@@ -152,16 +130,11 @@ class SiteController extends Controller
 
         if($user_data->user_role == 2 && $step_completed < 5){
             $this->render('start', ['step_completed' =>$step_completed]);
-        
-        
         }else{ $this->render('overview', ['user_data' => $user_data]); }
 	} 
       
     public function actionOverviewLoad1()
 	{
-	   //$this->layout='//layouts/column2';
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
 		$this->render('overview_load');
 	} 
     

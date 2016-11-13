@@ -231,10 +231,8 @@ var table = $('#example').DataTable( {
 
       table.on( 'select', function ( e, dt, type, indexes ) {
 		if ( type === 'row' ) {
-			var data = table.cells(indexes,0).data(); // table.rows( indexes ).data().pluck( 'trade_status.trade_status' );
-
+			var data = table.cells(indexes,0).data(); 
             instrumentsresultsload(data[0]);
-           
 		}
 	} );
 

@@ -9,17 +9,8 @@
     $accessable_portfolios2 = $user_data->accessable_portfolios;  
     $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios2));
     
-    if(isset($user_data->default_portfolio_id) && $user_data->default_portfolio_id>0)
-    {
-        $portfolio = $user_data->default_portfolio_id;
-        }else{
-            //$accessable_portfolios1 = $user_data->accessable_portfolios;
-             //       $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios1));
-                    $portfolio = $accessable_portfolios[0];
-            }
+    if(isset($user_data->default_portfolio_id) && $user_data->default_portfolio_id>0){ $portfolio = $user_data->default_portfolio_id;}else{$portfolio = $accessable_portfolios[0];}
             
-     
-    
    	$end_date = Date('Y-m-d');
 	$start_date = date('Y-m-d', strtotime('-1 years'));
     if(isset($user_data->default_start_date) && $user_data->default_start_date!=='0000-00-00'){$start_date = $user_data->default_start_date;}
@@ -80,12 +71,13 @@
         </div>
 
 </div>
-
-</form>
-
 <div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;">
     <img src='<?php echo Yii::app()->theme->baseUrl;?>/img/demo_wait.gif' width="64" height="64" /><br/>Loading..
 </div>
+
+</form>
+
+
 
 <div id="overview-view"></div>
 <script>
@@ -97,9 +89,9 @@ $(document).ready(function ($) {
             $("#wait").css("display", "none");
         });
 
- $("#form_id").submit(function(){
-  return false;
-});
+// $("#form_id").submit(function(){
+//  return false;
+//});
 
     overviewload();
 });

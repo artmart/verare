@@ -349,15 +349,16 @@ $(function () {
         $bench_data = [];
         
         foreach($portfolio_results as $pr){   
-            $months[] = $pr['trade_date'];
-            $port_ret[] = $pr['return'];
-            $bench_ret[] = $pr['benchmark_return'];
-                     
+                   
             if(strtotime($pr['trade_date'])>= strtotime($start_date)){
+                $port_ret[] = $pr['return'];
+                $bench_ret[] = $pr['benchmark_return'];
+                
                 $port_chart_value = $port_chart_value * $pr['return']; 
                 $bench_chart_value = $bench_chart_value * $pr['benchmark_return'];
                 $port_data[] = [$pr['trade_date'], floatval($port_chart_value)];
-                $bench_data[] = [$pr['trade_date'], floatval($bench_chart_value)];  
+                $bench_data[] = [$pr['trade_date'], floatval($bench_chart_value)]; 
+                $months[] = $pr['trade_date']; 
                 }
            
             if(strtotime($pr['trade_date'])>= strtotime($month_ytd_start)){$return_ytd = $return_ytd * $pr['return']; $return_ytd_bench = $return_ytd_bench * $pr['benchmark_return'];}

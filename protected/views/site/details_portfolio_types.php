@@ -40,15 +40,17 @@
         
         foreach($portfolio_results as $pr){
             
-            $months[] = $pr['trade_date'];
-            $port_ret[] = $pr['return'];
-            $bench_ret[] = $pr['benchmark_return'];
-            
-            $bench_chart_value = $bench_chart_value * $pr['benchmark_return'];   
+              
             if(strtotime($pr['trade_date'])>= strtotime($start_date)){
+                $port_ret[] = $pr['return'];
+                $bench_ret[] = $pr['benchmark_return'];
+            
+                $bench_chart_value = $bench_chart_value * $pr['benchmark_return']; 
+                
                 $port_chart_value = $port_chart_value * $pr['return'];
                 $port_data[$i][] = [$pr['trade_date'], floatval($port_chart_value)];
                 $bench_data[$i][] = [$pr['trade_date'], floatval($bench_chart_value)];
+                $months[] = $pr['trade_date'];
             }       
             
             if(strtotime($pr['trade_date'])>= strtotime($month_ytd_start)){$return_ytd = $return_ytd * $pr['return'];}

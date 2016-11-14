@@ -70,14 +70,15 @@
         $return_1y = 1;
         
         foreach($instrument_results as $ir){
-                        
-            $months[] = $ir['trade_date'];
-            $port_ret[] = $ir['return'];
-            $bench_ret[] = $ir['benchmark_return'];
-            
+        
             $port_chart_value = $port_chart_value * $ir['return'];
-            if(strtotime($ir['trade_date'])>= strtotime($start_date)){$port_chart_value = $port_chart_value * $ir['return'];
-            $port_data[$i][] = [$ir['trade_date'], floatval($port_chart_value)];
+            if(strtotime($ir['trade_date'])>= strtotime($start_date)){
+                $months[] = $ir['trade_date'];
+                $port_ret[] = $ir['return'];
+                $bench_ret[] = $ir['benchmark_return'];
+                
+                $port_chart_value = $port_chart_value * $ir['return'];
+                $port_data[$i][] = [$ir['trade_date'], floatval($port_chart_value)];
             if($inst_num == 0){
                 $bench_chart_value = $bench_chart_value * $ir['benchmark_return'];
                 $bench_data[$i][] = [$ir['trade_date'], floatval($bench_chart_value)];  

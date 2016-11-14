@@ -345,22 +345,26 @@ $(function () {
         $return_6m_bench = 1;
         $return_9m_bench = 1;
         $return_1y_bench = 1;
+        $port_data = [];
+        $bench_data = [];
         
         foreach($portfolio_results as $pr){   
             $months[] = $pr['trade_date'];
             $port_ret[] = $pr['return'];
             $bench_ret[] = $pr['benchmark_return'];
                      
-            if(strtotime($pr['trade_date'])>= strtotime($start_date)){$port_chart_value = $port_chart_value * $pr['return']; $bench_chart_value = $bench_chart_value * $pr['benchmark_return'];}
+            if(strtotime($pr['trade_date'])>= strtotime($start_date)){
+                $port_chart_value = $port_chart_value * $pr['return']; 
+                $bench_chart_value = $bench_chart_value * $pr['benchmark_return'];
+                $port_data[] = [$pr['trade_date'], floatval($port_chart_value)];
+                $bench_data[] = [$pr['trade_date'], floatval($bench_chart_value)];  
+                }
            
             if(strtotime($pr['trade_date'])>= strtotime($month_ytd_start)){$return_ytd = $return_ytd * $pr['return']; $return_ytd_bench = $return_ytd_bench * $pr['benchmark_return'];}
             if(strtotime($pr['trade_date'])>= strtotime($month3_start)){$return_3m = $return_3m * $pr['return']; $return_3m_bench = $return_3m_bench * $pr['benchmark_return'];}
             if(strtotime($pr['trade_date'])>= strtotime($month6_start)){$return_6m = $return_6m * $pr['return']; $return_6m_bench = $return_6m_bench * $pr['benchmark_return'];}
             if(strtotime($pr['trade_date'])>= strtotime($month9_start)){$return_9m = $return_9m * $pr['return']; $return_9m_bench = $return_9m_bench * $pr['benchmark_return'];}
-            if(strtotime($pr['trade_date'])>= strtotime($month1y_start)){$return_1y = $return_1y * $pr['return']; $return_1y_bench = $return_1y_bench * $pr['benchmark_return'];}
-                        
-            $port_data[] = [$pr['trade_date'], floatval($port_chart_value)];
-            $bench_data[] = [$pr['trade_date'], floatval($bench_chart_value)];   
+            if(strtotime($pr['trade_date'])>= strtotime($month1y_start)){$return_1y = $return_1y * $pr['return']; $return_1y_bench = $return_1y_bench * $pr['benchmark_return'];}   
         }
         
         $return_all_time = $port_chart_value;

@@ -17,7 +17,8 @@
                     $portfolio = $accessable_portfolios[0];
             }
     */
-    $accessable_portfolios2 = $user_data->accessable_portfolios;   
+    $accessable_portfolios2 = $user_data->accessable_portfolios;  
+    $accessable_portfolios = implode("', '", explode(",", $accessable_portfolios2));  
             
     $end_date = Date('Y-m-d');
 	$start_date = date('Y-m-d', strtotime('-1 years'));
@@ -66,7 +67,10 @@
         <div class="col-sm-2 control-label" style="margin-left: -70px;">Portfolio:</div>
         <div class="col-sm-3">
             <?php       
-            $ports = Portfolios::model()->findAll(['condition' => 'client_id = :client_id', 'params' => array(':client_id' => $client_id)]);
+            //$ports = Portfolios::model()->findAll(['condition' => 'client_id = :client_id',  'params' => array(':client_id' => $client_id)]);            
+            $ports_sql = "select id, portfolio from portfolios where id in ('$accessable_portfolios') and client_id = '$client_id'";
+            $ports = Yii::app()->db->createCommand($ports_sql)->queryAll(true);
+            
             $list = CHtml::listData($ports,'id','portfolio');
             echo CHtml::dropDownList('portfolio', $portfolio,  $list, [ 'id' => 'portfolio', 'empty' => '-- Select --',  'onchange'=>'resultsload()', 'class'=>"form-control"  /*'multiple' => true, 'size'=>'10'*/]);
             ?>

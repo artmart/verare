@@ -45,7 +45,11 @@
             $bench_ret[] = $pr['benchmark_return'];
             
             $bench_chart_value = $bench_chart_value * $pr['benchmark_return'];   
-            if(strtotime($pr['trade_date'])>= strtotime($start_date)){$port_chart_value = $port_chart_value * $pr['return'];}       
+            if(strtotime($pr['trade_date'])>= strtotime($start_date)){
+                $port_chart_value = $port_chart_value * $pr['return'];
+                $port_data[$i][] = [$pr['trade_date'], floatval($port_chart_value)];
+                $bench_data[$i][] = [$pr['trade_date'], floatval($bench_chart_value)];
+            }       
             
             if(strtotime($pr['trade_date'])>= strtotime($month_ytd_start)){$return_ytd = $return_ytd * $pr['return'];}
             if(strtotime($pr['trade_date'])>= strtotime($month3_start)){$return_3m = $return_3m * $pr['return'];}
@@ -53,8 +57,7 @@
             if(strtotime($pr['trade_date'])>= strtotime($month9_start)){$return_9m = $return_9m * $pr['return'];}
             if(strtotime($pr['trade_date'])>= strtotime($month1y_start)){$return_1y = $return_1y * $pr['return'];}
             
-            $port_data[$i][] = [$pr['trade_date'], floatval($port_chart_value)];
-            $bench_data[$i][] = [$pr['trade_date'], floatval($bench_chart_value)];   
+               
         }
         
         $return_all_time = $port_chart_value;

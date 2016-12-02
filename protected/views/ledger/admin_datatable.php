@@ -87,6 +87,7 @@ if($ledger_delete == 1){$access_buttons .= '{
                             <th>Trade Status</th>
                             <th>Currency</th>
                             <th>Currency Rate</th>
+                            <th>Trade Type</th>
                             <th>Note</th>
                             <th>Trade Code</th>
                             <th>Amount</th>
@@ -445,7 +446,8 @@ var table = $('#example').DataTable( {
             { data: "trade_status.trade_status", editField: "ledger.trade_status_id", className: 'editable'    },
             { data: "ledger.currency" },
             { data: "ledger.currency_rate" },
-            
+            { data: "trade_types.trade_type" },
+        
            // { data: "documents.file" },
             { data: "ledger.note" },
             { data: "trade_code" },

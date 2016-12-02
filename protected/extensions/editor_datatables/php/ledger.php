@@ -278,7 +278,8 @@
             Field::inst( 'documents.system_path' ),
             Field::inst( 'documents.file' ),
             Field::inst( 'documents.extension' ),
-            //Field::inst( 'documents.document_type_id' ),
+            
+            Field::inst( 'trade_types.trade_type' ),
                     
             
             Field::inst( 'ledger.confirmed_by' )
@@ -322,7 +323,7 @@
         ->leftJoin( 'profiles as prof1', 'prof1.user_id', '=', 'ledger.created_by' )
         ->leftJoin( 'profiles as prof2', 'prof2.user_id', '=', 'ledger.confirmed_by' )
         ->leftJoin( 'trade_status', 'trade_status.id', '=', 'ledger.trade_status_id' )
-       // ->leftJoin( 'users', 'users.client_id', '=', 'ledger.client_id' )
+        ->leftJoin( 'trade_types', 'trade_types.id', '=', 'ledger.trade_type' )
         ->leftJoin( 'documents', 'documents.id', '=', 'ledger.file' )
         ->where( 'ledger.client_id', $client_id )
         ->where( 'ledger.is_current', 1 )

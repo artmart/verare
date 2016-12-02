@@ -158,6 +158,17 @@ $(document).ready(function() {
                 "attr": {"class": "form-control", 'style': 'float:left' },
                 'id':'trade_date',
             },
+            
+            {
+                label: "Trade Type:",
+                name: "ledger.trade_type",
+                type: "select",
+                ipOpts: tradetypeLoader(),
+                "attr": {"class": "form-control"}
+            },
+            
+            
+            
             {
                 label: "Portfolio:",
                 name: "ledger.portfolio_id",
@@ -634,6 +645,25 @@ var table = $('#example').DataTable( {
     return instruments.sort(SortByName);
   }
   
+  function tradetypeLoader() {
+    var instruments = [{'value': '0', 'label': '-- Select Trade Type --'}];
+    var path1 = '<?php echo Yii::app()->baseUrl.'/tradeTypes/tradetypes'; ?>';
+    $.ajax({
+        url: path1,
+        async: false,
+        dataType: 'json',
+        success: function (json) {
+          var data = json.data;
+            for(var a=0; a<data.length; a++) {
+              obj = {
+                "value" : data[a]['id'],
+                "label" : data[a]['trade_type']
+              };
+              instruments.push(obj);
+            }
+        }
+    });
+    return instruments.sort(SortByName);
+  }
 
-  
 </script>

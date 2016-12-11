@@ -190,7 +190,8 @@ class PortfolioReturns extends CActiveRecord
 $portfolio_return_sql = "select p.trade_date, 
                             if(c.trd is not NULL, c.trd, 0) pnl,  
                             if(sum(p.price * m.port_val) is not NULL, sum(p.price * m.port_val* cr.{$portfolio_currency}/curs.cur_rate), 0) top,
-                            if(bc.weight is not NULL, sum(bc.ww)/sum(bc.weight), 0) sums
+                            if(bc.weight is not NULL, sum(bc.ww)/sum(bc.weight), 0) sums,
+                            if(c.coupon is not NULL, c.coupon, 0) coupon 
                             
                             from prices p 
                             inner join currency_rates cr on cr.day = p.trade_date
@@ -198,7 +199,8 @@ $portfolio_return_sql = "select p.trade_date,
                             inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
                                                         
                             left join
-                            (select l.trade_date, sum(l.nominal*l.price * cr.{$portfolio_currency}/curs.cur_rate) trd 
+                            (select l.trade_date, sum(l.nominal*l.price * cr.{$portfolio_currency}/curs.cur_rate) trd,
+                                if(l.trade_type in ('2'), l.nominal*l.price * cr.{$portfolio_currency}/curs.cur_rate, 0) coupon
                         		from ledger l
                                 
                                 inner join currency_rates cr on cr.day = l.trade_date
@@ -236,10 +238,13 @@ $portfolio_return_sql = "select p.trade_date,
                             
                             where p.instrument_id in ('$insids') 
                             group by p.trade_date order by p.trade_date asc";  
+                            
+//echo $portfolio_return_sql;
+//exit;
                    
         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
-        
+      
         if(count($portfolio_returns)>0){
             
             //Yii::app()->db->createCommand("delete from portfolio_returns where portfolio_id = '$portfolio_id'")->execute();
@@ -256,6 +261,8 @@ $portfolio_return_sql = "select p.trade_date,
             $rawData[$i]['trade_date'] = $price['trade_date'];
             $rawData[$i]['top'] = $price['top'];
             $rawData[$i]['pnl'] = $price['pnl'];
+            $rawData[$i]['coupon'] = $price['coupon'];
+              
             $rawData[$i]['return'] = 1;  
             
             ////For Benchmark///////
@@ -273,7 +280,7 @@ $portfolio_return_sql = "select p.trade_date,
                     
                     //Portfolio return//
                     $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'];
-                    if($div>0){$rawData[$i]['return'] = $rawData[$i]['top']/$div;}
+                    if($div>0){$rawData[$i]['return'] = ($rawData[$i]['top']+$rawData[$i]['coupon'])/$div;}
                }
          
               //checking if the return for current instrument is not exist and inserting the calculated return.//

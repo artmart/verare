@@ -19,6 +19,7 @@
         $trade_date = $values['ledger']['trade_date'];
         $instrument_id = $values['ledger']['instrument_id'];
         $portfolio_id = $values['ledger']['portfolio_id'];
+        $trade_type = $values['ledger']['trade_type'];
         
         $user_id = Yii::app()->user->id;
         $user = Users::model()->findByPk($user_id);
@@ -42,12 +43,18 @@
                         ->setValue( $user_id );
                     $editor
                         ->field( 'ledger.is_current' )
-                        ->setValue( 1 );                      
+                        ->setValue( 1 );  
+                    $editor
+                        ->field( 'ledger.trade_type' )
+                        ->setValue( $trade_type );                     
                 }else{
                         $trade_code = 'TMS'.date("Yhis");
                         $editor
                             ->field( 'trade_code' )
                             ->setValue( $trade_code );
+                        $editor
+                            ->field( 'ledger.trade_type' )
+                            ->setValue( $trade_type );
                         $editor
                             ->field( 'ledger.client_id' )
                             ->setValue( $client_id );
@@ -86,6 +93,8 @@
         if(isset($values['ledger']['note'])){$note = $values['ledger']['note'];}else{$note = $existing_trades->note;}
         if(isset($values['ledger']['file'])){$file = $values['ledger']['file'];}else{$file = $existing_trades->file;}  
         if(isset($values['ledger']['currency'])){$currency = $values['ledger']['currency'];}else{$currency = $existing_trades->currency;}
+        
+        if(isset($values['ledger']['trade_type'])){$trade_type = $values['ledger']['trade_type'];}else{$trade_type = $existing_trades->trade_type;}
               
         
         
@@ -122,6 +131,8 @@
                 $new_trade->note=$note;
                 $new_trade->file=$file;
                 $new_trade->currency = $currency;
+                $new_trade->trade_type = $trade_type;
+                
                 
                 $new_trade->save();
                 //var_dump($new_trade->getErrors());
@@ -135,10 +146,14 @@
                 $editor->field( 'ledger.nominal' )->setValue( $existing_trades->nominal );
                 $editor->field( 'ledger.price' )->setValue( $existing_trades->price ); 
                 $editor->field( 'trade_code' )->setValue( $trade_code ); 
+                $editor->field( 'ledger.trade_type' )->setValue( $trade_type );
           }else{
                 $editor
                     ->field( 'ledger.trade_status_id' )
                     ->setValue( $trade_status_id );
+                $editor
+                    ->field( 'ledger.trade_type' )
+                    ->setValue( $trade_type );
                 $editor
                     ->field( 'ledger.is_current' )
                     ->setValue( $is_current );
@@ -280,7 +295,7 @@
             Field::inst( 'documents.extension' ),
             
             Field::inst( 'trade_types.trade_type' ),
-                    
+            Field::inst( 'ledger.trade_type' ),        
             
             Field::inst( 'ledger.confirmed_by' )
                 ->validator( 'Validate::numeric' )

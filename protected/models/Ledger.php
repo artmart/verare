@@ -45,7 +45,7 @@ class Ledger extends CActiveRecord
 		// will receive user inputs.
 		return array(
 		//	array('trade_date, instrument_id, portfolio_id, nominal, price, created_by, created_at, trade_status_id, confirmed_by, confirmed_at, version_number, document_id, custody_account, custody_comment, account_number, file, trade_code', 'required'),
-			array('instrument_id, portfolio_id, created_by, trade_status_id, confirmed_by, version_number, document_id, account_number, is_current', 'numerical', 'integerOnly'=>true),
+			array('instrument_id, portfolio_id, created_by, trade_status_id, confirmed_by, version_number, document_id, account_number, is_current, trade_type', 'numerical', 'integerOnly'=>true),
 			array('nominal, price', 'numerical'),
 			array('custody_account, custody_comment, note', 'length', 'max'=>255),
 			array('file', 'length', 'max'=>100),
@@ -96,6 +96,7 @@ class Ledger extends CActiveRecord
 			'trade_code' => 'Trade Code',
             'note' =>'note',
             'currency' => 'currency',
+            'trade_type' => 'trade_type',
 		);
 	}
 
@@ -139,6 +140,7 @@ class Ledger extends CActiveRecord
 		$criteria->compare('trade_code',$this->trade_code,true);
         $criteria->compare('note',$this->note);
         $criteria->compare('currency',$this->currency);
+        $criteria->compare('trade_type',$this->trade_type);
         
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

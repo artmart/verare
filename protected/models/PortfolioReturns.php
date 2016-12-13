@@ -199,7 +199,7 @@ $portfolio_return_sql = "select p.trade_date,
                             inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
                                                         
                             left join
-                            (select l.trade_date, sum(l.nominal*l.price * cr.{$portfolio_currency}/curs.cur_rate) trd,
+                            (select l.trade_date, sum(if(l.trade_type Not in ('2'), l.nominal*l.price * cr.{$portfolio_currency}/curs.cur_rate, 0)) trd,
                                 if(l.trade_type in ('2'), l.nominal*l.price * cr.{$portfolio_currency}/curs.cur_rate, 0) coupon
                         		from ledger l
                                 

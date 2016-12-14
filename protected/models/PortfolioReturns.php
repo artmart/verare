@@ -139,54 +139,7 @@ class PortfolioReturns extends CActiveRecord
         foreach($trades as $trd){$ins_ids[] = $trd['instrument_id'];} 
         
         $insids = implode("','", array_unique($ins_ids));                         
-                                
-         //(port.id = $portfolio_id  or port.parrent_portfolio = $portfolio_id ) 
-         //sum(p.price*cr.{$portfolio_currency}/curs.cur_rate*bc.weight) sums   
-         //sum((select  sum(p1.price*cr.SEK/curs.cur_rate*bc.weight) from prices p1 where p1.instrument_id = bc.instrument_id and p1.trade_date = p.trade_date)) sums     
-         /*              
-        $portfolio_return_sql = "select p.trade_date,
-                                sum((select sum(if(trade_date=p.trade_date, nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id )) pnl,
-                                sum(p.price*cr.{$portfolio_currency}/curs.cur_rate * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id )) top, 
-                                sum((select sum(p1.price*cr.{$portfolio_currency}/curs.cur_rate*bc.weight) from prices p1 where p1.instrument_id = bc.instrument_id and p1.trade_date = p.trade_date and bc.benchmark_id = port.benchmark_id))/sum(bc.weight) sums
-                                from prices p
-                                inner join ledger ldg on ldg.instrument_id = p.instrument_id
-                                inner join portfolios port on port.id = ldg.portfolio_id
-                                inner join benchmark_components bc on bc.benchmark_id = port.benchmark_id
-                                inner join currency_rates cr on cr.day = p.trade_date 
-                                
-                                inner join benchmarks bench on bench.id = port.benchmark_id and bench.client_id = ldg.client_id
-                                
-                                inner join instruments i on i.id = p.instrument_id
-                                inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
-                                
-                                where p.instrument_id in ('$insids') and ldg.client_id = '$client_id' 
-                                and port.id in ('$all_p_ids') 
-                                group by  p.trade_date
-                                order by p.trade_date asc";
-                               
-                                
-                                
-       $portfolio_return_sql = "select p.trade_date,
-                                sum((select sum(if(trade_date=p.trade_date, nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id )) pnl,
-                                sum(p.price*cr.{$portfolio_currency}/curs.cur_rate * (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger where instrument_id = p.instrument_id and ledger.is_current = 1 and ledger.trade_status_id = 2 and ledger.client_id = ldg.client_id and port.id = portfolio_id )) top, 
-                                sum((select sum(p1.price*cr.{$portfolio_currency}/curs.cur_rate*bc.weight) from prices p1 where p1.instrument_id = bc.instrument_id and p1.trade_date = p.trade_date and bc.benchmark_id = port.benchmark_id))/sum(bc.weight) sums
-                                from prices p
-                                inner join ledger ldg on ldg.instrument_id = p.instrument_id
-                                inner join portfolios port on port.id = ldg.portfolio_id
-                                inner join benchmark_components bc on bc.benchmark_id = port.benchmark_id
-                                inner join currency_rates cr on cr.day = p.trade_date 
-                                
-                                inner join benchmarks bench on bench.id = port.benchmark_id and bench.client_id = ldg.client_id
-                                
-                                inner join instruments i on i.id = p.instrument_id
-                                inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
-                                
-                                where p.instrument_id in ('$insids') and ldg.client_id = '$client_id' 
-                                and port.id in ('$all_p_ids') 
-                                group by  p.trade_date
-                                order by p.trade_date asc";
-       */ 
-                                
+                                                                
 $portfolio_return_sql = "select p.trade_date, 
                             if(c.trd is not NULL, c.trd, 0) pnl,  
                             if(sum(p.price * m.port_val) is not NULL, sum(p.price * m.port_val* cr.{$portfolio_currency}/curs.cur_rate), 0) top,
@@ -238,10 +191,7 @@ $portfolio_return_sql = "select p.trade_date,
                             
                             where p.instrument_id in ('$insids') 
                             group by p.trade_date order by p.trade_date asc";  
-                            
-//echo $portfolio_return_sql;
-//exit;
-                   
+                                               
         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
       
@@ -283,18 +233,6 @@ $portfolio_return_sql = "select p.trade_date,
                     if($div>0){$rawData[$i]['return'] = ($rawData[$i]['top']+$rawData[$i]['coupon'])/$div;}
                }
          
-              //checking if the return for current instrument is not exist and inserting the calculated return.//
-              /*
-               $existing_return  = PortfolioReturns::model()->findByAttributes([
-                                                                                'portfolio_id'=>$portfolio_id, 
-                                                                                'trade_date' =>$rawData[$i]['trade_date'], 
-                                                                                //'is_prtfolio_or_group' =>1,
-                                                                                //'return' =>$rawData[$i]['return'],
-                                                                                //'benchmark_return' => $rawData[$i]['benchmark_return']
-                                                                                ]);
-               
-                   if(count($existing_return)==0){
-               */
                        $return = new PortfolioReturns;
                        $return->portfolio_id = $portfolio_id;
                        $return->is_prtfolio_or_group = 1;
@@ -302,13 +240,6 @@ $portfolio_return_sql = "select p.trade_date,
                        $return->return = $rawData[$i]['return'];
                        $return->benchmark_return = $rawData[$i]['benchmark_return'];
                        $return->save(); 
-                       /*
-                   }else{
-                           $existing_return->return = $rawData[$i]['return'];
-                           $existing_return->benchmark_return = $rawData[$i]['benchmark_return'];
-                           $existing_return->save(); 
-                        }
-                        */
                $i++;
                }     
           }else{

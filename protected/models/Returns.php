@@ -191,8 +191,10 @@ class Returns extends CActiveRecord
        $prices_sql = "select distinct p.trade_date, p.price*cr.{$portfolio_currency}/curs.cur_rate price, 
                         (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger 
                         	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') nominal,
-                        (select sum(if(trade_date=p.trade_date, nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
-                        	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') pnl
+                        (select sum(if(trade_date=p.trade_date And ledger.trade_type Not in ('2'), nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
+                        	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') pnl,
+                         (select sum(if(trade_date=p.trade_date And ledger.trade_type in ('2'), nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
+                        	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') coupon
                          from prices p
                          inner join currency_rates cr on cr.day = p.trade_date
                          
@@ -217,6 +219,7 @@ class Returns extends CActiveRecord
             $rawData[$i]['price'] = $price['price'];
             $rawData[$i]['nominal'] = $price['nominal'];
             $rawData[$i]['pnl'] = $price['pnl'];
+            $rawData[$i]['coupon'] = $price['coupon'];
             $rawData[$i]['return'] = 1;                          
              
              // && $rawData[0]['price'] !== 0
@@ -224,7 +227,7 @@ class Returns extends CActiveRecord
             if($i>0){                
                     $div = $rawData[$i-1]['nominal'] * $rawData[$i-1]['price']+ $rawData[$i]['pnl'];
                     
-                    if($div>0){$rawData[$i]['return'] = ($rawData[$i]['nominal'] * $rawData[$i]['price'])/$div;
+                    if($div>0){$rawData[$i]['return'] = ($rawData[$i]['nominal'] * $rawData[$i]['price'] + $rawData[$i]['coupon'])/$div;
                                 }else{$rawData[$i]['return'] = 1;}
                 }
                 

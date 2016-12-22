@@ -482,8 +482,7 @@ $(function () {
       </div><!-- /.row -->
 		  
     </div><!-- ./box-body -->
-	
-	
+		
   </div><!-- /.box -->
 </div><!-- /.col -->
 </div><!-- /.row -->
@@ -506,23 +505,7 @@ $(function () {
 		
           <div class="table">              
       <?php 
-        $rows = ''; 
-        /*                    
-        $cf_sql = "select cf.cash_flow_date, i.instrument, sum(cf.cash_flow * l.nominal*cr.{$portfolio_currency}/curs.cur_rate) cash_flow, cft.cash_flow_type from cash_flows cf
-                inner join cash_flow_types cft on cf.`type` = cft.id
-                inner join instruments i on i.id = cf.instrument
-                inner join ledger l on l.instrument_id = i.id
-                inner join currency_rates cr on cr.day = l.trade_date
-                inner join cur_rates curs on curs.day = cf.cash_flow_date and curs.cur = i.currency
-                inner join portfolios port on port.id = l.portfolio_id
-                where cf.cash_flow_date>='$end_date' 
-                and l.is_current = 1 and l.trade_status_id = 2
-                and (port.id = $portfolio or port.parrent_portfolio = $portfolio )
-                and l.client_id ='$client_id'
-                group by cf.cash_flow_date, i.instrument
-                limit 6";
-        */ 
-                
+        $rows = '';                 
         $cf_sql = "select l.trade_date cash_flow_date, i.instrument, l.price * l.nominal*cr.{$portfolio_currency}/curs.cur_rate cash_flow, tt.trade_type cash_flow_type 
                     from ledger l
                     inner join trade_types tt on tt.id = l.trade_type

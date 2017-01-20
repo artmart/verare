@@ -62,7 +62,6 @@
             <?php       
             //$ports = Portfolios::model()->findAll(['condition' => 'client_id = :client_id', 'params' => array(':client_id' => $client_id)]);
             
-            
             $ports_sql = "select id, portfolio from portfolios where id in ('$accessable_portfolios') and client_id = '$client_id'";
             $ports = Yii::app()->db->createCommand($ports_sql)->queryAll(true);
             $list = CHtml::listData($ports,'id','portfolio');
@@ -76,8 +75,6 @@
 </div>
 
 </form>
-
-
 
 <div id="overview-view"></div>
 <script>

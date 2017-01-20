@@ -198,6 +198,7 @@ $(document).ready(function() {
             {
                 label: "Currency Rate:",
                 name: "ledger.currency_rate",
+                type: "hidden",
                 "attr": {"class": "form-control"}
             },                 
              /*{
@@ -445,7 +446,7 @@ var table = $('#example').DataTable( {
             //{ data: "ledger.document_id" },
             { data: "trade_status.trade_status", editField: "ledger.trade_status_id", className: 'editable'    },
             { data: "ledger.currency" },
-            { data: "ledger.currency_rate" },
+            { data: "ledger.currency_rate",  "visible": false, },
             { data: "trade_types.trade_type" },
         
            // { data: "documents.file" },

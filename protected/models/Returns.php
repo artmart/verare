@@ -187,7 +187,8 @@ class Returns extends CActiveRecord
 	   ini_set('max_execution_time', 500000);
                        
        $table_name = "client_".$client_id. "_inst_returns";
-                                    
+      
+      /*                              
        $prices_sql = "select distinct p.trade_date, p.price*cr.{$portfolio_currency}/curs.cur_rate price, 
                         (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger 
                         	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') nominal,
@@ -203,7 +204,22 @@ class Returns extends CActiveRecord
                           
                          where p.is_current = 1 and p.instrument_id = $instrument_id
                          order by p.trade_date asc";
-                        
+       */
+                         
+      $prices_sql =  "select 
+        distinct p.trade_date, p.price, 
+        (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger 
+            where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') nominal, 
+        (select sum(if(trade_date=p.trade_date And ledger.trade_type Not in ('2'), nominal*price, 0)) from ledger 
+            where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') pnl, 
+        (select sum(if(trade_date=p.trade_date And ledger.trade_type in ('2'), nominal*price, 0)) from ledger 
+            where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') coupon 
+        from prices p 
+        where p.is_current = 1 and p.instrument_id = $instrument_id 
+        order by p.trade_date asc";                 
+        
+      // echo $prices_sql;
+      // exit;                 
                         //and p.trade_date >='$dt'
         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $prices = Yii::app()->db->createCommand($prices_sql)->queryAll(true);

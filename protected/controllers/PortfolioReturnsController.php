@@ -1,5 +1,4 @@
 <?php
-
 class PortfolioReturnsController extends Controller
 {
 	/**
@@ -50,7 +49,10 @@ class PortfolioReturnsController extends Controller
         //PortfolioReturns::model()->PortfolioReturnsUpdate($default_portfolio_id, $client_id, $default_portfolio_currency);
     }
     
-    
+   
+   /**
+    *This is the main function for Calculation/Recalculation of instrument returns and Portfolio returns 
+    */
     public function actionRecalculateReturns()
 	{
 	  ini_set('max_execution_time', 50000);

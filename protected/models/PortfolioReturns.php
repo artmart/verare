@@ -1,16 +1,4 @@
 <?php
-
-/**
- * This is the model class for table "portfolio_returns".
- *
- * The followings are the available columns in table 'portfolio_returns':
- * @property integer $id
- * @property integer $portfolio_id
- * @property integer $is_prtfolio_or_group
- * @property string $trade_date
- * @property double $return
- * @property double $benchmark_return
- */
 class PortfolioReturns extends CActiveRecord
 {
 	/**
@@ -101,6 +89,12 @@ class PortfolioReturns extends CActiveRecord
     
     
 /////////////////////////
+
+
+    /**
+    *This function is using for portfolio returns calculation
+    */
+
     public function PortfolioReturnsUpdate($portfolio_id, $client_id, $portfolio_currency)
 	{  
         if($portfolio_id >0){
@@ -139,7 +133,9 @@ class PortfolioReturns extends CActiveRecord
         foreach($trades as $trd){$ins_ids[] = $trd['instrument_id'];} 
         
         $insids = implode("','", array_unique($ins_ids));                         
-                                                                
+
+//This is the portfolio returns query where currency rates are used//
+/*                                                              
 $portfolio_return_sql = "select p.trade_date, 
                             if(c.trd is not NULL, c.trd, 0) pnl,  
                             if(sum(p.price * m.port_val) is not NULL, sum(p.price * m.port_val* cr.{$portfolio_currency}/curs.cur_rate), 0) top,
@@ -190,7 +186,42 @@ $portfolio_return_sql = "select p.trade_date,
                             ) bc on  bc.trade_date = p.trade_date
                             
                             where p.instrument_id in ('$insids') 
-                            group by p.trade_date order by p.trade_date asc";  
+                            group by p.trade_date order by p.trade_date asc"; 
+                            */ 
+
+//This is the portfolio returns query without currency rates//
+$portfolio_return_sql = "select distinct
+            p.trade_date, if(c.trd is not NULL, c.trd, 0) pnl, 
+            if(sum(p.price * m.port_val) is not NULL, sum(p.price * m.port_val), 0) top, 
+            if(bc.weight is not NULL, sum(bc.ww)/sum(bc.weight), 0) sums, 
+            if(c.coupon is not NULL, c.coupon, 0) coupon 
+            from prices p 
+            
+            left join 
+            (select l.trade_date, 
+            	sum(if(l.trade_type Not in ('2'), l.nominal*l.price, 0)) trd, 
+            	if(l.trade_type in ('2'), l.nominal*l.price, 0) coupon 
+            	from ledger l 
+            	where l.is_current = 1 and l.trade_status_id = 2 and l.instrument_id in ('$insids') and l.client_id = '$client_id' and l.portfolio_id in ('$all_p_ids') 
+            	group by l.trade_date ) c on c.trade_date = p.trade_date 
+            	
+            left join 
+            ( select trade_date, instrument_id, 
+            	sum(nominal) port_val 
+            	from ledger where is_current = 1 and trade_status_id = 2 and instrument_id in ('$insids') and client_id = '$client_id' and portfolio_id in ('$all_p_ids') 
+            	group by trade_date, instrument_id ) m on m.trade_date <= p.trade_date and m.instrument_id = p.instrument_id 
+            	
+            left join 
+            ( select bc.instrument_id, p.trade_date, 
+            	p.price* bc.weight ww, bc.weight 
+            	from benchmark_components bc 
+            	inner join benchmarks bench on bench.id = bc.benchmark_id 
+            	inner join portfolios port on port.benchmark_id = bench.id 
+            	inner join prices p on p.instrument_id = bc.instrument_id 
+            	where port.id ='$portfolio_id' ) bc on bc.trade_date = p.trade_date 
+            	
+            where p.instrument_id in ('$insids') and p.trade_date <> '0000-00-00'
+            group by p.trade_date order by p.trade_date asc";
                                                
         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);

@@ -1,14 +1,4 @@
 <?php
-
-/**
- * This is the model class for table "returns".
- *
- * The followings are the available columns in table 'returns':
- * @property integer $id
- * @property integer $instrument_id
- * @property string $trade_date
- * @property double $return
- */
 class Returns extends CActiveRecord
 {
 	/**
@@ -180,47 +170,49 @@ class Returns extends CActiveRecord
         }
         }
     } 
+
+
     
-//$trade_rate, $trade_currency, 
-    public function calculateIinstrumnetReturn($instrument_id, $portfolio_id , $client_id, $portfolio_currency){
+/**
+ * This function is using for instrument returns calculation and recalculation. After instrument return calculations it is recalculating portfolio returns too. 
+ */ 
+public function calculateIinstrumnetReturn($instrument_id, $portfolio_id , $client_id, $portfolio_currency){
         
-	   ini_set('max_execution_time', 500000);
-                       
+	   ini_set('max_execution_time', 500000);             
        $table_name = "client_".$client_id. "_inst_returns";
       
-      /*                              
-       $prices_sql = "select distinct p.trade_date, p.price*cr.{$portfolio_currency}/curs.cur_rate price, 
-                        (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger 
-                        	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') nominal,
-                        (select sum(if(trade_date=p.trade_date And ledger.trade_type Not in ('2'), nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
-                        	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') pnl,
-                         (select sum(if(trade_date=p.trade_date And ledger.trade_type in ('2'), nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
-                        	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') coupon
-                         from prices p
-                         inner join currency_rates cr on cr.day = p.trade_date
-                         
-                         inner join instruments i on i.id = p.instrument_id
-                         inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
-                          
-                         where p.is_current = 1 and p.instrument_id = $instrument_id
-                         order by p.trade_date asc";
-       */
-                         
-      $prices_sql =  "select 
-        distinct p.trade_date, p.price, 
-        (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger 
-            where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') nominal, 
-        (select sum(if(trade_date=p.trade_date And ledger.trade_type Not in ('2'), nominal*price, 0)) from ledger 
-            where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') pnl, 
-        (select sum(if(trade_date=p.trade_date And ledger.trade_type in ('2'), nominal*price, 0)) from ledger 
-            where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') coupon 
-        from prices p 
-        where p.is_current = 1 and p.instrument_id = $instrument_id 
-        order by p.trade_date asc";                 
+///This is the instrument returns query where currency rates are used// 
+/*                              
+$prices_sql = "select distinct p.trade_date, p.price*cr.{$portfolio_currency}/curs.cur_rate price, 
+                (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger 
+                	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') nominal,
+                (select sum(if(trade_date=p.trade_date And ledger.trade_type Not in ('2'), nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
+                	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') pnl,
+                 (select sum(if(trade_date=p.trade_date And ledger.trade_type in ('2'), nominal*price*cr.{$portfolio_currency}/ledger.currency_rate, 0)) from ledger 
+                	where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') coupon
+                 from prices p
+                 inner join currency_rates cr on cr.day = p.trade_date
+                 
+                 inner join instruments i on i.id = p.instrument_id
+                 inner join cur_rates curs on curs.day = p.trade_date and curs.cur = i.currency
+                  
+                 where p.is_current = 1 and p.instrument_id = $instrument_id
+                 order by p.trade_date asc";
+*/
+
+//This is the instrument returns query without currency rates//                         
+$prices_sql =  "select 
+                distinct p.trade_date, p.price, 
+                (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger 
+                    where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') nominal, 
+                (select sum(if(trade_date=p.trade_date And ledger.trade_type Not in ('2'), nominal*price, 0)) from ledger 
+                    where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') pnl, 
+                (select sum(if(trade_date=p.trade_date And ledger.trade_type in ('2'), nominal*price, 0)) from ledger 
+                    where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') coupon 
+                from prices p 
+                where p.is_current = 1 and p.instrument_id = $instrument_id 
+                order by p.trade_date asc";                 
         
-      // echo $prices_sql;
-      // exit;                 
-                        //and p.trade_date >='$dt'
         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $prices = Yii::app()->db->createCommand($prices_sql)->queryAll(true);
         
@@ -237,40 +229,25 @@ class Returns extends CActiveRecord
             $rawData[$i]['pnl'] = $price['pnl'];
             $rawData[$i]['coupon'] = $price['coupon'];
             $rawData[$i]['return'] = 1;                          
-             
-             // && $rawData[0]['price'] !== 0
-             
+                          
             if($i>0){                
                     $div = $rawData[$i-1]['nominal'] * $rawData[$i-1]['price']+ $rawData[$i]['pnl'];
-                    
-                    if($div>0){$rawData[$i]['return'] = ($rawData[$i]['nominal'] * $rawData[$i]['price'] + $rawData[$i]['coupon'])/$div;
-                                }else{$rawData[$i]['return'] = 1;}
-                }
+                    if($div>0){
+                        $rawData[$i]['return'] = ($rawData[$i]['nominal'] * $rawData[$i]['price'] + $rawData[$i]['coupon'])/$div;
+                        }else{$rawData[$i]['return'] = 1;}
+                    }
                 
                 $sql = "insert into {$table_name} ({$portfolio_currency}, instrument_id, trade_date) values (:return, :instrument_id, :trade_date)";
-                        $parameters = array(":return"=>$rawData[$i]['return'], ':instrument_id' => $instrument_id, ':trade_date' => $rawData[$i]['trade_date']);
-                        Yii::app()->db->createCommand($sql)->execute($parameters);
+                $parameters = array(":return"=>$rawData[$i]['return'], ':instrument_id' => $instrument_id, ':trade_date' => $rawData[$i]['trade_date']);
+                Yii::app()->db->createCommand($sql)->execute($parameters);
          
-            //checking if the return for current instrument is not exist and inserting the calculated return.//
-            /*  
-            $raturn_sql = "select {$portfolio_currency} from {$table_name} where trade_date = '$trade_date' and instrument_id = '$instrument_id' ";
-            $existing_return = Yii::app()->db->createCommand($raturn_sql)->queryAll(true);
-
-                   if(count($existing_return)==0){
-                        $sql = "insert into {$table_name} ({$portfolio_currency}, instrument_id, trade_date) values (:return, :instrument_id, :trade_date)";
-                        $parameters = array(":return"=>$rawData[$i]['return'], ':instrument_id' => $instrument_id, ':trade_date' => $rawData[$i]['trade_date']);
-                        Yii::app()->db->createCommand($sql)->execute($parameters);  
-                   }else{ 
-                        Yii::app()->db->createCommand()->update($table_name, array("{$portfolio_currency}"=>$rawData[$i]['return']), 'trade_date=:trade_date and instrument_id =:instrument_id',array(':trade_date'=>$rawData[$i]['trade_date'], ':instrument_id' => $instrument_id));
-                   }
-               */
                $i++;
                }
                //PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id, $client_id, $portfolio_currency);
             }
             //if($portfolio_id!==0){
-            //    PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id, $client_id, $portfolio_currency);
-           // }
+            //PortfolioReturns::model()->PortfolioReturnsUpdate($portfolio_id, $client_id, $portfolio_currency);
+            //}
         
     }  
     

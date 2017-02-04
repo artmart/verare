@@ -54,7 +54,7 @@
                                  inner join prices pr on pr.instrument_id = l.instrument_id  
                                  inner join instruments i on i.id = l.instrument_id
                                  inner join cur_rates curs on curs.day = l.trade_date and curs.cur = i.currency                              
-                                 where l.trade_date >= '$start_date' and l.trade_date<='$end_date' and l.portfolio_id = '$portfolio' 
+                                 where l.trade_date >= '$start_date' and l.trade_date<='$end_date' and l.portfolio_id = '$portfolio' and l.trade_type Not in ('2')
                                  and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' and pr.trade_date = '$end_date'
                                  group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
                                  
@@ -73,7 +73,7 @@
                     inner join instruments i on i.id = l.instrument_id
                     inner join cur_rates curs on curs.day = l.trade_date and curs.cur = i.currency                   
                     where p.parrent_portfolio = $portfolio and (pr.trade_date = '$end_date' or pr.trade_date = '$yesterday' )
-                    and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id'
+                    and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' and l.trade_type Not in ('2')
                     group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal
                     Union 
                     select p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal, 
@@ -88,7 +88,7 @@
                     inner join instruments i on i.id = l.instrument_id
                     inner join cur_rates curs on curs.day = l.trade_date and curs.cur = i.currency                   
                     where p.parrent_portfolio in ('$all_p_ids') and (pr.trade_date = '$end_date' or pr.trade_date = '$yesterday' )
-                    and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' 
+                    and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' and l.trade_type Not in ('2')
                     group by p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal";
                         
     Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();                

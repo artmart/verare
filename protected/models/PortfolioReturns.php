@@ -242,7 +242,7 @@ $portfolio_return_sql = "select distinct
             $rawData[$i]['trade_date'] = $price['trade_date'];
             $rawData[$i]['top'] = $price['top'];
             $rawData[$i]['pnl'] = $price['pnl'];
-            $rawData[$i]['coupon'] = $price['coupon'];
+            $rawData[$i]['coupon'] = 0; // $price['coupon'];
               
             $rawData[$i]['return'] = 1;  
             

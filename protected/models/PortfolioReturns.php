@@ -200,7 +200,7 @@ $portfolio_return_sql = "select distinct
             left join 
             (select l.trade_date, 
             	sum(if(l.trade_type Not in ('2'), l.nominal*l.price, 0)) trd, 
-            	if(l.trade_type in ('2'), l.nominal*l.price, 0) coupon 
+            	sum(if(l.trade_type in ('2'), l.nominal*l.price, 0)) coupon 
             	from ledger l 
             	where l.is_current = 1 and l.trade_status_id = 2 and l.instrument_id in ('$insids') and l.client_id = '$client_id' and l.portfolio_id in ('$all_p_ids') 
             	group by l.trade_date ) c on c.trade_date = p.trade_date 
@@ -222,6 +222,9 @@ $portfolio_return_sql = "select distinct
             	
             where p.instrument_id in ('$insids') and p.trade_date <> '0000-00-00'
             group by p.trade_date order by p.trade_date asc";
+        
+        //echo $portfolio_return_sql;
+        //exit;
                                                
         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $portfolio_returns = Yii::app()->db->createCommand($portfolio_return_sql)->queryAll(true);
@@ -242,7 +245,7 @@ $portfolio_return_sql = "select distinct
             $rawData[$i]['trade_date'] = $price['trade_date'];
             $rawData[$i]['top'] = $price['top'];
             $rawData[$i]['pnl'] = $price['pnl'];
-            $rawData[$i]['coupon'] = 0; // $price['coupon'];
+            $rawData[$i]['coupon'] = $price['coupon'];
               
             $rawData[$i]['return'] = 1;  
             

@@ -263,7 +263,7 @@ $portfolio_return_sql = "select distinct
                     ////////////////////////
                     
                     //Portfolio return//
-                    $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'];
+                    $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'] + $rawData[$i-1]['coupon'];
                     if($div>0){$rawData[$i]['return'] = ($rawData[$i]['top']+$rawData[$i]['coupon'])/$div;}
                }
          

@@ -192,7 +192,7 @@ $portfolio_return_sql = "select p.trade_date,
 //This is the portfolio returns query without currency rates//
 $portfolio_return_sql = "select distinct
             p.trade_date, if(c.trd is not NULL, c.trd, 0) pnl, 
-            if(sum(p.price * m.port_val) is not NULL, sum(p.price * m.port_val), 0) top, 
+            sum(if(p.price * m.port_val is not NULL, p.price * m.port_val, 0)) top, 
             if(bc.weight is not NULL, sum(bc.ww)/sum(bc.weight), 0) sums, 
             if(c.coupon is not NULL, c.coupon, 0) coupon 
             from prices p 
@@ -208,7 +208,7 @@ $portfolio_return_sql = "select distinct
             left join 
             ( select trade_date, instrument_id, 
             	sum(nominal) port_val 
-            	from ledger where is_current = 1 and trade_status_id = 2 and instrument_id in ('$insids') and client_id = '$client_id' and portfolio_id in ('$all_p_ids') 
+            	from ledger where is_current = 1 and trade_status_id = 2 and instrument_id in ('$insids') and client_id = '$client_id' and portfolio_id in ('$all_p_ids')  and trade_type Not in ('2') 
             	group by trade_date, instrument_id ) m on m.trade_date <= p.trade_date and m.instrument_id = p.instrument_id 
             	
             left join 
@@ -263,7 +263,7 @@ $portfolio_return_sql = "select distinct
                     ////////////////////////
                     
                     //Portfolio return//
-                    $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'] + $rawData[$i]['coupon'];
+                    $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'] + $rawData[$i-1]['coupon'];
                     if($div>0){$rawData[$i]['return'] = ($rawData[$i]['top']+$rawData[$i]['coupon'])/$div;}
                }
          

@@ -54,7 +54,7 @@
                                  inner join prices pr on pr.instrument_id = l.instrument_id  
                                  inner join instruments i on i.id = l.instrument_id
                                  inner join cur_rates curs on curs.day = l.trade_date and curs.cur = i.currency                              
-                                 where l.trade_date >= '$start_date' and l.trade_date<='$end_date' and l.portfolio_id = '$portfolio' and l.trade_type Not in ('2')
+                                 where l.trade_date<='$end_date' and l.portfolio_id = '$portfolio' and l.trade_type Not in ('2')
                                  and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' and pr.trade_date = '$end_date'
                                  group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
                                  

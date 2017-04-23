@@ -646,7 +646,7 @@ $(function () {
 </section>		
 <script>
 
-  $(document).ready(function () {
+  $(document).ready(function (){
     
     var table = $('#example').DataTable( {
     

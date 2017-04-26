@@ -118,31 +118,35 @@
          }
     $pnl =  $index_value - $yesterday_value1 - $yesterday_value2 - $trade;
             
-    foreach($portfolio_composition as $sp2){        
+    foreach($portfolio_composition as $sp2){ 
+                $division  = 0;
+                if(!($index_value==0)){$division  = $sp2['nav']*100/$index_value;}
                 $port_data_table .= '<tr>
             						<td>Uncategorized</td>
             						<td>'.number_format($sp2['nav']).'</td>
-            						<td>'.number_format($sp2['nav']*100/$index_value, 1).'%</td>
+            						<td>'.number_format($division, 1).'%</td>
             						<td>'.number_format($sp2['allocation_normal'], 1).'%</td>
-            						<td>'.number_format($sp2['allocation_normal']-$sp2['nav']*100/$index_value, 1).'%</td>
+            						<td>'.number_format($sp2['allocation_normal']-$division, 1).'%</td>
             						<td>'.number_format($sp2['allocation_min']).'-'.number_format($sp2['allocation_max']).'%</td>
             					  </tr>'; 
         
-        $level1[] = array('name' => 'Uncategorized', 'y' => $sp2['nav']*100/$index_value);                            
+        $level1[] = array('name' => 'Uncategorized', 'y' => $division);                            
   }
   
   ////////////////////////  
-    foreach($sub_portfolios as $sp2){        
+    foreach($sub_portfolios as $sp2){ 
+                $division  = 0;
+                if(!($index_value==0)){$division  = $sp2['nav']*100/$index_value;}
                 $sub_port_data .= '<tr>
             						<td>'.$sp2['portfolio'].'</td>
             						<td>'.number_format($sp2['nav']).'</td>
-            						<td>'.number_format($sp2['nav']*100/$index_value, 1).'%</td>
+            						<td>'.number_format($division, 1).'%</td>
             						<td>'.number_format($sp2['allocation_normal'], 1).'%</td>
-            						<td>'.number_format($sp2['allocation_normal']-$sp2['nav']*100/$index_value, 1).'%</td>
+            						<td>'.number_format($sp2['allocation_normal']-$division, 1).'%</td>
             						<td>'.number_format($sp2['allocation_min']).'-'.number_format($sp2['allocation_max']).'%</td>
             					  </tr>'; 
         
-        $level1[] = array('name' => $sp2['portfolio'], 'y' => $sp2['nav']*100/$index_value);                           
+        $level1[] = array('name' => $sp2['portfolio'], 'y' => $division);                           
   }
 ?>
 

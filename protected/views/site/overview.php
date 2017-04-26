@@ -70,21 +70,27 @@
         </div>
 
 </div>
-<div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;">
+<div id="wait" style="display:none;width:69px;height:89px;position:absolute;left:50%;padding:2px; z-index: 100000;">
     <img src='<?php echo Yii::app()->theme->baseUrl;?>/img/demo_wait.gif' width="64" height="64" /><br/>Loading..
 </div>
 
 </form>
 
+
+
+
 <div id="overview-view"></div>
 <script>
-$(document).ready(function ($) {
-        $(document).ajaxStart(function(){
+/*
+$(document).ajaxStart(function(){
             $("#wait").css("display", "block");
         });
         $(document).ajaxComplete(function(){
             $("#wait").css("display", "none");
         });
+*/
+$(document).ready(function ($) {
+        
 
 // $("#form_id").submit(function(){
 //  return false;
@@ -103,7 +109,12 @@ $(document).ready(function ($) {
                      end_date:$('#end_date').val(),
                      client_id: '<?php echo $client_id;?>',
     			},
+                beforeSend: function() {
+                       $("#wait").css("display", "block");               
+                      },
+
     			success: function (response) {
+    			     $("#wait").css("display", "none");
     			     $( '#overview-view' ).html(response);
     			}
     		   });

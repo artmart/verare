@@ -46,7 +46,7 @@
         
     $portfolio_composition_sql = "select p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, 
                                  sum(l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}) nav, 
-                                 sum(if( l.trade_date < '$end_date' and pr.trade_date = '$yesterday', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav_yest,
+                                 sum(if( l.trade_date <= '$end_date' and pr.trade_date = '$yesterday', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav_yest,
                                  sum(if( l.trade_date='$end_date' and pr.trade_date <> '$yesterday', l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}, 0)) trade
                                  from ledger l
                                  inner join portfolios p on p.id = l.portfolio_id
@@ -55,7 +55,7 @@
                                  inner join instruments i on i.id = l.instrument_id
                                  inner join cur_rates curs on curs.day = l.trade_date and curs.cur = i.currency                              
                                  where l.trade_date<='$end_date' and l.portfolio_id = '$portfolio' and l.trade_type Not in ('2')
-                                 and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' and pr.trade_date = '$end_date'
+                                 and l.is_current = 1 and l.trade_status_id = 2 and l.client_id = '$client_id' and (pr.trade_date = '$end_date' or pr.trade_date = '$yesterday' )
                                  group by p.portfolio, p.allocation_min, p.allocation_max, p.allocation_normal";
                                  
   
@@ -64,7 +64,7 @@
  
     $sub_portfolios_sql = "select portfolio, p.allocation_min, p.allocation_max, p.allocation_normal, 
                     sum(if(pr.trade_date = '$end_date', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav, 
-                    sum(if( l.trade_date < '$end_date' and pr.trade_date = '$yesterday', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav_yest,
+                    sum(if( l.trade_date <= '$end_date' and pr.trade_date = '$yesterday', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav_yest,
                     sum(if( l.trade_date='$end_date' and pr.trade_date <> '$yesterday', l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}, 0)) trade
                     from ledger l
                     inner join portfolios p on p.id = l.portfolio_id
@@ -78,7 +78,7 @@
                     Union 
                     select p2.portfolio, p2.allocation_min, p2.allocation_max, p2.allocation_normal, 
                     sum(if(pr.trade_date = '$end_date', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav,
-                    sum(if( l.trade_date < '$end_date' and pr.trade_date = '$yesterday', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav_yest,
+                    sum(if( l.trade_date <= '$end_date' and pr.trade_date = '$yesterday', l.nominal*pr.price*curs.cur_rate/cr.{$portfolio_currency}, 0)) nav_yest,
                     sum(if( l.trade_date='$end_date' and pr.trade_date <> '$yesterday', l.nominal*l.price*l.currency_rate/cr.{$portfolio_currency}, 0)) trade 
                     from ledger l
                     inner join portfolios p on p.id = l.portfolio_id

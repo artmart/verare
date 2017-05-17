@@ -47,7 +47,7 @@
             $instrument_id = $instrument['id'];
             $p_id = $instrument['portfolio_id'];
         
-            $sql_returns = "select r.trade_date, r.{$portfolio_currency} `return`, pr.benchmark_return 
+            $sql_returns = "select distinct r.trade_date, r.{$portfolio_currency} `return`, pr.benchmark_return 
                             from {$table_name} r 
                             inner join portfolio_returns pr on pr.trade_date = r.trade_date
                             where r.instrument_id = '$instrument_id'

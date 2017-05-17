@@ -198,7 +198,7 @@ $prices_sql = "select distinct p.trade_date, p.price*cr.{$portfolio_currency}/cu
                   
                  where p.is_current = 1 and p.instrument_id = $instrument_id
                  order by p.trade_date asc";
-*/
+
 
 //This is the instrument returns query without currency rates//                         
 $prices_sql =  "select 
@@ -211,7 +211,38 @@ $prices_sql =  "select
                     where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') coupon 
                 from prices p 
                 where p.is_current = 1 and p.instrument_id = $instrument_id 
-                order by p.trade_date asc";                 
+                order by p.trade_date asc";    
+ */               
+                
+                
+$prices_sql = "select distinct
+            p.trade_date, if(c.trd is not NULL, c.trd, 0) pnl, 
+            sum(if(p.price * m.port_val is not NULL, p.price * m.port_val, 0)) top, 
+            if(c.coupon is not NULL, c.coupon, 0) coupon 
+            from prices p 
+            
+            left join 
+            (select l.trade_date, 
+            	sum(if(l.trade_type Not in ('2'), l.nominal*l.price, 0)) trd, 
+            	sum(if(l.trade_type in ('2'), l.nominal*l.price, 0)) coupon 
+            	from ledger l 
+            	where l.is_current = 1 and l.trade_status_id = 2 and l.instrument_id = '$instrument_id' and l.client_id = '$client_id' 
+            	group by l.trade_date ) c on c.trade_date = p.trade_date 
+            	
+            left join 
+            ( select trade_date, instrument_id, 
+            	sum(nominal) port_val 
+            	from ledger where is_current = 1 and trade_status_id = 2 and instrument_id = '$instrument_id' and client_id = '$client_id' and trade_type Not in ('2') 
+            	group by trade_date, instrument_id ) m on m.trade_date <= p.trade_date and m.instrument_id = p.instrument_id 
+            	
+            	
+            where p.instrument_id = '$instrument_id' and p.trade_date <> '0000-00-00'
+            group by p.trade_date order by p.trade_date asc";                
+                
+                
+
+                
+                             
         
         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $prices = Yii::app()->db->createCommand($prices_sql)->queryAll(true);
@@ -223,18 +254,24 @@ $prices_sql =  "select
         foreach($prices as $price){
             $rawData[$i]['id'] = $i;    
             $rawData[$i]['trade_date'] = $price['trade_date'];
-            $trade_date = $price['trade_date'];
-            $rawData[$i]['price'] = $price['price'];
-            $rawData[$i]['nominal'] = $price['nominal'];
+            //$trade_date = $price['trade_date'];
+            //$rawData[$i]['price'] = $price['price'];
+            //$rawData[$i]['nominal'] = $price['nominal'];
             $rawData[$i]['pnl'] = $price['pnl'];
             $rawData[$i]['coupon'] = $price['coupon'];
+            $rawData[$i]['top'] = $price['top'];
             $rawData[$i]['return'] = 1;                          
                           
-            if($i>0){                
+            if($i>0){   
+                    /*
                     $div = $rawData[$i-1]['nominal'] * $rawData[$i-1]['price']+ $rawData[$i]['pnl'];
                     if($div>0){
                         $rawData[$i]['return'] = ($rawData[$i]['nominal'] * $rawData[$i]['price'] + $rawData[$i]['coupon'])/$div;
                         }else{$rawData[$i]['return'] = 1;}
+                    */    
+                        
+                    $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'];
+                    if($div>0 && !($rawData[$i]['top']==0)){$rawData[$i]['return'] = ($rawData[$i]['top'] + $rawData[$i]['coupon'])/$div;}
                     }
                 
                 $sql = "insert into {$table_name} ({$portfolio_currency}, instrument_id, trade_date) values (:return, :instrument_id, :trade_date)";

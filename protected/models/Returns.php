@@ -198,13 +198,13 @@ $prices_sql = "select distinct p.trade_date, p.price*cr.{$portfolio_currency}/cu
                   
                  where p.is_current = 1 and p.instrument_id = $instrument_id
                  order by p.trade_date asc";
-
+*/
 
 //This is the instrument returns query without currency rates//                         
 $prices_sql =  "select 
-                distinct p.trade_date, p.price, 
+                distinct p.trade_date, p.price* 
                 (select sum(if(trade_date<=p.trade_date, nominal, 0)) from ledger 
-                    where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') nominal, 
+                    where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') top, 
                 (select sum(if(trade_date=p.trade_date And ledger.trade_type Not in ('2'), nominal*price, 0)) from ledger 
                     where instrument_id = p.instrument_id and ledger.trade_status_id = 2 and ledger.is_current = 1 and ledger.client_id = '$client_id') pnl, 
                 (select sum(if(trade_date=p.trade_date And ledger.trade_type in ('2'), nominal*price, 0)) from ledger 
@@ -212,11 +212,12 @@ $prices_sql =  "select
                 from prices p 
                 where p.is_current = 1 and p.instrument_id = $instrument_id 
                 order by p.trade_date asc";    
- */               
-                
+              
+ /*               
                 
 $prices_sql = "select distinct
-            p.trade_date, if(c.trd is not NULL, c.trd, 0) pnl, 
+            p.trade_date, 
+            if(c.trd is not NULL, c.trd, 0) pnl, 
             sum(if(p.price * m.port_val is not NULL, p.price * m.port_val, 0)) top, 
             if(c.coupon is not NULL, c.coupon, 0) coupon 
             from prices p 
@@ -230,19 +231,14 @@ $prices_sql = "select distinct
             	group by l.trade_date ) c on c.trade_date = p.trade_date 
             	
             left join 
-            ( select trade_date, instrument_id, 
-            	sum(nominal) port_val 
+            ( select trade_date, instrument_id, sum(nominal) port_val 
             	from ledger where is_current = 1 and trade_status_id = 2 and instrument_id = '$instrument_id' and client_id = '$client_id' and trade_type Not in ('2') 
             	group by trade_date, instrument_id ) m on m.trade_date <= p.trade_date and m.instrument_id = p.instrument_id 
             	
             	
             where p.instrument_id = '$instrument_id' and p.trade_date <> '0000-00-00'
             group by p.trade_date order by p.trade_date asc";                
-                
-                
-
-                
-                             
+  */                                        
         
         Yii::app()->db->createCommand("SET SQL_BIG_SELECTS = 1")->execute();
         $prices = Yii::app()->db->createCommand($prices_sql)->queryAll(true);

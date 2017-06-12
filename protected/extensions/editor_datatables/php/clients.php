@@ -12,6 +12,7 @@
         
     function createReturnsTable( $id, $values ){
         $table_name = "client_".$id. "_inst_returns";
+    /*
         Yii::app()->db->createCommand("CREATE TABLE $table_name (`id` INT(11) NOT NULL AUTO_INCREMENT, 
                                                                       
                                                                     	`instrument_id` INT(11) NOT NULL,
@@ -39,6 +40,15 @@
                                                                     	`BRL` FLOAT(9,7) NOT NULL DEFAULT '1',
                                                                     	`INR` FLOAT(9,7) NOT NULL DEFAULT '1',
                                                                                                                                     
+                                                                      PRIMARY KEY (`id`)
+                                                                    ) ENGINE=INNODB DEFAULT CHARSET=utf8;")->execute();
+        */
+                                                                    
+                Yii::app()->db->createCommand("CREATE TABLE $table_name (`id` INT(11) NOT NULL AUTO_INCREMENT, 
+                                                                      
+                                                                    	`instrument_id` INT(11) NOT NULL,
+                                                                    	`trade_date` DATE NOT NULL,                                                                       
+                                                                        `returns` FLOAT(9,7) NOT NULL DEFAULT '1',                                                          
                                                                       PRIMARY KEY (`id`)
                                                                     ) ENGINE=INNODB DEFAULT CHARSET=utf8;")->execute();
     }    

@@ -5,8 +5,8 @@
     $end_date = $_REQUEST['end_date'];
         
     $table_name = "client_".$client_id. "_inst_returns";
-    $portfolios = Portfolios::model()->findByPk($portfolio_id);
-    $portfolio_currency = $portfolios->currency;
+    //$portfolios = Portfolios::model()->findByPk($portfolio_id);
+    $portfolio_currency = 'returns'; // $portfolios->currency;
     
     $month_ytd_start = date('Y-01-01');
     $month3_start = date( "Y-m-d", strtotime( "-3 month", strtotime($end_date) ));

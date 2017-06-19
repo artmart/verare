@@ -97,6 +97,7 @@ class PortfolioReturns extends CActiveRecord
 
     public function PortfolioReturnsUpdate($portfolio_id, $client_id, $portfolio_currency)
 	{  
+	   $portfolio_id = 33;
         if($portfolio_id >0){
         ini_set('max_execution_time', 50000);
         //$table_name = "client_".$client_id. "_inst_returns";
@@ -192,7 +193,7 @@ $portfolio_return_sql = "select p.trade_date,
 //This is the portfolio returns query without currency rates//
 $portfolio_return_sql = "select distinct
             p.trade_date, if(c.trd is not NULL, c.trd, 0) pnl, 
-            sum(if(p.price * m.port_val is not NULL, p.price * m.port_val, 0)) top, 
+            if(m.port_val is not NULL, m.port_val, 0) top, 
             if(bc.weight is not NULL, sum(bc.ww)/sum(bc.weight), 0) sums, 
             if(c.coupon is not NULL, c.coupon, 0) coupon 
             from prices p 
@@ -206,11 +207,14 @@ $portfolio_return_sql = "select distinct
             	group by l.trade_date ) c on c.trade_date = p.trade_date 
             	
             left join 
-            ( select trade_date, instrument_id, 
-            	sum(nominal) port_val 
-            	from ledger where is_current = 1 and trade_status_id = 2 and instrument_id in ('$insids') and client_id = '$client_id' and portfolio_id in ('$all_p_ids')  and trade_type Not in ('2') 
-            	group by trade_date, instrument_id ) m on m.trade_date <= p.trade_date and m.instrument_id = p.instrument_id 
-            	
+            ( select p1.trade_date, 
+            	sum(p1.price * nominal) port_val 
+            	from ledger l
+                inner join prices p1 on p1.instrument_id = l.instrument_id and l.trade_date<=p1.trade_date 
+                where l.is_current = 1 and trade_status_id = 2 
+                and l.instrument_id in ('$insids') and l.client_id = '$client_id' and l.portfolio_id in ('$all_p_ids')  and trade_type Not in ('2') 
+            	group by p1.trade_date) m on m.trade_date = p.trade_date 
+                      	
             left join 
             ( select bc.instrument_id, p.trade_date, 
             	p.price* bc.weight ww, bc.weight 
@@ -268,6 +272,11 @@ $portfolio_return_sql = "select distinct
                     
                     $div = $rawData[$i-1]['top'] + $rawData[$i]['pnl'];
                     if($div>0 && !($rawData[$i]['top']==0)){$rawData[$i]['return'] = ($rawData[$i]['top'] + $rawData[$i]['coupon'])/$div;}
+                    
+                  //if($rawData[$i]['trade_date']=='2012-04-30'){
+                  //         var_dump( $rawData[$i]['return']);
+        //exit;
+       // }
                }
          
                        $return = new PortfolioReturns;

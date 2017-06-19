@@ -80,7 +80,7 @@ class PricesController extends Controller
 		));
 	}
     
-    
+    /*
     public function actionApi()
     {
        // var_dump($_GET);
@@ -196,6 +196,150 @@ class PricesController extends Controller
             
             echo json_encode($res);
         }
+    }
+    
+    */
+    
+    public function actionApi()
+    {
+    $view = $_GET['view'];
+    if (strcasecmp($view, 'prices') == 0) {
+    $start_date = $_GET['start_date'];
+    $end_date = $_GET['end_date'];
+    $instrument_id = $_GET['instrument_id'];
+    
+    $sql = "select trade_date, price from prices 
+    where instrument_id = $instrument_id and trade_date>=$start_date and trade_date<=$end_date
+    order by trade_date asc";
+    $query = Yii::app()->db->createCommand($sql)->queryAll(true);
+    
+    if(count($query)>0){foreach($query as $q){$res[] = ['trade_date'=>$q['trade_date'], 'price'=> $q['price']];}
+    }else{$res[] = ['No Results found.'];}
+    
+    echo json_encode($res);
+    }
+    if (strcasecmp($view, 'instruments') == 0) {
+    $sql = "select * from instruments";
+    $query = Yii::app()->db->createCommand($sql)->queryAll(true);
+    
+    if(count($query)>0){foreach($query as $q){$res[] = ['id'=> $q['id'], 'instrument'=>$q['instrument'], 'currency'=> $q['currency']];}
+    }else{$res[] = ['No Results found.'];}
+    
+    echo json_encode($res);
+    }
+    if (strcasecmp($view, 'clients') == 0) {
+    $sql = "select id, client_name from clients";
+    $query = Yii::app()->db->createCommand($sql)->queryAll(true);
+    
+    if(count($query)>0){foreach($query as $q){$res[] = ['id'=> $q['id'], 'client'=>$q['client_name']];}
+    }else{$res[] = ['No Results found.'];}
+    
+    echo json_encode($res);
+    }
+    if (strcasecmp($view, 'users') == 0) {
+    $client_id = $_GET['client_id'];
+    
+    $sql = "select id, username from users where client_id=$client_id";
+    $query = Yii::app()->db->createCommand($sql)->queryAll(true);
+    
+    if(count($query)>0){foreach($query as $q){$res[] = ['id'=>$q['id'], 'user'=> $q['username']];}
+    }else{$res[] = ['No Results found.'];}
+    
+    echo json_encode($res);
+    }
+    if (strcasecmp($view, 'portfolios') == 0) {
+    $client_id = $_GET['client_id'];
+    
+    $sql = "select id, portfolio from portfolios where client_id=$client_id and is_current=1";
+    $query = Yii::app()->db->createCommand($sql)->queryAll(true);
+    
+    if(count($query)>0){foreach($query as $q){$res[] = ['id'=>$q['id'], 'portfolio'=> $q['portfolio']];}
+    }else{$res[] = ['No Results found.'];}
+    
+    echo json_encode($res);
+    }
+    
+    if (strcasecmp($view, 'insert_ledger') == 0) {
+    
+    $user_id = $_GET['user_id'];
+    $client_id = $_GET['client_id'];
+    $portfolio_id = $_GET['portfolio_id'];
+    $instrument_id = $_GET['instrument_id'];
+    $trade_date = $_GET['trade_date'];
+    $nominal = $_GET['nominal'];
+    $price = $_GET['price'];
+    $currency = $_GET['currency'];
+    $trade_type = $_GET['trade_type'];
+    
+    $timestamp = date('Y-m-d H:i:s');
+    $tradecode = 'TMS'.date("Yhis");
+    
+    $sql = "insert into ledger (trade_date, instrument_id, portfolio_id, nominal, price, created_by, created_at, trade_status_id, confirmed_by, confirmed_at, version_number, document_id, custody_account, custody_comment, account_number, is_current, trade_code, client_id, note, currency, currency_rate, trade_type) 
+    values ('$trade_date', '$instrument_id', '$portfolio_id', '$nominal', '$price', '$user_id', '$timestamp', 2, '$user_id', '$timestamp', 0, 0, '', '', 0, 1, '$tradecode', '$client_id', '', '$currency', 1, '$trade_type')";
+    
+    $query = Yii::app()->db->createCommand($sql)->execute();
+    //$res[] = ['Sucess'];
+    var_dump($query);
+    
+    exit;
+    //$query = Yii::app()->db->createCommand($sql)->queryAll(true);
+    //if(count($query)>0){foreach($query as $q){$res[] = ['Should be blank'];}
+    //}else{$res[] = ['Sucess'];}
+    
+    //echo json_encode($res);
+    }
+    
+    if (strcasecmp($view, 'insert_ledger2') == 0) {
+    $user_id = $_GET['user_id'];
+    $client_id = $_GET['client_id'];
+    $portfolio_id = $_GET['portfolio_id'];
+    $instrument_id = $_GET['instrument_id'];
+    $trade_date = $_GET['trade_date'];
+    $nominal = $_GET['nominal'];
+    $price = $_GET['price'];
+    $currency = $_GET['currency'];
+    
+    $timestamp = date('Y-m-d H:i:s');
+    $tradecode = 'TMS'.date("Yhis");
+    
+    $sql = "insert into ledger (trade_date, instrument_id, portfolio_id, nominal, price, created_by, created_at, trade_status_id, confirmed_by, confirmed_at, version_number, document_id, custody_account, custody_comment, account_number, is_current, trade_code, client_id, note, currency, currency_rate, trade_type) values ($trade_date, $instrument_id, $portfolio_id, $nominal, $price, $user_id, $timestamp, 2, $user_id, $timestamp, 0, 0, '', '', 0, 1, $tradecode, $client_id, '', 'SEK', 1, 1)";
+    
+    //$query = Yii::app()->db->createCommand($sql)->execute();
+    //$res[] = ['Sucess'];
+    echo $sql;
+    
+    //$query = Yii::app()->db->createCommand($sql)->queryAll(true);
+    //if(count($query)>0){foreach($query as $q){$res[] = ['Should be blank'];}
+    //}else{$res[] = ['Sucess'];}
+    
+    //echo json_encode($res);
+    }
+    if (strcasecmp($view, 'currencies') == 0) {
+    $start_date = $_GET['start_date'];
+    $end_date = $_GET['end_date'];
+    //$currency_code = $_GET['currency'];
+    $sql = "select * from currency_rates 
+    where day>=$start_date and day<=$end_date
+    order by day asc";
+    $query = Yii::app()->db->createCommand($sql)->queryAll(true);
+    
+    if(count($query)>0){foreach($query as $q){$res[] = ['trade_date'=> $q['day'], 'currency'=>$q['SEK']];}
+    }else{$res[] = ['No Results found.'];}
+    
+    echo json_encode($res);
+    }
+    if (strcasecmp($view, 'returns') == 0) {
+    $start_date = $_GET['start_date'];
+    $end_date = $_GET['end_date'];
+    $portfolio_name = $_GET['portfolio_name'];
+    $sql = "select portfolio_returns.trade_date, portfolio_returns.return, portfolio_returns.benchmark_return from portfolio_returns, portfolios where portfolio_returns.portfolio_id=portfolios.id and trade_date>=$start_date and trade_date<=$end_date and portfolios.portfolio=$portfolio_name";
+    $query = Yii::app()->db->createCommand($sql)->queryAll(true);
+    
+    if(count($query)>0){foreach($query as $q){$res[] = ['trade_date'=> $q['trade_date'], 'portfolio'=>$q['return'], 'benchmark'=> $q['benchmark_return']];}
+    }else{$res[] = ['No Results found.'];}
+    
+    echo json_encode($res);
+    }
     }
     
    	public function actionReturn()

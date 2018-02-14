@@ -153,8 +153,11 @@ $(document).ready(function() {
             {
                 label: "Trade Date:",
                 name: "ledger.trade_date",
-                type: "date",
+                type: "datetime",
                 dateFormat: 'yy-mm-dd',
+                opts:  {
+                    disableDays: [ 0, 6 ]
+                },
                 "dateImage": "<?php echo $baseUrl?>/editor_datatables/images/calender.png",
                 "attr": {"class": "form-control", 'style': 'float:left' },
                 'id':'trade_date',

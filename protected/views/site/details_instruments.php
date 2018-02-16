@@ -71,7 +71,7 @@
         
         foreach($instrument_results as $ir){
         
-            $port_chart_value = $port_chart_value * $ir['return'];
+            //$port_chart_value = $port_chart_value * $ir['return'];
             if(strtotime($ir['trade_date'])>= strtotime($start_date)){
                 $months[] = $ir['trade_date'];
                 $port_ret[] = $ir['return'];

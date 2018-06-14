@@ -1,3 +1,12 @@
+<style>
+#example {
+    overflow-x: scroll;
+    max-width: 40%;
+    display: block;
+    white-space: nowrap;
+}
+</style>
+
 <?php
 $this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
 
@@ -52,18 +61,9 @@ $(document).ready(function() {
         ajax: 'instruments/instruments',
         table: "#example",
         fields: [            
-            {
-                label: "Instrument:",
-                name: "instrument",
-            }, 
-            {
-                label: "Is Current:",
-                name: "instruments.is_current"
-            },
-            {
-                label: "ISIN:",
-                name: "instruments.isin"
-            },
+            {label: "Instrument:", name: "instrument"}, 
+            {label: "Is Current:", name: "instruments.is_current"},
+            {label: "ISIN:", name: "instruments.isin"},
             {
                 label: "Instrument Type:",
                 name: "instrument_types.instrument_type",
@@ -71,18 +71,19 @@ $(document).ready(function() {
                 ipOpts: instrumenttypeLoader(),
                 "attr": {"class": "form-control"}
             },
+            {label: "Created At:", name: "instruments.created_at", type: "datetime"},
             {
-                label: "Created At:",
-                name: "instruments.created_at",
-                type: "datetime"
-            },
-             {
                 label: "Instrument Group:",
                 name: "instrument_groups.group_name",
                 type: "select",
                 ipOpts: instrumentgroupLoader(),
                 "attr": {"class": "form-control"}
-            },            
+            },
+            {label: "eod_ric:", name: "instruments.eod_ric"},
+            {label: "eod_mic:", name: "instruments.eod_mic"},
+            {label: "eod_field:", name: "instruments.eod_field"},
+            {label: "eod_start:", name: "instruments.eod_start", type: "datetime"},
+            {label: "eod_active:", name: "instruments.eod_active"},                      
         ]
     } );
     
@@ -93,6 +94,11 @@ $(document).ready(function() {
         paginate: true,
         sort: true,
         info: false,
+        
+       // "scrollX": true,
+        //"sScrollX": "100%",
+        //"sScrollXInner": "110%",
+        //"bScrollCollapse": true,
         
         dom: '<"clear">&lt;<"clear">Bfrtip<"clear">', 
         //colVis: { exclude: [ 1 ] },
@@ -114,7 +120,12 @@ $(document).ready(function() {
             { data: "instruments.created_at" },
             { data: "instrument_groups.group_name" },
             { data: "instruments.currency" },
-                        
+            
+            { data: "instruments.eod_ric" },
+            { data: "instruments.eod_mic" },
+            { data: "instruments.eod_field" },
+            { data: "instruments.eod_start" },
+            { data: "instruments.eod_active" },                        
         ],
         select: true,
         buttons: [
@@ -214,6 +225,14 @@ $(document).ready(function() {
                 <th>Created At</th>
                 <th>Instrument Group</th>
                 <th>Currency</th>
+                
+                <th>eod_ric</th>
+                <th>eod_mic</th>
+                <th>eod_field</th>
+                <th>eod_start</th>
+                <th>eod_active</th>
+                
+
             </tr>
         </thead>
         <tfoot>
@@ -226,6 +245,13 @@ $(document).ready(function() {
                 <th>Created At</th>
                 <th>Instrument Group</th>
                 <th>Currency</th>
+                
+                                <th>eod_ric</th>
+                <th>eod_mic</th>
+                <th>eod_field</th>
+                <th>eod_start</th>
+                <th>eod_active</th>
+                
             </tr>
         </tfoot>
     </table>

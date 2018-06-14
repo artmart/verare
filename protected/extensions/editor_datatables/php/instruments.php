@@ -21,7 +21,12 @@ Editor::inst( $db, 'instruments', 'instruments.id')
         Field::inst( 'instruments.created_at' ),
         Field::inst( 'instruments.isin' ),
         Field::inst( 'instruments.instrument_group_id' ),
-        Field::inst( 'instruments.currency' )     
+        Field::inst( 'instruments.currency' ),
+        Field::inst( 'instruments.eod_ric' ),
+        Field::inst( 'instruments.eod_mic' ),
+        Field::inst( 'instruments.eod_field' ),
+        Field::inst( 'instruments.eod_start' ),
+        Field::inst( 'instruments.eod_active' )            
     )
     ->leftJoin( 'instrument_types', 'instrument_types.id', '=', 'instruments.instrument_type_id' )
     ->leftJoin( 'instrument_groups', 'instrument_groups.id', '=', 'instruments.instrument_group_id' )

@@ -8,8 +8,9 @@
 </style>
 
 <?php
-$this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
+$this->breadcrumbs=['Tag Limit'=>['admin'], 'Manage'];
 //$access_buttons = '{view} {update} {delete}';
+/*
 $access_level = 5;
 $access_buttons = '';
 if(isset(Yii::app()->user->user_role)){
@@ -37,7 +38,7 @@ switch ($access_level) {
         ];
         break;
 } 
-/*
+
 $this->menu=[
 	//array('label'=>'List Ledger', 'url'=>array('index')),
 	array('label'=>'Create Ledger', 'url'=>array('create')),
@@ -53,33 +54,15 @@ $this->menu=[
 var editor; // use a global for the submit and return data rendering in the examples
 $(document).ready(function() {
     editor = new $.fn.dataTable.Editor( {
-        ajax: 'instruments/instruments',
+        ajax: 'tagLimit/taglimit',
         table: "#example",
-        fields: [            
-            {label: "Instrument:", name: "instrument"}, 
-            {label: "Is Current:", name: "instruments.is_current"},
-            {label: "ISIN:", name: "instruments.isin"},
-            {label: "Rating:", name: "instruments.rating"},
-            {
-                label: "Instrument Type:",
-                name: "instrument_types.instrument_type",
-                type: "select",
-                ipOpts: instrumenttypeLoader(),
-                "attr": {"class": "form-control"}
-            },
-            {label: "Created At:", name: "instruments.created_at", type: "datetime"},
-            {
-                label: "Instrument Group:",
-                name: "instrument_groups.group_name",
-                type: "select",
-                ipOpts: instrumentgroupLoader(),
-                "attr": {"class": "form-control"}
-            },
-            {label: "EOD RIC:", name: "instruments.eod_ric"},
-            {label: "EOD Source:", name: "instruments.eod_mic"},
-            {label: "EOD Field:", name: "instruments.eod_field"},
-            {label: "EOD Start:", name: "instruments.eod_start", type: "datetime"},
-            {label: "EOD Active:", name: "instruments.eod_active"},                      
+        fields: [ 
+            {label: "Id:", name: "id"},           
+            {label: "Client Id:", name: "tag_limit.client_id"},
+            {label: "Portfolio Id:", name: "tag_limit.portfolio_id"},
+            {label: "Tag:", name: "tag_limit.tag"},
+            {label: "Limit Min:", name: "tag_limit.limit_min"},
+            {label: "Limit Max:", name: "tag_limit.limit_max"},                  
         ]
     } );
     
@@ -99,7 +82,7 @@ $(document).ready(function() {
         dom: '<"clear">&lt;<"clear">Bfrtip<"clear">', 
         //colVis: { exclude: [ 1 ] },
         //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
-        ajax: "instruments/",
+        ajax: "tagLimit/",
         columns: [
         /*
             { data: null, render: function ( data, type, row ) {
@@ -108,21 +91,11 @@ $(document).ready(function() {
             } },
         */              
             { data: "id" },
-            { data: "instrument" },
-            { data: "instrument_types.instrument_type" },
-            { data: "instruments.is_current" },
-            { data: "instruments.isin" },
-            { data: "instruments.rating" },
-            //{ data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
-            { data: "instruments.created_at" },
-            { data: "instrument_groups.group_name" },
-            { data: "instruments.currency" },
-            
-            { data: "instruments.eod_ric" },
-            { data: "instruments.eod_mic" },
-            { data: "instruments.eod_field" },
-            { data: "instruments.eod_start" },
-            { data: "instruments.eod_active" },                        
+            { data: "tag_limit.client_id" },
+            { data: "tag_limit.portfolio_id" },
+            { data: "tag_limit.tag" },
+            { data: "tag_limit.limit_min" },
+            { data: "tag_limit.limit_max" },                       
         ],
         select: true,
         buttons: [
@@ -132,7 +105,7 @@ $(document).ready(function() {
             {
                 extend: 'copyHtml5',
                 exportOptions: {
-                    columns: [ 0, ':visible' ]
+                    columns: ':visible'
                 }
             },
             {
@@ -144,7 +117,7 @@ $(document).ready(function() {
             {
                 extend: 'pdfHtml5',
                 exportOptions: {
-                    columns: [ 0, 1, 2, 5 ]
+                    columns: ':visible'
                 }
             },
             { extend: 'colvis', collectionLayout: 'fixed two-column',},
@@ -153,6 +126,8 @@ $(document).ready(function() {
     } );
     
 } );
+
+/*
   function SortByName(a, b){
     var aName = a.label.toLowerCase();
     var bName = b.label.toLowerCase();
@@ -160,7 +135,7 @@ $(document).ready(function() {
   }
   function instrumenttypeLoader() {
     var instruments = [{'value': '0', 'label': '-- Select Instrument Type --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/instrumentTypes/instrumenttypes'; ?>';
+    var path1 = '<?php //echo Yii::app()->baseUrl.'/instrumentTypes/instrumenttypes'; ?>';
     $.ajax({
         url: path1,
         async: false,
@@ -181,7 +156,7 @@ $(document).ready(function() {
   
   function instrumentgroupLoader() {
     var instruments = [{'value': '0', 'label': '-- Select Instrument Group --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/instrumentGroups/instrumentgroups'; ?>';
+    var path1 = '<?php //echo Yii::app()->baseUrl.'/instrumentGroups/instrumentgroups'; ?>';
     $.ajax({
         url: path1,
         async: false,
@@ -204,28 +179,18 @@ $(document).ready(function() {
     var instruments = [{'value': '0', 'label': 'No'}];
     return instruments.sort(SortByName);
   }
+  */
 </script>
 <!-- page script -->
 <table id="example" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
         <thead>
             <tr>
-                <th>Instrument Id</th>
-                <th>Instrument</th>
-                <th>Instrument Type</th>
-                <th>Is Current</th>
-                <th>ISIN</th>
-                <th>Rating</th>
-                <th>Created At</th>
-                <th>Instrument Group</th>
-                <th>Currency</th>
-                
-                <th>EOD RIC</th>
-                <th>EOD Source</th>
-                <th>EOD Field</th>
-                <th>EOD Start</th>
-                <th>EOD Active</th>
-                
-
+                <th>Id</th>
+                <th>Client Id</th>
+                <th>Portfolio Id</th>
+                <th>Tag</th>
+                <th>Limit Min</th>
+                <th>Limit Max</th>
             </tr>
         </thead>
     </table>

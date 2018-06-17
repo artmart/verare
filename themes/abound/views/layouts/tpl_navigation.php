@@ -16,6 +16,10 @@ switch ($user_role_id) {
                             <a href="'.$baseUrl1.'/instruments/admin">Instruments</a>
                             <a href="'.$baseUrl1.'/prices/admin">Prices</a>
                             </li><li class="divider"></li>';
+                
+                $usermenu1[]= '<li><a href="'.$baseUrl1.'/tagLimit/admin">Tag Limit</a></li><li class="divider"></li>';
+                $usermenu1[]= '<li><a href="'.$baseUrl1.'/tagInstrument/admin">Tag Instrument</a></li><li class="divider"></li>'; 
+                                
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/portfolios/admin">Portfolios</a>
                             <a href="'.$baseUrl1.'/benchmarks/admin">Benchmarks</a>
@@ -74,6 +78,10 @@ switch ($user_role_id) {
                             <a href="'.$baseUrl1.'/instruments/admin">Instruments</a>
                             <a href="'.$baseUrl1.'/prices/admin">Prices</a>
                             </li><li class="divider"></li>';
+                            
+                $usermenu1[]= '<li><a href="'.$baseUrl1.'/tagLimit/admin">Tag Limit</a></li><li class="divider"></li>';
+                $usermenu1[]= '<li><a href="'.$baseUrl1.'/tagInstrument/admin">Tag Instrument</a></li><li class="divider"></li>'; 
+                
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/portfolios/admin">Portfolios</a>
                             <a href="'.$baseUrl1.'/benchmarks/admin">Benchmarks</a>
@@ -84,10 +92,11 @@ switch ($user_role_id) {
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/counterparties/admin">Counterparties</a>  
                             </li><li class="divider"></li>';
-                $usermenu1[]= '<li>
-                            <a href="'.$baseUrl1.'/users/admin">Users</a>
+                $usermenu1[]= '<li><a href="'.$baseUrl1.'/users/admin">Users</a></li><li class="divider"></li>';
+                                
+                          
                             
-                            </li><li class="divider"></li>';
+                            
                // $usermenu1[]= '<li>
                 //            <a href="'.$baseUrl1.'/benchmarks/admin">Benchmarks</a>
                 //            <a href="'.$baseUrl1.'/benchmarkComponents/admin">Benchmark Components</a>

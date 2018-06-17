@@ -8,8 +8,9 @@
 </style>
 
 <?php
-$this->breadcrumbs=['Ledgers'=>['admin'], 'Manage'];
+$this->breadcrumbs=['Tag Instrument'=>['admin'], 'Manage'];
 //$access_buttons = '{view} {update} {delete}';
+/*
 $access_level = 5;
 $access_buttons = '';
 if(isset(Yii::app()->user->user_role)){
@@ -20,7 +21,7 @@ switch ($access_level) {
     case 1:
     $this->menu=[
         	//array('label'=>'List Ledger', 'url'=>array('index')),
-        	array('label'=>'Create Ledger', 'url'=>array('create')),
+        	array('label'=>'Create Tag Instrument', 'url'=>array('create')),
         ];
         break;
     case 2:
@@ -37,7 +38,7 @@ switch ($access_level) {
         ];
         break;
 } 
-/*
+
 $this->menu=[
 	//array('label'=>'List Ledger', 'url'=>array('index')),
 	array('label'=>'Create Ledger', 'url'=>array('create')),
@@ -53,33 +54,16 @@ $this->menu=[
 var editor; // use a global for the submit and return data rendering in the examples
 $(document).ready(function() {
     editor = new $.fn.dataTable.Editor( {
-        ajax: 'instruments/instruments',
+        ajax: 'tagInstrument/taginstrument',
         table: "#example",
-        fields: [            
-            {label: "Instrument:", name: "instrument"}, 
-            {label: "Is Current:", name: "instruments.is_current"},
-            {label: "ISIN:", name: "instruments.isin"},
-            {label: "Rating:", name: "instruments.rating"},
-            {
-                label: "Instrument Type:",
-                name: "instrument_types.instrument_type",
-                type: "select",
-                ipOpts: instrumenttypeLoader(),
-                "attr": {"class": "form-control"}
-            },
-            {label: "Created At:", name: "instruments.created_at", type: "datetime"},
-            {
-                label: "Instrument Group:",
-                name: "instrument_groups.group_name",
-                type: "select",
-                ipOpts: instrumentgroupLoader(),
-                "attr": {"class": "form-control"}
-            },
-            {label: "EOD RIC:", name: "instruments.eod_ric"},
-            {label: "EOD Source:", name: "instruments.eod_mic"},
-            {label: "EOD Field:", name: "instruments.eod_field"},
-            {label: "EOD Start:", name: "instruments.eod_start", type: "datetime"},
-            {label: "EOD Active:", name: "instruments.eod_active"},                      
+        fields: [ 
+            {label: "ID:", name: "id"},           
+            {label: "Instrument:", name: "tag_instrument.instrument_id"}, 
+            {label: "Client Id:", name: "tag_instrument.client_id"},
+            {label: "Portfolio Id:", name: "tag_instrument.portfolio_id"},
+            {label: "Tag:", name: "tag_instrument.tag"},
+            {label: "Limit Min:", name: "tag_instrument.limit_min"},
+            {label: "Limit Max:", name: "tag_instrument.limit_max"},                     
         ]
     } );
     
@@ -99,30 +83,15 @@ $(document).ready(function() {
         dom: '<"clear">&lt;<"clear">Bfrtip<"clear">', 
         //colVis: { exclude: [ 1 ] },
         //dom: 'C&gt;"clear"&lt;lfrtip"clear"Bfrtip',
-        ajax: "instruments/",
-        columns: [
-        /*
-            { data: null, render: function ( data, type, row ) {
-                // Combine the first and last names into a single table field
-                return data.first_name+' '+data.last_name;
-            } },
-        */              
+        ajax: "tagInstrument/",
+        columns: [            
             { data: "id" },
-            { data: "instrument" },
-            { data: "instrument_types.instrument_type" },
-            { data: "instruments.is_current" },
-            { data: "instruments.isin" },
-            { data: "instruments.rating" },
-            //{ data: "ledger.price", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) },
-            { data: "instruments.created_at" },
-            { data: "instrument_groups.group_name" },
-            { data: "instruments.currency" },
-            
-            { data: "instruments.eod_ric" },
-            { data: "instruments.eod_mic" },
-            { data: "instruments.eod_field" },
-            { data: "instruments.eod_start" },
-            { data: "instruments.eod_active" },                        
+            { data: "tag_instrument.instrument_id" },
+            { data: "tag_instrument.client_id" },
+            { data: "tag_instrument.portfolio_id" },
+            { data: "tag_instrument.tag" },
+            { data: "tag_instrument.limit_min" },
+            { data: "tag_instrument.limit_max" }                        
         ],
         select: true,
         buttons: [
@@ -144,7 +113,8 @@ $(document).ready(function() {
             {
                 extend: 'pdfHtml5',
                 exportOptions: {
-                    columns: [ 0, 1, 2, 5 ]
+                    //columns: [ 0, 1, 2, 5 ]
+                    columns: ':visible'
                 }
             },
             { extend: 'colvis', collectionLayout: 'fixed two-column',},
@@ -153,14 +123,17 @@ $(document).ready(function() {
     } );
     
 } );
+
+/*
   function SortByName(a, b){
     var aName = a.label.toLowerCase();
     var bName = b.label.toLowerCase();
     return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
   }
+  
   function instrumenttypeLoader() {
     var instruments = [{'value': '0', 'label': '-- Select Instrument Type --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/instrumentTypes/instrumenttypes'; ?>';
+    var path1 = '<?php //echo Yii::app()->baseUrl.'/instrumentTypes/instrumenttypes'; ?>';
     $.ajax({
         url: path1,
         async: false,
@@ -181,7 +154,7 @@ $(document).ready(function() {
   
   function instrumentgroupLoader() {
     var instruments = [{'value': '0', 'label': '-- Select Instrument Group --'}];
-    var path1 = '<?php echo Yii::app()->baseUrl.'/instrumentGroups/instrumentgroups'; ?>';
+    var path1 = '<?php //echo Yii::app()->baseUrl.'/instrumentGroups/instrumentgroups'; ?>';
     $.ajax({
         url: path1,
         async: false,
@@ -204,28 +177,19 @@ $(document).ready(function() {
     var instruments = [{'value': '0', 'label': 'No'}];
     return instruments.sort(SortByName);
   }
+  */
 </script>
 <!-- page script -->
 <table id="example" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
         <thead>
             <tr>
+                <th>Id</th>
                 <th>Instrument Id</th>
-                <th>Instrument</th>
-                <th>Instrument Type</th>
-                <th>Is Current</th>
-                <th>ISIN</th>
-                <th>Rating</th>
-                <th>Created At</th>
-                <th>Instrument Group</th>
-                <th>Currency</th>
-                
-                <th>EOD RIC</th>
-                <th>EOD Source</th>
-                <th>EOD Field</th>
-                <th>EOD Start</th>
-                <th>EOD Active</th>
-                
-
+                <th>Client Id</th>
+                <th>Portfolio Id</th>
+                <th>Tag</th>
+                <th>Limit Min</th>
+                <th>Limit Max</th>
             </tr>
         </thead>
     </table>

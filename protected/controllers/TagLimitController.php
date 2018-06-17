@@ -1,6 +1,6 @@
 <?php
 
-class LedgerController extends Controller
+class TagLimitController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -32,7 +32,7 @@ class LedgerController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'ledger'),
+				'actions'=>array('create', 'update', 'taglimit'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -63,14 +63,14 @@ class LedgerController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Ledger;
+		$model=new TagLimit;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Ledger']))
+		if(isset($_POST['TagLimit']))
 		{
-			$model->attributes=$_POST['Ledger'];
+			$model->attributes=$_POST['TagLimit'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -92,9 +92,9 @@ class LedgerController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Ledger']))
+		if(isset($_POST['TagLimit']))
 		{
-			$model->attributes=$_POST['Ledger'];
+			$model->attributes=$_POST['TagLimit'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -123,47 +123,45 @@ class LedgerController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Ledger');
+		$dataProvider=new CActiveDataProvider('TagLimit');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
 	}
     
-    public function actionLedger(){
-           require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/ledger.php');
+    public function actionTaglimit(){
+           require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/taglimit.php');
     }
 
-	public function actionAdmin()
+    public function actionAdmin()
 	{
 		$this->render('admin_datatable');
 	}
-    
-    
-    /*
-    	public function actionAdmin()
-	{
-		$model=new Ledger('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Ledger']))
-			$model->attributes=$_GET['Ledger'];
 
-		$this->render('admin_datatable',array(
+/*
+	public function actionAdmin()
+	{
+		$model=new TagLimit('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['TagLimit']))
+			$model->attributes=$_GET['TagLimit'];
+
+		$this->render('admin',array(
 			'model'=>$model,
 		));
 	}
-    */
-    
+*/
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Ledger the loaded model
+	 * @return TagLimit the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Ledger::model()->findByPk($id);
+		$model=TagLimit::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -171,11 +169,11 @@ class LedgerController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Ledger $model the model to be validated
+	 * @param TagLimit $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='ledger-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='tag-limit-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

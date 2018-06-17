@@ -1,6 +1,6 @@
 <?php
 
-class LedgerController extends Controller
+class TagInstrumentController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -32,7 +32,7 @@ class LedgerController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'ledger'),
+				'actions'=>array('create', 'update', 'taginstrument'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -63,14 +63,14 @@ class LedgerController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Ledger;
+		$model=new TagInstrument;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Ledger']))
+		if(isset($_POST['TagInstrument']))
 		{
-			$model->attributes=$_POST['Ledger'];
+			$model->attributes=$_POST['TagInstrument'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -92,9 +92,9 @@ class LedgerController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Ledger']))
+		if(isset($_POST['TagInstrument']))
 		{
-			$model->attributes=$_POST['Ledger'];
+			$model->attributes=$_POST['TagInstrument'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -123,47 +123,45 @@ class LedgerController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Ledger');
+		$dataProvider=new CActiveDataProvider('TagInstrument');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
 	}
     
-    public function actionLedger(){
-           require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/ledger.php');
+    public function actionTaginstrument(){
+           require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/taginstrument.php');
     }
 
-	public function actionAdmin()
+    public function actionAdmin()
 	{
 		$this->render('admin_datatable');
 	}
-    
-    
-    /*
-    	public function actionAdmin()
-	{
-		$model=new Ledger('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Ledger']))
-			$model->attributes=$_GET['Ledger'];
 
-		$this->render('admin_datatable',array(
+/*
+	public function actionAdmin()
+	{
+		$model=new TagInstrument('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['TagInstrument']))
+			$model->attributes=$_GET['TagInstrument'];
+
+		$this->render('admin',array(
 			'model'=>$model,
 		));
 	}
-    */
-    
+*/
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Ledger the loaded model
+	 * @return TagInstrument the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Ledger::model()->findByPk($id);
+		$model=TagInstrument::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -171,11 +169,11 @@ class LedgerController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Ledger $model the model to be validated
+	 * @param TagInstrument $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='ledger-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='tag-instrument-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

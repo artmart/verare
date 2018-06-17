@@ -1,5 +1,4 @@
 <?php require_once(Yii::app()->basePath . '/extensions/editor_datatables/php/DataTables.php');
-
     //Alias Editor classes so they are easy to use
     use
         DataTables\Editor,
@@ -20,6 +19,7 @@ Editor::inst( $db, 'instruments', 'instruments.id')
         Field::inst( 'instruments.is_current' ),
         Field::inst( 'instruments.created_at' ),
         Field::inst( 'instruments.isin' ),
+        Field::inst( 'instruments.rating' ),
         Field::inst( 'instruments.instrument_group_id' ),
         Field::inst( 'instruments.currency' ),
         Field::inst( 'instruments.eod_ric' ),

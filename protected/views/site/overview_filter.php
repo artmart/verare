@@ -1069,8 +1069,7 @@ $(function () {
         						<td><span class="description-percentage text-red">'.number_format($tag_tag_item['limit_max'], 1).'%</span></td>
         					  </tr>';
             }
-            else
-            {
+            else{
                 $tag_port_data .= '<tr>
         						<td><span class="description-percentage text-green">'.$tag_tag_item['tag'].'</span></td>
         						<td><span class="description-percentage text-green">'.number_format($tag_tag_item_nav).'</span></td>

@@ -3,10 +3,10 @@
 $usermenu=[];
 $usermenu1 = [];
 $user_role_id = Yii::app()->user->getState('user_role');
-
+$can_set_limits = Yii::app()->user->getState('can_set_limits');
 //<a href="'.$baseUrl1.'/grouping/admin">Grouping</a>
 //<a href="'.$baseUrl1.'/portfolioReturns/recalculateReturns">Recalculate Returns</a>
-switch ($user_role_id) {
+switch ($user_role_id){
     case 1:
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/ledger/admin">Ledger</a>
@@ -15,11 +15,7 @@ switch ($user_role_id) {
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/instruments/admin">Instruments</a>
                             <a href="'.$baseUrl1.'/prices/admin">Prices</a>
-                            </li><li class="divider"></li>';
-                
-                $usermenu1[]= '<li><a href="'.$baseUrl1.'/tagLimit/admin">Tag Limit</a></li><li class="divider"></li>';
-                $usermenu1[]= '<li><a href="'.$baseUrl1.'/tagInstrument/admin">Tag Instrument</a></li><li class="divider"></li>'; 
-                                
+                            </li><li class="divider"></li>';                                
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/portfolios/admin">Portfolios</a>
                             <a href="'.$baseUrl1.'/benchmarks/admin">Benchmarks</a>
@@ -78,10 +74,7 @@ switch ($user_role_id) {
                             <a href="'.$baseUrl1.'/instruments/admin">Instruments</a>
                             <a href="'.$baseUrl1.'/prices/admin">Prices</a>
                             </li><li class="divider"></li>';
-                            
-                $usermenu1[]= '<li><a href="'.$baseUrl1.'/tagLimit/admin">Tag Limit</a></li><li class="divider"></li>';
-                $usermenu1[]= '<li><a href="'.$baseUrl1.'/tagInstrument/admin">Tag Instrument</a></li><li class="divider"></li>'; 
-                
+                                            
                 $usermenu1[]= '<li>
                             <a href="'.$baseUrl1.'/portfolios/admin">Portfolios</a>
                             <a href="'.$baseUrl1.'/benchmarks/admin">Benchmarks</a>
@@ -155,6 +148,11 @@ switch ($user_role_id) {
                 //$usermenu[]=['label'=>'Audit Tables', 'url'=>['/auditTables/admin']];
                 
 } 
+
+if($can_set_limits==1){
+    $usermenu1[]= '<li><a href="'.$baseUrl1.'/tagLimit/admin">Tag Limit</a></li>';
+    $usermenu1[]= '<li><a href="'.$baseUrl1.'/tagInstrument/admin">Tag Instrument</a></li><li class="divider"></li>'; 
+}
 
 
 /*

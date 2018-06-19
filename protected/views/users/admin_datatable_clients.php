@@ -87,6 +87,7 @@ if($counterpart_delete == 1){$access_buttons .= '{
                 <th>Last Visit</th>
                 <!--<th>Superuser</th>-->
                 <th>Status</th>
+                <th>Can Set Limits</th>
                 <th>User Role</th>
                 <th>Default Portfolio</th>
                 <th>Default Start Date</th>
@@ -158,6 +159,13 @@ $(document).ready(function() {
                 name: "status",
                 type: "select",
                 ipOpts: statusLoader(),
+                "attr": {"class": "form-control"}
+            },
+            {
+                label: "Can Set Limits:",
+                name: "can_set_limits",
+                type: "select",
+                ipOpts: can_set_limitsLoader(),
                 "attr": {"class": "form-control"}
             },
             {
@@ -273,7 +281,13 @@ var table = $('#example').DataTable( {
                   if(data == '0') {return 'Inactive';}
                   if(data == '-1') {return 'Banned';}
                }
-             },
+            },
+            { data: "can_set_limits",
+               render: function(data, type, row) {
+                  if(data == '1') {return 'Yes';}
+                  if(data == '0') {return 'No';}
+               }
+            },            
             { data: "user_role_name" },
             { data: "portfolio" },
             { data: "default_start_date" },
@@ -362,17 +376,18 @@ var table = $('#example').DataTable( {
     return instruments.sort(SortByName);
   }
     
-    function statusLoader() {
-    //var instruments = [{'value': '0', 'label': '-- Select User Role --'}];
-    var instruments = [{'value': '0', 'label': 'Inactive'}];
-    instruments.push({'value': '1', 'label': 'Active'});
-    //instruments.push({'value': '0', 'label': 'Inactive'});
-    instruments.push({'value': '-1', 'label': 'Banned'});
-
-    return instruments.sort(SortByName);
+  function statusLoader(){
+        var instruments = [{'value': '0', 'label': 'Inactive'}];
+        instruments.push({'value': '1', 'label': 'Active'});
+        instruments.push({'value': '-1', 'label': 'Banned'});
+        return instruments.sort(SortByName);
   }
   
-
+  function can_set_limitsLoader(){
+        var instruments = [{'value': '0', 'label': 'No'}];
+        instruments.push({'value': '1', 'label': 'Yes'});
+        return instruments.sort(SortByName);
+  }
 
   function clientsLoader() {
     var instruments = [{'value': '0', 'label': '-- Select Client --'}];

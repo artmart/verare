@@ -81,6 +81,7 @@ Editor::inst( $db, 'users', 'id', $client_id)
         Field::inst( 'users.lastvisit_at as lastvisit_at' ),
         //Field::inst( 'users.superuser as superuser' ),
         Field::inst( 'users.status as status' ),
+        Field::inst( 'users.can_set_limits as can_set_limits' ),
         Field::inst( 'users.user_role' )->validator( 'Validate::notEmpty' ),
         Field::inst( 'users.default_portfolio_id as default_portfolio_id' ),
         Field::inst( 'users.default_start_date as default_start_date' ),

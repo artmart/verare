@@ -19,6 +19,7 @@
  * @property string $default_end_date
  * accessable_portfolios
  * step_completed
+ * can_set_limits
  *
  * The followings are the available model relations:
  * @property Profiles $profiles
@@ -43,7 +44,7 @@ class Users extends CActiveRecord
 		return array(
 			//array('username, password, email, create_at, default_portfolio_id, default_start_date, default_end_date', 'required'),
 			//array('superuser, status, user_role, default_portfolio_id', 'numerical', 'integerOnly'=>true),
-            array('default_portfolio_id, client_id, step_completed', 'numerical', 'integerOnly'=>true),
+            array('default_portfolio_id, client_id, step_completed, can_set_limits', 'numerical', 'integerOnly'=>true),
             array('default_start_date, default_end_date', 'length', 'max'=>10),
             array('accessable_portfolios', 'length', 'max'=>255),
             
@@ -53,7 +54,7 @@ class Users extends CActiveRecord
 			//array('lastvisit_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, username, step_completed, accessable_portfolios, password, email, activkey, create_at, lastvisit_at, superuser, status, user_role, default_portfolio_id, default_start_date, default_end_date', 'safe', 'on'=>'search'),
+			array('id, username, step_completed, accessable_portfolios, password, email, activkey, create_at, lastvisit_at, superuser, can_set_limits, status, user_role, default_portfolio_id, default_start_date, default_end_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,6 +84,7 @@ class Users extends CActiveRecord
 			'create_at' => 'Create At',
 			'lastvisit_at' => 'Lastvisit At',
 			'superuser' => 'Superuser',
+            'can_set_limits' => 'Can Set Limits',
 			'status' => 'Status',
 			'user_role' => 'User Role',
 			'default_portfolio_id' => 'Default Portfolio',
@@ -120,6 +122,7 @@ class Users extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('lastvisit_at',$this->lastvisit_at,true);
 		$criteria->compare('superuser',$this->superuser);
+        $criteria->compare('can_set_limits',$this->can_set_limits);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('user_role',$this->user_role);
 		$criteria->compare('default_portfolio_id',$this->default_portfolio_id);

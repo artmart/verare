@@ -26,6 +26,7 @@ class User extends CActiveRecord
      * @var string $default_start_date
      * @var string $default_end_date
      * accessable_portfolios
+     * can_set_limits
 	 */
 
 	/**
@@ -60,18 +61,18 @@ class User extends CActiveRecord
 			array('email', 'unique', 'message' => UserModule::t("This user's email address already exists.")),
 			array('username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u','message' => UserModule::t("Incorrect symbols (A-z0-9).")),
 			array('status', 'in', 'range'=>array(self::STATUS_NOACTIVE,self::STATUS_ACTIVE,self::STATUS_BANNED)),
-			array('superuser', 'in', 'range'=>array(0,1)),
+			array('superuser, can_set_limits', 'in', 'range'=>array(0,1)),
             array('create_at', 'default', 'value' => date('Y-m-d H:i:s'), 'setOnEmpty' => true, 'on' => 'insert'),
             array('lastvisit_at', 'default', 'value' => '0000-00-00 00:00:00', 'setOnEmpty' => true, 'on' => 'insert'),
-			array('username, email, superuser, status, user_role', 'required'),
-			array('superuser, status, client_id, default_portfolio_id', 'numerical', 'integerOnly'=>true),
+			array('username, email, superuser, status, user_role, can_set_limits', 'required'),
+			array('superuser, can_set_limits, status, client_id, default_portfolio_id', 'numerical', 'integerOnly'=>true),
             array('default_start_date, default_end_date', 'length', 'max'=>10),
             array('accessable_portfolios', 'length', 'max'=>255),
-			array('id, username, password, email, activkey, create_at, lastvisit_at, superuser, status, user_role, client_id, accessable_portfolios', 'safe', 'on'=>'search'),
+			array('id, username, password, email, activkey, create_at, lastvisit_at, superuser, can_set_limits, status, user_role, client_id, accessable_portfolios', 'safe', 'on'=>'search'),
 		):((Yii::app()->user->id==$this->id)?array(
 			array('username, email', 'required'),
             array('default_start_date, default_end_date', 'length', 'max'=>10),
-            array('default_portfolio_id, client_id, user_role', 'numerical', 'integerOnly'=>true),
+            array('default_portfolio_id, client_id, user_role, can_set_limits', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>20, 'min' => 3,'message' => UserModule::t("Incorrect username (length between 3 and 20 characters).")),
 			array('email', 'email'),
             array('accessable_portfolios', 'length', 'max'=>255),
@@ -109,6 +110,7 @@ class User extends CActiveRecord
 			'create_at' => UserModule::t("Registration date"),			
 			'lastvisit_at' => UserModule::t("Last visit"),
 			'superuser' => UserModule::t("Superuser"),
+            'can_set_limits' =>'Can Set Limits',
 			'status' => UserModule::t("Status"),
             'user_role' => 'User Role',
             'client_id' =>'client_id',
@@ -131,8 +133,9 @@ class User extends CActiveRecord
             'superuser'=>array(
                 'condition'=>'superuser=1',
             ),
+            //'can_set_limits'=>['']
             'notsafe'=>array(
-            	'select' => 'id, username, password, email, activkey, create_at, lastvisit_at, superuser, status, user_role, client_id, accessable_portfolios',
+            	'select' => 'id, username, password, email, activkey, create_at, lastvisit_at, superuser, can_set_limits, status, user_role, client_id, accessable_portfolios',
             ),
         );
     }
@@ -141,7 +144,7 @@ class User extends CActiveRecord
     {
         return CMap::mergeArray(Yii::app()->getModule('user')->defaultScope,array(
             'alias'=>'user',
-            'select' => 'user.id, user.username, user.email, user.create_at, user.lastvisit_at, user.superuser, user.user_role, user.status, user.client_id, user.accessable_portfolios',
+            'select' => 'user.id, user.username, user.email, user.create_at, user.lastvisit_at, user.superuser, user.can_set_limits, user.user_role, user.status, user.client_id, user.accessable_portfolios',
         ));
     }
 	
@@ -156,12 +159,13 @@ class User extends CActiveRecord
 				'0' => UserModule::t('No'),
 				'1' => UserModule::t('Yes'),
 			),
+			'CanSetLimits' => array(
+				'0' => UserModule::t('No'),
+				'1' => UserModule::t('Yes'),
+			),            
             'UserRoleStatus' =>[
                 CHtml::listData(UserRole::model()->findAll(array('select'=>'id, user_role', 'order'=>'user_role')),'id','user_role'),
-            ],
-            
-            
-            
+            ], 
 		);
 		if(isset($code))
 			return isset($_items[$type][$code]) ? $_items[$type][$code] : false;
@@ -188,6 +192,7 @@ class User extends CActiveRecord
         $criteria->compare('create_at',$this->create_at);
         $criteria->compare('lastvisit_at',$this->lastvisit_at);
         $criteria->compare('superuser',$this->superuser);
+        $criteria->compare('can_set_limits',$this->can_set_limits);
         $criteria->compare('user_role',$this->user_role);
         $criteria->compare('client_id',$this->client_id);
         $criteria->compare('accessable_portfolios',$this->accessable_portfolios);

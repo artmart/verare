@@ -43,6 +43,7 @@ class WebUser extends CWebUser
                                                 'create_at'=>$user->create_at,
                                                 'lastvisit_at'=>$user->lastvisit_at,
                                                 'user_role' =>$user->user_role,
+                                                'can_set_limits' =>$user->can_set_limits,
                                                 'client_id' =>$user->client_id,
                                                 'accessable_portfolios'=>$user->accessable_portfolios,
                                            ),$user->profile->getAttributes());

@@ -58,7 +58,7 @@
         </div>
         
         <div class="col-sm-2 control-label" style="margin-left: -70px;">Portfolio:</div>
-        <div class="col-sm-3">
+        <div class="col-sm-2">
             <?php       
             //$ports = Portfolios::model()->findAll(['condition' => 'client_id = :client_id', 'params' => array(':client_id' => $client_id)]);
             
@@ -67,6 +67,11 @@
             $list = CHtml::listData($ports,'id','portfolio');
             echo CHtml::dropDownList('portfolio', $portfolio,  $list, [ 'id' => 'portfolio', 'empty' => '-- Select --',  'onchange'=>'overviewload()', 'class'=>"form-control"  /*'multiple' => true, 'size'=>'10'*/]);
             ?>
+        </div>
+        <div class="col-sm-1">
+        <button type="button" class="btn step-nav-button green-gradient-bk" onclick="download()">
+              DOWNLOAD
+            </button>
         </div>
 
 </div>
@@ -78,6 +83,43 @@
 
 
 
+<script>
+
+    function download(){
+        // Validamos el formulario actual
+       // if (globalApp.tool.pages[globalApp.tool.currentPage].onCheckPage && globalApp.tool.pages[globalApp.tool.currentPage].onCheckPage() == false)
+       //     return;
+       // if (globalApp.tool.pages[globalApp.tool.currentPage].onDownload)
+      //     globalApp.tool.pages[globalApp.tool.currentPage].onDownload();
+        // Ahora montamos la chicha
+      //  var JSONData = JSON.stringify(tool.data);
+     //   var compressed = encodeURIComponent(LZString.compressToBase64(JSONData));
+        // alert("SIZE: " + compressed.length + "\nDATA: " + compressed + "\n\n\n");
+
+      //  var pages = globalApp.tool.currentPage;
+       // if (globalApp.tool.pages[globalApp.tool.currentPage].downloadPages) {
+       //     pages = downloadPages;
+     //   }
+     //   var urlParams = "tool=" + globalApp.tool.id + "&pages=" + pages + "&data=" + compressed;
+        //alert('URL PARAMS:\n' + urlParams);
+
+        /*
+        var uncompressed = LZString.decompressFromBase64(decodeURIComponent(compressed));
+        alert("SIZE: " + uncompressed.length + "\nDATA: " + uncompressed + "\n\n\n");
+        */
+        /* MODO POPUP PRINT
+        var printPopup = window.open(location.href + "?" + urlParams);
+        if (printPopup == null) {
+            bootBox.alert('You must allow this site open popup windows in order to print the results.');
+        }
+        */
+        /**/
+        // MODO DOWNLOAD
+      //  var downloadUrl = <?php //echo Yii::app()->baseUrl."/site/admin"; ?>  // + urlParams;
+        location.href = '<?php echo Yii::app()->baseUrl."/site/pdf?start_date=2017-01-01&end_date=2018-02-01&portfolio=48&client_id=9"; ?>'; // downloadUrl;
+        /**/
+    }
+</script>
 
 <div id="overview-view"></div>
 <script>

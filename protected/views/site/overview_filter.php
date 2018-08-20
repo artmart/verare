@@ -10,6 +10,7 @@
     $month_ytd_start = date("Y-m-d", mktime(0,0,0,1,1,date("Y", strtotime($end_date))));
      
     $id = Yii::app()->user->id;
+
     $user_data = Users::model()->findByPk($id);
     $user_data->default_portfolio_id = $portfolio;
     $user_data->default_start_date = $start_date;
@@ -1032,13 +1033,8 @@ $(function () {
                 $all_p_ids_x = recursivePorts($tag_tag_val_item['portfolio_id'],$client_id);
                 array_push($all_p_ids_x, $portfolio);
                 $all_p_ids_x = implode("','", array_unique($all_p_ids_x));
-                $tag_tag_sql = "select 
-                                	i.instrument, 
-                                	ti.limit_min, 
-                                	ti.limit_max, 
-                                	sum(if(pr.trade_date = '$end_date', l.nominal*pr.price, 0)) nav
-                                from 
-                                	ledger l 
+                $tag_tag_sql = "select i.instrument, ti.limit_min, ti.limit_max, sum(if(pr.trade_date = '$end_date', l.nominal*pr.price, 0)) nav
+                                from ledger l 
                                 	inner join portfolios p on p.id = l.portfolio_id 
                                 	inner join prices pr on pr.instrument_id = l.instrument_id 
                                 	inner join instruments i on i.id = l.instrument_id 
@@ -1082,13 +1078,8 @@ $(function () {
         foreach($tag_inst as $tag_inst_item)
         {
             $tag_inst_alloc = 0;
-            $tag_inst_sql = "select 
-                            	i.instrument, 
-                            	ti.limit_min, 
-                            	ti.limit_max, 
-                            	sum(if(pr.trade_date = '$end_date', l.nominal*pr.price, 0)) nav
-                            from 
-                            	ledger l 
+            $tag_inst_sql = "select i.instrument, ti.limit_min, ti.limit_max, sum(if(pr.trade_date = '$end_date', l.nominal*pr.price, 0)) nav
+                             from ledger l 
                             	inner join portfolios p on p.id = l.portfolio_id 
                             	inner join prices pr on pr.instrument_id = l.instrument_id 
                             	inner join instruments i on i.id = l.instrument_id 
